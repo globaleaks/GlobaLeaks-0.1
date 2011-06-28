@@ -16,7 +16,7 @@ services other than Tor (no mysql or apache installation).
 The software will be used entirely trough a web browser. A web interface
 will be provided to whistleblowers, targets and node maintainers.
 ### Easy to be installed:
-The software must be easy to instal and manage by non-technical people
+The software must be easy to instal and manage by non-technical people.
 An executable for Windows, App for OSX, Debian Package for Linux.
 ### Cross Platform:
 The software must be cross-platform in order to setup and run a server on workstations
@@ -30,8 +30,9 @@ to run.
 
 # Technology selection
 
-* Python Web Server
-
-
-
- 
+* Language: Python
+* Web Server: Twisted
+* Web Framework: Nevow + Athena
+* Database: SQLite
+* SMTPS Client: Twisted
+* Build: Windows/Py2exe - OSX/Py2app - Linux/Debian
