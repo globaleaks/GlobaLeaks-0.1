@@ -11,12 +11,13 @@ related to a city, region, country or even corporation level.
 # Technical Requirements
 ### Self Contained:
 The software must be self-contained and not depend on third party
-services other than Tor (no mysql or apache installation)
+services other than Tor (no mysql or apache installation). 
 ### Web based:
 The software will be used entirely trough a web browser. A web interface
-will be provided to leakers, targets and node maintainers.
+will be provided to whistleblowers, targets and node maintainers.
 ### Easy to be installed:
 The software must be easy to instal and manage by non-technical people
+An executable for Windows, App for OSX, Debian Package for Linux.
 ### Cross Platform:
 The software must be cross-platform in order to setup and run a server on workstations
 such as Windows, Mac OS X or Linux.
@@ -26,7 +27,10 @@ software project.
 ### Network Agnostic:
 The system must be Network Agnostic, not requiring domains, dedicated ip addreses
 to run.
+
 # Technology selection
+
+* Python Web Server
 
 
 
