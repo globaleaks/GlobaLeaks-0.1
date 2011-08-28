@@ -1,0 +1,3 @@
+*.pyc
+applications/admin/errors
+applications/init/errors
