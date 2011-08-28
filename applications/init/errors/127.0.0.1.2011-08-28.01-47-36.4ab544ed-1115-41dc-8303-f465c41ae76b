@@ -1,0 +1,20 @@
+(dp1
+S'output'
+p2
+S''
+sS'layer'
+p3
+S'/Users/hellais/Documents/code/mygit/globaleaks/webapp/applications/init/controllers/default.py'
+p4
+sS'code'
+p5
+S'# -*- coding: utf-8 -*-\n### required - do no delete\ndef user(): return dict(form=auth())\ndef download(): return response.download(request,db)\ndef call():\n    session.forget()\n    return service()\n### end requires\ndef index():\n    return dict(message=T("Hello World, I am GlobaLeaks!"))\n\ndef submission():\n    form_content = (Field(\'Title\', requires=IS_NOT_EMPTY()),\n                    Field(\'Description\', \'text\', requires=IS_NOT_EMPTY()),\n                    Field(\'Tags\'),Field(\'material\', \'upload\', uploadfolder="uploads/"),\n                    Field(\'dislaimer\', \'boolean\', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer")))\n   \n    form = SQLFORM.factory(*form_content)\n    \n    if form.accepts(request.vars, session):\n        l = request.vars\n        leak_id = gl.create_leak(l.Title, l.Description, None, None,\n                {"Al Jazeera":10 , "CNN":20, "Leaker":0}, l.Tags)\n        \n        #response.flash = \'form accepted\'\n        leak = Leak(leak_id)\n\n        #FIXME do this better...\n        for tulip in leak.tulips:\n            print tulip.target\n            if tulip.target=="Leaker":\n                return dict(leak_id=leak_id, tulip=tulip.url, form=None)\n\n        return dict(leak_id=leak_id, form=None, tulip=None)\n    elif form.errors:\n        response.flash = \'form has errors\'\n    else:\n        response.flash = \'please fill the form\'        \n    \n    return dict(form=form, leak_id=None, tulip=None)\n\ndef tulip():\n    tulip_url = request.args[0]\n    tul = Tulip(tulip_url)\n    print tul.target\n    return dict(message=tul.id)\n\ndef error():\n    return dict()\n\nresponse._vars=response._caller(tulip)\n'
+p6
+sS'snapshot'
+p7
+(dp8
+sS'traceback'
+p9
+S'Traceback (most recent call last):\n  File "/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/gluon/restricted.py", line 192, in restricted\n    exec ccode in environment\n  File "/Users/hellais/Documents/code/mygit/globaleaks/webapp/applications/init/controllers/default.py", line 51, in <module>\n  File "/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/gluon/globals.py", line 145, in <lambda>\n    self._caller = lambda f: f()\n  File "/Users/hellais/Documents/code/mygit/globaleaks/webapp/applications/init/controllers/default.py", line 45, in tulip\n    print tul.target\n  File "/Users/hellais/Documents/code/mygit/globaleaks/webapp/applications/init/models/datamodel.py", line 103, in get_target\n    return db.tulip[self.id].target_id\n  File "/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/gluon/dal.py", line 4675, in __getitem__\n    return dict.__getitem__(self, str(key))\nKeyError: \'0f05e204af4d1ffabf462df37c8c606a3240f45a2e2fcb3bef41ea5b823b55d0\'\n'
+p10
+s.

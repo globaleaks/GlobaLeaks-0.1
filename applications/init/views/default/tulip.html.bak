@@ -1,0 +1,4 @@
+{{extend 'layout.html'}}
+{{=request.args}}
+<h1>This is the default/tulip.html template</h1>
+{{=BEAUTIFY(response._vars)}}

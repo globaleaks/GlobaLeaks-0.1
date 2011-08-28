@@ -1,0 +1,26 @@
+{{extend 'layout.html'}}
+
+
+{{if form:}}
+    {{=form}}
+{{pass}}
+
+{{if leak_id:}}
+    <ul>
+    <li>The id of your leak is: <b>{{=leak_id}}</b></li>
+    <li>This is your tulip: <a href="/init/default/tulip/{{=tulip}}">{{=tulip}}</a>
+    </ul>
+    <br/>
+    <br/>
+    <br/>
+    <p>pssst... :P</p>
+    <p>I also generated these other tulips. Keep it secret, my boss doesn't want me to know ;).</p>
+    <ul>
+    {{for i in tulips:}}
+        <li>{{=i[1]}}: <a href="/init/default/tulip/{{=i[0]}}">{{=i[0]}}</a></li>
+    {{pass}}
+    </ul>
+{{pass}}
+
+
+{{#=BEAUTIFY(request.vars)}}

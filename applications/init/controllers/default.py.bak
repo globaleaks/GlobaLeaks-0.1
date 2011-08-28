@@ -1,0 +1,46 @@
+# -*- coding: utf-8 -*-
+### required - do no delete
+def user(): return dict(form=auth())
+def download(): return response.download(request,db)
+def call():
+    session.forget()
+    return service()
+### end requires
+def index():
+    return dict(message=T("Diocane"))
+
+def submission():
+    """form = FORM('Your name:', INPUT(_name='Title',requires=IS_NOT_EMPTY()),
+            'Tags:', INPUT(_name='Tags',requires=IS_NOT_EMPTY()),
+            'Description:', INPUT(_name='Description',requires=IS_NOT_EMPTY()),
+            'Files:', INPUT(_name='Files'), 
+            INPUT(_type='submit')
+            )
+    
+    if form.accepts(request.vars, session):
+        response.flash = 'form accepted'
+    elif form.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'please fill the form'
+    """
+    
+    form = SQLFORM.factory(
+        Field('Title', requires=IS_NOT_EMPTY()),
+        Field('Description', 'text', requires=IS_NOT_EMPTY()),
+        Field('Tags'),
+        Field('material', 'upload'),
+        Field('dislaimer', 'boolean', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer"))
+        )
+        
+    if form.accepts(request.vars, session):
+        response.flash = 'form accepted'
+    elif form.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'please fill the form'        
+    
+    return dict(form=form)
+
+def error():
+    return dict()

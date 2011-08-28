@@ -1,0 +1,13 @@
+{{extend 'layout.html'}}
+
+
+{{if form:}}
+    {{=form}}
+{{pass}}
+
+{{if leak_id:}}
+    The id of your leak is: {{=leak_id}}
+{{pass}}
+
+
+{{#=BEAUTIFY(request.vars)}}
