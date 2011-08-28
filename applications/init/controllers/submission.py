@@ -1,15 +1,4 @@
-# -*- coding: utf-8 -*-
-### required - do no delete
-def user(): return dict(form=auth())
-def download(): return response.download(request,db)
-def call():
-    session.forget()
-    return service()
-### end requires
 def index():
-    return dict(message=T("Hello World, I am GlobaLeaks!"))
-
-def submission():
     form_content = (Field('Title', requires=IS_NOT_EMPTY()),
                     Field('Description', 'text', requires=IS_NOT_EMPTY()),
                     Field('Tags'),Field('material', 'upload', uploadfolder="uploads/"),
@@ -40,6 +29,3 @@ def submission():
         response.flash = 'please fill the form'        
     
     return dict(form=form, leak_id=None, tulip=None, tulips=None)
-
-def error():
-    return dict()
