@@ -1,5 +1,10 @@
 {{extend 'layout.html'}}
 
+{{if err:}}
+<h2>No tulips found!</h2>
+{{pass}}
+
+{{if not err:}}
 <ul>
     
     <li><b>Title:</b> {{=leak_title}}</li>
@@ -25,3 +30,5 @@
 {{if not dead:}}
 <h1>From here you are able to download the material</h1>
 {{pass}}
+{{pass}}
+

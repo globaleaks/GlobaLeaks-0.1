@@ -12,8 +12,14 @@ def index():
 
 def status():
     tulip_url = request.args[0]
-    t = Tulip(url=tulip_url)
+    try:
+        t = Tulip(url=tulip_url)
+    
+    except:
+        return dict(err=True)
+
     leak = t.get_leak()
+    
     dead = False
     
     form = SQLFORM.factory(Field('Comment', 'text', requires=IS_NOT_EMPTY()))
