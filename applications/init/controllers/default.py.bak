@@ -7,40 +7,71 @@ def call():
     return service()
 ### end requires
 def index():
-    return dict(message=T("Diocane"))
+    return dict(message=T("Hello World, I am GlobaLeaks!"))
 
 def submission():
-    """form = FORM('Your name:', INPUT(_name='Title',requires=IS_NOT_EMPTY()),
-            'Tags:', INPUT(_name='Tags',requires=IS_NOT_EMPTY()),
-            'Description:', INPUT(_name='Description',requires=IS_NOT_EMPTY()),
-            'Files:', INPUT(_name='Files'), 
-            INPUT(_type='submit')
-            )
+    form_content = (Field('Title', requires=IS_NOT_EMPTY()),
+                    Field('Description', 'text', requires=IS_NOT_EMPTY()),
+                    Field('Tags'),Field('material', 'upload', uploadfolder="uploads/"),
+                    Field('dislaimer', 'boolean', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer")))
+   
+    form = SQLFORM.factory(*form_content)
     
     if form.accepts(request.vars, session):
-        response.flash = 'form accepted'
-    elif form.errors:
-        response.flash = 'form has errors'
-    else:
-        response.flash = 'please fill the form'
-    """
-    
-    form = SQLFORM.factory(
-        Field('Title', requires=IS_NOT_EMPTY()),
-        Field('Description', 'text', requires=IS_NOT_EMPTY()),
-        Field('Tags'),
-        Field('material', 'upload'),
-        Field('dislaimer', 'boolean', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer"))
-        )
+        l = request.vars
+        leak_id = gl.create_leak(l.Title, l.Description, None, None,
+                {"Al Jazeera":10 , "CNN":20, "Leaker":0}, l.Tags)
         
-    if form.accepts(request.vars, session):
-        response.flash = 'form accepted'
+        #response.flash = 'form accepted'
+        leak = Leak(leak_id)
+
+        #FIXME do this better...
+        tulips = []
+        for tulip in leak.tulips:
+            if tulip.target=="Leaker":
+                leaker_tulip = tulip.url
+            else:
+                tulips.append((tulip.url, tulip.target))
+            
+        return dict(leak_id=leak_id, tulip=tulip.url, form=None, tulips=tulips)
     elif form.errors:
         response.flash = 'form has errors'
     else:
         response.flash = 'please fill the form'        
     
-    return dict(form=form)
+    return dict(form=form, leak_id=None, tulip=None, tulips=None)
+
+def tulip():
+    tulip_url = request.args[0]
+    t = Tulip(url=tulip_url)
+    leak = t.get_leak()
+    
+                    
+    form = SQLFORM.factory(Field('Comment', 'text', requires=IS_NOT_EMPTY()))
+       
+    if form.accepts(request.vars, session):
+        response.flash = 'ok!'
+        c = response.vars
+        print response.vars
+        print dir(t)
+        return dict(comment="asdads", name=t.target, 
+                leak_title=leak.title,
+                leak_tags=leak.tags,
+                leak_desc=leak.desc,
+                leak_material=leak.material,
+                comment_form=form)
+    elif form.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'please fill the form'    
+    
+   
+    return dict(leak_title=leak.title,
+                leak_tags=leak.tags,
+                leak_desc=leak.desc,
+                leak_material=leak.material,
+                comment_form=form,
+                comment=None)
 
 def error():
     return dict()

@@ -33,7 +33,7 @@ def submission():
             else:
                 tulips.append((tulip.url, tulip.target))
             
-        return dict(leak_id=leak_id, tulip=tulip.url, form=None, tulips=tulips)
+        return dict(leak_id=leak_id, tulip=leaker_tulip, form=None, tulips=tulips)
     elif form.errors:
         response.flash = 'form has errors'
     else:
@@ -45,10 +45,33 @@ def tulip():
     tulip_url = request.args[0]
     t = Tulip(url=tulip_url)
     leak = t.get_leak()
+    
+                    
+    form = SQLFORM.factory(Field('Comment', 'text', requires=IS_NOT_EMPTY()))
+       
+    if form.accepts(request.vars, session):
+        response.flash = 'ok!'
+        c = response.vars
+        print response.vars
+        print dir(t)
+        return dict(comment="asdads", name=t.target, 
+                leak_title=leak.title,
+                leak_tags=leak.tags,
+                leak_desc=leak.desc,
+                leak_material=leak.material,
+                comment_form=form)
+    elif form.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'please fill the form'    
+    
+   
     return dict(leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
-                leak_material=leak.material)
+                leak_material=leak.material,
+                comment_form=form,
+                comment=None)
 
 def error():
     return dict()

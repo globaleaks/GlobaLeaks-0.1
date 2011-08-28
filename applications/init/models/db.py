@@ -42,7 +42,14 @@ class DB(DAL):
             Field('leaker_id', self.target),
             format='%(name)s'
             )
-        
+            
+        self.define_table('comment',
+            Field('leak_id', self.leak),
+            Field('commenter_id', self.target),
+            Field('comment'),
+            format='%(name)s'
+            )
+    
         self.define_table('material',
             Field('url', unique=True),
             Field('leak_id', self.leak),

@@ -1,4 +1,20 @@
 {{extend 'layout.html'}}
-{{=request.args}}
-<h1>This is the default/tulip.html template</h1>
-{{=BEAUTIFY(response._vars)}}
+
+
+<ul>
+    
+    <li><b>Title:</b> {{=leak_title}}</li>
+    <li><b>Description:</b> {{=leak_desc}}</li>
+    <li><b>Tags:</b> {{=leak_tags}}</li>
+    <li><b>Material:</b> {{=leak_material}}</li>
+   
+    {{=comment_form}}
+    
+    
+</ul>
+
+{{if comment:}}
+    {{=comment}}
+    {{=name}}
+    {{=Beautify(request.vars)}}
+{{pass}}
