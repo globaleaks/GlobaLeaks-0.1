@@ -26,3 +26,8 @@ applications/globaleaks/databases/fb87181b96a99be45f5a23f4277867ce_leak.table.~1
 applications/globaleaks/databases/fb87181b96a99be45f5a23f4277867ce_target.table.~1~.~1~
 applications/globaleaks/databases/storage.db.~1~
 applications/*/errors/*
+applications/admin/sessions/127.0.0.1-451e3253-5599-4a58-9729-d927f3cdd6fc
+applications/admin/sessions/127.0.0.1-8bc5c5d1-0d9f-4344-b867-e59ee1865949
+applications/globaleaks/sessions/127.0.0.1-144deeb4-6d5c-4579-bdd3-3d9d5085abd2
+applications/globaleaks/sessions/127.0.0.1-a8551263-bc3c-430c-abb2-8711fac671c1
+applications/globaleaks/sessions/127.0.0.1-c6d5b9b3-1ec7-41c1-8d72-04c21b7a6b11
