@@ -34,7 +34,8 @@ def status():
         c = response.vars
         print response.vars
 
-        return dict(dead=dead,
+        return dict(err=None,
+                dead=dead,
                 leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
@@ -51,7 +52,8 @@ def status():
         response.flash = 'please fill the form'    
 
 
-    return dict(dead=dead,
+    return dict(err=None,
+                dead=dead,
                 leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,

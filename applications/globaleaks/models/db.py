@@ -86,11 +86,24 @@ class Globaleaks(object):
     def __init__(self):
         pass
         
-    def create_target(self):
-        pass
+    def create_target(self, name, category, desc, uri, type, info):
+        target_id = db.target.insert(name=name, 
+            category=category,
+            desc = desc, uri=uri, type=type, info=info,
+            status=True #, last_send_tulip=None,
+            #last_access=None, last_download=None,
+            #tulip_counter=None, download_counter=None
+           )
+        db.commit()
+        return target_id
         
+    def delete_target (self, id):
+       db(db.target.id==id).delete()
+       pass
+
     def get_targets(self):
-        pass
+        return db(db.target).select()
+        
         
     def get_target(self, target_id):
         pass
@@ -164,14 +177,15 @@ plugins = PluginManager()                      # for configuring plugins
 # mail.settings.sender = 'you@gmail.com'         # your email
 # mail.settings.login = 'username:password'      # your credentials or None
 
-# auth.settings.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'   # before define_tables()
-# auth.define_tables()                           # creates all needed tables
-# auth.settings.mailer = mail                    # for user email verification
-# auth.settings.registration_requires_verification = False
-# auth.settings.registration_requires_approval = False
-# auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['verify_email'])+'/%(key)s to verify your email'
-# auth.settings.reset_password_requires_verification = True
-# auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['reset_password'])+'/%(key)s to reset your password'
+auth.settings.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'   # before define_tables()
+auth.define_tables()                           # creates all needed tables
+auth.settings.mailer = mail                    # for user email verification
+auth.settings.registration_requires_verification = False
+auth.settings.registration_requires_approval = False
+auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['verify_email'])+'/%(key)s to verify your email'
+
+auth.settings.reset_password_requires_verification = True
+auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['reset_password'])+'/%(key)s to reset your password'
 
 
 
