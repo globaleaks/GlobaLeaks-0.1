@@ -402,6 +402,7 @@ div.flash {
     -webkit-border-radius: 5px;
     z-index: 2;
 }
+
 div.error {
     background-color: red;
     color: white;
@@ -553,4 +554,3 @@ a.button:hover span.icon.user { background-position: 0 -869px }
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3{ page-break-after: avoid; }
 }
-

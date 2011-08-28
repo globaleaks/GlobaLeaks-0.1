@@ -10,14 +10,14 @@
 {{if not 'request_reset_password' in auth.settings.actions_disabled and False:}}
 <br/><a href="{{=URL(r=request,args='request_reset_password')}}">lost password</a>
 {{pass}}
-
 {{pass}}
-To login use:<br/>
-node@globaleaks.org<br/>
-testing<br/>
 </div>
 
 <script language="javascript">
+
+jQuery("#auth_user_email").val('node@globaleaks.org');
+jQuery("#auth_user_password").val('testing');
+jQuery('.flash').html('You are now logging in as the GlobaLeaks Node Maintainer').slideDown()
 <!--
  jQuery("#web2py_user_form input:visible:enabled:first").focus();
 //-->

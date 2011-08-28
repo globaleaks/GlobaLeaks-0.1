@@ -6,6 +6,8 @@ def index():
    
     form = SQLFORM.factory(*form_content)
     
+    response.flash = "You are the Whistleblower"
+    
     if form.accepts(request.vars, session):
         l = request.vars
         leak_id = gl.create_leak(l.Title, l.Description, None, None,
@@ -25,7 +27,5 @@ def index():
         return dict(leak_id=leak_id, tulip=leaker_tulip, form=None, tulips=tulips)
     elif form.errors:
         response.flash = 'form has errors'
-    else:
-        response.flash = 'please fill the form'        
     
     return dict(form=form, leak_id=None, tulip=None, tulips=None)
