@@ -1,5 +1,6 @@
 *.pyc
 *.bak
+*.DS_Store
 applications/admin/errors
 applications/init/errors
 uploads
