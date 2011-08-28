@@ -12,4 +12,4 @@ httpserver.pid
 applications/init/databases
 applications/init/databases/fb87181b96a99be45f5a23f4277867ce_leak.table.~1~
 applications/init/databases/fb87181b96a99be45f5a23f4277867ce_target.table.~1~
-applications/admin/cron/cron.master
+*/cron/cron.master

@@ -29,11 +29,19 @@ class DB(DAL):
     def create_db(self):
         self.define_table('target',
             Field('name'),
+            Field('category'),
+            Field('desc'),
+            Field('uri'),
             Field('type'),
-            Field('auth_type'),
-            Field('details'),
+            Field('info'),
+            Field('status'),
+            Field('last_sent_tulip'),
+            Field('last_access'),
+            Field('last_download'),
+            Field('tulip_counter'),
+            Field('dowload_counter'),
             format='%(name)s'
-            )
+           )
             
         self.define_table('leak',
             Field('title'),

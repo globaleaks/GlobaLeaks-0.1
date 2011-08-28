@@ -46,7 +46,6 @@ def tulip():
     t = Tulip(url=tulip_url)
     leak = t.get_leak()
     
-                    
     form = SQLFORM.factory(Field('Comment', 'text', requires=IS_NOT_EMPTY()))
        
     if form.accepts(request.vars, session):
@@ -54,22 +53,34 @@ def tulip():
         c = response.vars
         print response.vars
         print dir(t)
-        return dict(comment="asdads", name=t.target, 
+
+        return dict(dead=True,
                 leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
                 leak_material=leak.material,
+                comment="asdads", 
+                name=t.target, 
                 comment_form=form)
+
     elif form.errors:
         response.flash = 'form has errors'
     else:
         response.flash = 'please fill the form'    
-    
+
+    if(int(t.downloads_counter) >= int(t.allowed_downloads)):
+                tulip_downloads=t.downloads_counter,
+                tulip_allowed_downloads=t.allowed_downloads)
+
+    t.downloads_counter = int(t.downloads_counter) + 1
    
-    return dict(leak_title=leak.title,
+    return dict(dead=False,
+                leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
                 leak_material=leak.material,
+                tulip_downloads=t.downloads_counter,
+                tulip_allowed_downloads=t.allowed_downloads,
                 comment_form=form,
                 comment=None)
 
