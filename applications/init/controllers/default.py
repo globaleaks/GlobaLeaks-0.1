@@ -33,7 +33,7 @@ def submission():
             else:
                 tulips.append((tulip.url, tulip.target))
             
-        return dict(leak_id=leak_id, tulip=tulip.url, form=None, tulips=tulips)
+        return dict(leak_id=leak_id, tulip=leaker_tulip, form=None, tulips=tulips)
     elif form.errors:
         response.flash = 'form has errors'
     else:
@@ -46,23 +46,43 @@ def tulip():
     t = Tulip(url=tulip_url)
     leak = t.get_leak()
     
-    if(int(t.downloads_counter) >= int(t.allowed_downloads)):
+    form = SQLFORM.factory(Field('Comment', 'text', requires=IS_NOT_EMPTY()))
+       
+    if form.accepts(request.vars, session):
+        response.flash = 'ok!'
+        c = response.vars
+        print response.vars
+        print dir(t)
+
         return dict(dead=True,
                 leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
                 leak_material=leak.material,
+                comment="asdads", 
+                name=t.target, 
+                comment_form=form)
+
+    elif form.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'please fill the form'    
+
+    if(int(t.downloads_counter) >= int(t.allowed_downloads)):
                 tulip_downloads=t.downloads_counter,
                 tulip_allowed_downloads=t.allowed_downloads)
+
     t.downloads_counter = int(t.downloads_counter) + 1
-    
+   
     return dict(dead=False,
                 leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
                 leak_material=leak.material,
                 tulip_downloads=t.downloads_counter,
-                tulip_allowed_downloads=t.allowed_downloads)
+                tulip_allowed_downloads=t.allowed_downloads,
+                comment_form=form,
+                comment=None)
 
 def error():
     return dict()

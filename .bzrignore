@@ -9,15 +9,5 @@ parameters_8000.py
 deposit
 httpserver.log
 httpserver.pid
-applications/init/databases
-applications/init/databases/fb87181b96a99be45f5a23f4277867ce_leak.table.~1~
-applications/init/databases/fb87181b96a99be45f5a23f4277867ce_target.table.~1~
-databases/fb87181b96a99be45f5a23f4277867ce_leak.table
-databases/fb87181b96a99be45f5a23f4277867ce_leak.table.~1~
-databases/fb87181b96a99be45f5a23f4277867ce_material.table
-databases/fb87181b96a99be45f5a23f4277867ce_target.table
-databases/fb87181b96a99be45f5a23f4277867ce_target.table.~1~
-databases/fb87181b96a99be45f5a23f4277867ce_tulip.table
-databases/sql.log
-databases/storage.db
+*/databases/*
 */cron/cron.master

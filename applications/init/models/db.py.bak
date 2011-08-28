@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
 
+import time
+
 #########################################################################
 ## This scaffolding model makes your app work on Google App Engine too
 #########################################################################
@@ -17,7 +19,7 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
 else:                                         # else use a normal relational database
     db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
 """
-
+randomizer = local_import('randomizer')
 
 class DB(DAL):
     def __init__(self):
@@ -26,8 +28,7 @@ class DB(DAL):
     
     def create_db(self):
         self.define_table('target',
-            Field('name', requires=IS_NOT_EMPTY()),
-            Field('tid', unique=True),
+            Field('name'),
             Field('type'),
             Field('auth_type'),
             Field('details'),
@@ -51,41 +52,67 @@ class DB(DAL):
             
         self.define_table('tulip',
             Field('uri', unique=True),
-            Field('leak_id'),
-            Field('target_id'),
+            Field('leak_id', self.leak),
+            Field('target_id'),# self.target),
             Field('downloads_counter'),
             Field('allowed_downloads'),
             Field('expiry_time'),
             format='%(name)s'
             )
-        
-    def insert_leak(self, leak):
-        leak.id = self.leak.insert(
-            title = leak.title, desc = leak.desc,
-            submission_timestamp = leak.submission_timestamp,
-            leaker_id = leak.leaker_id)
-        
-        for tulip in leak.tulips.values():
-            tulip.id = self.tulip.insert(
-                uri = tulip.url,
-                leak_id = leak.id,
-                target_id = tulip.target,
-                downloads_counter = 0,
-                allowed_downloads = tulip.allowed_downloads,
-                expiry_time = 0,
-            )
-        
-        self.commit()
 
-    def get_tulip(self, uri):
-        # Fetch the tulip with a certain uri
-        tulip = self((self.tulip.uri==uri)).select()[0]
-        return tulip
+db = DB()
 
-    def get_leak(self, id):
+####
+# The main GlobaLeaks Class
+###
+
+class Globaleaks(object):
+
+    def __init__(self):
         pass
         
-db = DB()
+    def create_target(self):
+        pass
+        
+    def get_targets(self):
+        pass
+        
+    def get_target(self, target_id):
+        pass
+        
+    def create_leak(self, title, desc, leaker, material, targets = {}, tags=""):
+        #FIXME insert new tags into DB first
+        
+        #Create leak and insert into DB
+        leak_id = db.leak.insert(title = title, desc = desc,
+            submission_timestamp = time.time(),
+            leaker_id = 0)
+        
+        #Create a tulip for each target and insert into DB
+        for target_uri, allowed_downloads in targets.iteritems():
+            db.tulip.insert(uri = randomizer.generate_tulip_url(),
+                leak_id = leak_id,
+                target_id = target_uri, #FIXME get target_id_properly
+                downloads_counter = 0,
+                allowed_downloads = allowed_downloads,
+                expiry_time = 0)
+        
+        db.commit()
+        return leak_id
+        
+    def get_leaks(self):
+        pass
+        
+    def get_leak(self, leak_id):
+        pass
+        
+    def get_tulips(self, leak_id):
+        pass
+        
+    def get_tulip(self, tulip_id):
+        pass
+
+
 
 
 ####
@@ -169,3 +196,5 @@ plugins = PluginManager()                      # for configuring plugins
 # mail.settings.server = settings.email_server
 # mail.settings.sender = settings.email_sender
 # mail.settings.login = settings.email_login
+
+gl = Globaleaks()
