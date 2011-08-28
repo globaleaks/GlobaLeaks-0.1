@@ -20,3 +20,5 @@ databases/fb87181b96a99be45f5a23f4277867ce_target.table.~1~
 databases/fb87181b96a99be45f5a23f4277867ce_tulip.table
 databases/sql.log
 databases/storage.db
+applications/admin/cron/cron.master
+cron/cron.master
