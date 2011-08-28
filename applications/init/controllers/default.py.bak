@@ -51,7 +51,8 @@ def tulip():
 
     if(int(t.downloads_counter) >= int(t.allowed_downloads) and int(t.allowed_downloads)!=0):
         dead = True
-
+    else:
+        t.downloads_counter = int(t.downloads_counter) + 1
 
     if form.accepts(request.vars, session):
         response.flash = 'ok!'
@@ -75,8 +76,6 @@ def tulip():
         response.flash = 'please fill the form'    
 
 
-    t.downloads_counter = int(t.downloads_counter) + 1
-    print "hahah1a"
     return dict(dead=dead,
                 leak_title=leak.title,
                 leak_tags=leak.tags,
