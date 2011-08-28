@@ -8,7 +8,7 @@
 {{if leak_id:}}
     <ul>
         <li>The id of your leak is: <b>{{=leak_id}}</b></li>
-        <li>This is your tulip: <a href="/init/tulip/view/{{=tulip}}">{{=tulip}}</a>
+        <li>This is your tulip: <a href="/tulip/{{=tulip}}">{{=tulip}}</a>
     </ul>
     
     <br/>
@@ -19,7 +19,7 @@
     <ul>
     
     {{for i in tulips:}}
-        <li>{{=i[1]}}: <a href="/init/tulip/view/{{=i[0]}}">{{=i[0]}}</a></li>
+        <li>{{=i[1]}}: <a href="/tulip/{{=i[0]}}">{{=i[0]}}</a></li>
     {{pass}}
     
     </ul>

@@ -1,0 +1,65 @@
+timestamp: 2011-08-28T10:35:56.101185
+CREATE TABLE target(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512),
+    type CHAR(512),
+    auth_type CHAR(512),
+    details CHAR(512)
+);
+success!
+timestamp: 2011-08-28T10:35:56.104715
+CREATE TABLE leak(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    desc CHAR(512),
+    submission_timestamp CHAR(512),
+    leaker_id INTEGER REFERENCES target(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-08-28T10:35:56.112300
+CREATE TABLE material(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url CHAR(512) UNIQUE,
+    leak_id INTEGER REFERENCES leak(id) ON DELETE CASCADE,
+    type CHAR(512)
+);
+success!
+timestamp: 2011-08-28T10:35:56.117010
+CREATE TABLE tulip(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    uri CHAR(512) UNIQUE,
+    leak_id INTEGER REFERENCES leak(id) ON DELETE CASCADE,
+    target_id CHAR(512),
+    downloads_counter CHAR(512),
+    allowed_downloads CHAR(512),
+    expiry_time CHAR(512)
+);
+success!
+timestamp: 2011-08-28T12:18:00.679888
+ALTER TABLE target ADD category CHAR(512);
+timestamp: 2011-08-28T12:18:00.681504
+ALTER TABLE target ADD info CHAR(512);
+timestamp: 2011-08-28T12:18:00.682299
+ALTER TABLE target ADD last_sent_tulip CHAR(512);
+timestamp: 2011-08-28T12:18:00.683996
+ALTER TABLE target ADD dowload_counter CHAR(512);
+timestamp: 2011-08-28T12:18:00.685096
+ALTER TABLE target ADD uri CHAR(512);
+timestamp: 2011-08-28T12:18:00.688219
+ALTER TABLE target ADD tulip_counter CHAR(512);
+timestamp: 2011-08-28T12:18:00.689414
+ALTER TABLE target ADD status CHAR(512);
+timestamp: 2011-08-28T12:18:00.690182
+ALTER TABLE target ADD last_download CHAR(512);
+timestamp: 2011-08-28T12:18:00.691291
+ALTER TABLE target ADD last_access CHAR(512);
+timestamp: 2011-08-28T12:18:00.693585
+ALTER TABLE target ADD desc CHAR(512);
+timestamp: 2011-08-28T14:54:27.536113
+CREATE TABLE comment(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    leak_id INTEGER REFERENCES leak(id) ON DELETE CASCADE,
+    commenter_id INTEGER REFERENCES target(id) ON DELETE CASCADE,
+    comment CHAR(512)
+);
+success!
