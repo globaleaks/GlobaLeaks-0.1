@@ -13,7 +13,7 @@ class Leak(object):
     def get_id(self):
         return self._id
     def set_id(self):
-        #FIXME: raise error that id can not be changed
+        print "Error: id is read only"
         pass
     id = property(get_id, set_id)
     
@@ -55,14 +55,14 @@ class Leak(object):
     def get_submission_timestamp(self):
         return db.leak[self.id].submission_timestamp
     def set_submission_timstamp(self, timestamp):
-        #FIXME: raise error that submission timestamp can not be changed
+        print "Error: submission_timestamp is read only"
         pass
     submission_timestamp = property(get_submission_timestamp, set_submission_timstamp)
     
     def get_leaker(self):
         pass
     def set_leaker(self, leaker):
-        #FIXME: raise error that leaker can not be changed
+        print "Error: leaker is read only"
         pass
     leaker = property(get_leaker, set_leaker)
     
@@ -71,7 +71,7 @@ class Leak(object):
             yield Tulip(tulip_id["id"])
         
     def set_tulips(self, tulips):
-        #FIXME: raise error that tulip can not be changed
+        print "Error: tulip is read only"
         pass
     tulips = property(get_tulips, set_tulips)
 
@@ -86,30 +86,37 @@ class Tulip(object):
     def get_id(self):
         return self._id
     def set_id(self, id):
-        #FIXME: raise error that id of a tulip can not be changed
+        print "Error: id is read only"
         pass
     id = property(get_id, set_id)
     
     def get_url(self):
         return db.tulip[self.id].uri
     def set_url(self, url):
-        #FIXME: raise error that id of a tulip can not be changed
+        print "Error: url is read only"
         pass
     url = property(get_url, set_url)
     
     def get_target(self):
         return db.tulip[self.id].target_id
     def set_target(self, target):
-        #FIXME: raise error that id of a tulip can not be changed
+        print "Error: target is read only"
         pass
     target = property(get_target, set_target)
    
     def get_allowed_downloads(self):
-        return db.tulip[self.id].url
+        return db.tulip[self.id].allowed_downloads
     def set_allowed_downloads(self, allowed_downloads):
-        #FIXME: raise error that id of a tulip can not be changed
-        pass
+        db.tulip[self.id].update_record(allowed_downloads=allowed_downloads)
+        db.commit()
     allowed_downloads = property(get_allowed_downloads, set_allowed_downloads)
+    
+    def get_downloads_counter(self):
+        return db.tulip[self.id].downloads_counter
+    def set_downloads_counter(self, downloads_counter):
+        db.tulip[self.id].update_record(downloads_counter=downloads_counter)
+        db.commit()
+    downloads_counter = property(get_downloads_counter, set_downloads_counter)
     
     def get_leak(self):
         return Leak(db.tulip[self.id].leak_id)

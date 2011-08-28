@@ -45,10 +45,24 @@ def tulip():
     tulip_url = request.args[0]
     t = Tulip(url=tulip_url)
     leak = t.get_leak()
-    return dict(leak_title=leak.title,
+    
+    if(int(t.downloads_counter) >= int(t.allowed_downloads)):
+        return dict(dead=True,
+                leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
-                leak_material=leak.material)
+                leak_material=leak.material,
+                tulip_downloads=t.downloads_counter,
+                tulip_allowed_downloads=t.allowed_downloads)
+    t.downloads_counter = int(t.downloads_counter) + 1
+    
+    return dict(dead=False,
+                leak_title=leak.title,
+                leak_tags=leak.tags,
+                leak_desc=leak.desc,
+                leak_material=leak.material,
+                tulip_downloads=t.downloads_counter,
+                tulip_allowed_downloads=t.allowed_downloads)
 
 def error():
     return dict()

@@ -1,10 +1,18 @@
 {{extend 'layout.html'}}
 
-
 <ul>
     <li><b>Title:</b> {{=leak_title}}</li>
     <li><b>Description:</b> {{=leak_desc}}</li>
     <li><b>Tags:</b> {{=leak_tags}}</li>
     <li><b>Material:</b> {{=leak_material}}</li>
+    <li><b>Clicks:</b> {{=tulip_downloads}}/{{=tulip_allowed_downloads}}</li>
 </ul>
 
+{{if dead:}}
+<h1>This Tulip is no more</h1>
+<img src="{{=URL('static','images/dead_tulip.jpg')}}"/>
+{{pass}}
+
+{{if not dead:}}
+<h1>From here you are able to download the material</h1>
+{{pass}}
