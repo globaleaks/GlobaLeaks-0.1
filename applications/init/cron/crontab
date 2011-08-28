@@ -1,2 +1,2 @@
 #crontab
-* * * * * root *applications/init/cron/scheduler.py
+#* * * * * root *applications/init/cron/scheduler.py

@@ -1,4 +1,5 @@
 *.pyc
+*.bak
 applications/admin/errors
 applications/init/errors
 uploads
