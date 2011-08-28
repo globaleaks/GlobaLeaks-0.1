@@ -24,3 +24,4 @@ applications/globaleaks/databases/storage.db
 applications/globaleaks/databases/fb87181b96a99be45f5a23f4277867ce_leak.table.~1~.~1~
 applications/globaleaks/databases/fb87181b96a99be45f5a23f4277867ce_target.table.~1~.~1~
 applications/globaleaks/databases/storage.db.~1~
+applications/*/errors/*
