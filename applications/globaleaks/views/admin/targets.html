@@ -1,0 +1,54 @@
+{{extend 'layout.html'}}
+<style>
+div.flash {
+background-color: green;
+}
+</style>
+{{if not added:}}
+You must now add yourself to the target list
+<h1>Target list selection</h1>
+{{=form}}
+{{pass}}
+
+{{if added:}}
+
+<!-- h1>Now go and test a leak out ;)</h1>
+<ul>
+<li>Name: {{=request.vars.Name}}</li>
+<li>Description: {{=request.vars.Description}}</li>
+<li>Email: {{=request.vars.email}}</li>
+</ul -->
+
+<h2>Current target list</h2>
+<form><input type="hidden" id="edit" name="edit" /></form>
+<table>
+{{i=0}}
+{{for target in targets:}}
+    {{if (i % 2 == 0):}}
+    <tr style="background-color: white" id="target-{{=target.id}}">
+    {{pass}}
+    {{if (i % 2 == 1):}}
+    <tr style="background-color: #eee" id="target-{{=target.id}}">
+    {{pass}}
+        <td width="100px" id="target_name">{{=target.name}}</td>
+        <td width="100px" id="target_uri">{{=target.uri}}</td>
+        <td width="150px" id="target_desc">{{=target.desc}}</td>
+        <td width="50px">
+            <button name="delete" onclick="clicked({{=target.id}}, 'delete')">delete</button>
+            <!-- button name="edit" onclick="clicked({{=target.id}}, 'edit')">edit</button -->
+        </td>
+    </tr>
+    {{i += 1}}
+{{pass}}
+</table>
+<a href="/submit">Now go and be the Whistleblower</a>
+{{pass}}
+
+<script>
+function clicked(id, action) {
+      jQuery('#edit').val(action + '.' + id);
+      ajax('targets', ['edit'], '');
+      jQuery('#target-' + id).hide();
+      return false;
+}
+</script>
