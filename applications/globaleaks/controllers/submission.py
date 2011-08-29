@@ -42,10 +42,11 @@ def index():
                 continue
 
             print "%s: %s" % (tulip.target, target)
-            
-            db.mail.insert(target=target.name,
-                    address=target.uri, tulip=tulip.url)
-                        
+           
+            if target.status == "subscribed":
+                db.mail.insert(target=target.name,
+                        address=target.uri, tulip=tulip.url)
+                            
             
         return dict(leak_id=leak_id, leaker_tulip=leaker_tulip, form=None)
     elif form.errors:

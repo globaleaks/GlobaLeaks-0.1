@@ -98,7 +98,7 @@ class Globaleaks(object):
         target_id = db.target.insert(name=name, 
             category=category,
             desc = desc, uri=uri, type=type, info=info,
-            status=True #, last_send_tulip=None,
+            status="subscribed" #, last_send_tulip=None,
             #last_access=None, last_download=None,
             #tulip_counter=None, download_counter=None
            )
