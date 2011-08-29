@@ -17,3 +17,8 @@ settings.email_login = ''
 settings.login_method = 'local'
 settings.login_config = ''
 settings.plugins = []
+
+settings.hostname = '127.0.0.1'
+settings.port     = '8000'
+
+

@@ -29,7 +29,7 @@ mails = db(db.mail).select()
 
 base_message = """Hello there I am GlobaLeaks.
 There is a fresh new leak waiting for your at:
-    http://127.0.0.1:8000/tulip/%s
+    http://%s:%s/tulip/%s
         
 Take Care,
 Random GlobaLeaks Node
@@ -38,7 +38,7 @@ Random GlobaLeaks Node
 for m in mails:
     mail.send(to=m.address,
             subject="GlobaLeaks notification for: " + m.target,
-            message=base_message % m.tulip)
+            message=base_message % (settings.hostname, settings.port, m.tulip))
     db(db.mail.id==m.id).delete()
 
 db.commit()

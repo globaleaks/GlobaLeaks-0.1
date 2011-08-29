@@ -14,7 +14,38 @@
     <li><b>Clicks:</b> {{=tulip_downloads}}/{{=tulip_allowed_downloads}}</li>
    
     {{#=comment_form}}
+     
+    <h3>Optional parameters</h3>
+    <table>
+    <tr id="no_table_Description__row">
     
+    <td class="w2p_fl">
+        <label for="PGPKey" id="pgpkey">PGP Key: </label>
+    </td>
+    
+    <td class="w2p_fw">
+        <textarea onclick="notimpl()" class="text" cols="40" class="notimplemented" name="pgpkey" rows="10"></textarea>
+    </td>
+    
+    <td class="w2p_fc"></td>
+    
+    </tr>
+    
+    </table>
+    
+    <div id="messages">
+    </div>
+    
+    <script type="text/javascript">
+    function notimpl() {
+    //jQuery(".notimplemented").click(function() {
+                jQuery("#messages").html("NOT IMPLEMENTED!");
+    //});
+    }
+    </script>
+    
+
+   
 </ul>
 
 {{if comment and False:}}
