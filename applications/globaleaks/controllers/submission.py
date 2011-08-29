@@ -15,6 +15,12 @@ def index():
         l = request.vars
         leak_id = gl.create_leak(l.Title, l.Description, None, None,
                 "demo", l.Tags)
+                
+        if(l.material1 or l.material2 or l.material3):
+            db.material.insert(leak_id=leak_id,
+                    url="demo", type="demo")
+            
+        
         i = 0
         
         #XXX Refactor me please
