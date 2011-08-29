@@ -29,18 +29,23 @@ fp.close()
 
 mails = db(db.mail).select()
 
-base_message = """Hello there I am GlobaLeaks.
+message = """Hello there I am GlobaLeaks.
 There is a fresh new leak waiting for your at:
     http://%s:%s/tulip/%s
         
 Take Care,
 Random GlobaLeaks Node
-"""
+
+to unsubscribe: http://%s:%s/globaleaks/target/unsubscribe/%s
+to subscribe back: http://%s:%s/globaleaks/target/subscribe/%s
+""" % (settings.hostname, settings.port, m.tulip,
+        settings.hostname, settings.port, m.tulip,
+        settings.hostname, settings.port, m.tulip)
 
 for m in mails:
     mail.send(to=m.address,
             subject="GlobaLeaks notification for: " + m.target,
-            message=base_message % (settings.hostname, settings.port, m.tulip))
+            message=message)
     db(db.mail.id==m.id).delete()
 
 db.commit()
