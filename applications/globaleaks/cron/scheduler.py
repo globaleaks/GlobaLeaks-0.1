@@ -29,7 +29,8 @@ fp.close()
 
 mails = db(db.mail).select()
 
-message = """Hello there I am GlobaLeaks.
+for m in mails:
+    message = """Hello there I am GlobaLeaks.
 There is a fresh new leak waiting for your at:
     http://%s:%s/tulip/%s
         
@@ -42,7 +43,6 @@ to subscribe back: http://%s:%s/globaleaks/target/subscribe/%s
         settings.hostname, settings.port, m.tulip,
         settings.hostname, settings.port, m.tulip)
 
-for m in mails:
     mail.send(to=m.address,
             subject="GlobaLeaks notification for: " + m.target,
             message=message)
