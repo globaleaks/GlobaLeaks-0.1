@@ -9,30 +9,88 @@
     
     <li><b>Title:</b> {{=leak_title}}</li>
     <li><b>Description:</b> {{=leak_desc}}</li>
-    <li><b>Tags:</b> {{=leak_tags}}</li>
     <li><b>Material:</b> {{=leak_material}}</li>
+    {{if not whistleblower:}}
     <li><b>Clicks:</b> {{=tulip_downloads}}/{{=tulip_allowed_downloads}}</li>
-   
+    {{pass}}
     {{#=comment_form}}
      
-    <h3>Optional parameters</h3>
+    {{if not whistleblower:}}
+
     <table>
+    <tr><td><h2>PGP Security</h2></td></tr>
     <tr id="no_table_Description__row">
-    
     <td class="w2p_fl">
         <label for="PGPKey" id="pgpkey">PGP Key: </label>
     </td>
-    
     <td class="w2p_fw">
-        <textarea onclick="notimpl()" class="text" cols="40" class="notimplemented" name="pgpkey" rows="10"></textarea>
+        <input onclick="notimpl()" type="file" class="notimplemented" name="pgp_key" >
+    </td>
+    <td class="w2p_fc"></td>
+    </tr>
+
+    <tr id="no_table_Description__row">
+    <td class="w2p_fl">
+        <label for="TulipEncryption" id="tulip_encryption">Tulip Notification Encryption: </label>
+    </td>
+    <td class="w2p_fw">
+        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="tulip_encryption" >
+    </td>
+    <td class="w2p_fc"></td>
+    </tr>
+
+    <tr id="no_table_Description__row">
+    <td class="w2p_fl">
+        <label for="MaterialEncryption" id="pgpkey">Material Encryption: </label>
     </td>
     
+    <td class="w2p_fw">
+        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="material_encryption">
+    </td>
     <td class="w2p_fc"></td>
-    
     </tr>
+
+    <tr><td><h2>Password</h2></td></tr>
+
+
+    <tr id="no_table_Description__row">
+    <td class="w2p_fl">
+        <label for="Password" id="password">Password: </label>
+    </td>
+    
+    <td class="w2p_fw">
+        <input onclick="notimpl()" type="password" class="notimplemented" name="password">
+    </td>
+    <td class="w2p_fc"></td>
+    </tr>
+
+    <tr id="no_table_Description__row">
+    <td class="w2p_fl">
+        <label for="RestrictAccess" id="restrict_access">Restrict tulip access with my password: </label>
+    </td>
+    
+    <td class="w2p_fw">
+        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="restrict_access">
+    </td>
+    <td class="w2p_fc"></td>
+    </tr>
+
+
+    <tr id="no_table_Description__row">
+    <td class="w2p_fl">
+        <label for="ZipEncryption" id="zip_encryption">Material zip encryption with my password: </label>
+    </td>
+    
+    <td class="w2p_fw">
+        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="zip_encryption">
+    </td>
+    <td class="w2p_fc"></td>
+    </tr>
+
     
     </table>
-    
+    {{pass}}
+
     <div id="messages">
     </div>
     

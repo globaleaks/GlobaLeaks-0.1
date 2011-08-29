@@ -6,9 +6,12 @@ def index():
                     Field('material1', 'upload', uploadfolder=os.path.join(request.folder,'uploads/')),
                     Field('material2', 'upload', uploadfolder=os.path.join(request.folder,'uploads/')),
                     Field('material3', 'upload', uploadfolder=os.path.join(request.folder,'uploads/')),
-                    Field('dislaimer', 'boolean', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer")))
+                    Field('metadata', 'boolean', requires=NOT_IMPLEMENTED("tulip-metadata-sanitization")),
+                    
+                    Field('disclaimer', 'boolean', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer")),
+                    )
    
-    form = SQLFORM.factory(*form_content)
+    form = SQLFORM.factory(*form_content,labels = {'disclaimer':'Accept and have read the disclaimer', 'metadata':'Metadata sanitization'})
     
     response.flash = "You are the Whistleblower"
     

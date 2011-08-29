@@ -56,7 +56,7 @@ def status():
                 leak_material=leak.material,
                 tulip_downloads=t.downloads_counter,
                 tulip_allowed_downloads=t.allowed_downloads,
-                comment="asdads", 
+                comment="demo", 
                 name=t.target, 
                 comment_form=form)
 
