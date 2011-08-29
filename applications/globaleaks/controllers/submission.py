@@ -1,5 +1,6 @@
 import os
 def index():
+    leaker_number = None
     form_content = (Field('Title', requires=IS_NOT_EMPTY()),
                     Field('Description', 'text', requires=IS_NOT_EMPTY()),
                     Field('material1', 'upload', uploadfolder=os.path.join(request.folder,'uploads/')),
@@ -13,8 +14,10 @@ def index():
     
     if form.accepts(request.vars, session):
         l = request.vars
+        leaker_number = randomizer.generate_tulip_receipt()
+        
         leak_id = gl.create_leak(l.Title, l.Description, None, None,
-                "demo", l.Tags)
+                "demo", l.Tags, number=leaker_number[1])
                 
         if(l.material1 or l.material2 or l.material3):
             db.material.insert(leak_id=leak_id,
@@ -48,7 +51,7 @@ def index():
                         address=target.uri, tulip=tulip.url)
                             
             
-        return dict(leak_id=leak_id, leaker_tulip=leaker_tulip, form=None)
+        return dict(leak_id=leak_id, leaker_tulip=leaker_number[0], form=None)
     elif form.errors:
         response.flash = 'form has errors'
     

@@ -1,15 +1,18 @@
 def index():
-    return dict(dead=False,
-                leak_id=None,
-                leak_title=None,
-                leak_tags=None,
-                leak_desc=None,
-                leak_material=None,
-                tulip_downloads=None,
-                tulip_allowed_downloads=None,
-                comment=None, 
-                name=None,
-                comment_form=None)
+
+    import hashlib
+    tulip_url = None
+    
+    
+    form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
+    
+    
+    if form.accepts(request.vars, session):
+        l = request.vars
+        tulip_url = hashlib.sha256(l.Receipt).hexdigest()
+        return dict(tulip_url=tulip_url, form=None)
+
+    return dict(form=form,tulip_url=tulip_url)
 
 def status():
     tulip_url = request.args[0]

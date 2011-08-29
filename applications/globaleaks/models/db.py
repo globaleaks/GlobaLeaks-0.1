@@ -117,7 +117,7 @@ class Globaleaks(object):
     def get_target(self, target_id):
         return db(db.target.id==target_id).select().first()
         
-    def create_leak(self, title, desc, leaker, material, target_set, tags=""):
+    def create_leak(self, title, desc, leaker, material, target_set, tags="", number=None):
         #FIXME insert new tags into DB first
         
         #Create leak and insert into DB
@@ -137,7 +137,7 @@ class Globaleaks(object):
                 allowed_downloads = 5,
                 expiry_time = 0)
         
-        db.tulip.insert(uri = randomizer.generate_tulip_url(),
+        db.tulip.insert(uri = number,
                 leak_id = leak_id,
                 target_id = 0, #FIXME get target_id_properly
                 downloads_counter = 0,
