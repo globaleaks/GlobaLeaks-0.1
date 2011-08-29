@@ -48,6 +48,7 @@ class DB(DAL):
             Field('desc'),
             Field('submission_timestamp'),
             Field('leaker_id', self.target),
+            Field('spooled', 'boolean', False),
             format='%(name)s'
             )
             
@@ -72,6 +73,13 @@ class DB(DAL):
             Field('downloads_counter'),
             Field('allowed_downloads'),
             Field('expiry_time'),
+            format='%(name)s'
+            )
+            
+        self.define_table('mail',
+            Field('target'),
+            Field('address'),
+            Field('tulip'),
             format='%(name)s'
             )
 
@@ -101,28 +109,39 @@ class Globaleaks(object):
        db(db.target.id==id).delete()
        pass
 
-    def get_targets(self):
-        return db(db.target).select()
-        
+    def get_targets(self, target_set):
+        if target_set == "ANY":
+            return db(db.target).select()
+        return db(db.target.category==target_set).select()
         
     def get_target(self, target_id):
-        pass
+        return db(db.target.id==target_id).select().first()
         
-    def create_leak(self, title, desc, leaker, material, targets = {}, tags=""):
+    def create_leak(self, title, desc, leaker, material, target_set, tags=""):
         #FIXME insert new tags into DB first
         
         #Create leak and insert into DB
         leak_id = db.leak.insert(title = title, desc = desc,
             submission_timestamp = time.time(),
-            leaker_id = 0)
+            leaker_id = 0, spooled=False)
         
+        targets = gl.get_targets(target_set)
+        
+        for t in targets:
         #Create a tulip for each target and insert into DB
-        for target_uri, allowed_downloads in targets.iteritems():
+        #for target_uri, allowed_downloads in targets.iteritems():
             db.tulip.insert(uri = randomizer.generate_tulip_url(),
                 leak_id = leak_id,
-                target_id = target_uri, #FIXME get target_id_properly
+                target_id = t.id, #FIXME get target_id_properly
                 downloads_counter = 0,
-                allowed_downloads = allowed_downloads,
+                allowed_downloads = 5,
+                expiry_time = 0)
+        
+        db.tulip.insert(uri = randomizer.generate_tulip_url(),
+                leak_id = leak_id,
+                target_id = 0, #FIXME get target_id_properly
+                downloads_counter = 0,
+                allowed_downloads = 5,
                 expiry_time = 0)
         
         db.commit()
@@ -173,9 +192,9 @@ crud = Crud(db)                                # for CRUD helpers using auth
 service = Service()                            # for json, xml, jsonrpc, xmlrpc, amfrpc
 plugins = PluginManager()                      # for configuring plugins
 
-# mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
-# mail.settings.sender = 'you@gmail.com'         # your email
-# mail.settings.login = 'username:password'      # your credentials or None
+mail.settings.server = 'smtp.gmail.com:587'  # your SMTP server
+mail.settings.sender = 'globaleaks2011@gmail.com'         # your email
+mail.settings.login = 'globaleaks2011@gmail.com:Antani1234'      # your credentials or None
 
 auth.settings.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'   # before define_tables()
 auth.define_tables()                           # creates all needed tables

@@ -1,5 +1,6 @@
 def index():
     return dict(dead=False,
+                leak_id=None,
                 leak_title=None,
                 leak_tags=None,
                 leak_desc=None,
@@ -12,6 +13,7 @@ def index():
 
 def status():
     tulip_url = request.args[0]
+    
     try:
         t = Tulip(url=tulip_url)
     
@@ -19,6 +21,13 @@ def status():
         return dict(err=True)
 
     leak = t.get_leak()
+    
+    if t.target == "0":
+        whistleblower=True
+        response.flash = "You are the Whistleblower"
+    else:
+        whistleblower=False
+        response.flash = "You are the Target"
     
     dead = False
     
@@ -32,10 +41,12 @@ def status():
     if form.accepts(request.vars, session):
         response.flash = 'ok!'
         c = response.vars
-        print response.vars
 
         return dict(err=None,
                 dead=dead,
+                whistleblower=whistleblower,
+                tulip_url=tulip_url,
+                leak_id=leak.id,
                 leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
@@ -48,12 +59,13 @@ def status():
 
     elif form.errors:
         response.flash = 'form has errors'
-    else:
-        response.flash = 'please fill the form'    
 
-
+   
     return dict(err=None,
                 dead=dead,
+                whistleblower=whistleblower,
+                leak_id=leak.id,
+                tulip_url=tulip_url,
                 leak_title=leak.title,
                 leak_tags=leak.tags,
                 leak_desc=leak.desc,
@@ -62,3 +74,18 @@ def status():
                 tulip_allowed_downloads=t.allowed_downloads,
                 comment_form=form,
                 comment=None)
+
+def download():
+    tulip_url = request.args[0]
+    import os
+    try:
+        t = Tulip(url=tulip_url)
+    except:
+        return dict(err=True)
+    
+    leak = t.get_leak()
+    
+    response.headers['Content-Type'] = "application/octet"
+    response.headers['Content-Disposition'] = 'attachment; filename="' + tulip_url + '.zip"'
+    
+    return response.stream(open(os.path.join(request.folder, 'material/', str(leak.id)+'.zip'),'rb'))

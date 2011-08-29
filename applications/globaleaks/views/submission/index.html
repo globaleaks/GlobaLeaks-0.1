@@ -9,23 +9,8 @@ div.flash {background-color: #888;}
 {{pass}}
 
 {{if leak_id:}}
-    <ul>
-        <li>The id of your leak is: <b>{{=leak_id}}</b></li>
-        <li>This is your tulip: <a href="/tulip/{{=tulip}}">{{=tulip}}</a>
-    </ul>
-    
-    <br/>
-    <br/>
-    <br/>
-    <p>pssst... :P</p>
-    <p>I also generated these other tulips. Keep it secret, my boss doesn't want me to know ;).</p>
-    <ul>
-    
-    {{for i in tulips:}}
-        <li>{{=i[1]}}: <a href="/tulip/{{=i[0]}}">{{=i[0]}}</a></li>
-    {{pass}}
-    
-    </ul>
+    This is your tulip: <a href="/tulip/{{=leaker_tulip}}">{{=leaker_tulip}}</a>
+    <p>Please save it in a safe place</p>
 {{pass}}
 
 

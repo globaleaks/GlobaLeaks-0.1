@@ -506,6 +506,26 @@ a.button:hover span.icon.user { background-position: 0 -869px }
  *  HERE YOU CAN START TO WRITE YOUR OWN DIVS
  */
 
+    ul#demo li div.center {
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
+    }
+    
+    ul#demo li img {
+    border: 10px solid #EEE;
+    }
+    
+    
+    ul#demo {
+    list-style: none
+    }
+    
+    ul#demo li {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid black;
+    }
 
 
 

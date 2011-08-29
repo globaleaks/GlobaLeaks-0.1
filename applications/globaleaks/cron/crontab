@@ -1,2 +1,3 @@
 #crontab
-#* * * * * root *applications/init/cron/scheduler.py
+*      *  *  *  *  root *applications/globaleaks/cron/scheduler.py
+0      */2  *  *  *  root *applications/globaleaks/cron/target_list_clean.py

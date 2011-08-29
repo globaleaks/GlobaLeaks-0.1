@@ -21,5 +21,5 @@ gluon.widget.ProgramVersion="version 0.0000"
 gluon.widget.ProgramInfo="Starting up..."
 
 # Start Web2py and Web2py cron service!
-gluon.widget.start(cron=False)
+gluon.widget.start(cron=True)
 
