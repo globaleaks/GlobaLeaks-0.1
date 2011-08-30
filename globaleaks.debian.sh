@@ -21,13 +21,16 @@
 
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DESC="GlobaLeaks Node"
+ADDRESS="127.0.0.1"
+PORT="8000"
+PASSWORD="change"
 NAME=globaleaks
 PIDDIR=/var/run/$NAME
 PIDFILE=$PIDDIR/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 DAEMON=/usr/bin/python
 DAEMON_DIR=/usr/lib/$NAME
-DAEMON_ARGS="web2py.py --password=<recycle> --pid_filename=$PIDFILE"
+DAEMON_ARGS="web2py.py -i $ADDRESS -p $PORT --password=$PASSWORD --pid_filename=$PIDFILE"
 DAEMON_USER=web2py
 
 # Exit if the package is not installed
