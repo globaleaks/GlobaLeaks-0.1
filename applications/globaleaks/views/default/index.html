@@ -4,14 +4,14 @@
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed semper rutrum nunc, suscipit tincidunt ligula elementum semper. Cras in elit vel libero interdum faucibus. Vivamus vitae tellus vitae velit fermentum scelerisque. Ut ut sapien metus. In ut velit ac leo laoreet fermentum in eu sem.
 </p>
 
-<div class="box">
+<div onclick="location.href='{{=URL('globaleaks', 'admin', 'targets')}}'" class="box">
     <h2><span>1.</span><br />Node Administrator</h2>
     <p style="text-align:center">
         <img src="{{=URL('static', 'images/icon-admin.png')}}" alt="" />
     </p>
     <a href="/globaleaks/admin/targets">Create Target List &raquo;</a>
 </div>
-<div class="box">
+<div onclick="location.href='{{=URL('submission')}}'" class="box">
     <h2><span>2.</span><br />Whistleblower</h2>
     <p style="text-align:center">
         <img src="{{=URL('static', 'images/icon-whistleblower.png')}}" alt="" />
@@ -25,7 +25,7 @@
     </p>
     <span class="info">Check your inbox for Tulip URL</span>
 </div>
-<div class="box">
+<div onclick="location.href='{{=URL('tulip', 'index')}}'" class="box">
     <h2><span>4.</span><br />Whistleblower, redux</h2>
     <p style="text-align:center">
         <img src="{{=URL('static', 'images/icon-report.png')}}" alt="" />

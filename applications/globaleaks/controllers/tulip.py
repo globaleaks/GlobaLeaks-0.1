@@ -9,7 +9,9 @@ def index():
     
     if form.accepts(request.vars, session):
         l = request.vars
-        tulip_url = hashlib.sha256(l.Receipt).hexdigest()
+        # Make the tulip work well
+        leak_number = l.Receipt.replace(' ','')
+        tulip_url = hashlib.sha256(leak_number).hexdigest()
         redirect("/tulip/" + tulip_url)
 
     return dict(form=form,tulip_url=None)
@@ -42,6 +44,7 @@ def status():
     if(int(t.allowed_downloads) !=0 and int(t.downloads_counter) >= int(t.allowed_downloads)):
         dead = True
 
+    print gl.get_targets("ANY")
     return dict(err=None,
             dead=dead,
             whistleblower=whistleblower,
@@ -55,7 +58,8 @@ def status():
             tulip_allowed_accesses=t.allowed_accesses,
             tulip_downloads=t.downloads_counter,
             tulip_allowed_downloads=t.allowed_downloads,
-            name=t.target)
+            name=t.target,
+            targets=gl.get_targets("ANY"))
 
 def download():
     import os

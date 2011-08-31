@@ -58,21 +58,21 @@
     <h2>Target list</h2>
     <table class="targetlist">
         <thead>
-            <th>Nome</th>
-            <th>E-mail</th>
+            <th>Name</th>
+            <th>Description</th>
             <th class="downloads">Clicks</th>
             <th class="downloads">Downloads</th>
         </thead>
         <tbody>
             {{i=0}}
-            {{for i in range(0,10): }}
+            {{for target in targets: }}
             {{if i % 2 == 1: }}
             <tr class="odd">
             {{else:}}
             <tr class="even">
             {{pass}}
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
+                <td class="name">{{=target.name}}</td>
+                <td class="description">{{=target.desc}}</td>
                 <td class="downloads">10</td>
                 <td class="downloads">4</td>
             </tr>
