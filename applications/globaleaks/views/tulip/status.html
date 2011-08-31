@@ -1,107 +1,115 @@
 {{extend 'layout.html'}}
 
 {{if err:}}
-<h2>No tulips found!</h2>
 
-{{elif dead:}}
-<h2>Tulip access counter exceeded!</h2>
+<h2>Tulip not found!</h2>
 
 {{else:}}
 
+<h1>Tulip status page</h1>
+
 <ul>
-    
     <li><b>Title:</b> {{=leak_title}}</li>
     <li><b>Description:</b> {{=leak_desc}}</li>
     <li><b>Material:</b> {{=leak_material}}</li>
+    {{if int(tulip_allowed_accesses) == 0:}}
+    <li><b>Tulip Accesses Counter:</b> {{=tulip_accesses}}</li>
+    {{else:}}
     <li><b>Tulip Accesses Counter:</b> {{=tulip_accesses}}/{{=tulip_allowed_accesses}}</li>
+    {{pass}}
     {{if not whistleblower:}}
-    <li><b>Tulip Downloads Counter:</b> {{=tulip_downloads}}/{{=tulip_allowed_downloads}}</li>
-    {{url = tulip_url}}
-    <li><b>Download Link:</b> <a href="{{=URL('globaleaks','tulip','download',args=url)}}">DATA</a> 
+        <li><b>Tulip Downloads Counter:</b> {{=tulip_downloads}}/{{=tulip_allowed_downloads}}</li>
+        {{if dead:}}
+            {{if int(tulip_allowed_accesses) !=0 and int(tulip_accesses) >= int(tulip_allowed_accesses):}}
+            <h2>Tulip access counter exceeded!</h2>
+            {{elif int(tulip_allowed_downloads) !=0 and int(tulip_downloads) >= int(tulip_allowed_downloads):}}
+            <h2>Tulip download counter exceeded!</h2>
+            {{pass}}
+        {{else:}}
+            {{url = tulip_url}}
+            <li><b>Download Link:</b> <a href="{{=URL('globaleaks','tulip','download',args=url)}}">DATA</a></li>
+        {{pass}}
     {{pass}}
-    {{#=comment_form}}
-     
-    <table>
-    <tr><td><h2>PGP Security</h2></td></tr>
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="PGPKey" id="pgpkey">PGP Key: </label>
-    </td>
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="file" class="notimplemented" name="pgp_key" >
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="TulipEncryption" id="tulip_encryption">Tulip Notification Encryption: </label>
-    </td>
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="tulip_encryption" >
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="MaterialEncryption" id="pgpkey">Material Encryption: </label>
-    </td>
-    
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="material_encryption">
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    <tr><td><h2>Password</h2></td></tr>
-
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="Password" id="password">Password: </label>
-    </td>
-    
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="password" class="notimplemented" name="password">
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="RestrictAccess" id="restrict_access">Restrict tulip access with my password: </label>
-    </td>
-    
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="restrict_access">
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="ZipEncryption" id="zip_encryption">Material zip encryption with my password: </label>
-    </td>
-    
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="zip_encryption">
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    
-    </table>
-    {{pass}}
-
-    <div id="messages">
-    </div>
-    
-    <script type="text/javascript">
-    function notimpl() {
-        jQuery("#messages").html("NOT IMPLEMENTED!");
-    }
-    </script>
-    
 </ul>
+
+<table>
+<tr><td><h2>PGP Security</h2></td></tr>
+<tr id="no_table_Description__row">
+<td class="w2p_fl">
+    <label for="PGPKey" id="pgpkey">PGP Key: </label>
+</td>
+<td class="w2p_fw">
+    <input onclick="notimpl()" type="file" class="notimplemented" name="pgp_key" >
+</td>
+<td class="w2p_fc"></td>
+</tr>
+
+<tr id="no_table_Description__row">
+<td class="w2p_fl">
+    <label for="TulipEncryption" id="tulip_encryption">Tulip Notification Encryption: </label>
+</td>
+<td class="w2p_fw">
+    <input onclick="notimpl()" type="checkbox" class="notimplemented" name="tulip_encryption" >
+</td>
+<td class="w2p_fc"></td>
+</tr>
+
+<tr id="no_table_Description__row">
+<td class="w2p_fl">
+    <label for="MaterialEncryption" id="pgpkey">Material Encryption: </label>
+</td>
+    
+<td class="w2p_fw">
+    <input onclick="notimpl()" type="checkbox" class="notimplemented" name="material_encryption">
+</td>
+<td class="w2p_fc"></td>
+</tr>
+
+<tr><td><h2>Password</h2></td></tr>
+
+<tr id="no_table_Description__row">
+<td class="w2p_fl">
+    <label for="Password" id="password">Password: </label>
+</td>
+   
+<td class="w2p_fw">
+    <input onclick="notimpl()" type="password" class="notimplemented" name="password">
+</td>
+<td class="w2p_fc"></td>
+</tr>
+
+<tr id="no_table_Description__row">
+<td class="w2p_fl">
+    <label for="RestrictAccess" id="restrict_access">Restrict tulip access with my password: </label>
+</td>
+    
+<td class="w2p_fw">
+    <input onclick="notimpl()" type="checkbox" class="notimplemented" name="restrict_access">
+</td>
+<td class="w2p_fc"></td>
+</tr>
+
+
+<tr id="no_table_Description__row">
+<td class="w2p_fl">
+    <label for="ZipEncryption" id="zip_encryption">Material zip encryption with my password: </label>
+</td>
+    
+<td class="w2p_fw">
+    <input onclick="notimpl()" type="checkbox" class="notimplemented" name="zip_encryption">
+</td>
+<td class="w2p_fc"></td>
+</tr>
+
+    
+</table>
+{{pass}}
+
+<div id="messages">
+</div>
+  
+<script type="text/javascript">
+function notimpl() {
+    jQuery("#messages").html("NOT IMPLEMENTED!");
+}
+</script>
