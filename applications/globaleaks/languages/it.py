@@ -138,4 +138,5 @@
 'state': 'stato',
 'table': 'tabella',
 'unable to parse csv file': 'non riesco a decodificare questo file CSV',
+'value already in database or empty': 'value already in database or empty',
 }

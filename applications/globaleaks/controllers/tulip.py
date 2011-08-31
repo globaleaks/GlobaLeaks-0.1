@@ -34,36 +34,13 @@ def status():
     
     dead = False
     
-    form = SQLFORM.factory(Field('Comment', 'text', requires=IS_NOT_EMPTY()))
-
-    if(int(t.accesses_counter) >= int(t.allowed_accesses) and int(t.allowed_accesses)!=0):
+    if(int(t.allowed_accesses) !=0 and int(t.accesses_counter) >= int(t.allowed_accesses)):
         dead = True
     else:
         t.accesses_counter = int(t.accesses_counter) + 1
 
-    if form.accepts(request.vars, session):
-        response.flash = 'ok!'
-        c = response.vars
-
-        return dict(err=None,
-                dead=dead,
-                whistleblower=whistleblower,
-                tulip_url=tulip_url,
-                leak_id=leak.id,
-                leak_title=leak.title,
-                leak_tags=leak.tags,
-                leak_desc=leak.desc,
-                leak_material=leak.material,
-                tulip_accesses=t.accesses_counter,
-                tulip_allowed_accesses=t.allowed_accesses,
-                tulip_downloads=t.downloads_counter,
-                tulip_allowed_downloads=t.allowed_downloads,
-                comment="demo", 
-                name=t.target, 
-                comment_form=form)
-
-    elif form.errors:
-        response.flash = 'form has errors'
+    if(int(t.allowed_downloads) !=0 and int(t.downloads_counter) >= int(t.allowed_downloads)):
+        dead = True
 
     return dict(err=None,
             dead=dead,
@@ -78,9 +55,7 @@ def status():
             tulip_allowed_accesses=t.allowed_accesses,
             tulip_downloads=t.downloads_counter,
             tulip_allowed_downloads=t.allowed_downloads,
-            comment=None,
-            name=t.target,
-            comment_form=form)
+            name=t.target)
 
 def download():
     import os
@@ -90,10 +65,10 @@ def download():
     try:
         t = Tulip(url=tulip_url)
     except:
-        return dict(err=True)
+        redirect("/tulip/" + tulip_url);
 
     if(int(t.downloads_counter) >= int(t.allowed_downloads) and int(t.allowed_downloads)!=0):
-        return dict(err=True)
+        redirect("/tulip/" + tulip_url);
     else:
         t.downloads_counter = int(t.downloads_counter) + 1
 

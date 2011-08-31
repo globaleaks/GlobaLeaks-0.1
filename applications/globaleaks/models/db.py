@@ -140,7 +140,7 @@ class Globaleaks(object):
             db.tulip.insert(url = randomizer.generate_tulip_url(),
                 leak_id = leak_id,
                 target_id = t.id, #FIXME get target_id_properly
-                allowed_accesses = 5,
+                allowed_accesses = 0, # inf
                 accesses_counter = 0,
                 allowed_downloads = 5,
                 downloads_counter = 0,
@@ -149,7 +149,7 @@ class Globaleaks(object):
         db.tulip.insert(url = number,
                 leak_id = leak_id,
                 target_id = 0, #FIXME get target_id_properly
-                allowed_accesses = 5,
+                allowed_accesses = 0, # inf
                 accesses_counter = 0,
                 allowed_downloads = 5,
                 downloads_counter = 0,

@@ -1,7 +1,8 @@
 {{extend 'layout.html'}}
 
 {{if err:}}
-<h2>No tulips found!</h2>
+
+<h2>Tulip not found!</h2>
 
 {{else:}}
 
@@ -11,9 +12,11 @@
 </p>
             
 <div class="entry">
+
     <h2 class="title">{{=leak_title}}</h2>
     {{if not whistleblower:}}
-    <div class="downloads-left full">
+
+    <div class="downloads-left{{if int(tulip_allowed_downloads) != 0 and int(tulip_downloads) >= int(tulip_allowed_downloads): }} full{{pass}}">
         Downloads: <strong>{{=tulip_downloads}}/{{=tulip_allowed_downloads}}</strong>
     </div>
     {{pass}}
@@ -32,11 +35,13 @@
             <li class="pdf">nomefile2.pdf (574 kb Kb)</li>
             <li class="img">nomefileimmagine.jpg (827 Kb)</li>
         </ul>
-        
-        <a href="#" class="zip">ZIP</a>
-        <a href="#" class="crypt">Encrypted ZIP</a>
-        <a href="#" class="crypt">PGP Encrypted ZIP</a>
-        
+        {{if not dead and not whistleblower: }}
+            {{url = tulip_url}}
+
+            <a href=""{{=URL('globaleaks','tulip','download',args=url)}}" class="zip">ZIP</a>
+            <a href="{{=URL('globaleaks','tulip','download',args=url)}}" class="crypt">Encrypted ZIP</a>
+            <a href="{{=URL('globaleaks','tulip','download',args=url)}}" class="crypt">PGP Encrypted ZIP</a>
+        {{pass}}
         <div class="clear"></div>
         
     </div>
@@ -119,21 +124,7 @@
     </table>
     
 </div>
-
-<!-- ul>
-    
-    <li><b>Title:</b> {{=leak_title}}</li>
-    <li><b>Description:</b> {{=leak_desc}}</li>
-    <li><b>Material:</b> {{=leak_material}}</li>
-    <li><b>Tulip Accesses Counter:</b> {{=tulip_accesses}}/{{=tulip_allowed_accesses}}</li>
-    {{if not whistleblower:}}
-    <li><b>Tulip Downloads Counter:</b> {{=tulip_downloads}}/{{=tulip_allowed_downloads}}</li>
-    {{url = tulip_url}}
-    <li><b>Download Link:</b> <a href="{{=URL('globaleaks','tulip','download',args=url)}}">DATA</a> 
-    {{pass}}
-    {{#=comment_form}}
-     
-    <table>
+    <!-- table>
     <tr><td><h2>PGP Security</h2></td></tr>
     <tr id="no_table_Description__row">
     <td class="w2p_fl">
@@ -205,8 +196,8 @@
 
     
     </table-->
-    {{pass}}
 
+{{pass}}
     <div id="messages">
     </div>
     
@@ -215,5 +206,3 @@
         jQuery("#messages").html("NOT IMPLEMENTED!");
     }
     </script>
-    
-</ul>
