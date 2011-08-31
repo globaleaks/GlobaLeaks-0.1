@@ -85,6 +85,11 @@ class DB(DAL):
 
 db = DB()
 
+
+#XXX remove for non demo functionality
+#
+
+
 ####
 # The main GlobaLeaks Class
 ###
@@ -201,13 +206,12 @@ auth.define_tables()                           # creates all needed tables
 auth.settings.mailer = mail                    # for user email verification
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
-auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['verify_email'])+'/%(key)s to verify your email'
+auth.messages.verify_email = 'Click on the link http://' + request.env.http_host + URL('default','user',args=['verify_email']) + '/%(key)s to verify your email'
 
 auth.settings.reset_password_requires_verification = True
-auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['reset_password'])+'/%(key)s to reset your password'
+auth.messages.reset_password = 'Click on the link http://' + request.env.http_host + URL('default','user',args=['reset_password']) + '/%(key)s to reset your password'
 
 auth.settings.table_user.email.label=T("Username") 
-
 
 #########################################################################
 ## If you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
@@ -219,7 +223,6 @@ auth.settings.table_user.email.label=T("Username")
 #    url = "http://localhost:8000/%s/default/user/login" % request.application)
 ## other login methods are in gluon/contrib/login_methods
 #########################################################################
-
 
 # XXX
 # Don't know
@@ -246,6 +249,7 @@ auth.settings.table_user.email.label=T("Username")
 # mail.settings.sender = settings.email_sender
 # mail.settings.login = settings.email_login
 
+db.commit()
 
 # FIXME move to better location
 class NOT_IMPLEMENTED(object):
@@ -258,6 +262,5 @@ class NOT_IMPLEMENTED(object):
         return (value, self.e)
     def formatter(self, value):
         return format(value)
-
 
 gl = Globaleaks()

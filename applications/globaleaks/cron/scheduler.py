@@ -5,6 +5,13 @@ import zipfile, tempfile
 fp = open("/tmp/cron.log", "w+")
 fp.write(time.ctime()+"\n")
 
+if(db.auth_user):
+    # XXX Remove for non demo usage
+    if(not db(db.auth_user.email=="node@globaleaks.org").select().first()):
+        db.auth_user.insert(first_name="Globaleaks node administrator",
+                            last_name="Globaleaks",email="node@globaleaks.org",
+                            password=db.auth_user.password.validate("testing"))
+
 
 new_material = db(db.leak.spooled==False).select()
 
