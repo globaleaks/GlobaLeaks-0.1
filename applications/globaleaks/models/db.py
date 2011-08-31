@@ -255,7 +255,6 @@ auth.settings.table_user.email.label=T("Username")
 # mail.settings.sender = settings.email_sender
 # mail.settings.login = settings.email_login
 
-db.commit()
 
 # FIXME move to better location
 class NOT_IMPLEMENTED(object):

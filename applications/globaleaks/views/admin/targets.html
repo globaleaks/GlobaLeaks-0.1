@@ -5,8 +5,10 @@ background-color: green;
 }
 </style>
 {{if not added:}}
-You must now add yourself to the target list
 <h1>Target list selection</h1>
+<p class="intro">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed semper rutrum nunc, suscipit tincidunt ligula elementum semper. Cras in elit vel libero interdum faucibus. Vivamus vitae tellus vitae velit fermentum scelerisque. Ut ut sapien metus. In ut velit ac leo laoreet fermentum in eu sem
+</p>
 {{=form}}
 {{pass}}
 
@@ -21,11 +23,18 @@ You must now add yourself to the target list
 
 <h2>Current target list</h2>
 <form><input type="hidden" id="edit" name="edit" /></form>
-<table>
+<table class="targetlist">
+<thead>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Description</th>
+    <th>Delete</th>
+</thead>
+<tbody>
 {{i=0}}
 {{for target in targets:}}
     {{if (i % 2 == 0):}}
-    <tr style="background-color: white" id="target-{{=target.id}}">
+    <tr class="even">
     {{pass}}
     {{if (i % 2 == 1):}}
     <tr style="background-color: #eee" id="target-{{=target.id}}">

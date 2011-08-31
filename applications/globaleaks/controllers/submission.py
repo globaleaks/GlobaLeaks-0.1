@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 
 def index():
     leaker_number = None
@@ -10,9 +11,21 @@ def index():
                     Field('metadata', 'boolean', requires=NOT_IMPLEMENTED("tulip-metadata-sanitization")),
                     Field('disclaimer', 'boolean', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer")),
                     )
-   
+     
     form = SQLFORM.factory(*form_content,labels = {'disclaimer':'Accept and have read the disclaimer', 'metadata':'Metadata sanitization'})
     
+    form = FORM(TABLE(
+            TR('Title', INPUT(_name='Title', requires=IS_NOT_EMPTY())),
+            TR('Description:',TEXTAREA(_name='Description', requires=IS_NOT_EMPTY())),
+            TR('Material 1:', INPUT(_name='material1', _type='file', _class="notimplemented")),
+            TR('Metadata:',INPUT(_name='metadata', _type='checkbox', _class="notimplemented")),
+            TR('Accept Disclaimer:',
+                INPUT(_name='metadata', _type='checkbox', 
+                    requires=IS_EQUAL_TO("on", error_message="Please accept the disclaimer"))),
+            TR('', INPUT(_name='submit', _type='submit'))))
+    
+
+
     response.flash = "You are the Whistleblower"
     
     if form.accepts(request.vars, session):
@@ -48,8 +61,9 @@ def index():
             if target.status == "subscribed":
                 db.mail.insert(target=target.name,
                         address=target.url, tulip=tulip.url)
-            
-        return dict(leak_id=leak_id, leaker_tulip=leaker_number[0], form=None)
+        pretty_number = leaker_number[0][:3]+" "+leaker_number[0][3:6]+" " +leaker_number[0][6:]
+
+        return dict(leak_id=leak_id, leaker_tulip=pretty_number, form=None)
     elif form.errors:
         response.flash = 'form has errors'
     

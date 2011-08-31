@@ -1,36 +1,37 @@
 {{extend 'layout.html'}}
+<h1>Welcome to the Interactive Demo</h1>
+<p class="intro">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed semper rutrum nunc, suscipit tincidunt ligula elementum semper. Cras in elit vel libero interdum faucibus. Vivamus vitae tellus vitae velit fermentum scelerisque. Ut ut sapien metus. In ut velit ac leo laoreet fermentum in eu sem.
+</p>
 
-<h2>Welcome to the interactive demonstration</h2>
+<div class="box">
+    <h2><span>1.</span><br />Node Administrator</h2>
+    <p style="text-align:center">
+        <img src="{{=URL('static', 'images/icon-admin.png')}}" alt="" />
+    </p>
+    <a href="/globaleaks/admin/targets">Create Target List &raquo;</a>
+</div>
+<div class="box">
+    <h2><span>2.</span><br />Whistleblower</h2>
+    <p style="text-align:center">
+        <img src="{{=URL('static', 'images/icon-whistleblower.png')}}" alt="" />
+    </p>
+    <a href="/submit">Submit material &raquo;</a>
+</div>
+<div class="box">
+    <h2><span>3.</span><br />Target</h2>
+    <p style="text-align:center">
+        <img src="{{=URL('static', 'images/icon-target.png')}}" alt="" />
+    </p>
+    <span class="info">Check your inbox for Tulip URL</span>
+</div>
+<div class="box">
+    <h2><span>4.</span><br />Whistleblower, redux</h2>
+    <p style="text-align:center">
+        <img src="{{=URL('static', 'images/icon-report.png')}}" alt="" />
+    </p>
+    <a href="/tulip">Check your Tulip &raquo;</a>
+</div>
 
+<div class="clear"></div>
 
-<ul id="demo">
-    <li>
-        <h3>Part 1 (you as the Node Administrator)</h3>
-        <div class="center">
-        <img src="{{=URL('static','images/demo_node_maintainer.png')}}"/><br/>
-        <a href="/globaleaks/admin/targets">create target list</a>
-        </div>
-    </li>
-    <li>
-        <h3>Part 2 (you as the Whistleblower)</h3>
-        <div class="center">
-        <img src="{{=URL('static','images/demo_whistleblower1.png')}}"/><br/>
-        <a href="/submit">submit material</a>
-        </div>
-    </li>
-    <li>
-        <h3>Part 3 (you as a Target):</h3>
-        <div class="center">
-        <img src="{{=URL('static','images/demo_target.png')}}"/><br/>
-        check your inbox for Tulip URL
-        </div>
-   </li>
-   
-   <li><h3>Part 4 (you as the Whistleblower, redux):</h3>
-
-        <div class="center">
-        <img src="{{=URL('static','images/whistleblower2.png')}}"/><br/>
-        <a href="/globaleaks/tulip">go back to see your tulip</a>
-       </div>
-   </li>
-</ul>

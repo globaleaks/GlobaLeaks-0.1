@@ -53,7 +53,7 @@ table {
 
 /* Template */
 body {
-	background: #f3f3f3;
+	background: #f3f3f3 url('globaleaks/static/background.png');
 	font-family: Arial, sans-serif;
 	color: #444;
 }
@@ -124,8 +124,8 @@ p.tulip{
 	display: block;
 	text-decoration: none;
 	text-align: center;
-	margin: 10px 0 20px 0;
-	font-size: 24px;
+	margin: 10px auto 20px auto;
+	font-size: 28px;
 	width: 300px;
 }
 
@@ -134,7 +134,7 @@ p.tulip{
 	background: #fff;
 	width: 880px;
 	padding: 40px;
-	margin: 20px auto;
+	margin: 20px auto 5px auto;
 	-moz-box-shadow: 0px 0px 3px #dedede;
 	-webkit-box-shadow: 5px 5px 0px #dedede;
 	box-shadow: 0px 0px 10px #d0d0d0;
@@ -143,8 +143,8 @@ p.tulip{
 #container img.ribbon {
 	float: right;
 	margin-left: 20px;
-	margin-right: -20px;
-	margin-top: -45px;
+	margin-top: -40px;
+	margin-right: -40px;
 }
 
 
@@ -153,7 +153,9 @@ p.tulip{
 }
 
 ul#navigation {
-	float: right;	
+	float: right;
+	padding: 20px;
+	background: #ededed;
 }
 
 ul#navigation li {
@@ -161,16 +163,23 @@ ul#navigation li {
 	margin-left: 10px;
 }
 
+ul#navigation li.user {
+	float: none;
+	padding-bottom: 5px;
+	font-size: 14px;
+}
+
 ul#navigation a {
 	color: #444;
 	text-decoration: none;
+	text-shadow: #fff 1px 1px 1px;
 	font-weight: bold;
 	font-size: 14px;
 }
 
 
 #content h1 {
-	font-size: 28px;
+	font-size: 32px;
 	margin-bottom: 10px;
 	text-transform: uppercase;
 	font-weight: bold;
@@ -182,18 +191,28 @@ ul#navigation a {
 }
 
 #content p.intro {
-	line-height: 18px;
+	line-height: 20px;
 	text-align: justify;
 	margin-bottom: 20px;
+	background: #ededed;
+	padding: 20px;
 }
 
 #content .box {
 	background: #444;
-	width: 320px;
+	width: 340px;
 	height: 320px;
 	margin: 20px 0;
 	float: left;
 	padding: 40px;
+}
+
+#content .box.box-hover {
+	background: #555;
+	transition: background-color 0.3s linear;
+	-moz-transition: background-color 0.3s linear;    /* FF3.7+ */
+	-o-transition: background-color 0.3s linear;      /* Opera 10.5 */
+	-webkit-transition: background-color 0.3s linear; /* Saf3.2+, Chrome */
 }
 
 #content .box:nth-child(even) {
@@ -348,7 +367,6 @@ ul#navigation a {
 }
 
 .entry h3 {
-	margin-bottom: 20px;
 	padding-top: 5px;
 }
 
@@ -362,17 +380,20 @@ ul#navigation a {
 	font-size: 14px;
 }
 
+.material ul {
+	margin-bottom: 20px;	
+}
 
 .material li.zip {
-	background: url('images/box_16x16.png') no-repeat left center;
+	background: url('globaleaks/static/box_16x16.png') no-repeat left center;
 }
 
 .material li.img {
-	background: url('images/image_16x16.png') no-repeat left center;
+	background: url('globaleaks/static/image_16x16.png') no-repeat left center;
 }
 
 .material li.pdf {
-	background: url('images/document_fill_16x16.png') no-repeat left center;
+	background: url('globaleaks/static/document_fill_16x16.png') no-repeat left center;
 }
 
 .material a {
@@ -383,7 +404,7 @@ ul#navigation a {
 	font-weight: bold;
 	font-size: 14px;
 	float: left;
-	margin: 20px 10px 0 0;
+	margin: 10px 10px 0 0;
 	padding: 10px 10px 10px 30px;
 	border-radius:5px;
 	-webkit-border-radius:5px;
@@ -391,11 +412,11 @@ ul#navigation a {
 }
 
 .material a.zip {
-	background: #0a70b4 url('images/icon-download-zip.png') no-repeat 5px center;
+	background: #0a70b4 url('globaleaks/static/icon-download-zip.png') no-repeat 5px center;
 }
 
 .material a.crypt {
-	background: #0a70b4 url('images/icon-download-crypt.png') no-repeat 5px center;
+	background: #0a70b4 url('globaleaks/static/icon-download-crypt.png') no-repeat 5px center;
 }
 
 .downloads-left {
@@ -427,4 +448,13 @@ ul#navigation a {
 	margin: 20px 0;
 }
 
+#footer {
+	width: 960px;
+	margin: 10px auto 20px auto;
+	font-size: 12px;
+	text-align: right;
+}
 
+#footer a {
+	color: #0a70b4;
+}

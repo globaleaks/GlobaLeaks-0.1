@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{=T.accepted_language or 'en'}}" class="no-js"><!-- no-js need it for modernzr -->
-  <head>
+<html> 
+    <head>
     
     <meta charset="utf-8" />        
     <!-- www.phpied.com/conditional-comments-block-downloads/ -->
@@ -40,7 +40,12 @@
     {{#------  require CSS and JS files for this page (read info in base.css) ------}}
     {{response.files.append(URL('static','css/base.css'))}}
     {{response.files.append(URL('static','css/superfish.css'))}}
+    {{response.files.append(URL('static', 'js/fancybox/jquery.fancybox-1.3.4.css'))}}
     {{response.files.append(URL('static','js/superfish.js'))}}
+    {{response.files.append(URL('static', 'js/cufon.js'))}}
+    {{response.files.append(URL('static', 'js/AlteHaas_700.font.js'))}}
+    {{response.files.append(URL('static', 'js/main.js'))}}
+    {{response.files.append(URL('static', 'js/fancybox/jquery.fancybox-1.3.4.pack.js'))}}
     {{#------ include web2py specific js code (jquery, calendar, form stuff) ------}}
     {{include 'web2py_ajax.html'}}
 
@@ -72,12 +77,13 @@
     
     <div id="container">                        
       
-    <div id="wrapper">        
-    
+    <!-- div id="wrapper">        -->
+   
+    <img class="ribbon" alt="beta" src={{=URL('static', 'images/prototype.png')}} />
+
     <div id="header"> <!-- header and login nav -->
       {{block header}} <!-- this is default header -->
-      {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}               
-      <h1><img src="{{=URL('static','images/globaleaks.png')}}" /></h1>
+      <a href="/"><img src="{{=URL('static','images/globaleaks.png')}}" /></a>
       <div style="clear: both;"></div><!-- Clear the divs -->
       {{end}}                                     
     </div><!-- header  -->
@@ -122,21 +128,19 @@
       
     </div><!-- page -->                         
     
+     <!-- /div> wrapper -->
+    </div><!-- container -->        
+ 
     <div id="footer">
       {{block footer}} <!-- this is default footer -->
-      <a href="http://www.globaleaks.org/" style="float: left; padding-right: 6px;">
-        GlobaLeaks demo version
+      2011 - This is a prototype, please do not use in production. <a href="http://www.globaleaks.org/">Globaleaks</a> - <a href="https://launchpad.net/globaleaks">
+        Launchpad Project
       </a>
-      {{=T('Copyright')}} &#169; 2011
-      <a href="https://launchpad.net/globaleaks">
-        GlobaLeaks on launchpad
-      </a>
+
       <div style="clear: both;"></div><!-- Clear the divs -->
       {{end}}
 
     </div><!-- footer -->           
-      </div><!-- wrapper -->
-    </div><!-- container -->        
     
     <!--[if lt IE 7 ]>
     <script src="{{=URL('static','js/dd_belatedpng.js')}}"></script>
