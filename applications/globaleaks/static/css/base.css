@@ -83,7 +83,7 @@ a.button {
 	
 }
 
-a.button.whistblower {
+a.button.whistleblower {
 	background: #0a70b4;
 	width: 200px;
 }
@@ -279,6 +279,10 @@ ul#navigation a {
 	padding: 5px;
 	width: 350px;
 	font-size: 13px;
+}
+
+#content form input[type=submit] {
+    width: auto;
 }
 
 #content form textarea {

@@ -6,16 +6,24 @@
 
 {{else:}}
 
-<h1>4. Whistleblower, redux <span>| Details</span></h1>
+{{if whistleblower: }}
+<h1>4. Whistleblower<span>| Tulip</span></h1>
 <p class="intro">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed semper rutrum nunc, suscipit tincidunt ligula elementum semper. Cras in elit vel libero interdum faucibus. Vivamus vitae tellus vitae velit fermentum scelerisque. Ut ut sapien metus. In ut velit ac leo laoreet fermentum in eu sem.
 </p>
-            
+{{else:}}
+<h1>3. Target<span>| Tulip</span></h1>
+<p class="intro">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed semper rutrum nunc, suscipit tincidunt ligula elementum semper. Cras in elit vel libero interdum faucibus. Vivamus vitae tellus vitae velit fermentum scelerisque. Ut ut sapien metus. In ut velit ac leo laoreet fermentum in eu sem.
+</p>
+
+
+{{pass}}
 <div class="entry">
 
     <h2 class="title">{{=leak_title}}</h2>
+    
     {{if not whistleblower:}}
-
     <div class="downloads-left{{if int(tulip_allowed_downloads) != 0 and int(tulip_downloads) >= int(tulip_allowed_downloads): }} full{{pass}}">
         Downloads: <strong>{{=tulip_downloads}}/{{=tulip_allowed_downloads}}</strong>
     </div>
@@ -24,6 +32,7 @@
         Total clicks: <strong>{{=tulip_accesses}}</strong>
     </div>
     <div class="clear"></div>
+
     <p class="description">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam imperdiet risus sed lectus rutrum nec lobortis ligula lacinia. Aliquam et nibh lacus, et pulvinar enim. Maecenas non velit eu dolor auctor venenatis.
     </p>
@@ -37,7 +46,7 @@
         </ul>
         {{if not dead and not whistleblower: }}
             {{url = tulip_url}}
-
+            <h3>Download</h3>
             <a href=""{{=URL('globaleaks','tulip','download',args=url)}}" class="zip">ZIP</a>
             <a href="{{=URL('globaleaks','tulip','download',args=url)}}" class="crypt">Encrypted ZIP</a>
             <a href="{{=URL('globaleaks','tulip','download',args=url)}}" class="crypt">PGP Encrypted ZIP</a>
@@ -51,75 +60,23 @@
         <thead>
             <th>Nome</th>
             <th>E-mail</th>
+            <th class="downloads">Clicks</th>
             <th class="downloads">Downloads</th>
         </thead>
         <tbody>
+            {{i=0}}
+            {{for i in range(0,10): }}
+            {{if i % 2 == 1: }}
             <tr class="odd">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
+            {{else:}}
             <tr class="even">
+            {{pass}}
                 <td class="name">Stefo</td>
                 <td class="email">fuffone@gmail.com</td>
+                <td class="downloads">10</td>
                 <td class="downloads">4</td>
-                
             </tr>
-            <tr class="odd">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
-            <tr class="even">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
-            <tr class="odd">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
-            <tr class="even">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
-            <tr class="odd">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
-            <tr class="even">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
-            <tr class="odd">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
-            <tr class="even">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
-            <tr class="odd">
-                <td class="name">Stefo</td>
-                <td class="email">fuffone@gmail.com</td>
-                <td class="downloads">4</td>
-                
-            </tr>
+            {{pass}}
         </tbody>
     </table>
     

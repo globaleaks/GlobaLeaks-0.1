@@ -2,7 +2,7 @@ $(document).ready(function(){
 	
 	$(".notimplemented").click(function() {
 		$.fancybox(
-			'<div style=\"background:#444;width:300px;height:60px;padding:40px;text-transform:uppercase;font-size:28px;font-weight:bold;text-align:center\"><h1 style=\"color:#fff\">This function is not implemented!</h1></div>',
+			'<div style=\"background:#444;width:500px;height:200px;font-size:28px;padding:28px;font-weight:bold;\"><h1 style=\"color:#F20056\">This function is not yet implemented.</h1><br/><p style=\"color: white;font-size:20px;\">Help us implement it?<br/><a style=\"color:white\" href=\"https://blueprints.launchpad.net/globaleaks\">Take a look at the blueprints</a></p></div>',
 			{
 
 			});
