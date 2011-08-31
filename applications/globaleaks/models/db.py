@@ -31,7 +31,7 @@ class DB(DAL):
             Field('name'),
             Field('category'),
             Field('desc'),
-            Field('uri'),
+            Field('url'),
             Field('type'),
             Field('info'),
             Field('status'),
@@ -41,7 +41,7 @@ class DB(DAL):
             Field('tulip_counter'),
             Field('dowload_counter'),
             format='%(name)s'
-           )
+        )
             
         self.define_table('leak',
             Field('title'),
@@ -50,28 +50,30 @@ class DB(DAL):
             Field('leaker_id', self.target),
             Field('spooled', 'boolean', False),
             format='%(name)s'
-            )
+        )
             
         self.define_table('comment',
             Field('leak_id', self.leak),
             Field('commenter_id', self.target),
             Field('comment'),
             format='%(name)s'
-            )
+        )
     
         self.define_table('material',
             Field('url', unique=True),
             Field('leak_id', self.leak),
             Field('type'),
             format='%(name)s'
-            )
+        )
             
         self.define_table('tulip',
-            Field('uri', unique=True),
+            Field('url', unique=True),
             Field('leak_id', self.leak),
-            Field('target_id'),# self.target),
-            Field('downloads_counter'),
+            Field('target_id'),
+            Field('allowed_accesses'),
+            Field('accesses_counter'),
             Field('allowed_downloads'),
+            Field('downloads_counter'),
             Field('expiry_time'),
             format='%(name)s'
             )
@@ -79,9 +81,9 @@ class DB(DAL):
         self.define_table('mail',
             Field('target'),
             Field('address'),
-            Field('tulip'),
+            Field('tulip', unique=True),
             format='%(name)s'
-            )
+        )
 
 db = DB()
 
@@ -99,10 +101,10 @@ class Globaleaks(object):
     def __init__(self):
         pass
         
-    def create_target(self, name, category, desc, uri, type, info):
+    def create_target(self, name, category, desc, url, type, info):
         target_id = db.target.insert(name=name, 
             category=category,
-            desc = desc, uri=uri, type=type, info=info,
+            desc = desc, url=url, type=type, info=info,
             status="subscribed" #, last_send_tulip=None,
             #last_access=None, last_download=None,
             #tulip_counter=None, download_counter=None
@@ -134,19 +136,23 @@ class Globaleaks(object):
         
         for t in targets:
         #Create a tulip for each target and insert into DB
-        #for target_uri, allowed_downloads in targets.iteritems():
-            db.tulip.insert(uri = randomizer.generate_tulip_url(),
+        #for target_url, allowed_downloads in targets.iteritems():
+            db.tulip.insert(url = randomizer.generate_tulip_url(),
                 leak_id = leak_id,
                 target_id = t.id, #FIXME get target_id_properly
-                downloads_counter = 0,
+                allowed_accesses = 5,
+                accesses_counter = 0,
                 allowed_downloads = 5,
+                downloads_counter = 0,
                 expiry_time = 0)
         
-        db.tulip.insert(uri = number,
+        db.tulip.insert(url = number,
                 leak_id = leak_id,
                 target_id = 0, #FIXME get target_id_properly
-                downloads_counter = 0,
+                allowed_accesses = 5,
+                accesses_counter = 0,
                 allowed_downloads = 5,
+                downloads_counter = 0,
                 expiry_time = 0)
         
         db.commit()
@@ -191,19 +197,19 @@ class Globaleaks(object):
 #########################################################################
 
 from gluon.tools import Mail, Auth, Crud, Service, PluginManager, prettydate
-mail = Mail()                                  # mailer
-auth = Auth(db)                                # authentication/authorization
-crud = Crud(db)                                # for CRUD helpers using auth
-service = Service()                            # for json, xml, jsonrpc, xmlrpc, amfrpc
-plugins = PluginManager()                      # for configuring plugins
+mail = Mail()                                                  # mailer
+auth = Auth(db)                                                # authentication/authorization
+crud = Crud(db)                                                # for CRUD helpers using auth
+service = Service()                                            # for json, xml, jsonrpc, xmlrpc, amfrpc
+plugins = PluginManager()                                      # for configuring plugins
 
-mail.settings.server = 'smtp.gmail.com:587'  # your SMTP server
-mail.settings.sender = 'globaleaks2011@gmail.com'         # your email
-mail.settings.login = 'globaleaks2011@gmail.com:Antani1234'      # your credentials or None
+mail.settings.server = 'smtp.gmail.com:587'                    # your SMTP server
+mail.settings.sender = 'globaleaks2011@gmail.com'              # your email
+mail.settings.login = 'globaleaks2011@gmail.com:Antani1234'    # your credentials or None
 
-auth.settings.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'   # before define_tables()
-auth.define_tables()                           # creates all needed tables
-auth.settings.mailer = mail                    # for user email verification
+auth.settings.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'    # before define_tables()
+auth.define_tables()                                           # creates all needed tables
+auth.settings.mailer = mail                                    # for user email verification
 auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.messages.verify_email = 'Click on the link http://' + request.env.http_host + URL('default','user',args=['verify_email']) + '/%(key)s to verify your email'
@@ -257,7 +263,6 @@ class NOT_IMPLEMENTED(object):
         self.e = error_message % a
     def __call__(self, value):
         if value == "off" or not value:
-            print value
             return (value, None)
         return (value, self.e)
     def formatter(self, value):

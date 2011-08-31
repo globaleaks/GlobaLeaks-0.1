@@ -24,7 +24,7 @@ class Leak(object):
         db.commit()
     title = property(get_title, set_title)
     
-    #TODO: implment get/set tags
+    #TODO:implement get/set tags
     def set_tags(self):
         pass
     def get_tags(self):
@@ -38,14 +38,14 @@ class Leak(object):
         db.commit()
     desc = property(get_desc, set_desc)
     
-    #TODO: implment get/set material
+    #TODO: implement get/set material
     def get_material(self):
         pass
     def set_material(self, material):
         pass
     material = property(get_material, set_material)
     
-    #TODO: implment get/set targets
+    #TODO: implement get/set targets
     def get_targets(self):
         pass
     def set_targets(self, targets):
@@ -79,7 +79,7 @@ class Leak(object):
 class Tulip(object):
     def __init__(self, id=None, url=None):
         if url:
-            self._id = db(db.tulip.uri==url).select().first().id
+            self._id = db(db.tulip.url==url).select().first().id
         else:
             self._id = id
         
@@ -91,7 +91,7 @@ class Tulip(object):
     id = property(get_id, set_id)
     
     def get_url(self):
-        return db.tulip[self.id].uri
+        return db.tulip[self.id].url
     def set_url(self, url):
         print "Error: url is read only"
         pass
@@ -103,6 +103,20 @@ class Tulip(object):
         print "Error: target is read only"
         pass
     target = property(get_target, set_target)
+
+    def get_allowed_accesses(self):
+        return db.tulip[self.id].allowed_accesses
+    def set_allowed_accesses(self, allowed_accesses):
+        db.tulip[self.id].update_record(allowed_accessess=allowed_accesses)
+        db.commit()
+    allowed_accesses = property(get_allowed_accesses, set_allowed_accesses)
+
+    def get_accesses_counter(self):
+        return db.tulip[self.id].accesses_counter
+    def set_accesses_counter(self, accesses_counter):
+        db.tulip[self.id].update_record(accesses_counter=accesses_counter)
+        db.commit()
+    accesses_counter = property(get_accesses_counter, set_accesses_counter)
    
     def get_allowed_downloads(self):
         return db.tulip[self.id].allowed_downloads
@@ -121,6 +135,6 @@ class Tulip(object):
     def get_leak(self):
         return Leak(db.tulip[self.id].leak_id)
     def set_leak(self):
-        #FIXME: raise error that leak of a tulip can not be changed
+        print "Error: leak is read only"
         pass
     leak = property(get_leak, set_leak)

@@ -2,7 +2,7 @@
 import time,os
 import zipfile, tempfile
 
-fp = open("/tmp/cron.log", "w+")
+fp = open("/tmp/cron.log", "a+")
 fp.write(time.ctime()+"\n")
 
 if(db.auth_user):
@@ -12,14 +12,12 @@ if(db.auth_user):
                             last_name="Globaleaks",email="node@globaleaks.org",
                             password=db.auth_user.password.validate("testing"))
 
-
 new_material = db(db.leak.spooled==False).select()
 
 for mat in new_material:
     if db(db.material.leak_id==mat.id).select():
         mat_dir = os.path.join(request.folder, 'material/') + str(mat.id)
         fp.write("mat_dir %s\n" % mat_dir)
-        #zip_tmp = tempfile.TemporaryFile(prefix='material', suffix='.zip')
 
         fp.write("path %s\n" % os.path.join(mat_dir, str(mat.id)+".zip"))
         zip = zipfile.ZipFile(mat_dir+".zip", 'w')

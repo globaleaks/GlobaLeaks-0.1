@@ -2,21 +2,25 @@
 
 {{if err:}}
 <h2>No tulips found!</h2>
-{{pass}}
 
-{{if not err:}}
+{{elif dead:}}
+<h2>Tulip access counter exceeded!</h2>
+
+{{else:}}
+
 <ul>
     
     <li><b>Title:</b> {{=leak_title}}</li>
     <li><b>Description:</b> {{=leak_desc}}</li>
     <li><b>Material:</b> {{=leak_material}}</li>
+    <li><b>Tulip Accesses Counter:</b> {{=tulip_accesses}}/{{=tulip_allowed_accesses}}</li>
     {{if not whistleblower:}}
-    <li><b>Clicks:</b> {{=tulip_downloads}}/{{=tulip_allowed_downloads}}</li>
+    <li><b>Tulip Downloads Counter:</b> {{=tulip_downloads}}/{{=tulip_allowed_downloads}}</li>
+    {{url = tulip_url}}
+    <li><b>Download Link:</b> <a href="{{=URL('globaleaks','tulip','download',args=url)}}">DATA</a> 
     {{pass}}
     {{#=comment_form}}
      
-    {{if not whistleblower:}}
-
     <table>
     <tr><td><h2>PGP Security</h2></td></tr>
     <tr id="no_table_Description__row">
@@ -96,28 +100,8 @@
     
     <script type="text/javascript">
     function notimpl() {
-    //jQuery(".notimplemented").click(function() {
-                jQuery("#messages").html("NOT IMPLEMENTED!");
-    //});
+        jQuery("#messages").html("NOT IMPLEMENTED!");
     }
     </script>
     
-
-   
 </ul>
-
-{{if comment and False:}}
-    {{=comment}}
-    {{=name}}
-    {{=BEAUTIFY(request.vars)}}
-{{pass}}
-
-{{if dead:}}
-<h1>This Tulip is no more</h1>
-<img src="{{=URL('static','images/dead_tulip.jpg')}}"/>
-{{pass}}
-{{if not dead and not whistleblower:}}
-    {{url = tulip_url}}
-    <a href="{{=URL('globaleaks','tulip','download',args=url)}}">Download data</a>
-{{pass}}
-{{pass}}

@@ -10,7 +10,6 @@ def targets():
     
     response.flash = "You are now the GlobaLeaks Node Maintainer"
     
-    
     if(request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
 

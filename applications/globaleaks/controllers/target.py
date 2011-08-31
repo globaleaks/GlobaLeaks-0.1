@@ -1,10 +1,6 @@
-# coding: utf8
-# try something like
 def index(): return dict(message="hello from target.py")
 
-
 def subscribe():
-
     if not request.args:
         subscribe_form = SQLFORM.factory(
                             Field('Name', requires=IS_NOT_EMPTY()),
@@ -43,8 +39,6 @@ def subscribe():
             return dict(message="subscribed",subscribe=None)
             
     return dict(message="this is logically impossible",subscribe=None)
-
-
 
 def unsubscribe():
     if request.args:
