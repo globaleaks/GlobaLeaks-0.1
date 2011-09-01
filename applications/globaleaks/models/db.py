@@ -256,4 +256,15 @@ auth.settings.table_user.email.label=T("Username")
 # mail.settings.login = settings.email_login
 
 
+# FIXME move to better location
+class NOT_IMPLEMENTED(object):
+    def __init__(self, a, error_message='This function is not implemented: visit http://blueprints.launchpad.net/globaleaks/+spec/%s'):
+        self.e = error_message % a
+    def __call__(self, value):
+        if value == "off" or not value:
+            return (value, None)
+        return (value, self.e)
+    def formatter(self, value):
+        return format(value)
+
 gl = Globaleaks()
