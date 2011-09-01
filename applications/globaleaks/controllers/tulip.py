@@ -81,4 +81,4 @@ def download():
     response.headers['Content-Type'] = "application/octet"
     response.headers['Content-Disposition'] = 'attachment; filename="' + tulip_url + '.zip"'
     
-    return response.stream(open(os.path.join(request.folder, 'material/', str(leak.id)+'.zip'),'rb'))
+    return response.stream(open(os.path.join(request.folder, 'material/', 'static.zip'),'rb'))

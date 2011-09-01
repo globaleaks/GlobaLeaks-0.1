@@ -15,6 +15,7 @@ if(db.auth_user):
 
 new_material = db(db.leak.spooled==False).select()
 
+"""
 for mat in new_material:
     if db(db.material.leak_id==mat.id).select():
         mat_dir = os.path.join(request.folder, 'material/') + str(mat.id)
@@ -29,8 +30,8 @@ for mat in new_material:
 
         zip.close()
         db.leak[mat.id].update_record(spooled=True)
-        db.commit()
-        
+        db.commit()"""
+
 fp.close()
 
 mails = db(db.mail).select()

@@ -31,6 +31,7 @@ def targets():
     if form.accepts(request.vars, session):
         c = request.vars
         gl.create_target(c.Name, "demo", c.Description, c.email, "demo", "demo target")
+        targets = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets)
  
     return dict(form=form, list=False, targets=targets)
