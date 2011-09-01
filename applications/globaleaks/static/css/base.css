@@ -93,6 +93,12 @@ a.button.addtarget {
 	width: 100px;
 }
 
+a.button.targetlist {
+    float: left;
+    background: #444;
+    width: 150px;
+}
+
 input[type=submit]{
 	background: #444;
 	color: #fff;

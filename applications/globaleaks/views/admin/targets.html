@@ -4,15 +4,16 @@ div.flash {
 background-color: green;
 }
 </style>
-{{if not added:}}
-<h1>1. Node Admin <span>| Target list</span></h1>
+{{if not list:}}
+<h1>1. Node Admin <span>| Add Target</span></h1>
 <p class="intro">
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed semper rutrum nunc, suscipit tincidunt ligula elementum semper. Cras in elit vel libero interdum faucibus. Vivamus vitae tellus vitae velit fermentum scelerisque. Ut ut sapien metus. In ut velit ac leo laoreet fermentum in eu sem
 </p>
 {{=form}}
+<a class="button targetlist" href="/globaleaks/admin/targets/display">View target list</a>
 {{pass}}
 
-{{if added:}}
+{{if list:}}
 
 <!-- h1>Now go and test a leak out ;)</h1>
 <ul>
@@ -50,7 +51,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed semper rutrum nunc,
 </table>
 
 <a class="button whistleblower" href="/submit">Be the Whistleblower</a>
-
 
 <a class="button addtarget" href="/globaleaks/admin/targets">Add target</a>
 
