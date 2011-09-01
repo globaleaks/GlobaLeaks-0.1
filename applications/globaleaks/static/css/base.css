@@ -95,8 +95,13 @@ a.button.addtarget {
 
 a.button.targetlist {
     float: left;
-    background: #444;
-    width: 150px;
+    color: black;
+    background: transparent;
+    width: 120px;
+}
+
+a:hover.button.targetlist {
+    color: red;
 }
 
 input[type=submit]{

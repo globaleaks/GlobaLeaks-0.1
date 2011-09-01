@@ -18,14 +18,14 @@ def targets():
 
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description', 'text', requires=IS_LENGTH(minsize=5,maxsize=50)),
-                    Field('email', requires=IS_EMAIL())
+                    Field('email', requires=[IS_EMAIL(), IS_NOT_IN_DB(db, db.target.url)])
                    )
    
     form = SQLFORM.factory(*form_content)
 
     targets = gl.get_targets("ANY")
     
-    if "display" in request.args:
+    if "display" in request.args and not request.vars:
         return dict(form=None, list=True, targets=targets)
     
     if form.accepts(request.vars, session):
