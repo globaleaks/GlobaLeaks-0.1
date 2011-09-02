@@ -1,8 +1,9 @@
 import randomizer
+from db import db
 
 class Globaleaks(object):
 
-    def __init__(self, db):
+    def __init__(self):
         self._db = db
         
     def create_target(self, name, category, desc, url, type, info):

@@ -20,95 +20,8 @@ else:                                         # else use a normal relational dat
     db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
 """
 randomizer = local_import('randomizer')
-DB = local_import('logic.db').DB
-
-db = DB()
-
-
-#XXX remove for non demo functionality
-#
-
-
-####
-# The main GlobaLeaks Class
-###
-
-class Globaleaks(object):
-
-    def __init__(self):
-        pass
-        
-    def create_target(self, name, category, desc, url, type, info):
-        target_id = db.target.insert(name=name, 
-            category=category,
-            desc = desc, url=url, type=type, info=info,
-            status="subscribed" #, last_send_tulip=None,
-            #last_access=None, last_download=None,
-            #tulip_counter=None, download_counter=None
-           )
-        db.commit()
-        return target_id
-        
-    def delete_target (self, id):
-       db(db.target.id==id).delete()
-       pass
-
-    def get_targets(self, target_set):
-        if target_set == "ANY":
-            return db(db.target).select()
-        return db(db.target.category==target_set).select()
-        
-    def get_target(self, target_id):
-        return db(db.target.id==target_id).select().first()
-        
-    def create_leak(self, title, desc, leaker, material, target_set, tags="", number=None):
-        #FIXME insert new tags into DB first
-        
-        #Create leak and insert into DB
-        leak_id = db.leak.insert(title = title, desc = desc,
-            submission_timestamp = time.time(),
-            leaker_id = 0, spooled=False)
-        
-        targets = gl.get_targets(target_set)
-        
-        for t in targets:
-        #Create a tulip for each target and insert into DB
-        #for target_url, allowed_downloads in targets.iteritems():
-            db.tulip.insert(url = randomizer.generate_tulip_url(),
-                leak_id = leak_id,
-                target_id = t.id, #FIXME get target_id_properly
-                allowed_accesses = 0, # inf
-                accesses_counter = 0,
-                allowed_downloads = 5,
-                downloads_counter = 0,
-                expiry_time = 0)
-        
-        db.tulip.insert(url = number,
-                leak_id = leak_id,
-                target_id = 0, #FIXME get target_id_properly
-                allowed_accesses = 0, # inf
-                accesses_counter = 0,
-                allowed_downloads = 5,
-                downloads_counter = 0,
-                expiry_time = 0)
-        
-        db.commit()
-        return leak_id
-        
-    def get_leaks(self):
-        pass
-        
-    def get_leak(self, leak_id):
-        pass
-        
-    def get_tulips(self, leak_id):
-        pass
-        
-    def get_tulip(self, tulip_id):
-        pass
-
-
-
+db = local_import('logic.db').DB()
+gl = local_import('logic.globaleaks').Globaleaks()
 
 ####
 # For the time being just use sqlite
@@ -204,4 +117,3 @@ class NOT_IMPLEMENTED(object):
     def formatter(self, value):
         return format(value)
 
-gl = Globaleaks()
