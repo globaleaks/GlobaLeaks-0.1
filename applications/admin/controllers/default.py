@@ -1172,9 +1172,6 @@ def ticket():
     ticket = request.args[1]
     e = RestrictedError()
     e.load(request, app, ticket)
-    
-    print "----------------------------------------"
-    print e
 
     return dict(app=app,
                 ticket=ticket,

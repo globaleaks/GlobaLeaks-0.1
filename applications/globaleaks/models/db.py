@@ -21,7 +21,7 @@ else:                                         # else use a normal relational dat
 """
 randomizer = local_import('randomizer')
 db = local_import('logic.db').DB()
-gl = local_import('logic.globaleaks').Globaleaks()
+gl = local_import('logic.globaleaks').Globaleaks(db)
 
 ####
 # For the time being just use sqlite

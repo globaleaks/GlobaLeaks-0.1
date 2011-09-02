@@ -1,9 +1,9 @@
 import randomizer
-from db import db
+import time
 
 class Globaleaks(object):
 
-    def __init__(self):
+    def __init__(self, db):
         self._db = db
         
     def create_target(self, name, category, desc, url, type, info):
@@ -37,7 +37,7 @@ class Globaleaks(object):
             submission_timestamp = time.time(),
             leaker_id = 0, spooled=False)
         
-        targets = gl.get_targets(target_set)
+        targets = self.get_targets(target_set)
         
         for t in targets:
         #Create a tulip for each target and insert into DB

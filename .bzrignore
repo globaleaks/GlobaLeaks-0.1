@@ -34,3 +34,4 @@ applications/globaleaks/sessions/127.0.0.1-c6d5b9b3-1ec7-41c1-8d72-04c21b7a6b11
 material/*
 applications/globaleaks/cache/cache.lock
 applications/globaleaks/cache/cache.shelve
+applications/admin/cache/*
