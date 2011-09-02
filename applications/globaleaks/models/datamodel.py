@@ -40,7 +40,8 @@ class Leak(object):
     
     #TODO: implement get/set material
     def get_material(self):
-        pass
+        for material_id in db(db.material.leak_id==self._id).select(db.material.id):
+            yield Material(material_id)
     def set_material(self, material):
         pass
     material = property(get_material, set_material)
@@ -74,6 +75,9 @@ class Leak(object):
         print "Error: tulip is read only"
         pass
     tulips = property(get_tulips, set_tulips)
+    
+    def add_material(self, leak_id, url, type):
+        Material.create_new(leak_id, url, type)
 
 
 class Tulip(object):
@@ -138,3 +142,36 @@ class Tulip(object):
         print "Error: leak is read only"
         pass
     leak = property(get_leak, set_leak)
+    
+class Material(object):
+    def __init__(self, id, url=None):
+        if url:
+            self._id = db(db.tulip.url==url).select().first().id
+        else:
+            self._id = id
+        
+    def get_id(self):
+        return self._id
+    def set_id(self, id):
+        print "Error: id is read only"
+        pass
+    id = property(get_id, set_id)
+    
+    def get_url(self):
+        return db.material[self.id].url
+    def set_url(self, id):
+        print "Error: url is read only"
+        pass
+    url = property(get_url, set_url)
+    
+    def get_type(self):
+        return db.material[self.id].type
+    def set_type(self, id):
+        print "Error: url is read only"
+        pass
+    type = property(get_type, set_type)
+    
+    @staticmethod
+    def create_new(leakd_id, url, type):
+        return db.material.insert(leak_id=leak_id,
+            url="demo", type="demo")
