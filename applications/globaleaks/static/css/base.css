@@ -209,6 +209,31 @@ ul#navigation a {
 	padding: 20px;
 }
 
+#content .intro {
+	line-height: 20px;
+	text-align: justify;
+	margin-bottom: 20px;
+	background: #ededed;
+    padding: 20px;	
+}
+
+#content .intro ul {
+    margin-bottom: 20px;
+
+}
+
+#content .intro ul li {
+    padding-left: 10px;
+}
+
+#content .intro p {
+    margin-bottom: 20px;
+}
+
+#content .intro em {
+    font-size: 20px;
+
+}
 #content .box {
 	background: #444;
 	width: 340px;

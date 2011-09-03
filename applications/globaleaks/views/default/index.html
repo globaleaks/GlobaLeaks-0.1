@@ -1,9 +1,21 @@
 {{extend 'layout.html'}}
 <h1>Welcome to the Interactive Demo</h1>
-<p class="intro">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed semper rutrum nunc, suscipit tincidunt ligula elementum semper. Cras in elit vel libero interdum faucibus. Vivamus vitae tellus vitae velit fermentum scelerisque. Ut ut sapien metus. In ut velit ac leo laoreet fermentum in eu sem.
-</p>
-
+<div class="intro">
+ <p>
+ In this demo you will experience the very basic workflow of GlobaLeaks:
+ </p>
+ <ul>
+    <li>A GlobaLeaks node administrator setups up the targets list. These will be the receivers of the submitted material.</li>
+    <li>The Whistleblower submits the material and gets back a 10 digit receipt.</li>
+    <li>The Target receives the submitted material as a tulip that will expire after a certain amount of downloads</li>
+    <li>The Whistleblower using the receipt checks the status of his submission</li>
+ </ul>
+ <p>
+ The basic functionalities that this prototype is missing are: comments, tulip password authentication and much more, to have a full list visit our <a href="https://blueprints.launchpad.org/globaleaks/">blueprints page</a>
+ </p>
+ <p>
+ <em>Warning:</em> GlobaLeaks is by no means ready for deployment in a real world scenario as it is still just a  prototype. We just make software and we will never run a node for appropriated responsability segregation. Upload functionality it's disabled for the prototype demo.
+</div>
 <div onclick="location.href='{{=URL('globaleaks', 'admin', 'targets')}}'" class="box">
     <h2><span>1.</span><br />Node Administrator</h2>
     <p style="text-align:center">
