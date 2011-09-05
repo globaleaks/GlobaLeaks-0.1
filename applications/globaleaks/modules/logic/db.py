@@ -18,7 +18,7 @@ class DB(DAL):
             Field('last_access'),
             Field('last_download'),
             Field('tulip_counter'),
-            Field('dowload_counter'),
+            Field('download_counter'),
             format='%(name)s'
         )
             

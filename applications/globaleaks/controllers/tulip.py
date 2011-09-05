@@ -33,18 +33,27 @@ def status():
     else:
         whistleblower=False
         response.flash = "You are the Target"
-    
+   
+    target = gl.get_target(t.target)
+
     dead = False
-    
-    if(int(t.allowed_accesses) !=0 and int(t.accesses_counter) >= int(t.allowed_accesses)):
+     
+    if(int(t.allowed_accesses) != 0 and int(t.accesses_counter) >= int(t.allowed_accesses)):
         dead = True
     else:
+        if t.target != "0":
+            if target.tulip_counter:
+                new_count = int(target.tulip_counter) + 1
+            # XXX move to a Target Datamodel
+                db.target[t.target].update_record(tulip_counter=new_count)
+            else:
+                db.target[t.target].update_record(tulip_counter=1)
+
         t.accesses_counter = int(t.accesses_counter) + 1
 
     if(int(t.allowed_downloads) !=0 and int(t.downloads_counter) >= int(t.allowed_downloads)):
         dead = True
 
-    print gl.get_targets("ANY")
     return dict(err=None,
             dead=dead,
             whistleblower=whistleblower,
@@ -70,10 +79,20 @@ def download():
         t = Tulip(url=tulip_url)
     except:
         redirect("/tulip/" + tulip_url);
+    
+    target = gl.get_target(t.target)
 
     if(int(t.downloads_counter) >= int(t.allowed_downloads) and int(t.allowed_downloads)!=0):
         redirect("/tulip/" + tulip_url);
     else:
+        if t.target != "0":
+            if target.download_counter:
+                new_count = int(target.download_counter) + 1
+                # XXX move to a Target Datamodel
+                db.target[t.target].update_record(download_counter=new_count)
+            else:
+                db.target[t.target].update_record(download_counter=1)
+
         t.downloads_counter = int(t.downloads_counter) + 1
 
     leak = t.get_leak()

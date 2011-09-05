@@ -190,7 +190,7 @@ A Random GlobaLeaks Node""" % context
 
 <p>You can download the material from the following URL:</p>
 
-<p><a href="http://%(site)s/tulip/%(tulip_url)s">http://%(site)s/tulip/%(tulip_url)s"</a></p>
+<p><a href="http://%(site)s/tulip/%(tulip_url)s">http://%(site)s/tulip/%(tulip_url)s</a></p>
 
 <p>Please do not forward or share this e-mail: each TULIP has a limited number of downloads and access before being destroyed forever, nobody (even the node administrator) can recover and expired or dead TULIP.</p>
 
@@ -219,7 +219,7 @@ You can permanently unsubscribe from this GLobaLeaks Node by clicking on the fol
 </p>
 <p>
 If in any future you want to be re-enlisted you can add yourself again using this link:
-<a href="http://%(site)s/target/subscribe/%(tulip_url)s">http://%(site)s/target/subscribe/%(tulip_url)s"/a>
+<a href="http://%(site)s/target/subscribe/%(tulip_url)s">http://%(site)s/target/subscribe/%(tulip_url)s/a>
 </p>
 </li>
 </ol>
