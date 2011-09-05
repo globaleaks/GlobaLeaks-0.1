@@ -11,8 +11,10 @@ def index():
                     Field('metadata', 'boolean', requires=NOT_IMPLEMENTED("tulip-metadata-sanitization")),
                     Field('disclaimer', 'boolean', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer")),
                     )
-     
-    form = SQLFORM.factory(*form_content,labels = {'disclaimer':'Accept and have read the disclaimer', 'metadata':'Metadata sanitization'})
+         
+    form = SQLFORM.factory(*form_content)
+    # temporary comment: syntax error !?
+    # form = SQLFORM.factory(*form_content,labels = {'disclaimer':'Accept and have read the disclaimer', 'metadata':'Metadata sanitization'})
     
     form = FORM(TABLE(
             TR('Title', INPUT(_name='Title', requires=IS_NOT_EMPTY())),
