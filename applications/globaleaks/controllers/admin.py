@@ -17,7 +17,7 @@ def targets():
         pass
 
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
-                    Field('Description', 'text', requires=IS_LENGTH(minsize=5,maxsize=50)),
+                    Field('Description', requires=IS_LENGTH(minsize=5,maxsize=50)),
                     Field('email', requires=[IS_EMAIL(), IS_NOT_IN_DB(db, db.target.url)])
                    )
    
