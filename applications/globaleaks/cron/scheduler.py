@@ -42,6 +42,8 @@ new_material = db(db.leak.spooled==False).select()
 mails = db(db.mail).select()
 
 fp.write(str(mails)+"\n")
+if not mail:
+    fp.write(time.ctime()+": NO MAILS TO SEND!\n")
 
 for m in mails:
     context = dict(name=m.target,
