@@ -214,12 +214,12 @@ A Random GlobaLeaks Node""" % context
 
 <li><h3>How can I stop receiving future TULIPs?</h3>
 <p>
-You can permanently unsibscrive from this GLobaLeaks Node by clicking on the following leak:
-http://%(site)s/target/subscribe/%(tulip_url)s
+You can permanently unsubscribe from this GLobaLeaks Node by clicking on the following leak:
+<a href="http://%(site)s/target/unsubscribe/%(tulip_url)s">http://%(site)s/target/unsubscribe/%(tulip_url)s</a>
 </p>
 <p>
 If in any future you want to be re-enlisted you can add yourself again using this link:
-http://%(site)s/target/unsubscribe/%(tulip_url)s
+<a href="http://%(site)s/target/subscribe/%(tulip_url)s">http://%(site)s/target/subscribe/%(tulip_url)s"/a>
 </p>
 </li>
 </ol>
