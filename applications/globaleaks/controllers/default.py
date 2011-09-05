@@ -11,3 +11,6 @@ def call():
 def index(): return dict(message=T("Hello World, I am GlobaLeaks!"))
 
 def error(): return dict()
+
+def email_template(): return dict()
+

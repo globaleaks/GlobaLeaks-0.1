@@ -3,38 +3,9 @@ from gluon.tools import MIMEMultipart, MIMEText, MIMEBase, Encoders
 import smtplib
 
 class MultiPart_Mail(object):
-    def __init__(self, s):
 
-    """Helper to create MIME message
-     Arguments:
-        sender = email address of sender (string). Required
-        recipients = email address(es) of recipient(s). List. Required.
-                examples: ["name <someone@host.com>"] 
-                or if multiple 
-                ["name1 <name1@host1.com>, name2 <name2@host2.net>"]
-                or 
-                ["person@host.org, person@host.info"]
-        subject = subject for message. String. Required
-        message_text = body of message in plain text. String. Required
-        message_html = body of message in html. String. Optional
-        attachments = list of tuples representing attachments with each 
-                tuple having 2 elements - a filename & the file's contents. Optional. 
-                example: [('image1.jpg',file_io),('file2.pdf',file_contents)]
-                if the filename ends in an image extension (jpg, jpeg, png, gif, bmp) 
-                it will be attached as an embedded image
-                and you may refer to it in the message_html by 
-                <img src="cid:filename"> where filename is the first element in
-                the tuple.
-                DO NOT include spaces in the filename or it won't appear as an 
-                embedded image in your html email!
-                for all other file types, the file will be attached as octet-stream 
-                and be known by the filename passed as the first element in tuple
-        cc = email address(es) of people to send message to via Carbon Copy. 
-               String. Optional
-        bcc = email address(es) of people to send message to via Blind Carbon 
-                 Copy. String. Optional
-        reply_to = email address for replies to be send to. String. Optional
-    """
+    def __init__(self, s):
+       self.settings = s
     def buildMIME(self, 
         sender, 
         recipients, 
@@ -60,11 +31,11 @@ class MultiPart_Mail(object):
 
         if cc and isinstance(cc, list):
             cc = ', '.join(cc)
-        msgRoot['CC'] = cc
+            msgRoot['CC'] = cc
 
         if bcc and isinstance(cc, list):
             bcc = ', '.join(bcc)
-        msgRoot['BCC'] = bcc
+            msgRoot['BCC'] = bcc
 
         if reply_to:
             msgRoot['Reply-To'] = reply_to
@@ -141,7 +112,7 @@ class MultiPart_Mail(object):
                     message_text = message_text, message_html = message_html,
                     attachments = attachments, 
                     cc = cc, bcc = bcc, reply_to = reply_to)
-                print 'message'+msg.as_string()
+                #print 'message'+msg.as_string()
 
                 #Build MIME body
                 (host, port) = self.settings.email_server.split(':')
@@ -158,4 +129,112 @@ class MultiPart_Mail(object):
         except Exception, e:
             return False
         return True
+
+class MessageContent():
+    def txt(self, context):
+        return """Esteemed %(name)s,
+
+This is an E-Mail message to notify you that someone has selected you as a valuable recipient of WhistleBlowing material in the form of a Globaleaks TULIP. This message has been created by the GlobaLeaks Node %(sitename)s.
+
+This TULIP has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this TULIP should be considered of high importance.
+
+You can download the material from the following URL:
+
+http://%(site)s/tulip/%(tulip_url)s
+
+Please do not forward or share this e-mail: each TULIP has a limited number of downloads and access before being destroyed forever, nobody (even the node administrator) can recover and expired or dead TULIP.
+
+--------------------------------------------------
+GENERAL INFO
+--------------------------------------------------
+
+1. What is Globaleaks?
+
+GlobaLeaks is the first Open Source Whistleblowing Framework. It empowers anyone to easily setup and maintain their own Whistleblowing platform. It is also a collection of what are the best practices for people receiveiving and submitting material. GlobaLeaks works in all environments: media, activism, corporations, public agencies.
+
+2. Is GlobaLeaks sending me this Mail?
+
+No, this mail has been sent to you by the Node called %(sitename)s. They are running the GlobaLeaks Platform, but are not directly tied to the GlobaLeaks organization. GlobaLeaks (http://www.globaleaks.org) will never be directly affiliated with any real world WhistleBlowing sites, GlobaLeaks will only provide software and technical support.
+
+3. Why am I receiving this?
+
+You're receiving this communication because an anonymous whistleblower has chosen you as a trustworthy contact for releasing confidential and/or important information that could be of utmost importance.
+
+4. How can I stop receiving future TULIPs?
+
+You can permanently unsibscrive from this GLobaLeaks Node by clicking on the following leak:
+http://%(site)s/target/subscribe/%(tulip_url)s
+
+If in any future you want to be re-enlisted you can add yourself again using this link:
+http://%(site)s/target/unsubscribe/%(tulip_url)s
+
+
+For any other inquire please refer to %(sitename)s to the GlobaLeaks website at http://globaleaks.org
+
+Take Care,
+A Random GlobaLeaks Node""" % context
+
+
+
+    def html(self, context):
+        return """<!html>
+<html><head><title>You have received a TULIP from %(sitename)s - %(name)s</title>
+</head>
+<body>
+
+<p>Esteemed %(name)s,</p>
+
+<p>This is an E-Mail message to notify you that someone has selected you as a valuable recipient of WhistleBlowing material in the form of a Globaleaks TULIP. This message has been created by the GlobaLeaks Node %(sitename)s.</p>
+
+<p>This TULIP has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this TULIP should be considered of high importance.</p>
+
+<p>You can download the material from the following URL:</p>
+
+<p><a href="http://%(site)s/tulip/%(tulip_url)s">http://%(site)s/tulip/%(tulip_url)s"</a></p>
+
+<p>Please do not forward or share this e-mail: each TULIP has a limited number of downloads and access before being destroyed forever, nobody (even the node administrator) can recover and expired or dead TULIP.</p>
+
+<h2>GENERAL INFO</h2>
+
+<ol>
+<li><h3>What is Globaleaks?</h3>
+
+<p>GlobaLeaks is the first Open Source Whistleblowing Framework. It empowers anyone to easily setup and maintain their own Whistleblowing platform. It is also a collection of what are the best practices for people receiveiving and submitting material. GlobaLeaks works in all environments: media, activism, corporations, public agencies.</p>
+</li>
+
+<li><h3>Is GlobaLeaks sending me this Mail?</h3>
+
+<p>No, this mail has been sent to you by the Node called %(sitename)s. They are running the GlobaLeaks Platform, but are not directly tied to the GlobaLeaks organization. GlobaLeaks (http://www.globaleaks.org) will never be directly affiliated with any real world WhistleBlowing sites, GlobaLeaks will only provide software and technical support.</p>
+</li>
+
+<li><h3>Why am I receiving this?</h3>
+
+<p>You're receiving this communication because an anonymous whistleblower has chosen you as a trustworthy contact for releasing confidential and/or important information that could be of utmost importance.</p>
+</li>
+
+<li><h3>How can I stop receiving future TULIPs?</h3>
+<p>
+You can permanently unsibscrive from this GLobaLeaks Node by clicking on the following leak:
+http://%(site)s/target/subscribe/%(tulip_url)s
+</p>
+<p>
+If in any future you want to be re-enlisted you can add yourself again using this link:
+http://%(site)s/target/unsubscribe/%(tulip_url)s
+</p>
+</li>
+</ol>
+
+<p>
+For any other inquire please refer to %(sitename)s to the GlobaLeaks website at http://globaleaks.org
+</p>
+
+<p>Take Care,<br/>
+A Random GlobaLeaks Node</p>
+
+
+""" % context
+
+
+
+
 
