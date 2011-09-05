@@ -42,7 +42,7 @@ def status():
         dead = True
     else:
         if t.target != "0":
-            if target.tulip_counter:
+            if target and target.tulip_counter:
                 new_count = int(target.tulip_counter) + 1
             # XXX move to a Target Datamodel
                 db.target[t.target].update_record(tulip_counter=new_count)
@@ -86,7 +86,7 @@ def download():
         redirect("/tulip/" + tulip_url);
     else:
         if t.target != "0":
-            if target.download_counter:
+            if target and target.download_counter:
                 new_count = int(target.download_counter) + 1
                 # XXX move to a Target Datamodel
                 db.target[t.target].update_record(download_counter=new_count)
