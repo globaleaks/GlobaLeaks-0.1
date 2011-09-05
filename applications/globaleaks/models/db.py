@@ -55,7 +55,7 @@ plugins = PluginManager()                                      # for configuring
 
 mail.settings.server = 'smtp.gmail.com:587'                    # your SMTP server
 mail.settings.sender = 'globaleaks2011@gmail.com'              # your email
-mail.settings.login = 'globaleaks2011@gmail.com:Antani1234'    # your credentials or None
+mail.settings.login = ''                                       # your credentials or None
 
 auth.settings.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'    # before define_tables()
 auth.define_tables()                                           # creates all needed tables

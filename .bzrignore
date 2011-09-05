@@ -35,3 +35,4 @@ material/*
 applications/globaleaks/cache/cache.lock
 applications/globaleaks/cache/cache.shelve
 applications/admin/cache/*
+0.py

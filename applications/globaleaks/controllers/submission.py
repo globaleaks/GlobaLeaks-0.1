@@ -60,6 +60,7 @@ def index():
                 continue
 
             if target.status == "subscribed":
+                print "adding to mail, subscribed dude"
                 db.mail.insert(target=target.name,
                         address=target.url, tulip=tulip.url)
         pretty_number = leaker_number[0][:3]+" "+leaker_number[0][3:6]+" " +leaker_number[0][6:]
