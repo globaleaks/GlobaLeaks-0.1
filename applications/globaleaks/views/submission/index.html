@@ -6,12 +6,7 @@ div.flash {background-color: #888;}
 
 {{if form:}}
     <h1>2. Whistleblower<span> | Submission</span></h1>
-    <p class="intro">
-    The Node Administrator is the person who is actually running the GlobaLeaks node. He is aware of the context he wishes to impact and will therefor
-    be able to properly construct a target list. The target list will be composed of respectable people that will be willing to analyze the information
-    that is sent to them. The target lists needs to be as diversified as possible. The diversification of interests serves to incentivize targets into
-    properly analyzing the information submitted by the Whistleblower.
-    </p>
+    <p class="intro">You are the Whistleblower and this is the Submission interface from which you can send material to be received as a TULIP by the Targets. Once you have successfully submitted the form you will be given a Reciept allowing you to check back on the status of the TULIP, view statistics (access/downloads counters), send and receive comments and upload new material. The Target group responsible for analyzing and recieving the material may be selected by the Whistleblower (NOT IMPLEMENTED <a href="https://blueprints.launchpad.net/globaleaks/+spec/submission-targets-configurable">https://blueprints.launchpad.net/globaleaks/+spec/submission-targets-configurable</a></p>
     
         {{=form}}
 {{pass}}
@@ -19,6 +14,7 @@ div.flash {background-color: #888;}
 {{if leak_id:}}
     <h1>2. Whistleblower <span>| Tulip</span></h1>
     <p class="intro">This is a number you should write down to keep track of your submission</p>
+         <img src="{{=URL('static', 'images/icon-target.png')}}" alt="" />
     
     <p class="tulip">
         {{=leaker_tulip}}
@@ -27,6 +23,11 @@ div.flash {background-color: #888;}
     <p class="intro">
         Please save it in a safe place (e.x. mobile phone, piece of paper, etc.)
     </p>
+    <p>
+    You should now impersonate the Target by checking you email and clicking on the TULIP (link). Be sure to check also your spam email folder.
+    </p>
+   <img src="{{=URL('static', 'images/icon-target.png')}}" alt="" />
+    
 
 {{pass}}
 
