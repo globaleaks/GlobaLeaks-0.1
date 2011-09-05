@@ -219,7 +219,7 @@ You can permanently unsubscribe from this GLobaLeaks Node by clicking on the fol
 </p>
 <p>
 If in any future you want to be re-enlisted you can add yourself again using this link:
-<a href="http://%(site)s/target/subscribe/%(tulip_url)s">http://%(site)s/target/subscribe/%(tulip_url)s/a>
+<a href="http://%(site)s/target/subscribe/%(tulip_url)s">http://%(site)s/target/subscribe/%(tulip_url)s</a>
 </p>
 </li>
 </ol>
