@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import time,os
 import zipfile, tempfile
+from boto.ses.connection import SESConnection
+
+conn = SESConnection(settings.aws_key, settings.aws_secret_key) 
 
 fp = open("/tmp/cron.log", "a+")
 fp.write(time.ctime()+"\n")
@@ -49,6 +52,10 @@ to subscribe back: http://%s:%s/globaleaks/target/subscribe/%s
 """ % (settings.hostname, settings.port, m.tulip,
         settings.hostname, settings.port, m.tulip,
         settings.hostname, settings.port, m.tulip)
+
+    # XXX Use for AWS
+    # conn.send_email(source='node@globaleaks.org', subject='GlobaLeaks notification for:' + m.target, body=message, to_addresses=m.address, cc_addresses=None, bcc_addresses=None, format='text', reply_addresses=None, return_path=None)
+
 
     mail.send(to=m.address,
             subject="GlobaLeaks notification for: " + m.target,

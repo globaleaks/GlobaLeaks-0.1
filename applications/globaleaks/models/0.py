@@ -21,4 +21,8 @@ settings.plugins = []
 settings.hostname = '127.0.0.1'
 settings.port     = '8000'
 
+# Configuration for AWS
+settings.aws_key = '<AWS-KEY>'
+settings.aws_secret_key = '<AWS-SECRET-KEY>'
+
 
