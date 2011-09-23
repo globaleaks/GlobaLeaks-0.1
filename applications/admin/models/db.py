@@ -9,18 +9,18 @@ if MULTI_USER_MODE:
     crud = Crud(globals(),db)                      # for CRUD helpers using auth
     service = Service(globals())                   # for json, xml, jsonrpc, xmlrpc, amfrpc
     plugins = PluginManager()
-    
-    mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
-    mail.settings.sender = 'you@gmail.com'         # your email
-    mail.settings.login = 'username:password'      # your credentials or None
 
-    auth.settings.hmac_key = '<your secret key>'   # before define_tables()
-    auth.define_tables()                           # creates all needed tables
-    auth.settings.mailer = mail                    # for user email verification
-    auth.settings.registration_requires_verification = False
-    auth.settings.registration_requires_approval = True
-    auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['verify_email'])+'/%(key)s to verify your email'
-    auth.settings.reset_password_requires_verification = True
+    settings.mail.settings.server = 'logging' or 'smtp.gmail.com:587'  # your SMTP server
+    settings.mail.settings.sender = 'you@gmail.com'         # your email
+    settings.mail.settings.login = 'username:password'      # your credentials or None
+
+    settings.auth.hmac_key = '<your secret key>'   # before define_tables()
+    settings.auth.define_tables()                           # creates all needed tables
+    settings.auth.mailer = mail                    # for user email verification
+    settings.auth.registration_requires_verification = False
+    settings.auth.registration_requires_approval = True
+    settings.auth.messages.verify_email = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['verify_email'])+'/%(key)s to verify your email'
+    settings.auth.reset_password_requires_verification = True
     auth.messages.reset_password = 'Click on the link http://'+request.env.http_host+URL('default','user',args=['reset_password'])+'/%(key)s to reset your password'
 
     db.define_table('app',Field('name'),Field('owner',db.auth_user))
