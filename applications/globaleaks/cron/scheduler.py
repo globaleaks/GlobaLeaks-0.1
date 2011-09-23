@@ -16,8 +16,8 @@ if(db.auth_user):
     if(not db(db.auth_user.email=="node@globaleaks.org").select().first()):
         db.auth_user.insert(first_name="Globaleaks node administrator",
                             last_name="Globaleaks",email="node@globaleaks.org",
-                            password="04240502d92a8c637725bbd44726ddf7278cf8c284fe25de112383fb3b36fe5d7d38dc228c92cf71ac300a1e767878dcb868ab5c53b7be51ae42f148eca151dd")
-                            #password=db.auth_user.password.validate("testing"))
+#                           password="04240502d92a8c637725bbd44726ddf7278cf8c284fe25de112383fb3b36fe5d7d38dc228c92cf71ac300a1e767878dcb868ab5c53b7be51ae42f148eca151dd")
+                            password=db.auth_user.password.validate("testing")[0])
 
 
 new_material = db(db.leak.spooled==False).select()
