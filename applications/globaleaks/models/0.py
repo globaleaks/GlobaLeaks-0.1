@@ -10,6 +10,7 @@ gl = local_import('logic.globaleaks').Globaleaks(db)
 mail = Mail(db)
 auth = Auth(db)
 settings = Storage()
+settings.tulip = Storage()
 
 cfgparser = ConfigParser()
 cfgfile = os.path.join(os.path.dirname(__file__), 'gleaks.cfg')
