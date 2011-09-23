@@ -21,3 +21,5 @@ material/*
 applications/globaleaks/cache/*
 applications/admin/cache/*
 0.py
+applications/admin/languages/it-it.py
+applications/globaleaks/languages/it-it.py
