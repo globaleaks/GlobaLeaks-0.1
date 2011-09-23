@@ -15,6 +15,7 @@ applications/admin/
 applications/globaleaks/errors
 applications/globaleaks/sessions/
 deposit/
+docs/build
 material/
 logs/
 site-packages/
