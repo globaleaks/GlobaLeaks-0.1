@@ -350,7 +350,7 @@ def make_table(table,fields):
         s+="    Field('registration_id',default='',\n"
         s+="          writable=False,readable=False),\n"
     s+="    format='%("+first_field+")s',\n"
-    s+="    migrate=settings.migrate)\n\n"
+    s+="    migrate=settings.globals.migrate)\n\n"
     if table=='auth_user':
         s+="""
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
@@ -374,30 +374,30 @@ def fix_db(filename):
         content = content.replace('sqlite://storage.sqlite',
                                 params['database_uri'])
         content = content.replace('auth.define_tables()',\
-            auth_user+'auth.define_tables(migrate = settings.migrate)')
+            auth_user+'auth.define_tables(migrate = settings.globals.migrate)')
     content += """
-mail.settings.server = settings.email_server
-mail.settings.sender = settings.email_sender
-mail.settings.login = settings.email_login
+mail.settings.server = settings.globals.email_server
+mail.settings.sender = settings.globals.email_sender
+mail.settings.login = settings.globals.email_login
 """
     if params['login_method']=='janrain':
         content+="""
 from gluon.contrib.login_methods.rpx_account import RPXAccount
 settings.auth.actions_disabled=['register','change_password','request_reset_password']
 settings.auth.login_form = RPXAccount(request,
-    api_key = settings.login_config.split(':')[-1],
-    domain = settings.login_config.split(':')[0],
+    api_key = settings.globals.login_config.split(':')[-1],
+    domain = settings.globals.login_config.split(':')[0],
     url = "http://%s/%s/default/user/login" % (request.env.http_host,request.application))
 """
     write_file(filename, content, 'wb')
 
 def make_menu(pages):
     s="""
-response.title = settings.title
-response.subtitle = settings.subtitle
-response.meta.author = '%s <%s>' % (settings.author, settings.author_email)
-response.meta.keywords = settings.keywords
-response.meta.description = settings.description
+response.title = settings.globals.title
+response.subtitle = settings.globals.subtitle
+response.meta.author = '%s <%s>' % (settings.globals.author, settings.globals.author_email)
+response.meta.keywords = settings.globals.keywords
+response.meta.description = settings.globals.description
 response.menu = [
 """
     for page in pages:
@@ -540,7 +540,7 @@ def create(options):
     try:
         file.write("from gluon.storage import Storage\n")
         file.write("settings = Storage()\n\n")
-        file.write("settings.migrate = True\n")
+        file.write("settings.globals.migrate = True\n")
         for key,value in session.app['params']:
             file.write("settings.%s = %s\n" % (key,repr(value)))
     finally:

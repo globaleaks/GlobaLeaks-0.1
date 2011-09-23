@@ -81,9 +81,9 @@ plugins = PluginManager()                                      # for configuring
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
-# mail.settings.server = settings.email_server
-# mail.settings.sender = settings.email_sender
-# mail.settings.login = settings.email_login
+# mail.settings.server = settings.globals.email_server
+# mail.settings.sender = settings.globals.email_sender
+# mail.settings.login = settings.globals.email_login
 
 
 # FIXME move to better location
