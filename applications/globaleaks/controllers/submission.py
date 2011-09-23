@@ -25,8 +25,6 @@ def index():
                 INPUT(_name='disclaimer', _type='checkbox', 
                     requires=IS_EQUAL_TO("on", error_message="Please accept the disclaimer"))),
             TR('', INPUT(_name='submit', _type='submit'))))
-    
-
 
     response.flash = "You are the Whistleblower"
     
@@ -40,6 +38,8 @@ def index():
         i = 0
         
         #FIXME Refactor me please
+        # Create the material directory if it does not exist
+        # the name of the directory is the leak id
         for f in os.listdir(os.path.join(request.folder,'uploads/')):
             ext = f.split(".")[-1:][0]
             dst_folder = os.path.join(request.folder, 'material/' + str(leak_id.id) + '/')
