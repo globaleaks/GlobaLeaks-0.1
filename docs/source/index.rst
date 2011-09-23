@@ -5,7 +5,7 @@
 
 Welcome to globaleaks's documentation!
 ======================================
-
+GlobaLeaks is the first Open Source Whistleblowing Framework. It empowers anyone to easily setup and maintain their own Whistleblowing platform. It is also a collection of what are the best practices for people receiveiving and submitting material. GlobaLeaks works in all environments: media, activism, corporations, public agencies.
 Contents:
 
 .. toctree::
