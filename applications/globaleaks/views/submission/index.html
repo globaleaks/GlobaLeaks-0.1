@@ -1,6 +1,39 @@
 {{extend 'layout.html'}}
+<script type="text/javascript" src="/globaleaks/static/js/fileupload/fileuploader.js"></script>
 
 <style>
+.qq-uploader { position:relative; width: 100%;}
+
+.qq-upload-button {
+    display:block; /* or inline-block */
+    width: 105px; padding: 7px 0; text-align:center;    
+    background:#880000; border-bottom:1px solid #ddd;color:#fff;
+}
+.qq-upload-button-hover {background:#cc0000;}
+.qq-upload-button-focus {outline:1px dotted black;}
+
+.qq-upload-drop-area {
+    position:absolute; top:0; left:0; width:100%; height:100%; min-height: 70px; z-index:2;
+    background:#FF9797; text-align:center; 
+}
+.qq-upload-drop-area span {
+    display:block; position:absolute; top: 50%; width:100%; margin-top:-8px; font-size:16px;
+}
+.qq-upload-drop-area-active {background:#FF7171;}
+
+.qq-upload-list {margin:15px 35px; padding:0; list-style:disc;}
+.qq-upload-list li { margin:0; padding:0; line-height:15px; font-size:12px;}
+.qq-upload-file, .qq-upload-spinner, .qq-upload-size, .qq-upload-cancel, .qq-upload-failed-text {
+    margin-right: 7px;
+}
+
+.qq-upload-file {}
+.qq-upload-spinner {display:inline-block; background: url("loading.gif"); width:15px; height:15px; vertical-align:text-bottom;}
+.qq-upload-size,.qq-upload-cancel {font-size:11px;}
+
+.qq-upload-failed-text {display:none;}
+.qq-upload-fail .qq-upload-failed-text {display:inline;}
+
 div.flash {background-color: #888;}
 </style>
 
@@ -9,6 +42,21 @@ div.flash {background-color: #888;}
     <p class="intro">You are the Whistleblower and this is the Submission interface from which you can send material to be received as a TULIP by the Targets. Once you have successfully submitted the form you will be given a Reciept allowing you to check back on the status of the TULIP, view statistics (access/downloads counters), send and receive comments and upload new material. The Target group responsible for analyzing and recieving the material may be selected by the Whistleblower (NOT IMPLEMENTED for details see the <a href="https://blueprints.launchpad.net/globaleaks/+spec/submission-targets-configurable">blueprint</a>)</p>
     
         {{=form}}
+<script type="text/javascript">
+function createUploader(){            
+    var uploader = new qq.FileUploader({
+        element: document.getElementById('file-uploader'),
+        action: '/globaleaks/submission/upload?wb_id={{=wb_id}}',
+        debug: true
+    });           
+}
+window.onload = createUploader;     
+$(document).ready(function() {
+    $('#file-uploader-nonjs').hide();
+});
+</script>
+
+
 {{pass}}
 
 {{if leak_id:}}
@@ -31,6 +79,42 @@ div.flash {background-color: #888;}
     <p>
     You are also able to use your Whistleblower receipt from the following interface: <a href="/tulip">/tulip</a>
     </p>
+
+<script>
+
+/* $(document).ready(function() { 
+  var uploader = new qq.FileUploader({
+        // pass the dom node (ex. $(selector)[0] for jQuery users)
+        element: document.getElementById('file-uploader'),
+        // path to server-side upload script
+        action: '/globaleaks/submission/upload',
+        sizeLimit: 15000000,
+        minSizeLimit: 0,         
+        allowedExtensions: ['xls','jpg', 'jpeg', 'pdf', 'txt','doc','htm','html','xml','xmls', 'txt','ppt','png', 'gif'],
+        // set to true to output server response to console
+        debug: true,
+
+        // events         
+        // you can return false to abort submit
+        onSubmit: function(id, fileName){},
+        onProgress: function(id, fileName, loaded, total){},
+        onComplete: function(id, fileName, responseJSON){},
+        onCancel: function(id, fileName){},
+
+        messages: {
+            // error messages, see qq.FileUploaderBasic for content
+            typeError: "{file} {{=T('has invalid extension.')}} {{=T('Only')}} {extensions} {{=T('are allowed.')}}",
+            sizeError: "{file} {{=T('is too large, maximum file size is')}} {sizeLimit}.",
+            minSizeError: "{file} {{=T('is too small, minimum file size is')}} {minSizeLimit}.",
+            emptyError: "{file} {{=T('is empty, please select files again without it.')}}",
+            onLeave: "{{=T('The files are being uploaded, if you leave now the upload will be cancelled.')}}"                         
+        },
+        showMessage: function(message){ alert(message); }        
+    });
+    });        
+*/
+
+</script>
 
 {{pass}}
 

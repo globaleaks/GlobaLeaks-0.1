@@ -281,7 +281,7 @@ def make_table(table,fields):
                   'text':'text','file':'upload','image':'upload','upload':'upload',
                   'wiki':'text', 'html':'text'}
         for key,t in deftypes.items():
-            if key in has:                
+            if key in has:
                 ftype = t
         if refs:
             key = refs[0]
@@ -350,12 +350,12 @@ def make_table(table,fields):
         s+="    Field('registration_id',default='',\n"
         s+="          writable=False,readable=False),\n"
     s+="    format='%("+first_field+")s',\n"
-    s+="    migrate=settings.migrate)\n\n"
+    s+="    migrate=settings.globals.migrate)\n\n"
     if table=='auth_user':
         s+="""
 db.auth_user.first_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
 db.auth_user.last_name.requires = IS_NOT_EMPTY(error_message=auth.messages.is_empty)
-db.auth_user.password.requires = CRYPT(key=auth.settings.hmac_key)
+db.auth_user.password.requires = CRYPT(key=settings.auth.hmac_key)
 db.auth_user.username.requires = IS_NOT_IN_DB(db, db.auth_user.username)
 db.auth_user.registration_id.requires = IS_NOT_IN_DB(db, db.auth_user.registration_id)
 db.auth_user.email.requires = (IS_EMAIL(error_message=auth.messages.invalid_email),
@@ -374,30 +374,30 @@ def fix_db(filename):
         content = content.replace('sqlite://storage.sqlite',
                                 params['database_uri'])
         content = content.replace('auth.define_tables()',\
-            auth_user+'auth.define_tables(migrate = settings.migrate)')
+            auth_user+'auth.define_tables(migrate = settings.globals.migrate)')
     content += """
-mail.settings.server = settings.email_server
-mail.settings.sender = settings.email_sender
-mail.settings.login = settings.email_login
+mail.settings.server = settings.globals.email_server
+mail.settings.sender = settings.globals.email_sender
+mail.settings.login = settings.globals.email_login
 """
     if params['login_method']=='janrain':
         content+="""
 from gluon.contrib.login_methods.rpx_account import RPXAccount
-auth.settings.actions_disabled=['register','change_password','request_reset_password']
-auth.settings.login_form = RPXAccount(request,
-    api_key = settings.login_config.split(':')[-1],
-    domain = settings.login_config.split(':')[0],
+settings.auth.actions_disabled=['register','change_password','request_reset_password']
+settings.auth.login_form = RPXAccount(request,
+    api_key = settings.globals.login_config.split(':')[-1],
+    domain = settings.globals.login_config.split(':')[0],
     url = "http://%s/%s/default/user/login" % (request.env.http_host,request.application))
 """
     write_file(filename, content, 'wb')
 
 def make_menu(pages):
     s="""
-response.title = settings.title
-response.subtitle = settings.subtitle
-response.meta.author = '%s <%s>' % (settings.author, settings.author_email)
-response.meta.keywords = settings.keywords
-response.meta.description = settings.description
+response.title = settings.globals.title
+response.subtitle = settings.globals.subtitle
+response.meta.author = '%s <%s>' % (settings.globals.author, settings.globals.author_email)
+response.meta.keywords = settings.globals.keywords
+response.meta.description = settings.globals.description
 response.menu = [
 """
     for page in pages:
@@ -522,7 +522,7 @@ def create(options):
             fn = 'web2py.plugin.layout_%s.w2p' % params['layout_theme']
             theme = urllib.urlopen(LAYOUTS_APP+'/static/plugin_layouts/plugins/'+fn)
             plugin_install(app, theme, request, fn)
-        except: 
+        except:
             session.flash = T("unable to download layout")
 
     ### apply plugins
@@ -531,16 +531,16 @@ def create(options):
             plugin_name = 'web2py.plugin.'+plugin+'.w2p'
             stream = urllib.urlopen(PLUGINS_APP+'/static/'+plugin_name)
             plugin_install(app, stream, request, plugin_name)
-        except Exception, e: 
+        except Exception, e:
             session.flash = T("unable to download plugin: %s" % plugin)
-                    
+
     ### write configuration file into newapp/models/0.py
     model = os.path.join(request.folder,'..',app,'models','0.py')
     file = open(model, 'wb')
     try:
         file.write("from gluon.storage import Storage\n")
         file.write("settings = Storage()\n\n")
-        file.write("settings.migrate = True\n")
+        file.write("settings.globals.migrate = True\n")
         for key,value in session.app['params']:
             file.write("settings.%s = %s\n" % (key,repr(value)))
     finally:
@@ -613,5 +613,5 @@ def call():
 
     if options.erase_database:
         path = os.path.join(request.folder,'..',app,'databases','*')
-        for file in glob.glob(path): 
+        for file in glob.glob(path):
             os.unlink(file)
