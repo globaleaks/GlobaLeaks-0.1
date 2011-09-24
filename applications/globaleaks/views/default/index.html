@@ -2,7 +2,7 @@
 
 <div id="receiptbox">
 <h2>Whistleblower Tulip Receipt</h2>
-<form>
+<form action="" method="POST">
 <input type="text" name="Receipt" style="width: 150px"/>
 <input type="submit" name="send"/>
 </form>
@@ -24,4 +24,6 @@ Synth veniam cliche, photo booth beard elit keffiyeh nisi marfa culpa nulla proi
     <a href="/submit">Submit material &raquo;</a>
 </div>
 <div class="clear"></div>
+
+{{=BEAUTIFY(request.vars)}}
 
