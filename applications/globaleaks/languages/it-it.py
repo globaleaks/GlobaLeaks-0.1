@@ -38,6 +38,7 @@
 'Invalid login': 'Invalid login',
 'Last name': 'Cognome',
 'Layout': 'Layout',
+'Logged in': 'Logged in',
 'Login': 'Login',
 'Main Menu': 'Menu principale',
 'Menu Model': 'Menu Modelli',
