@@ -19,7 +19,7 @@ class DB(DAL):
             Field('last_download'),
             Field('tulip_counter'),
             Field('download_counter'),
-            Field('group'),
+            Field('groupname'),
             format='%(name)s'
             )
 
