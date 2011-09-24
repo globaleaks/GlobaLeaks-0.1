@@ -60,15 +60,15 @@ def status():
     # the stats of the whistleblower stay in the leak/material entry
         download_available = False
         if leak.whistleblower_access:
-            new_count = int(leak.whistleblowing_access) + 1            
+            new_count = int(leak.whistleblowing_access) + 1
             leak.whistleblower_access=new_count
         else:
             leak.whistleblower_counter=1
-            
-        counter_accesses = leak.whistleblower_access   
-        limit_counter = int("50") # settings.max_submitter_accesses 
-        access_available = True 
- 
+
+        counter_accesses = leak.whistleblower_access
+        limit_counter = int("50") # settings.max_submitter_accesses
+        access_available = True
+
     return dict(err=None,
             access_available=access_available,
             download_available=download_available,
@@ -120,5 +120,5 @@ def download():
 
     response.headers['Content-Type'] = "application/octet"
     response.headers['Content-Disposition'] = 'attachment; filename="' + tulip_url + '.zip"'
-
-    return response.stream(open(os.path.join(request.folder, 'material/', 'static.zip'),'rb'))
+    # XXX to make proper handlers to manage the fetch of dirname
+    return response.stream(open(os.path.join(request.folder, 'material/', db(db.submission.leak_id==leak.id).select().first().dirname + '.zip'),'rb'))
