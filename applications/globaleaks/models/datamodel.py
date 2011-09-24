@@ -4,6 +4,9 @@ import time
 #db = local_import('sql').db
 #randomizer = local_import('randomizer')
 
+#XXX render all of the property setters pythonic
+# (i.e. @property and @<name>.setter)
+
 randomizer = local_import('randomizer')
 
 class Leak(object):
@@ -175,3 +178,57 @@ class Material(object):
     def create_new(leak_id, url, type):
         return db.material.insert(leak_id=leak_id,
             url=None, type="demo")
+
+class TargetList(object):
+    def __init__(self, tlist):
+        self.build(tlist)
+
+    def build(self, tlist):
+        for t in tlist:
+            db.target.insert(name=t[0].name, desc=t[0].desc,
+                            url=t[0].url, type=t[0].type,
+                            info=t[0].info, status="active",
+                            group=t[1])
+    @property
+    def list(self):
+        pass
+    @list.setter
+    def list(self, value):
+        pass
+
+    @property
+    def name(self):
+        pass
+    @name.setter
+    def name(self, value):
+        pass
+
+    @property
+    def desc(self):
+        pass
+    @desc.setter
+    def desc(self, value):
+        pass
+
+    @property
+    def url(self):
+        pass
+    @url.setter
+    def url(self, value):
+        pass
+
+    @property
+    def type(self):
+        pass
+    @type.setter
+    def type(self, value):
+        pass
+
+    @property
+    def info(self):
+        pass
+    @info.setter
+    def info(self, value):
+        pass
+
+
