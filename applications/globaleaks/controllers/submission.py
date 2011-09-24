@@ -25,12 +25,13 @@ def index():
     form = FORM(TABLE(
             TR('Title', INPUT(_name='Title', requires=IS_NOT_EMPTY())),
             TR('Description:',TEXTAREA(_name='Description', requires=IS_NOT_EMPTY())),
-            TR('Material:', INPUT(_name='material', _type='file'),
+            DIV(_id='file-uploader'),
+            TR('Material:', INPUT(_name='material', _type='file'),_id='file-uploader-nonjs'),
             TR('Metadata:',INPUT(_name='metadata', _type='checkbox', _class="notimplemented")),
             TR('Accept Disclaimer:',
                 INPUT(_name='disclaimer', _type='checkbox', 
                     requires=IS_EQUAL_TO("on", error_message="Please accept the disclaimer"))),
-            TR('', INPUT(_name='submit', _type='submit')))),
+            TR('', INPUT(_name='submit', _type='submit'))),
             INPUT(_name='wb_id', _type='hidden', _value=wb_id)
             )
 
