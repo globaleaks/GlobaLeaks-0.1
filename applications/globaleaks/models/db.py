@@ -20,9 +20,6 @@ else:                                         # else use a normal relational dat
     db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
 """
 randomizer = local_import('randomizer')
-db = local_import('logic.db').DB()
-gl = local_import('logic.globaleaks').Globaleaks(db)
-
 ####
 # For the time being just use sqlite
 ###
@@ -46,36 +43,19 @@ gl = local_import('logic.globaleaks').Globaleaks(db)
 ## (more options discussed in gluon/tools.py)
 #########################################################################
 
-from gluon.tools import Mail, Auth, Crud, Service, PluginManager, prettydate
-mail = Mail()                                                  # mailer
-auth = Auth(db)                                                # authentication/authorization
+from gluon.tools import Crud, Service, PluginManager, prettydate
 crud = Crud(db)                                                # for CRUD helpers using auth
 service = Service()                                            # for json, xml, jsonrpc, xmlrpc, amfrpc
 plugins = PluginManager()                                      # for configuring plugins
 
-mail.settings.server = 'smtp.gmail.com:587'                    # your SMTP server
-mail.settings.sender = 'globaleaks2011@gmail.com'              # your email
-mail.settings.login = ''                                       # your credentials or None
-
-auth.settings.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'    # before define_tables()
-auth.define_tables()                                           # creates all needed tables
-auth.settings.mailer = mail                                    # for user email verification
-auth.settings.registration_requires_verification = False
-auth.settings.registration_requires_approval = False
-auth.messages.verify_email = 'Click on the link http://' + request.env.http_host + URL('default','user',args=['verify_email']) + '/%(key)s to verify your email'
-
-auth.settings.reset_password_requires_verification = True
-auth.messages.reset_password = 'Click on the link http://' + request.env.http_host + URL('default','user',args=['reset_password']) + '/%(key)s to reset your password'
-
-auth.settings.table_user.email.label=T("Username") 
 
 #########################################################################
 ## If you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
 ## register with janrain.com, uncomment and customize following
 # from gluon.contrib.login_methods.rpx_account import RPXAccount
-# auth.settings.actions_disabled = \
+# settings.auth.actions_disabled = \
 #    ['register','change_password','request_reset_password']
-# auth.settings.login_form = RPXAccount(request, api_key='...',domain='...',
+# settings.auth.login_form = RPXAccount(request, api_key='...',domain='...',
 #    url = "http://localhost:8000/%s/default/user/login" % request.application)
 ## other login methods are in gluon/contrib/login_methods
 #########################################################################
@@ -101,9 +81,9 @@ auth.settings.table_user.email.label=T("Username")
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
-# mail.settings.server = settings.email_server
-# mail.settings.sender = settings.email_sender
-# mail.settings.login = settings.email_login
+# mail.settings.server = settings.globals.email_server
+# mail.settings.sender = settings.globals.email_sender
+# mail.settings.login = settings.globals.email_login
 
 
 # FIXME move to better location

@@ -39,9 +39,10 @@ class DB(DAL):
         )
     
         self.define_table('material',
-            Field('url', unique=True),
+            Field('url'), #, unique=True),
             Field('leak_id', self.leak),
             Field('type'),
+            Field('file', 'upload'),
             format='%(name)s'
         )
             

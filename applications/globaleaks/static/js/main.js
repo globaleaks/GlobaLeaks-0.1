@@ -10,7 +10,7 @@ $(document).ready(function(){
 		return false;
 	});
 	
-    $(".disabled").click(function() {
+    /* $(".disabled").click(function() {
 		$.fancybox(
 			'<div style=\"background:#444;width:500px;height:200px;font-size:28px;padding:28px;font-weight:bold;\"><h1 style=\"color:#F20056\">This function is DISABLED in demo...</h1>',
 			{
@@ -19,7 +19,7 @@ $(document).ready(function(){
 	
 		return false;
 	});
-	
+	*/
 	$("#content .box").hover(
 	  function () {
 	    $(this).addClass("box-hover");
