@@ -66,26 +66,42 @@ def groups():
 
 @auth.requires_login()
 def config():
+    create_form = lambda: FORM(TABLE(
+            TR("title", INPUT(_name='title', _type='text',
+                              _value=settings.globals.title)),
+            TR("subtitle", INPUT(_name='subtitle', _type='text',
+                                 _value=settings.globals.subtitle)),
+            TR("author", INPUT(_name='author', _type='text',
+                               _value=settings.globals.author)),
+            TR("title", INPUT(_name='author_email', _type='text',
+                              _value=settings.globals.title)),
+
+            TR(INPUT(_type='submit'))
+          ))
+
+    global_form = create_form()
+    if global_form.accepts(request.vars):
+        for var in global_form.vars:
+            value = getattr(global_form.vars,  var)
+            setattr(settings.globals, var,  value)
+        global_form = create_form()
+    #if auth_form.accepts(request.vars, session):
+    #    return 'accepting auth'
+    #if mail_form.accepts(request.vars, session):
+    #    return 'accepting mail'
+
+
     response.flash = ("Welcome to the Globaleaks new wizard application, "
                       "please donate coffee")
 
-    global_form = FORM(TABLE(
-            "migrate:", TR(INPUT(_name='migrate', _type='checkbox')),
-            "name", TR(INPUT(_name='name', _type='name', requires=IS_NOT_EMPTY())),
-            "mail", TR(INPUT(_name='email', _type='email')),
-            "title", TR(INPUT(_name='title', _type='name')),
-            TR(INPUT(_type='submit'))
-          ))
     # XXX: also private form?
     mail_form = FORM(TABLE(
             "foobar", TR(INPUT(_type='submit'))
             ))
     auth_form = FORM(TABLE(
-            "spamcheese", TR(INPUT(_type='submit'))
+            "verification",
+            TR(INPUT(_type='submit'))
             ))
-
-    if global_form.accepts(request.vars, session):
-        return 'whoa'
 
 
     return dict(settings=settings,
