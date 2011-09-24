@@ -38,10 +38,7 @@ def targets():
 
 @auth.requires_login()
 def config():
-    response.flash = ("Welcome to the Globaleaks new wizard application, "
-                      "please donate coffee")
-
-    global_form = FORM(TABLE(
+    create_form = lambda: FORM(TABLE(
             TR("title", INPUT(_name='title', _type='text',
                               _value=settings.globals.title)),
             TR("subtitle", INPUT(_name='subtitle', _type='text',
@@ -53,6 +50,22 @@ def config():
 
             TR(INPUT(_type='submit'))
           ))
+
+    global_form = create_form()
+    if global_form.accepts(request.vars):
+        for var in global_form.vars:
+            value = getattr(global_form.vars,  var)
+            setattr(settings.globals, var,  value)
+        global_form = create_form()
+    #if auth_form.accepts(request.vars, session):
+    #    return 'accepting auth'
+    #if mail_form.accepts(request.vars, session):
+    #    return 'accepting mail'
+
+
+    response.flash = ("Welcome to the Globaleaks new wizard application, "
+                      "please donate coffee")
+
     # XXX: also private form?
     mail_form = FORM(TABLE(
             "foobar", TR(INPUT(_type='submit'))
@@ -62,15 +75,6 @@ def config():
             TR(INPUT(_type='submit'))
             ))
 
-    if global_form.accepts(request.vars):
-        for var in global_form.vars:
-            value = getattr(global_form.vars,  var)
-            setattr(settings.globals, var,  value)
-
-    if auth_form.accepts(request.vars, session):
-        return 'accepting auth'
-    if mail_form.accepts(request.vars, session):
-        return 'accepting mail'
 
     return dict(settings=settings,
                 global_form=global_form,
