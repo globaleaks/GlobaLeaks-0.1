@@ -59,6 +59,6 @@ for m in mails:
             message_html=message_html):
             db(db.mail.id==m.id).delete()
 
-    #mail.send(to=m.address,subject="GlobaLeaks notification for: " + m.target,message=message)
+    # mail.send(to=m.address,subject="GlobaLeaks notification for: " + m.target,message=message)
 
 db.commit()
