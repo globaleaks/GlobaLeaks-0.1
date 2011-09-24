@@ -172,6 +172,6 @@ class Material(object):
     type = property(get_type, set_type)
     
     @staticmethod
-    def create_new(leakd_id, url, type):
+    def create_new(leak_id, url, type):
         return db.material.insert(leak_id=leak_id,
             url="demo", type="demo")
