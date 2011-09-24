@@ -24,6 +24,7 @@ settings.auth = auth.settings
 settings.mail = mail.settings
 
 # GLOBAL setting
+# XXX: Useless var?
 # settings.globals.migrate = True
 # settings.globals.title = procfgparser.get('global', 'title')
 # settings.globals.subtitle = cfgparser.get('global', 'subtitle')
