@@ -111,11 +111,13 @@ def upload():
             filename = request.vars.qqfile
             tmp_file = db.material.file.store(request.body, filename)
 
-            fldr = str(db(db.submission.session==session.wb_id
-                         ).select().first().dirname)
+            fldr = db(db.submission.session==session.wb_id
+                         ).select().first()
             if not fldr:
                 fldr = randomizer.generate_dirname()
                 session.dirname = fldr
+            else:
+                fldr = str(fldr.dirname)
             dst_folder = os.path.join(request.folder, 'material/' + fldr + '/')
             if not os.path.isdir(dst_folder):
                 os.makedirs(dst_folder)
