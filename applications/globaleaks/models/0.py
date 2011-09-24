@@ -49,6 +49,10 @@ settings.mail = mail.settings
 # settings.tulip.expire = cfgparser.get('tulip', 'expire', 6)
 #
 # settings.mail
+
+# XXX: change this into private/globals, depending on export
+settings.logfile = '/tmp/globaleaks.log'
+
 settings.mail.server = 'smtp.gmail.com:587'                    # your SMTP server
 settings.mail.sender = 'globaleaks2011@gmail.com'              # your email
 settings.mail.login = ''                                       # your credentials or None
