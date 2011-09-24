@@ -1,4 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -12,8 +12,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
 	margin: 0;
@@ -24,7 +24,7 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
@@ -80,7 +80,7 @@ a.button {
 	text-align: center;
 	margin: 20px 0 20px 10px;
 	float: right;
-	
+
 }
 
 a.button.whistleblower {
@@ -188,6 +188,9 @@ ul#navigation a {
 	font-size: 14px;
 }
 
+#content {
+    position: relative;
+}
 
 #content h1 {
 	font-size: 32px;
@@ -200,6 +203,38 @@ ul#navigation a {
 	font-weight: normal;
 	text-transform: none;
 }
+
+#content #receiptbox {
+ 	background: #444;
+	width: 240px;
+	margin: 0 auto;
+	padding: 30px;
+    position: absolute;
+    top: -190px;
+    right: -10px;
+}
+
+#content #receiptbox h2 {
+    color: #fff;
+	font-weight: bold;
+	font-size: 16px;
+    margin-bottom: 15px;
+}
+
+#content #receiptbox form input[type="submit"] {
+display: block;
+color: #fff;
+text-decoration: none;
+text-transform: uppercase;
+font-weight: bold;
+background: #0a70b4;
+padding: 10px;
+border: none;
+border-radius:5px;
+-webkit-border-radius:5px;
+-moz-border-radius:5px;
+}
+
 
 #content p.intro {
 	line-height: 20px;
@@ -214,7 +249,7 @@ ul#navigation a {
 	text-align: justify;
 	margin-bottom: 20px;
 	background: #ededed;
-    padding: 20px;	
+    padding: 20px;
 }
 
 #content .intro ul {
@@ -234,6 +269,16 @@ ul#navigation a {
     font-size: 20px;
 
 }
+#content  .box {
+	background: #444;
+	width: 340px;
+	height: 320px;
+	margin: 0 auto;
+	padding: 40px;
+    display: block;
+}
+
+/*
 #content .box {
 	background: #444;
 	width: 340px;
@@ -242,6 +287,7 @@ ul#navigation a {
 	float: left;
 	padding: 40px;
 }
+*/
 
 #content .box.box-hover {
 	background: #555;
@@ -249,10 +295,6 @@ ul#navigation a {
 	-moz-transition: background-color 0.3s linear;    /* FF3.7+ */
 	-o-transition: background-color 0.3s linear;      /* Opera 10.5 */
 	-webkit-transition: background-color 0.3s linear; /* Saf3.2+, Chrome */
-}
-
-#content .box:nth-child(even) {
-	margin-left: 40px;
 }
 
 #content .box h2 {
@@ -367,7 +409,7 @@ ul#navigation a {
 }
 
 #content table.targetlist td.delete {
-	text-align: center;	
+	text-align: center;
 }
 
 #content table.targetlist td.delete button {
@@ -418,7 +460,7 @@ ul#navigation a {
 }
 
 .material ul {
-	margin-bottom: 20px;	
+	margin-bottom: 20px;
 }
 
 .material li.zip {
