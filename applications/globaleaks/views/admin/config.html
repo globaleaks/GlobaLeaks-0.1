@@ -11,8 +11,17 @@ background-color: green;
     This configuration page provides almost every configuration variable present
     either in database or in cfg file.</p>
 
-    {{= form}}
-    what the hell
+    <h2> Configuration | Global Form </h2>
+    {{= global_form}}
+
+
+    <h2> Configuration | Authentication Form </h2>
+    {{= auth_form }}
+
+    <h2> Configuration | Mail form </h2>
+    {{= mail_form}}
+
+    <h2></h2>
+{{=BEAUTIFY(request.vars)}}
 {{pass}
 
-<script> alert("whoa!") </script>
