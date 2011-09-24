@@ -68,13 +68,16 @@ def index():
         # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
         for file in request.vars:
             if file=="material":
-                filename = request.vars.material.filename
-                tmp_file = db.material.file.store(request.body, filename)
+                try:
+                    filename = request.vars.material.filename
+                    tmp_file = db.material.file.store(request.body, filename)
 
-                dst_folder = os.path.join(request.folder, 'material/' + str(leak_id.id) + '/')
-                if not os.path.isdir(dst_folder):
-                    os.mkdir(dst_folder)
-                os.rename(os.path.join(request.folder, 'uploads/') + tmp_file, dst_folder + filename)
+                    dst_folder = os.path.join(request.folder, 'material/' + str(leak_id.id) + '/')
+                    if not os.path.isdir(dst_folder):
+                        os.mkdir(dst_folder)
+                    os.rename(os.path.join(request.folder, 'uploads/') + tmp_file, dst_folder + filename)
+                except:
+                    pass
 
         leak = Leak(leak_id)
 
