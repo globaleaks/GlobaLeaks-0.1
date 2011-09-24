@@ -8,7 +8,7 @@ class DB(DAL):
     def create_db(self):
         self.define_table('target',
             Field('name'),
-            Field('category'),
+            Field('hidden'),
             Field('desc'),
             Field('url'),
             Field('type'),
@@ -19,14 +19,25 @@ class DB(DAL):
             Field('last_download'),
             Field('tulip_counter'),
             Field('download_counter'),
+            Field('groupname'),
             format='%(name)s'
-        )
+            )
+
+        # The table for target groups
+        self.define_table('targetgroup',
+            Field('id'),
+            Field('name'),
+            Field('desc'),
+            Field('tags'),
+            format='%(name)s'
+            )
 
         self.define_table('leak',
             Field('title'),
             Field('desc'),
             Field('submission_timestamp'),
             Field('leaker_id', self.target),
+            Field('whistleblower_access'),
             Field('spooled', 'boolean', False),
             format='%(name)s'
         )

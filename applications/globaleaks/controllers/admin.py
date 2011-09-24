@@ -8,8 +8,6 @@ def index():
 @auth.requires_login()
 def targets():
 
-    response.flash = "You are now the GlobaLeaks Node Maintainer"
-
     if(request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
 
@@ -35,6 +33,36 @@ def targets():
         return dict(form=form, list=True, targets=targets)
 
     return dict(form=form, list=False, targets=targets)
+
+@auth.requires_login()
+def groups():
+    tlist = None
+
+    if(request.vars.edit and request.vars.edit.startswith("delete")):
+        gl.delete_target(request.vars.edit.split(".")[1])
+
+    if(request.vars.edit and request.vars.edit.startswith("edit")):
+        pass
+
+    form_content = (Field('Name', requires=IS_NOT_EMPTY()),
+                    Field('Description'),
+                    Field('Tags')
+                   )
+
+    form = SQLFORM.factory(*form_content)
+
+    if "display" in request.args and not request.vars:
+        tlist = TargetList()
+        return dict(form=None, list=True, groups=tlist.list)
+
+    if form.accepts(request.vars, session):
+        # Build group target list with posted data
+        tlist = TargetList(request.vars)
+        return dict(form=form, list=True, groups=tlist.list)
+
+    return dict(form=form, list=False, targets=None)
+
+
 
 @auth.requires_login()
 def config():
