@@ -67,5 +67,3 @@ settings.auth.table_user.email.label=T("Username")
 # AWS configuration
 settings.aws_key = '<AWS-KEY>'
 settings.aws_secret_key = '<AWS-SECRET-KEY>'
-
-
