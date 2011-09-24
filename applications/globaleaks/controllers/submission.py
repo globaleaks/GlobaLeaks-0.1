@@ -111,7 +111,8 @@ def index():
                         address=target.url, tulip=tulip.url)
         pretty_number = leaker_number[0][:3] + " " + leaker_number[0][3:6] + \
                         " " + leaker_number[0][6:]
-
+        session.dirname = None
+        session.wb_id = None
         return dict(leak_id=leak_id, leaker_tulip=pretty_number, form=None)
     elif form.errors:
         response.flash = 'form has errors'
@@ -129,8 +130,11 @@ def upload():
             fldr = db(db.submission.session==session.wb_id
                          ).select().first()
             if not fldr:
-                fldr = randomizer.generate_dirname()
-                session.dirname = fldr
+                if not session.dirname:
+                    fldr = randomizer.generate_dirname()
+                    session.dirname = fldr
+                else:
+                    fldr = session.dirname
             else:
                 fldr = str(fldr.dirname)
             dst_folder = os.path.join(request.folder, 'material/' + fldr + '/')
