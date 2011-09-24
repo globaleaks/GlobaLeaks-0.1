@@ -3,12 +3,12 @@ def index():
 
     if form.accepts(request.vars, session):
         l = request.vars
-    
-
+   
         # Make the tulip work well
         leak_number = l.Receipt.replace(' ','')
         tulip_url = hashlib.sha256(leak_number).hexdigest()
         redirect("/tulip/" + tulip_url)
+        
     return dict(form=None,tulip_url=None)
 
 
@@ -20,6 +20,8 @@ def access_increment(t):
         db.tulip[t.target].update_record(accesses_counter=new_count)
     else:
         db.tulip[t.target].update_record(accesses_counter=1)
+    
+    db.commit()
 
     if(int(t.allowed_accesses) != 0 and int(t.accesses_counter) > int(t.allowed_accesses)):
         return True
@@ -50,7 +52,7 @@ def status():
 
     if whistleblower == False:
     # the stats of the whistleblower stay in the tulip entry (its unique!)
-        download_available = (int(t.allowed_downloads) == 0 or int(t.downloads_counter) > int(t.allowed_downloads))
+        download_available = (int(t.downloads_counter) < int(t.allowed_downloads))
         access_available = access_increment(t)
         counter_accesses = t.accesses_counter
         limit_counter = t.allowed_accesses
@@ -87,8 +89,8 @@ def status():
 
 def download_increment(t):
 
-    if(int(t.allowed_downloads) !=0 and int(t.downloads_counter) > int(t.allowed_downloads)):
-        return True
+    if (int(t.downloads_counter) > int(t.allowed_downloads)):
+        return False
 
     if t.downloads_counter:
         new_count = int(t.downloads_counter) + 1
@@ -96,7 +98,8 @@ def download_increment(t):
     else:
         db.tulip[t.target].update_record(downloads_counter=1)
 
-    return False
+    db.commit()
+    return True
 
 def download():
     import os
