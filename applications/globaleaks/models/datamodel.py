@@ -174,4 +174,4 @@ class Material(object):
     @staticmethod
     def create_new(leak_id, url, type):
         return db.material.insert(leak_id=leak_id,
-            url="demo", type="demo")
+            url=None, type="demo")

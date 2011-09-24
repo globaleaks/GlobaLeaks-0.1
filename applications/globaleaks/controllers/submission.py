@@ -81,7 +81,7 @@ def index():
                     pass
 
         leak = Leak(leak_id)
-        leak.add_material(leak_id, "demo", "demo")
+        leak.add_material(leak_id, None, None)
 
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)
