@@ -4,7 +4,7 @@ class DB(DAL):
     def __init__(self):
         DAL.__init__(self, 'sqlite://storage.db')
         self.create_db()
-    
+
     def create_db(self):
         self.define_table('target',
             Field('name'),
@@ -21,7 +21,7 @@ class DB(DAL):
             Field('download_counter'),
             format='%(name)s'
         )
-            
+
         self.define_table('leak',
             Field('title'),
             Field('desc'),
@@ -30,14 +30,14 @@ class DB(DAL):
             Field('spooled', 'boolean', False),
             format='%(name)s'
         )
-            
+
         self.define_table('comment',
             Field('leak_id', self.leak),
             Field('commenter_id', self.target),
             Field('comment'),
             format='%(name)s'
         )
-    
+
         self.define_table('material',
             Field('url'), #, unique=True),
             Field('leak_id', self.leak),
@@ -45,7 +45,7 @@ class DB(DAL):
             Field('file', 'upload'),
             format='%(name)s'
         )
-            
+
         self.define_table('tulip',
             Field('url', unique=True),
             Field('leak_id', self.leak),
@@ -57,12 +57,20 @@ class DB(DAL):
             Field('expiry_time'),
             format='%(name)s'
             )
-            
+
         self.define_table('mail',
             Field('target'),
             Field('address'),
             Field('tulip', unique=True),
             format='%(name)s'
         )
+
+        self.define_table('submission',
+            Field('session', unique=True),
+            Field('leak_id'),
+            Field('dirname'),
+            format='%(name)s'
+        )
+
 
 db = DB()
