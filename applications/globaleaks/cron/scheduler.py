@@ -26,6 +26,7 @@ if(db.auth_user):
                             last_name="Globaleaks",email="node@globaleaks.org",
                             password=db.auth_user.password.validate("testing")[0])
         logger.info("First launch of GlobaLeaks, creating node administrator!")
+        db.commit()
 
 new_material = db(db.leak.spooled==False).select()
 
