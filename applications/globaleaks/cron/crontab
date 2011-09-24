@@ -1,3 +1,4 @@
 #crontab
 *      *  *  *  *  nobody *applications/globaleaks/cron/scheduler.py
+#XXX To be removed in non demo usage
 0      */2  *  *  *  nobody *applications/globaleaks/cron/target_list_clean.py

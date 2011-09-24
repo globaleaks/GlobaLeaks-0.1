@@ -187,17 +187,22 @@ class Material(object):
             url=None, type="demo")
 
 class TargetList(object):
-    def __init__(self, tlist):
-        self.build(tlist)
+    def __init__(self, g=None):
+        if g:
+            self.build(g)
 
-    def build(self, tlist):
-        for t in tlist:
+    def build(self, g):
+        """for t in tlist:
             db.target.insert(name=t[0].name, desc=t[0].desc,
                             url=t[0].url, type=t[0].type,
-                            info=t[0].info, status="active",
-                            group=t[1])
+                            info=t.info, status="active",
+                            group=t.Name)
+        """
+        db.targetgroup.insert(name=g.Name, desc=g.Description, tags=g.Tags)
 
     def get_list(self):
+        for group in db().select(db.targetgroup.ALL):
+            yield group
         pass
     def set_list(self, value):
         pass
