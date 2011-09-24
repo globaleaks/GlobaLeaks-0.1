@@ -1,5 +1,4 @@
 import os
-from pprint import pprint
 
 def register_whistleblower(leak_id):
     submitter = db.target.insert(id=leak_id)
@@ -30,38 +29,38 @@ def index():
 
     leaker_number = randomizer.generate_tulip_receipt()
 
-    # XXX add check for uniqueness
     if not session.wb_id:
         session.wb_id = randomizer.generate_wb_id()
-    # add to database the session -> leak_id association
-
-    wb_id = leaker_number[0]
 
     form = FORM(TABLE(
             TR('Title', INPUT(_name='Title', requires=IS_NOT_EMPTY())),
-            TR('Description:',TEXTAREA(_name='Description', requires=IS_NOT_EMPTY())),
+            TR('Description:',TEXTAREA(_name='Description',
+                                       requires=IS_NOT_EMPTY())),
             TR('Material',DIV(_id='file-uploader'), _id='file-uploader-js'),
-            TR('Material:', INPUT(_name='material', _type='file'),_id='file-uploader-nonjs'),
-            TR('Metadata:',INPUT(_name='metadata', _type='checkbox', _class="notimplemented")),
+            TR('Material:', INPUT(_name='material', _type='file'),
+                                  _id='file-uploader-nonjs'),
+            TR('Metadata:',INPUT(_name='metadata', _type='checkbox',
+                                 _class="notimplemented")),
             TR('Accept Disclaimer:',
-                INPUT(_name='disclaimer', _type='checkbox',
-                    requires=IS_EQUAL_TO("on", error_message="Please accept the disclaimer"))),
-            TR('', INPUT(_name='submit', _type='submit'))),
-            INPUT(_name='wb_id', _type='hidden', _value=wb_id)
-            )
+               INPUT(_name='disclaimer',
+                     _type='checkbox',
+                     requires=IS_EQUAL_TO("on",
+                              error_message="Please accept the disclaimer"))),
+            TR('', INPUT(_name='submit', _type='submit'))))
 
     response.flash = "You are the Whistleblower"
 
     if form.accepts(request.vars, session):
         l = request.vars
 
-        # add to database the session -> leak_id association
         leak_id = gl.create_leak(l.Title, l.Description, None, None,
-                    "demo", l.Tags, number=leaker_number[1])
+                                 "demo", l.Tags, number=leaker_number[1])
 
-        # session.wb_id -> leak_id
-
-        i = 0
+        # adding association submission -> leak_id
+        if not db(db.submission.session==session.wb_id).select():
+            db.submission.insert(session=session.wb_id,
+                                 leak_id=leak_id,
+                                 dirname=session.dirname)
 
         #XXX Refactor me please
         # Create the material directory if it does not exist
@@ -83,10 +82,12 @@ def index():
                     filename = request.vars.material.filename
                     tmp_file = db.material.file.store(request.body, filename)
 
-                    dst_folder = os.path.join(request.folder, 'material/' + str(leak_id.id) + '/')
+                    dst_folder = os.path.join(request.folder, 'material/' + \
+                                              str(leak_id.id) + '/')
                     if not os.path.isdir(dst_folder):
                         os.mkdir(dst_folder)
-                    os.rename(os.path.join(request.folder, 'uploads/') + tmp_file, dst_folder + filename)
+                    os.rename(os.path.join(request.folder, 'uploads/') + \
+                              tmp_file, dst_folder + filename)
                 except:
                     pass
 
@@ -96,12 +97,10 @@ def index():
         # is checked the counter of access (could expired also for the submitter)
         register_whistleblower(leak_id)
         
-        leak.add_material(leak_id, "demo", "demo")
-
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)
 
-            if tulip.target=="0":
+            if tulip.target == "0":
                 leaker_tulip = tulip.url
                 continue
 
@@ -109,32 +108,32 @@ def index():
                 print "adding to mail, subscribed dude"
                 db.mail.insert(target=target.name,
                         address=target.url, tulip=tulip.url)
-        pretty_number = leaker_number[0][:3]+" "+leaker_number[0][3:6]+" " +leaker_number[0][6:]
+        pretty_number = leaker_number[0][:3] + " " + leaker_number[0][3:6] + \
+                        " " + leaker_number[0][6:]
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number, form=None)
     elif form.errors:
         response.flash = 'form has errors'
 
-    return dict(form=form, leak_id=None, tulip=None, tulips=None, wb_id=wb_id)
+    return dict(form=form, leak_id=None, tulip=None, tulips=None)
 
 def upload():
-    l = request.vars
-
-    #leaker_number = randomizer.generate_tulip_receipt()
-
     # File upload in a slightly smarter way
     # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
-    for file in request.vars:
-        if file=="qqfile":
+    for f in request.vars:
+        if f == "qqfile":
             filename = request.vars.qqfile
-            if not session.wb_id:
-                session.wb_id = randomizer.generate_wb_id()
-            wb_id = request.vars.wb_id
             tmp_file = db.material.file.store(request.body, filename)
 
-            dst_folder = os.path.join(request.folder, 'material/' + str(wb_id) + '/')
+            fldr = str(db(db.submission.session==session.wb_id
+                         ).select().first().dirname)
+            if not fldr:
+                fldr = randomizer.generate_dirname()
+                session.dirname = fldr
+            dst_folder = os.path.join(request.folder, 'material/' + fldr + '/')
             if not os.path.isdir(dst_folder):
-                os.mkdir(dst_folder)
-            os.rename(os.path.join(request.folder, 'uploads/') + tmp_file, dst_folder + filename)
+                os.makedirs(dst_folder)
+            os.rename(os.path.join(request.folder, 'uploads/') +
+                      tmp_file, dst_folder + filename)
             return response.json({'success':'true'})
 
