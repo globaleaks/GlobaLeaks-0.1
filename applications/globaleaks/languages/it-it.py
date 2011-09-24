@@ -52,6 +52,7 @@
 'Origin': 'Origine',
 'Password': 'Password',
 "Password fields don't match": "Password fields don't match",
+'Please accept the disclaimer': 'Please accept the disclaimer',
 'Powered by': 'Powered by',
 'Query:': 'Richiesta (query):',
 'Record ID': 'Record ID',
