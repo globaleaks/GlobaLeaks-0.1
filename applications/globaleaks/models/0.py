@@ -12,14 +12,12 @@ gl = local_import('logic.globaleaks').Globaleaks(db)
 mail = Mail(db)
 auth = Auth(db)
 
-cfgparser = ConfigParser.ConfigParser()
 cfgfile = os.path.join(os.path.dirname(__file__), 'gleaks.cfg')
-cfgparser.read(cfgfile)
 
 # bind everything to settings
 settings = Storage()
-settings.globals = ConfigFile(cfgparser, 'global')
-settings.tulip = ConfigFile(cfgparser, 'tulip')
+settings.globals = ConfigFile(cfgfile, 'global')
+settings.tulip = ConfigFile(cfgfile, 'tulip')
 settings.auth = auth.settings
 settings.mail = mail.settings
 
