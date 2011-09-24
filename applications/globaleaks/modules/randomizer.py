@@ -14,6 +14,8 @@ def generate_wb_id():
     #      should i be converting the random number string to bytes?
     return hashlib.sha256(os.urandom(1024)).hexdigest()
 
+def generate_dirname():
+    return hashlib.sha256(os.urandom(1024)).hexdigest()
 
 def generate_leaker_id():
     return hashlib.sha256(os.urandom(100)).hexdigest()

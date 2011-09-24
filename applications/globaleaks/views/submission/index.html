@@ -50,7 +50,7 @@ div.flash {background-color: #888;}
 function createUploader(){
     var uploader = new qq.FileUploader({
         element: document.getElementById('file-uploader'),
-        action: '/globaleaks/submission/upload?wb_id={{=wb_id}}',
+        action: '/globaleaks/submission/upload',
         debug: true
     });
 }

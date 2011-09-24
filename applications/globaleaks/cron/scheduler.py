@@ -1,75 +1,64 @@
 #!/usr/bin/env python
-import time,os
-import zipfile, tempfile
+"""
+This is used to spool tulips send them to targets and
+perform operations related to the health and wellbeing of
+a GlobaLeaks node
+"""
+
+import time
+import logging
 # from boto.ses.connection import SESConnection
 
 MimeMail = local_import('mailer').MultiPart_Mail(settings)
 MessageContent = local_import('mailer').MessageContent()
+logger = local_import('logger').get_logger(settings)
+compressor = local_import('compress_material').Zip()
 
-# conn = SESConnection(settings.aws_key, settings.aws_secret_key) 
+# conn = SESConnection(settings.aws_key, settings.aws_secret_key)
 
-fp = open("/tmp/cron.log", "a+")
-fp.write(time.ctime()+"\n")
+logger.info(time.ctime()+"\n")
 
+# Create first node administrator
 if(db.auth_user):
     # XXX Remove for non demo usage
     if(not db(db.auth_user.email=="node@globaleaks.org").select().first()):
         db.auth_user.insert(first_name="Globaleaks node administrator",
                             last_name="Globaleaks",email="node@globaleaks.org",
-#                           password="04240502d92a8c637725bbd44726ddf7278cf8c284fe25de112383fb3b36fe5d7d38dc228c92cf71ac300a1e767878dcb868ab5c53b7be51ae42f148eca151dd")
                             password=db.auth_user.password.validate("testing")[0])
-
+        logger.info("First launch of GlobaLeaks, creating node administrator!")
 
 new_material = db(db.leak.spooled==False).select()
 
-
-"""for mat in new_material:
-    if db(db.material.leak_id==mat.id).select():
-        mat_dir = os.path.join(request.folder, 'material/') + str(mat.id)
-        fp.write("mat_dir %s\n" % mat_dir)
-
-        fp.write("path %s\n" % os.path.join(mat_dir, str(mat.id)+".zip"))
-        zip = zipfile.ZipFile(mat_dir+".zip", 'w')
-        fp.write("zip %s\n" % zip)
-
-        for file in os.listdir(mat_dir):
-            zip.write(mat_dir+"/"+file, file)
-
-        zip.close()
-        db.leak[mat.id].update_record(spooled=True)
-        db.commit()"""
-
+for mat in new_material:
+    compressor.create_zip(db, mat, request, logger)
 
 mails = db(db.mail).select()
+logger.info(str(mails)+"\n")
 
-fp.write(str(mails)+"\n")
 if not mail:
-    fp.write(time.ctime()+": NO MAILS TO SEND!\n")
+    logger.info(time.ctime()+": NO MAILS TO SEND!\n")
 
 for m in mails:
     context = dict(name=m.target,
                     sitename=settings.sitename,
                     tulip_url=m.tulip,
                     site=settings.hostname)
-    fp.write(str(dir(response))+"\n")
-    fp.write(str(dir(response.render))+"\n")
+
     message_txt = MessageContent.txt(context)
-    message_html = MessageContent.html(context) 
+    message_html = MessageContent.html(context)
 
     # XXX Use for AWS
     # conn.send_email(source='node@globaleaks.org', subject='GlobaLeaks notification for:' + m.target, body=message, to_addresses=m.address, cc_addresses=None, bcc_addresses=None, format='text', reply_addresses=None, return_path=None)
-    
+
     to = m.target + "<" + m.address + ">"
     subject = "[GlobaLeaks] A TULIP from node " + settings.sitename + " for " + m.target + " - " + m.tulip[-8:]
-    fp.write("Sending to %s\n" % m.target)
+    logger.info("Sending to %s\n", m.target)
 
-    if MimeMail.send(to=to, subject=subject, 
-            message_text=message_txt, 
+    if MimeMail.send(to=to, subject=subject,
+            message_text=message_txt,
             message_html=message_html):
             db(db.mail.id==m.id).delete()
-    
+
     #mail.send(to=m.address,subject="GlobaLeaks notification for: " + m.target,message=message)
-    
-fp.close()
 
 db.commit()

@@ -19,3 +19,6 @@ docs/build
 material/
 logs/
 site-packages/
+applications/admin/languages/it-it.py
+applications/globaleaks/languages/it-it.py
+applications/globaleaks/uploads/
