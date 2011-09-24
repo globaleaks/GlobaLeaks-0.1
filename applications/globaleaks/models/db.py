@@ -53,9 +53,9 @@ plugins = PluginManager()                                      # for configuring
 ## If you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
 ## register with janrain.com, uncomment and customize following
 # from gluon.contrib.login_methods.rpx_account import RPXAccount
-# auth.settings.actions_disabled = \
+# settings.auth.actions_disabled = \
 #    ['register','change_password','request_reset_password']
-# auth.settings.login_form = RPXAccount(request, api_key='...',domain='...',
+# settings.auth.login_form = RPXAccount(request, api_key='...',domain='...',
 #    url = "http://localhost:8000/%s/default/user/login" % request.application)
 ## other login methods are in gluon/contrib/login_methods
 #########################################################################
@@ -81,9 +81,9 @@ plugins = PluginManager()                                      # for configuring
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
-# mail.settings.server = settings.email_server
-# mail.settings.sender = settings.email_sender
-# mail.settings.login = settings.email_login
+# mail.settings.server = settings.globals.email_server
+# mail.settings.sender = settings.globals.email_sender
+# mail.settings.login = settings.globals.email_login
 
 
 # FIXME move to better location

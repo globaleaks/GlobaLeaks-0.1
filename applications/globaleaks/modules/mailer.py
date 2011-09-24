@@ -6,15 +6,15 @@ class MultiPart_Mail(object):
 
     def __init__(self, s):
        self.settings = s
-    def buildMIME(self, 
-        sender, 
-        recipients, 
-        subject, 
-        message_text, 
-        message_html = None, 
-        attachments = None, 
-        cc = None, 
-        bcc = None, 
+    def buildMIME(self,
+        sender,
+        recipients,
+        subject,
+        message_text,
+        message_html = None,
+        attachments = None,
+        cc = None,
+        bcc = None,
         reply_to = None):
         #bases off of http://code.activestate.com/recipes/473810/
 
@@ -22,11 +22,11 @@ class MultiPart_Mail(object):
         msgRoot = MIMEMultipart.MIMEMultipart('related')
         msgRoot['Subject'] = subject
         msgRoot['From'] = sender
-        
+
         if not isinstance(recipients, list):
             #presumably only given a string representing a single email address
             #convert to single element list
-            to = [recipients] 
+            to = [recipients]
         msgRoot['To'] = ', '.join(recipients)
 
         if cc and isinstance(cc, list):
@@ -46,7 +46,7 @@ class MultiPart_Mail(object):
         # 'alternative' part, so message agents can decide which they want to display.
         msgAlternative = MIMEMultipart.MIMEMultipart('alternative')
         msgRoot.attach(msgAlternative)
-        
+
         #text only version
         msgText = MIMEText.MIMEText(message_text)
         msgAlternative.attach(msgText)
@@ -99,32 +99,32 @@ class MultiPart_Mail(object):
             to = [to]
 
         try:
-            if self.settings.email_server == 'gae':
+            if self.settings.globals.email_server == 'gae':
                 from google.appengine.api import mail
                 #untested on GAE, but in theory should work
                 #http://code.google.com/appengine/docs/python/mail/emailmessagefields.html
-                mail.send_mail(sender=self.settings.email_sender, to=to,
+                mail.send_mail(sender=self.settings.globals.email_sender, to=to,
                                subject=subject, body=message_text, html=message_html, attachments=attachments, cc = cc,
                                bcc = bcc, reply_to = reply_to)
             else:
-                msg = self.buildMIME(sender = self.settings.email_sender, 
-                    recipients = to, subject = subject, 
+                msg = self.buildMIME(sender = self.settings.globals.email_sender,
+                    recipients = to, subject = subject,
                     message_text = message_text, message_html = message_html,
-                    attachments = attachments, 
+                    attachments = attachments,
                     cc = cc, bcc = bcc, reply_to = reply_to)
                 #print 'message'+msg.as_string()
 
                 #Build MIME body
-                (host, port) = self.settings.email_server.split(':')
+                (host, port) = self.settings.globals.email_server.split(':')
                 server = smtplib.SMTP(host, port)
-                if self.settings.email_login:
+                if self.settings.globals.email_login:
                     server.ehlo()
                     if self.settings.use_tls:
                         server.starttls()
                     server.ehlo()
-                    (username, password) = self.settings.email_login.split(':')
+                    (username, password) = self.settings.globals.email_login.split(':')
                     server.login(username, password)
-                server.sendmail(self.settings.email_sender, to, msg.as_string())
+                server.sendmail(self.settings.globals.email_sender, to, msg.as_string())
                 server.quit()
         except Exception, e:
             return False

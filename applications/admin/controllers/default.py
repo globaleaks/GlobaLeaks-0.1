@@ -265,7 +265,7 @@ def uninstall():
             else:
                 session.flash = T('no permission to uninstall "%s"', app)
                 redirect(URL('site'))
-        if app_uninstall(app, request):            
+        if app_uninstall(app, request):
             session.flash = T('application "%s" uninstalled', app)
         else:
             session.flash = T('unable to uninstall "%s"', app)
@@ -930,7 +930,7 @@ def create_file():
                 raise SyntaxError
 
             msg = T('This is the %(filename)s template',
-                    dict(filename=filename))            
+                    dict(filename=filename))
             if extension == 'html':
                 text = dedent("""
                    {{extend 'layout.html'}}
@@ -942,7 +942,7 @@ def create_file():
                     text = read_file(generic)
                 else:
                     text = ''
-                
+
         elif path[-9:] == '/modules/':
             if request.vars.plugin and not filename.startswith('plugin_%s/' % request.vars.plugin):
                 filename = 'plugin_%s/%s' % (request.vars.plugin, filename)
@@ -1211,7 +1211,7 @@ def twitter():
 def user():
     if MULTI_USER_MODE:
         if not db(db.auth_user).count():
-            auth.settings.registration_requires_approval = False            
+            settings.auth.registration_requires_approval = False
         return dict(form=auth())
     else:
         return dict(form=T("Disabled"))
