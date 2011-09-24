@@ -1,14 +1,19 @@
 def index():
     import hashlib
 
-    if form.accepts(request.vars, session):
-        l = request.vars
+    form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
+
+    if not form:
+        if form.accepts(request.vars, session):
+            l = request.vars
    
-        # Make the tulip work well
-        leak_number = l.Receipt.replace(' ','')
-        tulip_url = hashlib.sha256(leak_number).hexdigest()
-        redirect("/tulip/" + tulip_url)
-        
+            # Make the tulip work well
+            leak_number = l.Receipt.replace(' ','')
+            tulip_url = hashlib.sha256(leak_number).hexdigest()
+            redirect("/tulip/" + tulip_url)
+    else:
+        redirect("/")
+            
     return dict(form=None,tulip_url=None)
 
 
