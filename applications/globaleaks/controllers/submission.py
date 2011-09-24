@@ -3,12 +3,12 @@ import os
 def register_whistleblower(leak_id):
     submitter = db.target.insert(id=leak_id)
 #    OK, this is putting the user in the target table
-#    NEW BUG DETECTED: at the moment the target list is not inside target but 
+#    NEW BUG DETECTED: at the moment the target list is not inside target but
 #    in "mail". now this could be committed because someother will implement the
 #    groups management
     if not submitter:
         return
-        
+
     db.target[leak_id].update_record(status="submitter")
 
 def index():
@@ -92,11 +92,12 @@ def index():
                     pass
 
         leak = Leak(leak_id)
+        leak.add_material(leak_id, None, None)
 
         # adding the whilstleblower in the target list is required because in tulip.py
         # is checked the counter of access (could expired also for the submitter)
         register_whistleblower(leak_id)
-        
+
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)
 
@@ -125,11 +126,13 @@ def upload():
             filename = request.vars.qqfile
             tmp_file = db.material.file.store(request.body, filename)
 
-            fldr = str(db(db.submission.session==session.wb_id
-                         ).select().first().dirname)
+            fldr = db(db.submission.session==session.wb_id
+                         ).select().first()
             if not fldr:
                 fldr = randomizer.generate_dirname()
                 session.dirname = fldr
+            else:
+                fldr = str(fldr.dirname)
             dst_folder = os.path.join(request.folder, 'material/' + fldr + '/')
             if not os.path.isdir(dst_folder):
                 os.makedirs(dst_folder)
