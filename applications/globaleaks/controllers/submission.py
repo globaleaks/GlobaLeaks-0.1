@@ -1,4 +1,5 @@
 import os
+import hashlib
 
 def index():
     leaker_number = None
@@ -99,7 +100,8 @@ def index():
         session.dirname = None
         session.wb_id = None
 
-        return dict(leak_id=leak_id, leaker_tulip=pretty_number, form=None)
+        return dict(leak_id=leak_id, leaker_tulip=pretty_number,
+                    form=None, tulip_url=tulip.url)
     elif form.errors:
         response.flash = 'form has errors'
 

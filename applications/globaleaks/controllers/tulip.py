@@ -6,14 +6,14 @@ def index():
     if not form:
         if form.accepts(request.vars, session):
             l = request.vars
-   
+
             # Make the tulip work well
             leak_number = l.Receipt.replace(' ','')
             tulip_url = hashlib.sha256(leak_number).hexdigest()
             redirect("/tulip/" + tulip_url)
     else:
         redirect("/")
-            
+
     return dict(form=None,tulip_url=None)
 
 
@@ -25,10 +25,11 @@ def access_increment(t):
         db.tulip[t.target].update_record(accesses_counter=new_count)
     else:
         db.tulip[t.target].update_record(accesses_counter=1)
-    
+
     db.commit()
 
-    if(int(t.allowed_accesses) != 0 and int(t.accesses_counter) > int(t.allowed_accesses)):
+    if int(t.allowed_accesses) != 0 and \
+       int(t.accesses_counter) > int(t.allowed_accesses):
         return True
     else:
         return False
@@ -57,7 +58,7 @@ def status():
 
     if whistleblower == False:
     # the stats of the whistleblower stay in the tulip entry (its unique!)
-        download_available = (int(t.downloads_counter) < int(t.allowed_downloads))
+        download_available = int(t.downloads_counter) < int(t.allowed_downloads)
         access_available = access_increment(t)
         counter_accesses = t.accesses_counter
         limit_counter = t.allowed_accesses
@@ -124,6 +125,9 @@ def download():
     leak = t.get_leak()
 
     response.headers['Content-Type'] = "application/octet"
-    response.headers['Content-Disposition'] = 'attachment; filename="' + tulip_url + '.zip"'
+    response.headers['Content-Disposition'] = 'attachment; filename="' + \
+                                              tulip_url + '.zip"'
     # XXX to make proper handlers to manage the fetch of dirname
-    return response.stream(open(os.path.join(request.folder, 'material/', db(db.submission.leak_id==leak.id).select().first().dirname + '.zip'),'rb'))
+    return response.stream(open(os.path.join(request.folder, 'material/',
+                           db(db.submission.leak_id==leak.id).select().first(
+                           ).dirname + '.zip'),'rb'))
