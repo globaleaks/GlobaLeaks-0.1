@@ -30,7 +30,7 @@ if(db.auth_user):
 new_material = db(db.leak.spooled==False).select()
 
 for mat in new_material:
-    compressor.create_zip(db=db, mat=mat, logger=logger)
+    compressor.create_zip(db, mat, request, logger)
 
 mails = db(db.mail).select()
 logger.info(str(mails)+"\n")

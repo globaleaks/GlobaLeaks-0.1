@@ -46,11 +46,10 @@ def index():
                                  "demo", l.Tags, number=leaker_number[1])
 
         # adding association submission -> leak_id
-        db.submission.insert(session=session.wb_id,
-                             leak_id=leak_id,
-                             dirname=session.dirname)
-
-        i = 0
+        if not db(db.submission.session==session.wb_id).select():
+            db.submission.insert(session=session.wb_id,
+                                 leak_id=leak_id,
+                                 dirname=session.dirname)
 
         #XXX Refactor me please
         # Create the material directory if it does not exist
@@ -82,9 +81,7 @@ def index():
                     pass
 
         leak = Leak(leak_id)
-
-        if i > 0:
-            leak.add_material(leak_id, "demo", "demo")
+        leak.add_material(leak_id, "demo", "demo")
 
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)
@@ -107,8 +104,6 @@ def index():
     return dict(form=form, leak_id=None, tulip=None, tulips=None)
 
 def upload():
-    #leaker_number = randomizer.generate_tulip_receipt()
-
     # File upload in a slightly smarter way
     # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
     for f in request.vars:
@@ -116,8 +111,8 @@ def upload():
             filename = request.vars.qqfile
             tmp_file = db.material.file.store(request.body, filename)
 
-            fldr = db(db.submission.session==session.wb_id).select(
-                      db.submission.dirname).first()
+            fldr = str(db(db.submission.session==session.wb_id
+                         ).select().first().dirname)
             if not fldr:
                 fldr = randomizer.generate_dirname()
                 session.dirname = fldr
