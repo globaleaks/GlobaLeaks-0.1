@@ -51,16 +51,18 @@ def config():
     # XXX: also private form?
     mail_form = FORM(TABLE(
             "foobar", TR(INPUT(_type='submit'))
+            ))
     auth_form = FORM(TABLE(
             "spamcheese", TR(INPUT(_type='submit'))
             ))
 
-    if form.accepts(request.vars, session):
+    if global_form.accepts(request.vars, session):
         return 'whoa'
+
 
     return dict(settings=settings,
                 global_form=global_form,
-                mail_form=mail_formm
+                mail_form=mail_form,
                 auth_form=auth_form)
 
 @auth.requires_login()
