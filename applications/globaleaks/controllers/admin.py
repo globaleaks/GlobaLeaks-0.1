@@ -41,18 +41,27 @@ def config():
     response.flash = ("Welcome to the Globaleaks new wizard application, "
                       "please donate coffee")
 
-    form = FORM(TABLE(
-                TR(INPUT(_name='migrate', _type='checkbox')),
-                TR(INPUT(_name='name', _type='submit', requires=IS_NOT_EMPTY())),
-                TR(INPUT(_name='email', _type='email')),
-                TR(INPUT(_name='tutle', _type='submit')),
-                TR(INPUT(_type='submit'))
-                ))
+    global_form = FORM(TABLE(
+            "migrate:", TR(INPUT(_name='migrate', _type='checkbox')),
+            "name", TR(INPUT(_name='name', _type='name', requires=IS_NOT_EMPTY())),
+            "mail", TR(INPUT(_name='email', _type='email')),
+            "title", TR(INPUT(_name='title', _type='name')),
+            TR(INPUT(_type='submit'))
+          ))
+    # XXX: also private form?
+    mail_form = FORM(TABLE(
+            "foobar", TR(INPUT(_type='submit'))
+    auth_form = FORM(TABLE(
+            "spamcheese", TR(INPUT(_type='submit'))
+            ))
+
     if form.accepts(request.vars, session):
-        return True
+        return 'whoa'
 
     return dict(settings=settings,
-               form=form)
+                global_form=global_form,
+                mail_form=mail_formm
+                auth_form=auth_form)
 
 @auth.requires_login()
 def wizard():
@@ -60,5 +69,6 @@ def wizard():
     Wizard page should be avaible only on startup, and provide with a cool
     graphical interface a configuration wizard.
     """
+
     return dict(message=None)
 
