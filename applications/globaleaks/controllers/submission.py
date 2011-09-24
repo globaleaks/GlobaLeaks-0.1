@@ -43,12 +43,12 @@ def index():
         l = request.vars
 
         leak_id = gl.create_leak(l.Title, l.Description, None, None,
-                    "demo", l.Tags, number=leaker_number[1])
+                                 "demo", l.Tags, number=leaker_number[1])
 
         # adding association submission -> leak_id
         db.submission.insert(session=session.wb_id,
                              leak_id=leak_id,
-                             dirname=randomizer.generate_dirname())
+                             dirname=session.dirname)
 
         i = 0
 
@@ -116,10 +116,14 @@ def upload():
             filename = request.vars.qqfile
             tmp_file = db.material.file.store(request.body, filename)
 
-            dst_folder = os.path.join(request.folder, 'material/' +
-                                      str(session.wb_id) + '/')
+            fldr = db(db.submission.session==session.wb_id).select(
+                      db.submission.dirname).first()
+            if not fldr:
+                fldr = randomizer.generate_dirname()
+                session.dirname = fldr
+            dst_folder = os.path.join(request.folder, 'material/' + fldr + '/')
             if not os.path.isdir(dst_folder):
-                os.mkdir(dst_folder)
+                os.makedirs(dst_folder)
             os.rename(os.path.join(request.folder, 'uploads/') +
                       tmp_file, dst_folder + filename)
             return response.json({'success':'true'})

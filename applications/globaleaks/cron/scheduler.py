@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-# This is used to spool tulips send them to targets and
-# perform operations related to the health and wellbeing of
-# a GlobaLeaks node
+"""
+This is used to spool tulips send them to targets and
+perform operations related to the health and wellbeing of
+a GlobaLeaks node
+"""
 
 import time
 import logging
@@ -28,8 +30,7 @@ if(db.auth_user):
 new_material = db(db.leak.spooled==False).select()
 
 for mat in new_material:
-    if db(db.material.leak_id==mat.id).select():
-        compressor.create_zip(db=db, mat=mat, logger=logger)
+    compressor.create_zip(db=db, mat=mat, logger=logger)
 
 mails = db(db.mail).select()
 logger.info(str(mails)+"\n")
