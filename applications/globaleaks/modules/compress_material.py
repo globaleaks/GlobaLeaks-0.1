@@ -10,7 +10,7 @@ class Zip:
         Function to create an unencrypted zipfile
         """
         if db(db.material.leak_id==mat.id).select():
-            fldr = str(db(db.submission.leak_id==db.leak.id).select(
+            fldr = str(db(db.submission.leak_id==mat.id).select(
                       db.submission.dirname).first().dirname)
             mat_dir = os.path.join(request.folder, 'material/') + fldr
             logger.info("mat_dir %s\n", mat_dir)
