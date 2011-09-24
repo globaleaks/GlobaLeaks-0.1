@@ -3,12 +3,14 @@ def index():
 
     if form.accepts(request.vars, session):
         l = request.vars
+    
+
         # Make the tulip work well
         leak_number = l.Receipt.replace(' ','')
         tulip_url = hashlib.sha256(leak_number).hexdigest()
         redirect("/tulip/" + tulip_url)
-
     return dict(form=None,tulip_url=None)
+
 
 # this is called only in the Target context
 def access_increment(t):

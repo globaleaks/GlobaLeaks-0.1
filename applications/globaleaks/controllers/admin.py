@@ -66,31 +66,6 @@ def groups():
 
 @auth.requires_login()
 def config():
-    create_form = lambda: FORM(TABLE(
-            TR("title", INPUT(_name='title', _type='text',
-                              _value=settings.globals.title)),
-            TR("subtitle", INPUT(_name='subtitle', _type='text',
-                                 _value=settings.globals.subtitle)),
-            TR("author", INPUT(_name='author', _type='text',
-                               _value=settings.globals.author)),
-            TR("title", INPUT(_name='author_email', _type='text',
-                              _value=settings.globals.title)),
-
-            TR(INPUT(_type='submit'))
-          ))
-
-    global_form = create_form()
-    if global_form.accepts(request.vars):
-        for var in global_form.vars:
-            value = getattr(global_form.vars,  var)
-            setattr(settings.globals, var,  value)
-        global_form = create_form()
-    #if auth_form.accepts(request.vars, session):
-    #    return 'accepting auth'
-    #if mail_form.accepts(request.vars, session):
-    #    return 'accepting mail'
-
-
     response.flash = ("Welcome to the Globaleaks new wizard application, "
                       "please donate coffee")
 
@@ -103,6 +78,28 @@ def config():
             TR(INPUT(_type='submit'))
             ))
 
+    global_form = FORM(TABLE(
+        TR("title", INPUT(_name='title', _type='text',
+                          _value=settings.globals.title)),
+        TR("subtitle", INPUT(_name='subtitle', _type='text',
+                             _value=settings.globals.subtitle)),
+        TR("author", INPUT(_name='author', _type='text',
+                           _value=settings.globals.author)),
+        TR("author_email", INPUT(_name='author_email', _type='text',
+                          _value=settings.globals.author_email)),
+
+        TR(INPUT(_type='submit'))
+    ))
+
+    if global_form.accepts(request.vars, keepvalues=True):
+        for var in global_form.vars:
+            value = getattr(global_form.vars, var)
+            setattr(settings.globals, var, value)
+
+    if auth_form.accepts(request.vars, session):
+        return 'accepting auth'
+    if mail_form.accepts(request.vars, session):
+        return 'accepting mail'
 
     return dict(settings=settings,
                 global_form=global_form,
