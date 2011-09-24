@@ -16,6 +16,19 @@ def index():
 
     return dict(form=form,tulip_url=None)
 
+def access_increment(t):
+
+    if t.accesses_counter:
+        new_count = int(t.accesses_counter) + 1            
+        db.tulip[t.target].update_record(accesses_counter=new_count)
+    else:
+        db.tulip[t.target].update_record(accesses_counter=1)
+     
+    if(int(t.allowed_accesses) != 0 and int(t.accesses_counter) > int(t.allowed_accesses)):
+        return True
+    else:
+        return False
+    
 def status():
     tulip_url = request.args[0]
     
@@ -35,28 +48,19 @@ def status():
         response.flash = "You are the Target"
    
     target = gl.get_target(t.target)
+    # handle target page management
+    target_url = "FIXME FIXME"
 
-    dead = False
-     
-    if(int(t.allowed_accesses) != 0 and int(t.accesses_counter) >= int(t.allowed_accesses)):
-        dead = True
+    access_available = access_increment(t)
+    
+    if whistleblower == False:
+        download_available = (int(t.allowed_downloads) == 0 or int(t.downloads_counter) > int(t.allowed_downloads))
     else:
-        if t.target != "0":
-            if target: 
-                if target.tulip_counter:
-                    new_count = int(target.tulip_counter) + 1
-                    # XXX move to a Target Datamodel
-                    db.target[t.target].update_record(tulip_counter=new_count)
-                else:
-                    db.target[t.target].update_record(tulip_counter=1)
-
-        t.accesses_counter = int(t.accesses_counter) + 1
-
-    if(int(t.allowed_downloads) !=0 and int(t.downloads_counter) >= int(t.allowed_downloads)):
-        dead = True
-
+        download_available = False
+ 
     return dict(err=None,
-            dead=dead,
+            access_available=access_available,
+            download_available=download_available,
             whistleblower=whistleblower,
             tulip_url=tulip_url,
             leak_id=leak.id,
@@ -66,10 +70,24 @@ def status():
             leak_material=leak.material,
             tulip_accesses=t.accesses_counter,
             tulip_allowed_accesses=t.allowed_accesses,
-            tulip_downloads=t.downloads_counter,
-            tulip_allowed_downloads=t.allowed_downloads,
+            tulip_download=t.downloads_counter,
+            tulip_allowed_download=t.allowed_downloads,
             name=t.target,
+            target_url=target_url,
             targets=gl.get_targets("ANY"))
+
+def download_increment(t):
+
+    if(int(t.allowed_downloads) !=0 and int(t.downloads_counter) > int(t.allowed_downloads)):
+        return True
+   
+    if t.downloads_counter:
+        new_count = int(t.downloads_counter) + 1            
+        db.tulip[t.target].update_record(downloads_counter=new_count)
+    else:
+        db.tulip[t.target].update_record(downloads_counter=1)
+
+    return False
 
 def download():
     import os
@@ -83,20 +101,9 @@ def download():
     
     target = gl.get_target(t.target)
 
-    if(int(t.downloads_counter) >= int(t.allowed_downloads) and int(t.allowed_downloads)!=0):
+    if(download_increment(t)):
         redirect("/tulip/" + tulip_url);
-    else:
-        if t.target != "0":
-            if target:
-                if target.download_counter:
-                    new_count = int(target.download_counter) + 1
-                    # XXX move to a Target Datamodel
-                    db.target[t.target].update_record(download_counter=new_count)
-                else:
-                    db.target[t.target].update_record(download_counter=1)
-
-        t.downloads_counter = int(t.downloads_counter) + 1
-
+ 
     leak = t.get_leak()
     
     response.headers['Content-Type'] = "application/octet"

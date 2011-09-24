@@ -17,7 +17,9 @@
 {{else:}}
 <h1>3. Target<span>| Tulip</span></h1>
 <p class="intro">
-This TULIP has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this TULIP should be considered of high importance.</p>
+This TULIP has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this TULIP should be considered of high importance.<br>
+If you are not interested in receive Tulips, or want change the segnalation properties, could access to the <a href="{{=target_url}}">personal receiver page</a>.
+</p>
 
 {{pass}}
 <div class="entry">
@@ -25,8 +27,8 @@ This TULIP has been sent to you by an anonymous whistleblower. She/He would like
     <h2 class="title">{{=leak_title}}</h2>
     
     {{if not whistleblower:}}
-    <div class="downloads-left{{if int(tulip_allowed_downloads) != 0 and int(tulip_downloads) >= int(tulip_allowed_downloads): }} full{{pass}}">
-        Downloads: <strong>{{=tulip_downloads}}/{{=tulip_allowed_downloads}}</strong>
+    <div class="downloads-left{{if download_available: }} full{{pass}}">
+        Downloads: <strong>{{=tulip_download}}/{{=tulip_allowed_download}}</strong>
     </div>
     {{pass}}
     <div class="total-clicks">
@@ -34,9 +36,19 @@ This TULIP has been sent to you by an anonymous whistleblower. She/He would like
     </div>
     <div class="clear"></div>
 
-    <p class="description">
-        In this demo, the Material is an example not submitted by the whistleblower
+    <p class="info">
+        {{if whistleblower:}} This is your previously submitted material, only you had the property to add new data
+        {{else:}} This is the material submitted by the whistleblower for your revision. You are invited to:
+         <ul>
+             <li>Do not spread this link, is intended be for your eyes only</li>
+             <li>Analyze the received material, your contribution is useful to discern the truth</li>
+             <li>Ask useful details to the whistleblower (<b>Todo:</b>checks if comments are available)</li>
+         </ul>
+         {{pass}}
     </p>
+    
+    <p class="description">{{=leak_desc}}</p>
+    <p class="description">{{=leak_tags}}</p>
     
     <div class="material">
         <h3>Material</h3>
@@ -45,7 +57,7 @@ This TULIP has been sent to you by an anonymous whistleblower. She/He would like
             <li class="pdf">Pentagon-Papers-Index.pdf (1.4 M)</li>
             <li class="img">Tuskegee-syphilis-experiment.gif (172 K)</li>
         </ul>
-        {{if not dead and not whistleblower: }}
+        {{if not download_available and not whistleblower: }}
             {{url = tulip_url}}
             <h3>Download</h3>
             <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="zip">ZIP</a>
@@ -74,8 +86,8 @@ This TULIP has been sent to you by an anonymous whistleblower. She/He would like
             {{pass}}
                 <td class="name">{{=target.name}}</td>
                 <td class="description">{{=target.desc}}</td>
-                <td class="downloads">{{=target.tulip_counter}}</td>
-                <td class="downloads">{{=target.download_counter}}</td>
+                <td class="downloads">{{=tulip_accesses}}/{{=tulip_allowed_accesses}}</td>
+                <td class="downloads">{{=tulip_download}}/{{=tulip_allowed_download}}</td>
             </tr>
             {{pass}}
         </tbody>

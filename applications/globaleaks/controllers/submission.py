@@ -1,6 +1,17 @@
 import os
 from pprint import pprint
 
+def register_whistleblower(leak_id):
+    submitter = db.target.insert(id=leak_id)
+#    OK, this is putting the user in the target table
+#    NEW BUG DETECTED: at the moment the target list is not inside target but 
+#    in "mail". now this could be committed because someother will implement the
+#    groups management
+    if not submitter:
+        return
+        
+    db.target[leak_id].update_record(status="submitter")
+
 def index():
     leaker_number = None
     form_content = (Field('Title', requires=IS_NOT_EMPTY()),
@@ -26,8 +37,6 @@ def index():
                     requires=IS_EQUAL_TO("on", error_message="Please accept the disclaimer"))),
             TR('', INPUT(_name='submit', _type='submit'))))
     
-
-
     response.flash = "You are the Whistleblower"
     
     if form.accepts(request.vars, session):
@@ -51,6 +60,10 @@ def index():
 
         if(i>0):
             leak.add_material(leak_id, "demo", "demo")
+        
+        # adding the whilstleblower in the target list is required because in tulip.py
+        # is checked the counter of access (could expired also for the submitter)
+        register_whistleblower(leak_id)
         
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)
