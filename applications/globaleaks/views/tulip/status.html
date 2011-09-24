@@ -9,7 +9,7 @@
 {{if whistleblower: }}
 <h1>4. Whistleblower<span>| TULIP</span></h1>
 <p class="intro">
-    Welcome back Whistleblower: this TULIP interface is unique for you. 
+    Welcome back Whistleblower: this TULIP interface is unique for you.
     If you are using the GlobaLeaks platform with anonymity in mind, be aware that using this page over an inscure channel may lead to the compromise of your identity.</p>
 
 <p>In the future a comment interface will be implemented (<a href="https://blueprints.launchpad.net/globaleaks/+spec/tulip-comments">blueprint</a>). The comments left by you will appear as comming from the Whistleblower. It may be possible that targets could try to identify you, so be sure to not link to any other communication means (email, twitter, facebook, etc.). Be also careful when clicking on external links, as these may lead to the compromise of your identity.</p>
@@ -25,7 +25,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 <div class="entry">
 
     <h2 class="title">{{=leak_title}}</h2>
-    
+
     {{if not whistleblower:}}
     <div class="downloads-left{{if not download_available: }} full{{pass}}">
         Downloads: <strong>{{=tulip_download}}/{{=tulip_allowed_download}}</strong>
@@ -46,18 +46,18 @@ If you are not interested in receive Tulips, or want change the segnalation prop
          </ul>
          {{pass}}
     </p>
-    
+
     <p class="description">{{=leak_desc}}</p>
     <p class="description">{{=leak_tags}}</p>
-    
+
     <div class="material">
         <h3>Material</h3>
         <ul>
-            <li class="zip">dancemonkeyboy.mpg (3.0 M)</li>
-            <li class="pdf">Pentagon-Papers-Index.pdf (1.4 M)</li>
-            <li class="img">Tuskegee-syphilis-experiment.gif (172 K)</li>
+            {{for file in files:}}
+                <li class="{{=file.type}}">{{=file.name}} ({{=file.size}})</li>
+            {{pass}}
         </ul>
-        {{if not download_available and not whistleblower: }}
+        {{if download_available and not whistleblower: }}
             {{url = tulip_url}}
             <h3>Download</h3>
             <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="zip">ZIP</a>
@@ -65,9 +65,9 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
         {{pass}}
         <div class="clear"></div>
-        
+
     </div>
-    
+
     <h2>Target list</h2>
     <table class="targetlist">
         <thead>
@@ -92,85 +92,13 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             {{pass}}
         </tbody>
     </table>
-    
+
 </div>
-    <!-- table>
-    <tr><td><h2>PGP Security</h2></td></tr>
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="PGPKey" id="pgpkey">PGP Key: </label>
-    </td>
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="file" class="notimplemented" name="pgp_key" >
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="TulipEncryption" id="tulip_encryption">Tulip Notification Encryption: </label>
-    </td>
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="tulip_encryption" >
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="MaterialEncryption" id="pgpkey">Material Encryption: </label>
-    </td>
-    
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="material_encryption">
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    <tr><td><h2>Password</h2></td></tr>
-
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="Password" id="password">Password: </label>
-    </td>
-    
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="password" class="notimplemented" name="password">
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="RestrictAccess" id="restrict_access">Restrict tulip access with my password: </label>
-    </td>
-    
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="restrict_access">
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-
-    <tr id="no_table_Description__row">
-    <td class="w2p_fl">
-        <label for="ZipEncryption" id="zip_encryption">Material zip encryption with my password: </label>
-    </td>
-    
-    <td class="w2p_fw">
-        <input onclick="notimpl()" type="checkbox" class="notimplemented" name="zip_encryption">
-    </td>
-    <td class="w2p_fc"></td>
-    </tr>
-
-    
-    </table-->
 
 {{pass}}
     <div id="messages">
     </div>
-    
+
     <script type="text/javascript">
     function notimpl() {
         jQuery("#messages").html("NOT IMPLEMENTED!");
