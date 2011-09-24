@@ -112,6 +112,7 @@ def index():
         pretty_number = leaker_number[0][:3] + " " + leaker_number[0][3:6] + \
                         " " + leaker_number[0][6:]
         session.dirname = None
+        session.wb_id = None
         return dict(leak_id=leak_id, leaker_tulip=pretty_number, form=None)
     elif form.errors:
         response.flash = 'form has errors'
