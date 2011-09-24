@@ -10,6 +10,7 @@ def index():
 
     return dict(form=None,tulip_url=None)
 
+# this is called only in the Target context
 def access_increment(t):
 
     if t.accesses_counter:
@@ -45,16 +46,25 @@ def status():
     # handle target page management
     target_url = "FIXME FIXME"
 
-    if target:
-        access_available = access_increment(t)
-    else:
-        access_available = True
-
     if whistleblower == False:
+    # the stats of the whistleblower stay in the tulip entry (its unique!)
         download_available = (int(t.allowed_downloads) == 0 or int(t.downloads_counter) > int(t.allowed_downloads))
+        access_available = access_increment(t)
+        counter_accesses = t.accesses_counter
+        limit_counter = t.allowed_accesses
     else:
+    # the stats of the whistleblower stay in the leak/material entry
         download_available = False
-
+        if leak.whistleblower_access:
+            new_count = int(leak.whistleblowing_access) + 1            
+            leak.whistleblower_access=new_count
+        else:
+            leak.whistleblower_counter=1
+            
+        counter_accesses = leak.whistleblower_access   
+        limit_counter = int("50") # settings.max_submitter_accesses 
+        access_available = True 
+ 
     return dict(err=None,
             access_available=access_available,
             download_available=download_available,
@@ -65,8 +75,8 @@ def status():
             leak_tags=leak.tags,
             leak_desc=leak.desc,
             leak_material=leak.material,
-            tulip_accesses=t.accesses_counter,
-            tulip_allowed_accesses=t.allowed_accesses,
+            tulip_accesses=counter_accesses,
+            tulip_allowed_accesses=limit_counter,
             tulip_download=t.downloads_counter,
             tulip_allowed_download=t.allowed_downloads,
             name=t.target,
