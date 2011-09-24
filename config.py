@@ -1,4 +1,6 @@
 from gluon.storage import Storage
+import ConfigParser
+
 class ConfigFile(Storage):
 
     def __init__(self, cfgparser, section):
@@ -13,7 +15,7 @@ class ConfigFile(Storage):
         try:
             return self._cfgparser.get(self._section, name)
         except ConfigParser.NoOptionError:
-            raise NameError
+            raise NameError(name)
 
     def __setattr__(self, name, value):
         # keep an open port with private attributes
@@ -22,5 +24,5 @@ class ConfigFile(Storage):
         try:
             self._cfgparser.set(self._section, name, value)
         except ConfigParser.NoOptionError:
-            raise NameError
+            raise NameError(name)
 
