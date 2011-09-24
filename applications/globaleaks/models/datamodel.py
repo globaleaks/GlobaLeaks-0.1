@@ -40,6 +40,13 @@ class Leak(object):
         db.leak[self.id].desc = desc
         db.commit()
     desc = property(get_desc, set_desc)
+    
+    def get_whistleblower_access(self):
+        return db.leak[self.id].whistleblower_access
+    def set_whistleblower_access(self, whistleblower_access):
+        db.leak[self.id].whistleblower_access
+        db.commit()
+    whistleblower_access = property(get_whistleblower_access, set_whistleblower_access)
 
     #TODO: implement get/set material
     def get_material(self):
@@ -189,46 +196,39 @@ class TargetList(object):
                             url=t[0].url, type=t[0].type,
                             info=t[0].info, status="active",
                             group=t[1])
-    @property
-    def list(self):
-        pass
-    @list.setter
-    def list(self, value):
-        pass
 
-    @property
-    def name(self):
+    def get_list(self):
         pass
-    @name.setter
-    def name(self, value):
+    def set_list(self, value):
         pass
+    list = property(get_list, set_list)
 
-    @property
-    def desc(self):
+    def get_name(self):
         pass
-    @desc.setter
-    def desc(self, value):
+    def set_name(self, value):
         pass
+    name = property(get_name, set_name)
 
-    @property
-    def url(self):
+    def get_desc(self):
         pass
-    @url.setter
-    def url(self, value):
+    def set_desc(self, value):
         pass
+    desc = property(get_desc, set_desc)
 
-    @property
-    def type(self):
+    def get_url(self):
         pass
-    @type.setter
-    def type(self, value):
+    def set_url(self, value):
         pass
+    url = property(get_url, set_url)
 
-    @property
-    def info(self):
+    def get_type(self):
         pass
-    @info.setter
-    def info(self, value):
+    def set_type(self, value):
         pass
+    type = property(get_type, set_type)
 
-
+    def get_info(self):
+        pass
+    def set_info(self, value):
+        pass
+    info = property(get_info, set_info)

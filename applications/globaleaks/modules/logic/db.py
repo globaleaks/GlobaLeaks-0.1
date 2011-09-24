@@ -27,6 +27,7 @@ class DB(DAL):
             Field('desc'),
             Field('submission_timestamp'),
             Field('leaker_id', self.target),
+            Field('whistleblower_access'),
             Field('spooled', 'boolean', False),
             format='%(name)s'
         )
