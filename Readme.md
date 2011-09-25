@@ -16,25 +16,29 @@ then install Globaleaks
 
     easy_install globaleaks
 
-and start the service (its bind in 127.0.0.1:8000)
+and start the service (its bind at http://127.0.0.1:8000, admin access http://127.0.0.1:8000/admin password "globaleaks")
 
     startglobaleaks
 
 How to hack on it
 -----------------
 
-You need to get a copy of [.web2py](http://www.web2py.com/) and install it (that means get the necessary gluons into $PYTHON_PATH)
+You need to get a copy of [web2py](http://www.web2py.com/) and install it (that means get the necessary gluons into $PYTHON_PATH)
 
-# updated link-o-graphy
+updated link-o-graphy
+---------------------
 
-[GlobaLeaks website](http://www.globaleaks.org)
-[code repository](https://github.com/globaleaks)
-[GL's blogroll](http://planet.globaleaks.org)
-[mailing list "people"](http://box549.bluehost.com/mailman/listinfo/people_globaleaks.org)
+* [GlobaLeaks website](http://www.globaleaks.org)
+* [code repository](https://github.com/globaleaks)
+* [GL's blogroll](http://planet.globaleaks.org)
+* [mailing list "people"](http://box549.bluehost.com/mailman/listinfo/people_globaleaks.org)
+* [GL's twitter](https://twitter.com/#!/globaleaks)
+* [GlobaLeaks documentation](https://github.com/globaleaks/advocacy)
 
-# OLD pages reference, documentation,
+eldest pages reference, documentation
+-------------------------------------
 
-launchpad old project page: https://launchpad.net/globaleaks
-old list of features https://blueprints.launchpad.net/globaleaks
-old site, old ideas, old goals: http://www.globaleaks.org/old/
-old trac, old ideas, old goals: http://sourceforge.net/apps/trac/globaleaks/
+* [launchpad old project page](https://launchpad.net/globaleaks)
+* [old list of features](https://blueprints.launchpad.net/globaleaks)
+* [old site, old ideas, old goals](http://www.globaleaks.org/old/)
+* [old trac, old ideas, old goals](http://sourceforge.net/apps/trac/globaleaks/)
