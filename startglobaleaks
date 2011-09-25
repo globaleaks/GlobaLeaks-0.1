@@ -3,6 +3,7 @@
 ADDRESS="127.0.0.1"
 PORT="8000"
 PASSWORD="globaleaks"
+FOLDER=$(python -c "import globaleaks, os; print os.path.dirname(globaleaks.__file__)")
 
+cd $FOLDER
 python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD
-
