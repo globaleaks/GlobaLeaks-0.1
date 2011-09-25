@@ -3,6 +3,10 @@
 .*.swp
 *.DS_Store
 
+build/
+dist/
+*.egg-info
+
 parameters_8000.py
 httpserver.log
 httpserver.pid
