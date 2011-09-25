@@ -111,7 +111,23 @@ def wizard():
     """
     Wizard page should be avaible only on startup, and provide with a cool
     graphical interface a configuration wizard.
+        {{{ import cfg file }}}
+      step #1:
+        Node description, i.e. title and subtitle
+      step #2:
+        Supported output: mail, aws?
+        (mail is the only options supported now.)
+      step #3 {>>>skip}
+        Tulip settings: expiration date, maximum access and so on.
+      step #4: {>>>skip}
+        Advanced configs: author email, layout theme, keywords
+      step #5: {{>>>skip}}
+        Create first grups
     """
+    step1_form = None
+    step2_form = None
+    step3_form = None
+    step4_form = None
 
     return dict(message=None)
 
