@@ -124,14 +124,11 @@ def wizard():
         Create first grups
     """
 
-<<<<<<< HEAD
     import_form = FORM(TR(INPUT(_name="imp_url", _type="url"),
                           "\tor\t",
                           INPUT(_name="imp_file", _type="file")),
                       )
 
-=======
->>>>>>> dff5c82303729aacd37c94989e1ef1fb51b29029
     step1_form = FORM(TABLE(
         TR("Leak author", INPUT(_name= "author", _type="text",
             _value=settings.globals.author)),
@@ -150,10 +147,6 @@ def wizard():
     step4_form = None
     step5_form = None
 
-<<<<<<< HEAD
     return dict(import_form=import_form, step1=step1_form, step2=step2_form,
-=======
-    return dict(step1=step1_form, step2=step2_form,
->>>>>>> dff5c82303729aacd37c94989e1ef1fb51b29029
                 step3=step3_form, step4=step4_form, step5=step5_form)
 
