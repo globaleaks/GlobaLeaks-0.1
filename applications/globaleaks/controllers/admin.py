@@ -66,8 +66,7 @@ def groups():
 
 @auth.requires_login()
 def config():
-    response.flash = ("Welcome to the Globaleaks new wizard application, "
-                      "please donate coffee")
+    response.flash = ("Welcome to the Globaleaks new wizard application")
 
     mail_form = FORM(TABLE(
             "foobar", TR(INPUT(_type='submit'))
