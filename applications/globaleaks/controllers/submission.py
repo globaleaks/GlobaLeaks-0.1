@@ -1,5 +1,5 @@
 import os
-import hashlib
+import pickle
 
 def index():
     leaker_number = None
@@ -67,10 +67,23 @@ def index():
         # File upload in a slightly smarter way
         # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
         for file in request.vars:
+            files = []
             if file=="material":
                 try:
-                    filename = request.vars.material.filename
+                    f = Storage()
+                    f.filename = request.vars.material.filename
                     tmp_file = db.material.file.store(request.body, filename)
+
+
+                    f.ext = filename.split(".")[-1]
+                    if not ext:
+                        f.ext = ""
+
+                    tmp_fpath = os.path(os.path.join(request.folder, 'uploads/') + \
+                                    tmp_file + filename)
+
+                    f.size = os.path.getsize(tmp_fpath)
+                    files.append(f)
 
                     dst_folder = os.path.join(request.folder, 'material/' + \
                                               str(leak_id.id) + '/')
@@ -80,9 +93,11 @@ def index():
                               tmp_file, dst_folder + filename)
                 except:
                     pass
+        # XXX alarm alert, please sanitize this data properly XXX
+        pfile = pickle.dump(file)
 
         leak = Leak(leak_id)
-        leak.add_material(leak_id, None, None)
+        leak.add_material(leak_id, None, None, file=pfile)
 
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)

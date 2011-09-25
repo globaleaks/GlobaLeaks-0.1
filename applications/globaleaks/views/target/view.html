@@ -1,0 +1,50 @@
+{{extend 'layout.html'}}
+<h1>This is the user list</h1>
+
+<div class="intro">
+{{if active:}}
+Those are the brave active users! added with <a href="targets/">insertion interface</a>.<br>
+<table>
+    {{i=0}}
+    {{for target in active:}}
+        {{if i % 2 == 1: }}
+        <tr class="odd">
+        {{else:}}
+        <tr class="even">
+        {{pass}}
+    <td class="name">{{=target.id}}</td>
+    <td class="name">{{=target.name}}</td>
+    <td class="description">{{=target.desc}}</td>  
+    <td class="description">{{=target.url}}</td>  
+    </tr>
+    {{pass}}
+</table>
+{{else:}}
+No target configured in this node, add them by <a href="targets/">insertion interface</a>.
+{{pass}}
+</div>
+
+<div class="intro">
+{{if inactive:}}
+    And whass follow are the loooooser user<br>
+<table>
+    {{i=0}}
+    {{for target in inactive:}}
+        {{if i % 2 == 1: }}
+        <tr class="odd">
+        {{else:}}
+        <tr class="even">
+        {{pass}}
+    <td class="name">{{=target.id}}</td>
+    <td class="name">{{=target.name}}</td>
+    <td class="description">{{=target.desc}}</td>    
+    <td class="description">{{=target.url}}</td>  
+    </tr>
+    {{pass}}
+</table>
+
+{{else:}}
+No unsubscribed users are presents! maybe you have not choose so randomly the lists of targetz!
+{{pass}}
+
+</div>

@@ -40,7 +40,7 @@ class Leak(object):
         db.leak[self.id].desc = desc
         db.commit()
     desc = property(get_desc, set_desc)
-    
+
     def get_whistleblower_access(self):
         return db.leak[self.id].whistleblower_access
     def set_whistleblower_access(self, whistleblower_access):
@@ -184,7 +184,7 @@ class Material(object):
     @staticmethod
     def create_new(leak_id, url, type):
         return db.material.insert(leak_id=leak_id,
-            url=None, type="demo")
+            url=None, type=None, files=None)
 
 class TargetList(object):
     def __init__(self, g=None):
