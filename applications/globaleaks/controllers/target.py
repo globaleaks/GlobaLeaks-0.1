@@ -1,5 +1,19 @@
 def index(): return dict(message="hello from target.py")
 
+def view():
+    
+    collectedUser = []
+    targetList = db(db.target.status=="subscribed").select()
+    for active_user in targetList:
+        collectedUser.append(active_user)
+    
+    inactiveUser = []
+    unsubscribedList = db(db.target.status=="unsubscribed").select()
+    for inactive_user in unsubscribedList:
+         inactiveUser.append(inactive_user)
+    
+    return dict(active=collectedUser, inactive=inactiveUser)
+
 def subscribe():
     if not request.args:
         subscribe_form = SQLFORM.factory(
