@@ -79,15 +79,16 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         <tbody>
             {{i=0}}
             {{for target in targets: }}
-            {{if i % 2 == 1: }}
-            <tr class="odd">
-            {{else:}}
-            <tr class="even">
-            {{pass}}
-                <td class="name">{{=target.name}}</td>
-                <td class="description">{{=target.desc}}</td>
-                <td class="downloads">{{=tulip_accesses}}/{{=tulip_allowed_accesses}}</td>
-                <td class="downloads">{{=tulip_download}}/{{=tulip_allowed_download}}</td>
+                {{i += 1}}
+                {{if i % 2 == 1: }}
+                <tr class="odd">
+                {{else:}}
+                <tr class="even">
+                {{pass}}
+             <td class="name">{{=target.name}}</td>
+             <td class="description">{{=target.desc}}</td>
+             <td class="downloads">{{=tulip_accesses}}/{{=tulip_allowed_accesses}}</td>
+             <td class="downloads">{{=tulip_download}}/{{=tulip_allowed_download}}</td>
             </tr>
             {{pass}}
         </tbody>
