@@ -12,7 +12,7 @@ def find_data_files(srcdir, *wildcards, **kw):
     # get a list of all files under the srcdir matching wildcards,
     # returned in a format to be used for install_data
     def walk_helper(arg, dirname, files):
-        if '.svn' in dirname:
+        if '.git' in dirname:
             return
         names = []
         lst, wildcards = arg
@@ -38,12 +38,10 @@ def find_data_files(srcdir, *wildcards, **kw):
 
 data_files = [('globaleaks',['VERSION'])]
 for elem in find_data_files('applications/', '*.*'):
-    data_files.append(("globaleaks/"+elem[0], elem[1]))
+    data_files.append((os.path.join("globaleaks/", elem[0]), elem[1]))
 
-#packages = ['globaleaks.'+x for x in find_packages()]+['globaleaks']
 packages = ['globaleaks']
-#package_data = find_package_data(where="applications",
-#               package="globaleaks.applications")
+
 setup(name='Globaleaks',
       version='0.hackathon',
       description='A flexible Opensource Whistleblowing Platform',
@@ -53,7 +51,6 @@ setup(name='Globaleaks',
       install_requires=['web2py'],
       package_dir={'globaleaks': ''},
       packages=packages,
-      #package_data=package_data,
       data_files=data_files,
       scripts=['startglobaleaks'],
      )
