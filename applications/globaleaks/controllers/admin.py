@@ -142,8 +142,24 @@ def wizard():
         TR("SMS Messages", INPUT(_name="SMS", _type="checkbox", _value=True))
         ))
 
-    step3_form = None
-    step4_form = None
+    step3_form = FORM(TABLE(
+        TR("Expiration Date", INPUT(_name="expire", _type="text",
+                                    _value=settings.tulip.expire)),
+        TR("Maximum Access", INPUT(_name="max_access", _type="int",
+                                   _value=settings.tulip.max_access))
+        ))
+
+    step4_form = FORM(TABLE(
+        TR("Author Email", INPUT(_name="author_email", _type="email",
+                                 _value=settings.globals.author_email)),
+        TR("Layout Theme", INPUT(_name="layout_theme", _type="text",
+                                 _value=settings.globals.layout_theme)),
+        TR("HTML Keyword", INPUT(_name="html_keyword", _type="text",
+                                _value=settings.globals.html_keyword))
+        ))
+
+
+    # set up here various groups: one group form + button "add group"
     step5_form = None
 
     return dict(import_form=import_form, step1=step1_form, step2=step2_form,
