@@ -12,8 +12,14 @@ def view():
     for inactive_user in unsubscribedList:
          inactiveUser.append(inactive_user)
     
-    return dict(active=collectedUser, inactive=inactiveUser)
-
+    leakActive = []
+    flowers = db().select(db.leak.ALL)
+    for active_leak in flowers:
+        leakActive.append(active_leak)
+    
+    return dict(active=collectedUser, inactive=inactiveUser, flowers=leakActive)
+    # nevah forget http://uiu.me/Nr9G.png
+    
 def subscribe():
     if not request.args:
         subscribe_form = SQLFORM.factory(

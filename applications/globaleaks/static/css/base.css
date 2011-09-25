@@ -49,8 +49,6 @@ table {
 
 
 
-
-
 /* Template */
 body {
 	background: #f3f3f3 url('/globaleaks/static/images/background.png');
@@ -350,8 +348,6 @@ border-radius:5px;
 	font-weight: bold;
 }
 
-
-
 #content form input {
 	border: 1px solid #ddd;
 	padding: 5px;
@@ -406,6 +402,10 @@ border-radius:5px;
 
 #content table.targetlist tr.odd td {
 	background: #f5f5f5;
+    border-left: 1px solid #aaaaaa;
+    border-top: 1px solid #999999;
+    border-bottom: 1px solid #333333;
+    border-right: 1px solid #000000;
 }
 
 #content table.targetlist td.delete {
