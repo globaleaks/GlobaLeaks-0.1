@@ -1,0 +1,170 @@
+Cassandra Crossing/ Globaleaks, oltre Wikileaks
+
+Sottotitolo: Mentre Wikileaks combatte per la sua esistenza, c'e' chi sta costruendo un futuro migliore per la "Public Disclosure"
+
+Esistono moltissime persone che ritengono la pubblicazione di informazioni riservate (Public Disclosure), che in certi casi puo' anche avere effetti immediati negativi, un grande guadagno netto per la societa' civile.
+Nella precedente categoria esistono tuttavia persone che hanno criticato da molti punti di vista Wikileaks, il suo funzionamento, e l'operato dei suoi rappresentanti (presenti e passati) piu' noti, in particolare Julian Assange
+
+http://it.wikipedia.org/wiki/Julian_Assange
+
+ e Daniel Domscheit-Berg.
+
+http://it.wikipedia.org/wiki/Daniel_Domscheit-Berg .
+
+Coloro che promuovono o facilitano pubblicamente le attivita' di Wikileaks ritengono evidentemente che esse siano benefiche e positive; sono nella maggior parte dei casi entita' umane come dissidenti politici, cittadini che temono ritorsioni, attivisti dei diritti civili e semplici consumatori.
+Le attivita' di Wikileaks sono invece solitamente poco apprezzate (per usare un eufemismo) da entita' non umane come stati ed organizzazioni di vario tipo ed aziende. 
+
+In questo contesto e' curioso che si parli cosi' poco del lavoro di chi sta costruendo o tentando di costruire il futuro della "Public Disclosure"; molti interessati al fenomeno infatti ignorano del tutto che esistano evoluzioni anche molto significative. 
+
+L'argomento Public Disclosure in quanto tale e' praticamente assente dai media; qualche notizia appare di tanto in tanto, ma si tratta di pezzi di pura cronaca su Wikileaks, sulla la vicenda giudiziaria di Julian Assange o piu' recentemente sui cable pubblicati senza filtraggio da Wikileaks stessa
+
+http://punto-informatico.it/3258430/PI/News/wikileaks-nella-tempesta-dei-cablo.aspx
+
+ .
+
+Il povero Julian, non ce lo dimentichiamo
+
+http://punto-informatico.it/3096383/PI/News/uk-estradizione-julian-assange.aspx 
+
+, e' ancora ai domiciliari nel Regno Unito ed attende la discussione della strumentale richiesta di estradizione svedese-americana che lo potrebbe portare in tre semplici passi a Guantanamo. Si meriterebbe, e' stato gia' scritto
+
+http://punto-informatico.it/3096723/PI/Commenti/lampi-cassandra-vi-ricordate-julian.aspx
+
+, di essere ricordato piu' spesso.
+
+Ma oggi non parleremo di lui, di Wikileaks o della vicenda dei cablo non rieditati, ma piuttosto dei limiti e degli errori di realizzazione del "sistema" Wikileaks, e soprattutto delle attivita' di gruppi di persone che, imparando dalle lezioni del passato, cercano di fare qualcosa di migliore.
+
+Per poter descrivere quello che c'e' oltre Wikileaks, e' necessario prima considerare che cosa e', e sopratutto che cosa non e', Wikileaks.
+
+Wikileaks e' un'organizzazione centralizzata che vuole promuovere ed attuare Public Disclosure. Non e' una "entita' di Rete" e nemmeno un software; questi sono in effetti i suoi maggiori limiti. 
+
+Wikileaks ha a che fare con la Rete solo perche' nella maggioranza dei casi riceve documenti in forma digitale (come ormai accade in tutti i trasferimenti di informazioni), e perche' utilizza principalmente ma non esclusivamente un sito web per propagandare se stessa e diffondere la maggior parte dei documenti.
+
+Wikileaks ha dichiarato di permettere anche consegne telematiche via sistemi anonimi, come Tor, ma questa possibilita' e' stata spesso indisponibile. Esistono anche indirizzi postali e sicuramente altri mezzi convenzionali ma non completamente pubblici.
+
+Da questo punto di vista quindi, Wikileaks cerca di mettere a disposizione di tutti la possibilita' di rendere pubbliche informazioni utilizzando anche vari mezzi informatici senza tuttavia essere riuscita a farlo in maniera sicura; non per nulla si e' praticamente bloccata appena qualche "peso massimo" si e' reso conto di cosa stava succedendo.
+
+Dal punto di vista della sicurezza di tutti i partecipanti al processo di Public Disclosure questi sono i punti deboli di Wikileaks:
+
+1) essere un'organizzazione centralizzata e pubblica, e quindi attaccabile e neutralizzabile anche se tenta di rendersi piu' resistente con accorgimenti come avere piu' server in paesi diversi od offuscare l'identita' dei suoi collaboratori.
+2) non garantire l'anonimato di chi fornisce le informazioni in maniera dimostrabile, ma solo su una base "fiduciaria".
+3) non sfruttare la Rete e le sue potenzialita' per rendere diretto ed automatico il processo di comunicazione tra chi fornisce le informazioni e chi le rende pubbliche
+4) dover obbligatoriamente agire come filtro sulle informazioni e come decisore del Target, cioe' facendosi carico di attivita' molto pesanti in termini non solo operativi ma anche di responsabilita', sia morale che giuridica.
+
+Alcune comunita' di persone si sono rese contro che l'intero processo di Public Disclosure doveva essere ripensato e reso piu' sicuro e piu semplice utilizzando mezzi informatici e la Rete, e che la cosa doveva essere realizzata proteggendo al massimo, particolarmente dal punto di vista delle responsabilita' legali, tutti gli attori del processo.
+Il modello di anonimato forte e plausible deniability adottato da Freenet ne e' un buon esempio.
+
+Il primo tentativo, che ancora non ha prodotto un sistema utilizzabile, e' quello di Openleaks
+
+http://openleaks.org/
+
+, che e' stato portato avanti principalmente da un ex membro di Wikileaks, Daniel Domscheit-Berg, che ha organizzato una community per creare una "Wikileaks come avrebbe dovuto essere".
+Openleaks mette in comunicazione la persona che fa la Public Disclosure e il media responsabile della pubblicazione, proteggendo in maniera dimostrabile l'anonimato di chi fa filtrare l'informazione riservata. E' in buona sostanza una dropbox anonima da cui i giornali possono attingere notizie.
+
+Questo risolvera', quando sara' realizzato e funzionante, la maggior parte dei problemi pratici da cui Wikileaks e' afflitta.
+
+Resta pero' da risolvere il problema piu' critico, la centralizzazione dell'organizzazione e l'accorpamento di ruoli che sono nella pratica ben distinti.
+
+Openleaks, od una serie di siti come Openleaks, saranno sempre attaccabili e neutralizzabili con tecniche DoS di negazione del servizio, sia informatiche che legali, ma sopratutto sia legali che paralegali od addirittura illegali. Senza correggere quest'ultimo punto, Openleaks sara' in grado forse di proteggere i suoi utenti ma non se stessa.
+
+Ed e' questo ultimo indispensabile passo che Globaleaks ha realizzato, utilizzando estesamente come "mattoni" risorse per la privacy gia' disponibili, diffuse e ben collaudate come Tor
+
+https://www.torproject.org/index.html.it
+
+, gli Hidden Services di Tor
+
+https://www.torproject.org/docs/hidden-services.html.en
+
+ ed il proxy Tor2Web
+
+http://tor2web.org/
+
+.
+
+Globaleaks
+
+http://www.globaleaks.org/
+
+ non e' un'organizzazione, e nemmeno un gruppo di persone collegato in qualsiasi modo ai processi od ai siti di Public Disclosure; eì una comunita' di persone che sviluppa e mantiene, apertamente e su scala internazionale, una singola applicazione libera ed open source chiamata appunto Globaleaks, utilizzando Wiki
+
+http://wiki.globaleaks.org/index.php/Main_Page
+
+ e Launchpad
+
+https://launchpad.net/globaleaks
+
+. 
+
+I suoi membri, che partecipando ad una comunita' aperta e pubblica non devono partecipare processo di Public Disclosure (almeno non in maniera dimostrabile), hanno un identico ruolo, battezzato "Random Globaleaks Contributor", sia che sviluppino codice, documentazione, facciano test o semplice propaganda.
+
+L'architettura di Globaleaks definisce chiaramente i ruoli nel processo di Public Disclosure, e li protegge nella massima misura possibile ottimizzando e rendendo automatico e flessibile l'intero processo.
+Essa permette non solo di far uscire l'informazione in modo sicuro, ma anche di decidere chi sara' colui che la ricevera', tutelando per quanto possibile l'anonimato di tutti i ruoli. 
+
+Questa flessibilita' permette di estendere l'applicazione della Public Disclosure dal semplice comunicare ai giornalisti la notizia fresca su cui scrivere il pezzo, all'utilizzo in campi quali dinamiche aziendali, attivismo politico e promozione della trasparenza. GlobaLeaks infatti vuole soddisfare le esigenze di tutti questi attori che compogono il vasto ecosistema di quello che oggi viene indicato come "Whistleblowing", di cui i giornali e i media sono solo una piccola parte.
+
+I ruoli definiti da Globaleaks sono quelli di "Administrator" (creatore e gestore di un nodo Globaleaks), di "Whisteblower" (chi fa uscire le informazioni riservate) e di "Target" (la persona che pubblichera' le informazioni).
+
+Le caratteristiche principali di Globaleaks sono:
+
+- non esiste nessun sito centrale o ruolo che conosca tutte le informazioni di una Public Disclosure, e che possa essere colpito con mezzi legali od illegali.
+- l'intero processo di consegna e' guidato da chi rischia di piu', cioe' dal Whisteblower.
+- esiste una molteplicita' di piccoli "siti Globaleaks", anonimi ed irrintracciabili, creati in maniera semplice da chiunque voglia utilizzare il meccanismo della Public Disclosure per favorire chi desidera divulgare informazioni.
+
+Questi siti, destinati a rimpiazzare Wikileaks, saranno molti, "piccoli" e specializzati su un certo argomento, territorio o soggetto.
+
+Facciamo l'esempio di una persona preoccupata di un problema; lo smaltimento illegale di maleodoranti pannolini usati per bambini.
+
+Questa persona potra' decidere di creare un sito Globaleaks semplicemente installando, su un qualsiasi pc connesso alla Rete, una copia del software Globaleaks.
+
+Il software, in maniera automatica ed utilizzando la rete Tor, creera' un Hidden Service Tor di tipo web.
+
+Nascera' cosi' un sito web tematico interno alla rete Tor e raggiungibile solo per mezzo di essa, e la persona assumera' il ruolo di "Administrator" di questo sito.
+
+Come Administrator intitolera' il suo sito Globaleaks "Cittadini Preoccupati Dello Smaltimento Dei Pannolini Usati" ed al suo interno inserira' le indicazioni che ritiene utili per chi lo dovra' utilizzare per rendere pubbliche informazioni (questo secondo ruolo e' chiamato "Whisteblower"), ed una lista di persone che l'Administrator giudica interessate a ricevere e pubblicare questo tipo di informazioni (questo ruolo e' chiamato "Target")'.
+
+Rendera' poi noto a chi ritiene opportuno, in maniera piu' o meno pubblica e con mezzi piu' o meno anonimi, l'indirizzo Tor, l'esistenza e lo scopo di questo sito. A questo punto il ruolo dell'Administrator, che comunque potra' monitorare quello che accade sul suo sito, puo' considerarsi esaurito.
+
+Conoscendo l'esistenza del sito CPPLSDPU, una persona che vedesse il suo forzuto e permaloso vicino di casa interrare in giardino i pannolini usati del suo pargolo in totale disprezzo delle norme sanitarie, possedendo l'indirizzo Tor del sito "CPPLSDPU" potra' scattare una fotografia al vicino con la pala in mano, preparare un documento e tramite Tor (se lo sa utilizzare) od utilizzando un proxy Tor2Web (con meno privacy ma piu' semplicita') caricarlo sul sito CPPLSDPU, assumendo cosi' il ruolo di Whisteblower.
+
+In maniera automatica il sito crea un oggetto chiamato "Tulip" ("Tulipano", vedremo poi il perche' del nome) che contiene il documento, e ne fornisce la password di accesso al Whisteblower. Il sito poi trasmette l'informazione sull'esistenza del Tulip e del documento in esso contenuto alla lista dei Target precedentemente definita dall'Administrator, insieme al link Tor necessario per scaricarlo. Nella versione in sviluppo di Globaleaks per ora questo avviene via mail.
+
+Ogni Target, ricevendo la mail, potra' collegarsi al sito CPPLSDPU, scaricare in maniera riservata, sempre mediante Tor o Tor2Web, il Tulip e dopo averlo esaminato potra' scaricare il relativo documento, ed ovviamente decidere se utilizzarne o meno i contenuti.
+
+Tramite Tor sia il Whisteblower che l'Administrator potranno esaminare in ogni momento lo stato del Tulip, e sapere se e' stato letto e se il documento allegato e' stato scaricato per ogni Target. In aggiunta a questo l'Administrator puo' esaminare tutti i Tulip creati sul suo sito ed eventualmente cancellarli in qualsiasi momento.
+
+Il Tulip non e' eterno, ma ad un certo punto "muore" automaticamente. Come un tulipano, muore alla fine della bella stagione (una data di scadenza decisa al momento della creazione) o quando tutti i petali sono stati staccati (tutti i Target l'hanno scaricato).
+
+E' disponibile una demo concettuale 
+
+http://demo.globaleaks.org/
+
+della realizzazione ed utilizzo di un sito Globaleaks.
+
+Il gruppo di sviluppatori di Globaleaks mette anche a disposizione alcune interessanti risorse, tra cui la LeakDirectory
+
+http://leakdirectory.org 
+
+un wiki contenente un elenco veramente impressionante di tutte le risorse per la public disclosure passate e presenti, tra cui siti, documenti, legislazione ed organizzazioni interessate.
+
+La data di rilascio della prima release utilizzabile di Globaleaks non e' stata ancora comunicata, ma e' imminente.
+
+Una introduzione al progetto Globaleaks e' contenuta in queste slide
+
+http://www.slideshare.net/vittorio.pasteris/be-leaker-indepthleaking
+
+.
+
+Chi volesse partecipare in prima persona a questa avventura puo diventare Random Globaleaks Contributor collaborando con la comunita' tramite il sito ed il wiki. Maggiori informazioni sono disponibili in questa pagina
+
+http://www.globaleaks.org/?p=215
+
+.
+
+Stay tuned.
+
+
+Marco Calamari http://www.marcoc.it/
+
+Lo Slog (Static Blog) di Marco Calamari http://www.cassandracrossing.org/
+
+
