@@ -41,9 +41,9 @@ if not mail:
 
 for m in mails:
     context = dict(name=m.target,
-                    sitename=settings.sitename,
+                    sitename=settings.globals.sitename,
                     tulip_url=m.tulip,
-                    site=settings.hostname)
+                    site=settings.private.hostname)
 
     message_txt = MessageContent.txt(context)
     message_html = MessageContent.html(context)
@@ -52,7 +52,8 @@ for m in mails:
     # conn.send_email(source='node@globaleaks.org', subject='GlobaLeaks notification for:' + m.target, body=message, to_addresses=m.address, cc_addresses=None, bcc_addresses=None, format='text', reply_addresses=None, return_path=None)
 
     to = m.target + "<" + m.address + ">"
-    subject = "[GlobaLeaks] A TULIP from node " + settings.sitename + " for " + m.target + " - " + m.tulip[-8:]
+    subject = "[GlobaLeaks] A TULIP from node %s for %s - %s" % (
+              settings.globals.sitename, m.target, str(m.tulip[-8:]))
     logger.info("Sending to %s\n", m.target)
 
     if MimeMail.send(to=to, subject=subject,

@@ -36,7 +36,8 @@ def access_increment(t):
 
     db.commit()
 
-    if(int(t.allowed_accesses) != 0 and int(t.accesses_counter) > int(t.allowed_accesses)):
+    if int(t.allowed_accesses) != 0 and \
+       int(t.accesses_counter) > int(t.allowed_accesses):
         return True
     else:
         return False
@@ -65,8 +66,7 @@ def status():
 
     if whistleblower == False:
     # the stats of the whistleblower stay in the tulip entry (its unique!)
-        print t.downloads_counter, t.allowed_downloads
-        download_available = (int(t.downloads_counter) < int(t.allowed_downloads))
+        download_available = int(t.downloads_counter) < int(t.allowed_downloads)
         access_available = access_increment(t)
         counter_accesses = t.accesses_counter
         limit_counter = t.allowed_accesses
@@ -99,7 +99,8 @@ def status():
             tulip_allowed_download=t.allowed_downloads,
             name=t.target,
             target_url=target_url,
-            targets=gl.get_targets("ANY"))
+            targets=gl.get_targets("ANY"),
+            files=pickle.loads(leak.material.file))
 
 def download_increment(t):
 
@@ -133,6 +134,9 @@ def download():
     leak = t.get_leak()
 
     response.headers['Content-Type'] = "application/octet"
-    response.headers['Content-Disposition'] = 'attachment; filename="' + tulip_url + '.zip"'
+    response.headers['Content-Disposition'] = 'attachment; filename="' + \
+                                              tulip_url + '.zip"'
     # XXX to make proper handlers to manage the fetch of dirname
-    return response.stream(open(os.path.join(request.folder, 'material/', db(db.submission.leak_id==leak.id).select().first().dirname + '.zip'),'rb'))
+    return response.stream(open(os.path.join(request.folder, 'material/',
+                           db(db.submission.leak_id==leak.id).select().first(
+                           ).dirname + '.zip'),'rb'))

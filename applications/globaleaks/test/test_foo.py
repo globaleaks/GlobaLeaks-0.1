@@ -1,4 +1,4 @@
-from applications.globaleaks import test
+from applications.globaleaks import testt
 
 class TestFoo(test.TestCase):
     def setUp(self):
