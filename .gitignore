@@ -13,7 +13,7 @@ httpserver.pid
 cron.master
 
 applications/globaleaks/cache/
-applications/globaleaks/databases/
+applications/globaleaks/databases/*
 applications/globaleaks/languages/
 applications/admin/
 applications/globaleaks/errors
