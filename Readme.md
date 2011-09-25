@@ -7,7 +7,8 @@ media, activism, corporations, public agencies.
 
 # Installation
 First of all you need to get a copy of web2py, you can install it doing
-   easy_install web2py
+   <strike>easy_install web2py</strike>
+   pip install web2py
 then install Globaleaks
    easy_install globaleaks
 and start the server
