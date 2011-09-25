@@ -16,8 +16,13 @@ def view():
     flowers = db().select(db.leak.ALL)
     for active_leak in flowers:
         leakActive.append(active_leak)
+        
+    groupsUsage = []
+    groupList = db().select(db.targetgroup.ALL)
+    for group in groupList:
+        groupsUsage.append(group)
     
-    return dict(active=collectedUser, inactive=inactiveUser, flowers=leakActive)
+    return dict(active=collectedUser, inactive=inactiveUser, flowers=leakActive, groups=groupsUsage)
     # nevah forget http://uiu.me/Nr9G.png
     
 def subscribe():

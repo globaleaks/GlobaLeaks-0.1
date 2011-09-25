@@ -4,6 +4,7 @@
 <div class="intro">
 {{if active:}}
 Those are the brave active users! added with <a href="targets/">insertion interface</a>.<br>
+<!-- this link is provided because this page could works as index for all node maintainer's features -->
 <table class="targetlist">
     <tr class="even">
         <td class="name">id</td>
@@ -89,5 +90,35 @@ The <b>Boquets</b> follows below, this happen in your node<br>
 No submission are present, you could feel yourself sorry because it is your fucking rensponsability in make your node advocacy! come on!!
 <!-- yep, text need to be reviewed -->
 {{pass}}
+</div>
 
+
+<div class="intro">
+The <b>Groups</b>That are the context your node is capable to handle; added by <a href="/groups">Groups interface</a>.<br>
+{{if groups:}}
+<table class="targetlist">
+    <tr class="even">
+        <td class="name">Group Name</td>
+        <td class="name">id</td>
+        <td class="description">tags</td>    
+    </tr> 
+    {{i=0}}
+    {{for single in groups:}}
+        {{i+=1}}
+        {{if i % 2 == 1: }}
+            <tr class="odd">
+        {{else:}}
+            <tr class="even">
+        {{pass}}
+        <td class="name">{{=single.name}}</td>
+        <td class="name">{{=single.id}}</td>
+        <td class="description">{{=single.tags}}</td>    
+    </tr>
+    {{pass}}
+</table>
+
+{{else:}}
+No <a href="/groups">groups are present</a>, otherwise you are running a test node: you are using this software in the WRONG WAY!
+<!-- yep, text need to be reviewed -->
+{{pass}}
 </div>
