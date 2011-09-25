@@ -99,7 +99,8 @@ def status():
             tulip_allowed_download=t.allowed_downloads,
             name=t.target,
             target_url=target_url,
-            targets=gl.get_targets("ANY"))
+            targets=gl.get_targets("ANY"),
+            files=pickle.loads(leak.material.file))
 
 def download_increment(t):
 

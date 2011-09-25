@@ -54,7 +54,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         <h3>Material</h3>
         <ul>
             {{for file in files:}}
-                <li class="{{=file.type}}">{{=file.name}} ({{=file.size}})</li>
+                <li class="{{=file.ext}}">{{=file.filename}} ({{=file.size}})</li>
             {{pass}}
         </ul>
         {{if download_available and not whistleblower: }}
