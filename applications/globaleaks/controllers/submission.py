@@ -115,7 +115,8 @@ def index():
         session.wb_id = None
         session.files = None
 
-        return dict(leak_id=leak_id, leaker_tulip=pretty_number, form=None)
+        return dict(leak_id=leak_id, leaker_tulip=pretty_number,
+                    form=None, tulip_url=tulip.url)
     elif form.errors:
         response.flash = 'form has errors'
 
