@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 import os, glob, fnmatch
 
@@ -37,8 +37,8 @@ def find_data_files(srcdir, *wildcards, **kw):
     return file_list
 
 data_files = [('globaleaks',['VERSION'])]
-for elem in find_data_files('applications/', '*.*'):
-    data_files.append((os.path.join("globaleaks/", elem[0]), elem[1]))
+for elem in find_data_files('applications', '*.*'):
+    data_files.append((os.path.join("globaleaks", elem[0]), elem[1]))
 
 packages = ['globaleaks']
 
