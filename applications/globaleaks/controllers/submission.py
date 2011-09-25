@@ -38,7 +38,9 @@ def index():
                      _type='checkbox',
                      requires=IS_EQUAL_TO("on",
                               error_message="Please accept the disclaimer"))),
-            TR('', INPUT(_name='submit', _type='submit'))))
+            TR('', INPUT(_name='submit', _type='submit'), _id="submit"),
+            TR('', 'File Upload In Progress...', _id="uploading", _style="display: none")
+            ))
 
     response.flash = "You are the Whistleblower"
 
