@@ -8,7 +8,7 @@ routes_in = (
              ('^/tulip/(?P<tulip_id>[\w]+)', '/globaleaks/tulip/status/\g<tulip_id>'),
              ('^/submit(/)?(?P<any>.*)', '/globaleaks/submission/\g<any>'),
              ('^/subscribe(/)?', '/globaleaks/target/subscribe/'),
-             ('^/unsubscribe(/)?', '/globaleaks/target/unsubscribe/')
+             ('^/unsubscribe(/)?', '/globaleaks/target/unsubscribe/'),
              ('^/groups(/)?', 'globaleaks/admin/groups')
             )
 
