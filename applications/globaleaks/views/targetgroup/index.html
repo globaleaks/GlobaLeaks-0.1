@@ -1,0 +1,17 @@
+{{extend 'layout.html'}}
+<select id="multiselect-advanced" multiple="multiple" style="width:375px">
+{{for group in targetgroups:}}
+    <optgroup label={{=group}}></p>
+    {{for target in target:}}
+        <option value="{{=target}}">{{=target}}</option>
+    <p></optgroup><br/>
+</select>
+
+<script type="text/javascript">
+$("#multiselect-demo")
+   .multiselect({
+      noneSelectedText: 'Select car/boat manufacturers'
+      selectedList: 4
+   })
+   .multiselectfilter();
+</script>
