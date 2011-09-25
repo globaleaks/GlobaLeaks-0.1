@@ -1,0 +1,3 @@
+recursive-include applications *
+include VERSION
+include welcome.w2p
