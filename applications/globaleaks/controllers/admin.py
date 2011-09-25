@@ -69,7 +69,6 @@ def config():
     response.flash = ("Welcome to the Globaleaks new wizard application, "
                       "please donate coffee")
 
-    # XXX: also private form?
     mail_form = FORM(TABLE(
             "foobar", TR(INPUT(_type='submit'))
             ))
@@ -96,8 +95,8 @@ def config():
             value = getattr(global_form.vars, var)
             setattr(settings.globals, var, value)
 
-    if auth_form.accepts(request.vars, session):
-        return 'accepting auth'
+    if auth_form.accepts(request.vars, keepvalues=True):
+        return str(dir(db))
     if mail_form.accepts(request.vars, session):
         return 'accepting mail'
 
@@ -124,10 +123,25 @@ def wizard():
       step #5: {{>>>skip}}
         Create first grups
     """
-    step1_form = None
-    step2_form = None
+
+    step1_form = FORM(TABLE(
+        TR("Leak author", INPUT(_name= "author", _type="text",
+            _value=settings.globals.author)),
+        TR("Leak title", INPUT(_name="title", _type="text",
+            _value=settings.globals.title)),
+        TR("Leak description", INPUT(_name="subtitle", _type="text",
+            _value=settings.globals.subtitle))
+        ))
+
+    step2_form = FORM(TABLE(
+        TR("E-Mail Messages", INPUT(_name="mail", _type="checkbox", _value=True)),
+        TR("SMS Messages", INPUT(_name="SMS", _type="checkbox", _value=True))
+        ))
+
     step3_form = None
     step4_form = None
+    step5_form = None
 
-    return dict(message=None)
+    return dict(step1=step1_form, step2=step2_form,
+                step3=step3_form, step4=step4_form, step5=step5_form)
 
