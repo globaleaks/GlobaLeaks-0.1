@@ -43,9 +43,9 @@ for elem in find_data_files('applications/', '*.*'):
 packages = ['globaleaks']
 
 setup(name='Globaleaks',
-      version='0.hackathon',
-      description='A flexible Opensource Whistleblowing Platform',
-      author='Random Globaleaks Developers',
+      version='0.0.1',
+      description='The Opensource Whistleblowing Framework',
+      author='Some Random Globaleaks Developers',
       author_email='info@globaleaks.org',
       url='http://www.globaleaks.org/',
       install_requires=['web2py'],
