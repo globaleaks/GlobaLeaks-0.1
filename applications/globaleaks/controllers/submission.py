@@ -1,6 +1,8 @@
 import os
 import pickle
 
+mutils = local_import('material').utils()
+
 def index():
     leaker_number = None
 
@@ -36,7 +38,9 @@ def index():
                      _type='checkbox',
                      requires=IS_EQUAL_TO("on",
                               error_message="Please accept the disclaimer"))),
-            TR('', INPUT(_name='submit', _type='submit'))))
+            TR('', INPUT(_name='submit', _type='submit'), _id="submit"),
+            TR('', 'File Upload In Progress...', _id="uploading", _style="display: none")
+            ))
 
     response.flash = "You are the Whistleblower"
 
@@ -67,17 +71,13 @@ def index():
         # File upload in a slightly smarter way
         # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
         for file in request.vars:
-            files = []
             if file=="material":
                 try:
                     f = Storage()
                     f.filename = request.vars.material.filename
                     tmp_file = db.material.file.store(request.body, filename)
 
-
-                    f.ext = filename.split(".")[-1]
-                    if not ext:
-                        f.ext = ""
+                    f.ext = mutils.file_type(filename.split(".")[-1])
 
                     tmp_fpath = os.path(os.path.join(request.folder, 'uploads/') + \
                                     tmp_file + filename)
@@ -94,7 +94,9 @@ def index():
                 except:
                     pass
         # XXX alarm alert, please sanitize this data properly XXX
-        pfile = pickle.dump(file)
+        if not session.files:
+            session.files = []
+        pfile = pickle.dumps(session.files)
 
         leak = Leak(leak_id)
         leak.add_material(leak_id, None, None, file=pfile)
@@ -107,13 +109,13 @@ def index():
                 continue
 
             if target.status == "subscribed":
-                print "adding to mail, subscribed dude"
                 db.mail.insert(target=target.name,
                         address=target.url, tulip=tulip.url)
         pretty_number = leaker_number[0][:3] + " " + leaker_number[0][3:6] + \
                         " " + leaker_number[0][6:]
         session.dirname = None
         session.wb_id = None
+        session.files = None
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
                     form=None, tulip_url=tulip.url)
@@ -125,10 +127,24 @@ def index():
 def upload():
     # File upload in a slightly smarter way
     # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
+    if not session.files:
+        session.files = []
     for f in request.vars:
         if f == "qqfile":
             filename = request.vars.qqfile
             tmp_file = db.material.file.store(request.body, filename)
+
+            fls = Storage()
+            fls.filename = filename
+
+            fls.ext = mutils.file_type(filename.split(".")[-1])
+
+            tmp_fpath = os.path.join(request.folder, 'uploads/') + \
+                                tmp_file
+
+            fls.size = mutils.human_size(os.path.getsize(tmp_fpath))
+
+            session.files.append(fls)
 
             fldr = db(db.submission.session==session.wb_id
                          ).select().first()
@@ -145,4 +161,7 @@ def upload():
                 os.makedirs(dst_folder)
             os.rename(os.path.join(request.folder, 'uploads/') +
                       tmp_file, dst_folder + filename)
+
             return response.json({'success':'true'})
+
+

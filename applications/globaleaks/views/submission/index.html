@@ -51,7 +51,22 @@ function createUploader(){
     var uploader = new qq.FileUploader({
         element: document.getElementById('file-uploader'),
         action: '/globaleaks/submission/upload',
-        debug: true
+        onComplete: function(id, fileName, responseJSON){
+            $("#submit").show();
+            $("#uploading").hide();
+        },
+        onProgress: function(id, fileName, loaded, total){
+            $("#submit").hide();
+            $("#uploading").show();
+        },
+        onCancel: function(id, fileName){
+            $("#submit").show();
+            $("#uploading").hide();
+        },
+        onSubmit: function(id, fileName){
+
+        },
+        debug: false
     });
 }
 window.onload = createUploader;

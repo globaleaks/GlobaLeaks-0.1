@@ -1,12 +1,20 @@
 {{extend 'layout.html'}}
-<h1>This is the user list</h1>
+<h2 class="entry">Globa<u>List</u>: Users, Tulips & Bouquet</h2>
 
 <div class="intro">
 {{if active:}}
 Those are the brave active users! added with <a href="targets/">insertion interface</a>.<br>
-<table>
+<!-- this link is provided because this page could works as index for all node maintainer's features -->
+<table class="targetlist">
+    <tr class="even">
+        <td class="name">id</td>
+        <td class="name">name</td>
+        <td class="description">description</td>    
+        <td class="description">email</td>  
+    </tr>  
     {{i=0}}
     {{for target in active:}}
+        {{i+=1}}
         {{if i % 2 == 1: }}
         <tr class="odd">
         {{else:}}
@@ -27,9 +35,10 @@ No target configured in this node, add them by <a href="targets/">insertion inte
 <div class="intro">
 {{if inactive:}}
     And whass follow are the loooooser user<br>
-<table>
+<table class="targetlist">
     {{i=0}}
     {{for target in inactive:}}
+        {{i+=1}}
         {{if i % 2 == 1: }}
         <tr class="odd">
         {{else:}}
@@ -46,5 +55,70 @@ No target configured in this node, add them by <a href="targets/">insertion inte
 {{else:}}
 No unsubscribed users are presents! maybe you have not choose so randomly the lists of targetz!
 {{pass}}
+</div>
 
+<div class="intro">
+The <b>Boquets</b> follows below, this happen in your node<br>
+{{if flowers:}}
+<table class="targetlist">
+    <tr class="even">
+        <td class="name">title</td>
+        <td class="name">leaker id (0!)</td>
+        <!-- has no sense that is always 0, it's a field to delete -->
+        <td class="description">Submission date</td>    
+        <td class="description">whistleblower accesses</td>  
+        <td class="description">spooled</td>
+    </tr> 
+    {{i=0}}
+    {{for leak in flowers:}}
+        {{i+=1}}
+        {{if i % 2 == 1: }}
+            <tr class="odd">
+        {{else:}}
+            <tr class="even">
+        {{pass}}
+        <td class="name">{{=leak.title}}</td>
+        <td class="name">{{=leak.leaker_id}}</td>
+        <td class="description">{{=leak.submission_timestamp}}</td>    
+        <td class="description">{{=leak.whistleblower_access}}</td>  
+        <td class="description">{{=leak.spooled}}</td>  
+    </tr>
+    {{pass}}
+</table>
+
+{{else:}}
+No submission are present, you could feel yourself sorry because it is your fucking rensponsability in make your node advocacy! come on!!
+<!-- yep, text need to be reviewed -->
+{{pass}}
+</div>
+
+
+<div class="intro">
+The <b>Groups</b>That are the context your node is capable to handle; added by <a href="/groups">Groups interface</a>.<br>
+{{if groups:}}
+<table class="targetlist">
+    <tr class="even">
+        <td class="name">Group Name</td>
+        <td class="name">id</td>
+        <td class="description">tags</td>    
+    </tr> 
+    {{i=0}}
+    {{for single in groups:}}
+        {{i+=1}}
+        {{if i % 2 == 1: }}
+            <tr class="odd">
+        {{else:}}
+            <tr class="even">
+        {{pass}}
+        <td class="name">{{=single.name}}</td>
+        <td class="name">{{=single.id}}</td>
+        <td class="description">{{=single.tags}}</td>    
+    </tr>
+    {{pass}}
+</table>
+
+{{else:}}
+No <a href="/groups">groups are present</a>, otherwise you are running a test node: you are using this software in the WRONG WAY!
+<!-- yep, text need to be reviewed -->
+{{pass}}
 </div>

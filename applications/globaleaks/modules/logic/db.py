@@ -53,7 +53,7 @@ class DB(DAL):
             Field('url'), #, unique=True),
             Field('leak_id', self.leak),
             Field('type'),
-            Field('files'),
+            Field('file'),
             format='%(name)s'
         )
 

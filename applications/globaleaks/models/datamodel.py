@@ -1,4 +1,5 @@
 import time
+import pickle
 
 # web2py's funny way to import "local" modules
 #db = local_import('sql').db
@@ -50,8 +51,7 @@ class Leak(object):
 
     #TODO: implement get/set material
     def get_material(self):
-        for material_id in db(db.material.leak_id==self._id).select(db.material.id):
-            yield Material(material_id)
+        return db(db.material.leak_id==self._id).select(db.material.ALL).first()
     def set_material(self, material):
         pass
     material = property(get_material, set_material)
@@ -86,8 +86,8 @@ class Leak(object):
         pass
     tulips = property(get_tulips, set_tulips)
 
-    def add_material(self, leak_id, url, type):
-        Material.create_new(leak_id, url, type)
+    def add_material(self, leak_id, url, type, file):
+        Material.create_new(leak_id, url, type, file)
 
 
 class Tulip(object):
@@ -181,10 +181,18 @@ class Material(object):
         pass
     type = property(get_type, set_type)
 
+    def get_files(self):
+        files = db.material[self.id].file
+        return pickle.loads(files)
+    def set_files(self, id):
+        print "Error: url is read only"
+        pass
+    files = property(get_files, set_files)
+
     @staticmethod
-    def create_new(leak_id, url, type):
+    def create_new(leak_id, url, type, file):
         return db.material.insert(leak_id=leak_id,
-            url=None, type=None, files=None)
+            url=None, type=None, file=file)
 
 class TargetList(object):
     def __init__(self, g=None):
