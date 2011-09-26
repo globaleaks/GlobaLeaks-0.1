@@ -22,7 +22,13 @@ def view():
     for group in groupList:
         groupsUsage.append(group)
     
-    return dict(active=collectedUser, inactive=inactiveUser, flowers=leakActive, groups=groupsUsage)
+    # this require to be splitted because tulip are leak x target matrix 
+    tulipAvail = []
+    tulipList = db().select(db.tulip.ALL)
+    for singleT in tulipList:
+        tulipAvail.append(singleT)
+    
+    return dict(active=collectedUser, inactive=inactiveUser, flowers=leakActive, groups=groupsUsage, tulips=tulipAvail)
     # nevah forget http://uiu.me/Nr9G.png
     
 def subscribe():
