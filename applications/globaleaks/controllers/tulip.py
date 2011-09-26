@@ -52,17 +52,17 @@ def status():
         return dict(err=True)
 
     leak = t.get_leak()
+    
+    target = gl.get_target(t.target)
 
     if t.target == "0":
         whistleblower=True
         response.flash = "You are the Whistleblower"
+        target_url = ''
     else:
         whistleblower=False
+        target_url = "target/" + t.url
         response.flash = "You are the Target"
-
-    target = gl.get_target(t.target)
-    # handle target page management
-    target_url = "FIXME FIXME"
 
     if whistleblower == False:
     # the stats of the whistleblower stay in the tulip entry (its unique!)
