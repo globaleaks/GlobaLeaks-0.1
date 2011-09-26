@@ -32,7 +32,9 @@ settings.private.email_login = ''
 settings.private.login_method = 'local'
 settings.private.login_config = ''
 settings.private.plugins = []
-
+# AWS configuration
+settings.private.aws_key = '<AWS-KEY>'
+settings.private.aws_secret_key = '<AWS-SECRET-KEY>'
 settings.private.hostname = '127.0.0.1'
 settings.private.port     = '8000'
 
@@ -53,6 +55,3 @@ auth.messages.reset_password = 'Click on the link http://' + request.env.http_ho
 
 settings.auth.table_user.email.label=T("Username")
 
-# AWS configuration
-settings.aws_key = '<AWS-KEY>'
-settings.aws_secret_key = '<AWS-SECRET-KEY>'
