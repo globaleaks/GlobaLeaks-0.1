@@ -1,27 +1,31 @@
 {{extend 'layout.html'}}
 <style>
 div.flash {
-background-color: green;
+    background-color: green;
 }
+
 </style>
 
 <h1> Configuration <span>| Configuring Globaleaks</span></h1>
 
 <p class="intro">
     This configuration page provides almost every configuration variable present
-    either in database or in cfg file.</p>
+    either in database or in cfg file, semantically grouped. Feel free to edit
+    those, private value are hardcoded :P </p>
 
     <h2> Configuration | Global Form </h2>
     {{= global_form}}
+    <input type=submit \>
+    <input type=cancel \>
 
 
     <h2> Configuration | Authentication Form </h2>
     {{= auth_form }}
+    <input type=submit \>
 
     <h2> Configuration | Mail form </h2>
     {{= mail_form}}
+    <input type=submit \>
 
-    <h2></h2>
-{{=BEAUTIFY(request.vars)}}
-{{pass}
+{{pass}}
 

@@ -69,11 +69,15 @@ def config():
     response.flash = ("Welcome to the Globaleaks new wizard application")
 
     mail_form = FORM(TABLE(
-            "foobar", TR(INPUT(_type='submit'))
+            TR("foobar", INPUT(_name="foo"))
             ))
     auth_form = FORM(TABLE(
-            "verification",
-            TR(INPUT(_type='submit'))
+            TR("verification", INPUT(_name="registration_requires_verification",
+                                     _type="text",
+                                     _value=settings.auth.registration_requires_verification)),
+            TR("approval" , INPUT(_name="registration_requires_approval",
+                                      _type="text",
+                                      _value=settings.auth.registration_requires_approval))
             ))
 
     global_form = FORM(TABLE(
@@ -83,10 +87,8 @@ def config():
                              _value=settings.globals.subtitle)),
         TR("author", INPUT(_name='author', _type='text',
                            _value=settings.globals.author)),
-        TR("author_email", INPUT(_name='author_email', _type='text',
+        TR("author email", INPUT(_name='author_email', _type='text',
                           _value=settings.globals.author_email)),
-
-        TR(INPUT(_type='submit'))
     ))
 
     if global_form.accepts(request.vars, keepvalues=True):
