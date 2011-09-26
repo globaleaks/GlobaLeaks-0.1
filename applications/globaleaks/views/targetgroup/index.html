@@ -1,19 +1,17 @@
 {{extend 'layout.html'}}
+
+<select id="targets" multiple="multiple" style="width:375px">
+{{for target in all_targets:}}
+    <option value="{{=target['id']}}">{{=target['name']}}</option>
+</select>
+{{pass}}
+
 <select id="multiselect-advanced" multiple="multiple" style="width:375px">
 {{for group in targetgroups:}}
-    <optgroup label={{=group}}></p>
-    {{for target in target:}}
-        <option value="{{=target}}">{{=target}}</option>
+    <optgroup label="{{=targetgroups[group]['data']['name']}}"></p>
+    {{for target in targetgroups[group]['members']:}}
+        <option value="{{=target['id']}}">{{=target['name']}}</option>
     <p></optgroup><br/>
     {{pass}}
 </select>
 {{pass}}
-
-<script type="text/javascript">
-$("#multiselect-demo")
-   .multiselect({
-      noneSelectedText: 'Select car/boat manufacturers'
-      selectedList: 4
-   })
-   .multiselectfilter();
-</script>

@@ -19,13 +19,12 @@ class DB(DAL):
             Field('last_download'),
             Field('tulip_counter'),
             Field('download_counter'),
-            Field('groupname'),
+            Field('groups'),
             format='%(name)s'
             )
 
         # The table for target groups
         self.define_table('targetgroup',
-            Field('id'),
             Field('name'),
             Field('desc'),
             Field('tags'),
