@@ -74,7 +74,14 @@ h3 {
     <div id="dragSource" class="group">
       <ul id="targetlist">
       {{for target in all_targets:}}
-      <li class="target"><input type="checkbox" style="float:left;"/><span class="{{=target['id']}}">{{=target['name']}}</span></li>
+      <li class="target" onclick="$(this).find('ul').slideToggle();">
+        <input type="checkbox" style="float:left;"/>
+        <span class="{{=target['id']}}">{{=target['name']}}</span>
+        <ul style="display:none;">
+            <li>Description: {{=target['desc']}}</li>
+            <li>Email: {{=target['url']}}</li>
+        </ul>
+      </li>
       {{pass}}
       </ul>
     </div>
@@ -84,7 +91,14 @@ h3 {
       <h3>{{=targetgroups[group]['data']['name']}}</h3>
       <ul>
       {{for target in targetgroups[group]['members']:}}
-        <li class="target"><span class="{{=target['id']}}">{{=target['name']}}</span></li>
+      <li class="target" onclick="$(this).find('ul').slideToggle();">
+        <input type="checkbox" style="float:left;"/>
+        <span class="{{=target['id']}}">{{=target['name']}}</span>
+        <ul style="display:none;">
+            <li>Description: {{=target['desc']}}</li>
+            <li>Email: {{=target['url']}}</li>
+        </ul>
+      </li>
       {{pass}}
       </ul>
     </div>
@@ -93,6 +107,9 @@ h3 {
 <script>
 $(function(){
   $(".dropTarget").find("li").each(function(k, e) {
+    if (!$(e).hasClass("target")) {
+      return true;
+    };
     var target_id = $(e).find('span').attr('class');
     var group_id = $(e).parent().parent().attr("name");
     var del = $('<span/>').text("X").click(function() {
@@ -144,7 +161,7 @@ $(function(){
           });
           }).css({paddingRight:'10px', float:"left"});
           to_append.find("input").remove();
-          to_append.append(del);
+          to_append.first().append(del);
           that.find("ul").append(to_append);
           $.post('group_add', {target: target_id, group: group_id},
                  function(data) {
