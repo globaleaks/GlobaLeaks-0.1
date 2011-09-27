@@ -112,6 +112,28 @@ def group_create():
         return response.json({'success':'true'})
 
 @auth.requires_login()
+def group_delete():
+    """
+    Receives parameter "group" from POST.
+    Deletes that group
+    """
+    try:
+        group_id = request.post_vars["group"]
+    except KeyError:
+        return response.json({'success':'false'})
+    else:
+        if db(db.targetgroup.id==group_id).select():
+            db(db.targetgroup.id==group_id).delete()
+            for row in db().select(db.target.ALL):
+                if row.groups:
+                    groups_list = pickle.loads(row.groups)
+                    groups_list.remove(group_id)
+                    db(db.target.id==row.id).update(
+                        groups=pickle.dumps(groups_list))
+        db.commit()
+        return response.json({'success':'true'})
+
+@auth.requires_login()
 def group_add():
     """
     Receives parameters "target" and "group" from POST.
