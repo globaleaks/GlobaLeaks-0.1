@@ -54,17 +54,17 @@ No target configured in this node, add them by <a href="targets/">insertion inte
 </table>
 
 {{else:}}
-No unsubscribed users are presents! maybe you have not choose so randomly the lists of targetz!
+No unsubscribed users are presents! <b>maybe you have not choose so randomly the lists of targetz!</b>
 {{pass}}
 </div>
 
 <div class="intro">
-The <b>Boquets</b> follows below, this happen in your node<br>
+The <b>Boquets</b> follows below: this is what happen in your node:<br>
 {{if flowers:}}
 <table class="targetlist">
     <tr class="even">
         <td class="name">title</td>
-        <td class="name">leaker id (0!)</td>
+        <td class="name">leak_id</td>
         <!-- has no sense that is always 0, it's a field to delete -->
         <td class="description">Submission date</td>    
         <td class="description">whistleblower accesses</td>  
@@ -79,7 +79,7 @@ The <b>Boquets</b> follows below, this happen in your node<br>
             <tr class="even">
         {{pass}}
         <td class="name">{{=leak.title}}</td>
-        <td class="name">{{=leak.leaker_id}}</td>
+        <td class="name"><b>fixme</b> [{{=leak.leaker_id}}]</td>
         <td class="description">{{=leak.submission_timestamp}}</td>    
         <td class="description">{{=leak.whistleblower_access}}</td>  
         <td class="description">{{=leak.spooled}}</td>  
