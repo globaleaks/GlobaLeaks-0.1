@@ -1,4 +1,5 @@
 from gluon.storage import Storage
+from gluon.tools import Auth
 import ConfigParser
 
 class ConfigFile(Storage):
@@ -34,3 +35,4 @@ class ConfigFile(Storage):
         except ConfigParser.NoOptionError:
             raise NameError(name)
 
+Auth.commit = lambda self: 0
