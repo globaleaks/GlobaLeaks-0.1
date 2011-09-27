@@ -9,7 +9,7 @@ class Globaleaks(object):
 
     def create_target(self, name, category, desc, url, type, info):
         target_id = self._db.target.insert(name=name,
-            groups=pickle.dumps([category]),
+            groups=pickle.dumps([category]) if category else "",
             desc = desc, url=url, type=type, info=info,
             status="subscribed", tulip_counter = 0,
             download_counter = 0 #, last_send_tulip=None,

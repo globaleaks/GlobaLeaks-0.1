@@ -28,37 +28,38 @@ def targets():
 
     if form.accepts(request.vars, session):
         c = request.vars
-        gl.create_target(c.Name, "demo", c.Description, c.email, "demo", "demo target")
+        gl.create_target(c.Name, None, c.Description, c.email, "demo", "demo target")
         targets = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets)
 
     return dict(form=form, list=False, targets=targets)
 
 @auth.requires_login()
-def groups():
+def targetgroups():
+    """
     tlist = None
-
-    if(request.vars.edit and request.vars.edit.startswith("delete")):
+    if request.vars.edit and request.vars.edit.startswith("delete"):
         gl.delete_target(request.vars.edit.split(".")[1])
 
-    if(request.vars.edit and request.vars.edit.startswith("edit")):
+    if request.vars.edit and request.vars.edit.startswith("edit"):
         pass
-
+    """
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description'),
                     Field('Tags')
                    )
-
     form = SQLFORM.factory(*form_content)
-
+    """
     if "display" in request.args and not request.vars:
         tlist = TargetList()
-        return dict(form=None, list=True, groups=tlist.list)
+        return dict(form=None, list=True, groups=tlist.list,
+                    all_targets=[], targetgroups=[])
 
     if form.accepts(request.vars, session):
         # Build group target list with posted data
         tlist = TargetList(request.vars)
-        return dict(form=form, list=True, groups=tlist.list)
+        return dict(form=form, list=True, groups=tlist.list,
+                    all_targets=[], targetgroups=[])"""
 
     all_targets = []
     result = {}
@@ -97,11 +98,10 @@ def group_create():
     Receives parameters "name", "desc", and "tags" from POST.
     Creates a new target group with the specified parameters
     """
-    # XXX fix to POST! get only for test
     try:
-        name = request.get_vars["name"]
-        desc = request.get_vars["desc"]
-        tags = request.get_vars["tags"]
+        name = request.post_vars["name"]
+        desc = request.post_vars["desc"]
+        tags = request.post_vars["tags"]
     except KeyError:
         return response.json({'success':'false'})
     else:
@@ -117,10 +117,9 @@ def group_add():
     Receives parameters "target" and "group" from POST.
     Adds taget to group.
     """
-    # XXX fix to POST! get only for test
     try:
-        target_id = request.get_vars["target"]
-        group_id = request.get_vars["group"]
+        target_id = request.post_vars["target"]
+        group_id = request.post_vars["group"]
     except KeyError:
         pass
     else:
@@ -150,8 +149,8 @@ def group_remove():
     """
     # XXX fix to POST! get only for test
     try:
-        target_id = request.get_vars["target"]
-        group_id = request.get_vars["group"]
+        target_id = request.post_vars["target"]
+        group_id = request.post_vars["group"]
     except KeyError:
         pass
     else:
