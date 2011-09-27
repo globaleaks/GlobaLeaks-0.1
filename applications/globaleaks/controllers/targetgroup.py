@@ -7,6 +7,11 @@ def index():
     """
     all_targets = []
     result = {}
+    for row in db().select(db.targetgroup.ALL):
+        result[row.id] = {}
+        result[row.id]["data"] = dict(row)
+        result[row.id]["members"] = []
+
     for row in db().select(db.target.ALL):
         target_data = dict(row)
         all_targets.append(target_data)

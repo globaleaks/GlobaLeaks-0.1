@@ -28,40 +28,172 @@ def targets():
 
     if form.accepts(request.vars, session):
         c = request.vars
-        gl.create_target(c.Name, "demo", c.Description, c.email, "demo", "demo target")
+        gl.create_target(c.Name, None, c.Description, c.email, "demo", "demo target")
         targets = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets)
 
     return dict(form=form, list=False, targets=targets)
 
 @auth.requires_login()
-def groups():
+def targetgroups():
+    """
     tlist = None
-
-    if(request.vars.edit and request.vars.edit.startswith("delete")):
+    if request.vars.edit and request.vars.edit.startswith("delete"):
         gl.delete_target(request.vars.edit.split(".")[1])
 
-    if(request.vars.edit and request.vars.edit.startswith("edit")):
+    if request.vars.edit and request.vars.edit.startswith("edit"):
         pass
-
+    """
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description'),
                     Field('Tags')
                    )
-
     form = SQLFORM.factory(*form_content)
-
+    """
     if "display" in request.args and not request.vars:
         tlist = TargetList()
-        return dict(form=None, list=True, groups=tlist.list)
+        return dict(form=None, list=True, groups=tlist.list,
+                    all_targets=[], targetgroups=[])
 
     if form.accepts(request.vars, session):
         # Build group target list with posted data
         tlist = TargetList(request.vars)
-        return dict(form=form, list=True, groups=tlist.list)
+        return dict(form=form, list=True, groups=tlist.list,
+                    all_targets=[], targetgroups=[])"""
 
-    return dict(form=form, list=False, targets=None)
+    all_targets = []
+    result = {}
+    for row in db().select(db.targetgroup.ALL):
+        result[row.id] = {}
+        result[row.id]["data"] = dict(row)
+        result[row.id]["members"] = []
 
+    # retrieving groups data from db
+    for row in db().select(db.target.ALL):
+        target_data = dict(row)
+        all_targets.append(target_data)
+        if not row.groups:
+            continue
+        groups = pickle.loads(row.groups)
+        for group in groups:
+            group_q = db(db.targetgroup.id==int(group)).select().first()
+            if not group_q:
+                continue
+            group_data = dict(group_q)
+            if not result.has_key(group_q.id):
+                result[group_q.id] = {}
+            if not result[group_q.id].has_key("data"):
+                result[group_q.id]["data"] = dict(group_q)
+            try:
+                result[group_q.id]["members"].append(target_data)
+            except KeyError:
+                result[group_q.id]["members"] = [target_data]
+
+    return dict(form=form, list=False, targets=None,
+                all_targets=all_targets, targetgroups=result)
+
+@auth.requires_login()
+def group_create():
+    """
+    Receives parameters "name", "desc", and "tags" from POST.
+    Creates a new target group with the specified parameters
+    """
+    try:
+        name = request.post_vars["name"]
+        desc = request.post_vars["desc"]
+        tags = request.post_vars["tags"]
+    except KeyError:
+        return response.json({'success':'false'})
+    else:
+        db.targetgroup.insert(name=name,
+                              desc=desc,
+                              tags=tags)
+        db.commit()
+        return response.json({'success':'true'})
+
+@auth.requires_login()
+def group_delete():
+    """
+    Receives parameter "group" from POST.
+    Deletes that group
+    """
+    try:
+        group_id = request.post_vars["group"]
+    except KeyError:
+        return response.json({'success':'false'})
+    else:
+        if db(db.targetgroup.id==group_id).select():
+            db(db.targetgroup.id==group_id).delete()
+            for row in db().select(db.target.ALL):
+                if row.groups:
+                    groups_list = pickle.loads(row.groups)
+                    groups_list.remove(group_id)
+                    db(db.target.id==row.id).update(
+                        groups=pickle.dumps(groups_list))
+        db.commit()
+        return response.json({'success':'true'})
+
+@auth.requires_login()
+def group_add():
+    """
+    Receives parameters "target" and "group" from POST.
+    Adds taget to group.
+    """
+    try:
+        target_id = request.post_vars["target"]
+        group_id = request.post_vars["group"]
+    except KeyError:
+        pass
+    else:
+        target_row = db(db.target.id==target_id).select().first()
+        group_row = db(db.targetgroup.id==group_id).select().first()
+
+        if target_row is not None and group_row is not None:
+            groups_p = target_row.groups
+            if not groups_p:
+                groups_p = pickle.dumps(set([group_id]))
+            else:
+                tmp = pickle.loads(groups_p)
+                tmp.add(group_id)
+                groups_p = pickle.dumps(tmp)
+            db(db.target.id==target_id).update(groups=groups_p)
+            db.commit()
+            return response.json({'success':'true'})
+
+    return response.json({'success':'false'})
+
+
+@auth.requires_login()
+def group_remove():
+    """
+    Receives parameters "target" and "group" from POST.
+    Removes taget from group.
+    """
+    # XXX fix to POST! get only for test
+    try:
+        target_id = request.post_vars["target"]
+        group_id = request.post_vars["group"]
+    except KeyError:
+        pass
+    else:
+        target_row = db(db.target.id==target_id).select().first()
+        group_row = db(db.targetgroup.id==group_id).select().first()
+
+        if target_row is not None and group_row is not None:
+            groups_p = target_row.groups
+            if groups_p:
+                tmp = pickle.loads(groups_p)
+                try:
+                    tmp.remove(group_id)
+                except KeyError:
+                    pass
+                else:
+                    groups_p = pickle.dumps(tmp)
+                    db(db.target.id==target_id).update(groups=groups_p)
+                    db.commit()
+            return response.json({'success':'true'})
+
+    return response.json({'success':'false'})
 
 
 @auth.requires_login()
