@@ -4,6 +4,7 @@ from setuptools import setup
 
 import os, glob, fnmatch
 
+from applications import globaleaks
 def opj(*args):
     path = os.path.join(*args)
     return os.path.normpath(path)
@@ -42,12 +43,12 @@ for elem in find_data_files('applications', '*.*'):
 
 packages = ['globaleaks']
 
-setup(name='Globaleaks',
-      version='0.0.1',
+setup(name=globaleaks.__name__,
+      version=globaleaks.__version__,
       description='The Opensource Whistleblowing Framework',
-      author='Some Random Globaleaks Developers',
-      author_email='info@globaleaks.org',
-      url='http://www.globaleaks.org/',
+      author=globaleaks.__authors__,
+      author_email=globaleaks.__email__,
+      url=globaleaks.__site__,
       install_requires=['web2py'],
       package_dir={'globaleaks': ''},
       packages=packages,
