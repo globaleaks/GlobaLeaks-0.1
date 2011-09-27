@@ -1,5 +1,6 @@
 import randomizer
 import time
+import pickle
 
 class Globaleaks(object):
 
@@ -8,7 +9,7 @@ class Globaleaks(object):
 
     def create_target(self, name, category, desc, url, type, info):
         target_id = self._db.target.insert(name=name,
-            groupname=category,
+            groups=pickle.dumps([category]),
             desc = desc, url=url, type=type, info=info,
             status="subscribed", tulip_counter = 0,
             download_counter = 0 #, last_send_tulip=None,
@@ -23,9 +24,20 @@ class Globaleaks(object):
        pass
 
     def get_targets(self, target_set):
-        if target_set == "ANY":
+        if not isinstance(target_set, list):
             return self._db(self._db.target).select()
-        return self._db(self._db.target.groupname==target_set).select()
+        rows = self._db().select(self._db.target)
+        result = []
+        for row in rows:
+            if row.groups:
+                groups = pickle.loads(row.groups)
+                done = False
+                for elem in target_set:
+                    if elem in groups:
+                        done = True
+                        break
+                result.append(row)
+        return result
 
     def get_target(self, target_id):
         return self._db(self._db.target.id==target_id).select().first()

@@ -1,65 +1,4 @@
 {{extend 'layout.html'}}
-<style>
-div.flash {
-background-color: green;
-}
-</style>
-{{if not list:}}
-<h1>Node Admin <span>| Target Groups</span></h1>
-<p class="intro">
-Quis irure echo park blog. Sartorial fanny pack esse, fugiat VHS tofu seitan. Shoreditch food truck dolore cliche cred, ut portland keytar Austin VHS tumblr biodiesel trust fund. Fixie officia laborum, you probably haven't heard of them fap trust fund mollit cred thundercats wes anderson. Freegan american apparel nisi beard. Eiusmod reprehenderit consectetur vero, bicycle rights yr Austin gluten-free elit consequat accusamus brunch non tempor. In tumblr master cleanse cliche culpa.
-</p>
-
-{{=form}}
-<a class="button grouplist" href="/globaleaks/admin/groups/display">View Groups</a>
-{{pass}}
-
-{{if list:}}
-
-<h1>1. Node Admin <span>| Current Group list</span></h1>
-<form><input type="hidden" id="edit" name="edit" /></form>
-<table class="grouplist">
-<thead>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Tags</th>
-</thead>
-<tbody>
-{{i=0}}
-{{for group in groups:}}
-    {{if (i % 2 == 0):}}
-    <tr class="even" id="group-{{=group.id}}">
-    {{pass}}
-    {{if (i % 2 == 1):}}
-    <tr class="odd" id="group-{{=group.id}}">
-    {{pass}}
-        <td class="name">{{=group.name}}</td>
-        <td class="tags">{{=group.tags}}</td>
-        <td class="description">{{=group.desc}}</td>
-        <td class="delete">
-            <button name="delete" onclick="clicked({{=group.id}}, 'delete')">delete</button>
-        </td>
-    </tr>
-    {{i += 1}}
-{{pass}}
-</table>
-
-<a class="button addtarget" href="/globaleaks/admin/targets">Add target</a>
-
-<div class="clear"></div>
-
-{{pass}}
-
-<script>
-function clicked(id, action) {
-      jQuery('#edit').val(action + '.' + id);
-      ajax('groups', ['edit'], '');
-      jQuery('#group-' + id).hide();
-      return false;
-}
-</script>
-
-
 
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css" type="text/css" />
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
@@ -99,6 +38,7 @@ function clicked(id, action) {
 #selectActions span, #selectActions li {float: left; padding: 5px;}
 .dropTarget input { visibility: hidden; }
 </style>
+  <h1>Target Groups</h1>
   <h3>Target pool</h3>
   <div id="selectActions">
     <span>Select:</span>
@@ -162,7 +102,7 @@ $(function(){
       var e = ui.helper.children();
       var target_id = e.find('span').attr('class');
       var group_id = $(this).attr("name");
-      console.log(group_id);
+      console.log(target_id);
       var append = true;
       $(this).children().each(function(k, elem) {
         if ($(elem).find('span').attr('class')==target_id) {
