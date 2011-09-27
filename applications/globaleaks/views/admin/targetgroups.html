@@ -88,7 +88,7 @@ h3 {
     {{for group in targetgroups:}}
     <div class="dropTarget group" name="{{=targetgroups[group]['data']['id']}}">
       <h3>{{=targetgroups[group]['data']['name']}}</h3>
-      <ul>
+      <ul class="grouplist">
       {{for target in targetgroups[group]['members']:}}
       <li class="target" onclick="$(this).find('ul').slideToggle();">
         <input type="checkbox" style="float:left;"/>
@@ -161,7 +161,7 @@ $(function(){
           }).css({paddingRight:'10px', float:"left"});
           to_append.find("input").remove();
           to_append.first().append(del);
-          that.find("ul").append(to_append);
+          that.find("ul.grouplist").append(to_append);
           $.post('group_add', {target: target_id, group: group_id},
                  function(data) {
             if ($.parseJSON(data).success == "false") {
