@@ -20,6 +20,7 @@ and start the service with:
     startglobaleaks
 
 then you could found running those web services:
+
 * whistleblowing interface its bind at http://127.0.0.1:8000
 * node administrator targets configuratation http://127.0.0.1:8000/[targets|groups]
 * debug only global view interface: http://127.0.0.1:8000/globalview
