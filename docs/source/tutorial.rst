@@ -18,7 +18,7 @@ GlobaLeaks depends on `web2py`_, which can be downloaded using pip ::
 
 GlobaLeaks can be downloaded from `GitHub`_ via git: ::
 
-    git clone git://github.com/globaleaks/GlobaLeaks.git
+    $ git clone git://github.com/globaleaks/GlobaLeaks.git
 
 An then blablabla.
 

@@ -104,7 +104,9 @@ html_theme = 'default'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = dict(
-        sidebarbgcolor='lightblue'
+        sidebarbgcolor='lightblue',
+        linkcolor='blue',
+        sidebarlinkcolor='lightred',
         )
 
 # Add any paths that contain custom themes here, relative to this directory.
