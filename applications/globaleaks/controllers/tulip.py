@@ -83,6 +83,22 @@ def status():
         limit_counter = int("50") # settings.max_submitter_accesses
         access_available = True
 
+    # configuration issue
+    # *) if we want permit, in Tulip, to see how many download/clicks has been doing
+    #    from the receiver, we need to pass the entire tulip list, because in fact
+    #    the information about "counter_access" "downloaded_access" are different for each tulip.
+    # or if we want not permit this information crossing, the interface simply has to stop in printing
+    #    other receiver behaviour.
+    # now is implement the extended version, but need to be selectable by the maintainer.
+    tulipUsage = []
+    flowers = db().select(db.tulip.ALL)
+    for singleTulip in flowers:
+        if singleTulip.leak_id == t.get_id():
+            tulipUsage.append(singleTulip)
+        else:
+            tulipUsage.append(singleTulip)
+    # this else is obviously an unsolved bug, but at the moment 0 lines seem to match in leak_id
+       
     return dict(err=None,
             access_available=access_available,
             download_available=download_available,
@@ -97,6 +113,7 @@ def status():
             tulip_allowed_accesses=limit_counter,
             tulip_download=t.downloads_counter,
             tulip_allowed_download=t.allowed_downloads,
+            tulipUsage=tulipUsage,
             name=t.target,
             target_url=target_url,
             targets=gl.get_targets("ANY"),

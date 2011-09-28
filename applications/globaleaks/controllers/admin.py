@@ -201,26 +201,31 @@ def config():
     response.flash = ("Welcome to the Globaleaks new wizard application")
 
     mail_form = FORM(TABLE(
-            TR("foobar", INPUT(_name="foo"))
+            TR("server", INPUT(_name="server", _type="text")),
+            TR("sender", INPUT(_name="sender", _type="text")),
+            TR("login", INPUT(_name="login", _type="text")),
+            TR(INPUT(_type="submit"))
             ))
     auth_form = FORM(TABLE(
             TR("verification", INPUT(_name="registration_requires_verification",
                                      _type="text",
                                      _value=settings.auth.registration_requires_verification)),
             TR("approval" , INPUT(_name="registration_requires_approval",
-                                      _type="text",
-                                      _value=settings.auth.registration_requires_approval))
+                                  _type="text",
+                                  _value=settings.auth.registration_requires_approval)),
+            TR(INPUT(_type="submit"))
             ))
 
     global_form = FORM(TABLE(
-        TR("title", INPUT(_name='title', _type='text',
-                          _value=settings.globals.title)),
-        TR("subtitle", INPUT(_name='subtitle', _type='text',
-                             _value=settings.globals.subtitle)),
-        TR("author", INPUT(_name='author', _type='text',
-                           _value=settings.globals.author)),
-        TR("author email", INPUT(_name='author_email', _type='text',
-                          _value=settings.globals.author_email)),
+            TR("title", INPUT(_name='title', _type='text',
+                              _value=settings.globals.title)),
+            TR("subtitle", INPUT(_name='subtitle', _type='text',
+                                 _value=settings.globals.subtitle)),
+            TR("author", INPUT(_name='author', _type='text',
+                               _value=settings.globals.author)),
+            TR("author email", INPUT(_name='author_email', _type='text',
+                                     _value=settings.globals.author_email)),
+            TR(INPUT(_type="sumbit"))
     ))
 
     if global_form.accepts(request.vars, keepvalues=True):
@@ -229,9 +234,17 @@ def config():
             setattr(settings.globals, var, value)
 
     if auth_form.accepts(request.vars, keepvalues=True):
-        return str(dir(db))
-    if mail_form.accepts(request.vars, session):
-        return 'accepting mail'
+        for var in auth_form.vars:
+            value = getarre(auth_form.vars, var)
+            setattr(settings.auth, var, value)
+        # XXX: temporary added commit, there should be a class in config.py
+        db.commit()
+    if mail_form.accepts(request.vars, keepvalue=True):
+        for var in mail_form.vars:
+            value = getattr(auth.form.vars, var)
+            setattr(settings.mail, var, value)
+        # XXX: same as above.
+        db.commit()
 
     return dict(settings=settings,
                 global_form=global_form,
@@ -296,6 +309,7 @@ def wizard():
     # set up here various groups: one group form + button "add group"
     step5_form = None
 
-    return dict(import_form=import_form, step1=step1_form, step2=step2_form,
-                step3=step3_form, step4=step4_form, step5=step5_form)
+    return dict(import_form=import_form,
+                step1=step1_form, step2=step2_form, step3=step3_form,
+                step4=step4_form, step5=step5_form)
 
