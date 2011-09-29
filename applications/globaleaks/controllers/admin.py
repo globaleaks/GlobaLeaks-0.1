@@ -225,7 +225,7 @@ def config():
                                _value=settings.globals.author)),
             TR("author email", INPUT(_name='author_email', _type='text',
                                      _value=settings.globals.author_email)),
-            TR(INPUT(_type="sumbit"))
+            TR(INPUT(_type="submit"))
     ))
 
     if global_form.accepts(request.vars, keepvalues=True):
