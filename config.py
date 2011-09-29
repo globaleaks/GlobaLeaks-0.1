@@ -35,4 +35,21 @@ class ConfigFile(Storage):
         except ConfigParser.NoOptionError:
             raise NameError(name)
 
-Auth.commit = lambda self: 0
+
+class ConfigAuth(Auth):
+    """
+    A new auth class with is supposed to save data as soon as data changes.
+    """
+    def __setattr__(self, name, value):
+        super(ConfigAuth, self).__setattr__(name, value)
+        db.commit()
+
+
+class ConfigMail(Mail):
+    """
+    A new Mail class which is supposed to save data as soon as data changes.
+    """
+    def __setattr__(self, name, value):
+        super(ConfigMail, self).__setattr__(name, value).
+        db.commit()
+
