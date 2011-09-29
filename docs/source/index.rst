@@ -13,6 +13,7 @@ Contents:
 
    FAQ
    tutorial
+   structure
    tulip
 
 
