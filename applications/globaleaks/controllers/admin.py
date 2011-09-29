@@ -273,6 +273,7 @@ def wizard():
     import_form = FORM(TR(INPUT(_name="imp_url", _type="url"),
                           "\tor\t",
                           INPUT(_name="imp_file", _type="file")),
+                       TR(INPUT(_type="submit"))
                       )
 
     step1_form = FORM(TABLE(
