@@ -16,6 +16,7 @@ globaleaks/applications/globaleaks/cache/*
 globaleaks/applications/globaleaks/databases/*
 globaleaks/applications/globaleaks/errors/*
 globaleaks/applications/globaleaks/sessions/*
+globaleaks/applications/admin/sessions/*
 globaleaks/deposit/
 globaleaks/docs/build/
 globaleaks/material/

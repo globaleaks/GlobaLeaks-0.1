@@ -5,14 +5,24 @@ div.flash {
 background-color: green;
 }
 </style>
-<h1>Node Admin <span>| Target Groups</span></h1>
+<h1>Node Admin <span>| Targets</span></h1>
 <p class="intro">
 Creation of a target group is extremely useful, because your whistleblower could select the appropriate audience for their submitted material.
 </p>
-<h3>Create new target group</h3>
-<br/>
-{{=form}}
-{{pass}}
+
+<div style="float:left;width:45%;">
+  <h3>Create new target</h3>
+  <br/>
+  {{=form_target}}
+  {{pass}}
+</div>
+
+<div style="float:right;width:45%;">
+  <h3>Create new target group</h3>
+  <br/>
+  {{=form_group}}
+  {{pass}}
+</div>
 
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css" type="text/css" />
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
@@ -66,6 +76,7 @@ h3 {
 #selectActions span, #selectActions li {float: left; padding: 5px;}
 .dropTarget input { visibility: hidden; }
 </style>
+<div style="clear:both;">
   <h3 style="margin-top:50px;">Target pool</h3>
   <p id="targetpool"></p>
   <div id="selectActions">
@@ -111,6 +122,7 @@ h3 {
     </div>
     {{pass}}
   </div>
+</div>
 <script>
 $(function(){
   $(".dropTarget").find("li").each(function(k, e) {
@@ -154,14 +166,15 @@ $(function(){
       $(e).each(function(k, el) {
         var target_id = $(el).find('span').attr('class');
         var append = true;
+        console.log(target_id);
         $(that).find("li.target").each(function(k, elem) {
-          if ($(elem).find('span').attr('class')==target_id) {
+          if ($(elem).find('span').attr('class') == target_id) {
             append = false;
             return false;
           }
         });
         if (append) {
-          var to_append = ui.helper.children();
+          var to_append = $(el);
           to_append.find("input").remove();
           to_append.each(function (k, v) {
             var del = $('<span/>').text("X").click(function() {

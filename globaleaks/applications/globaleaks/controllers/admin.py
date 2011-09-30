@@ -36,30 +36,30 @@ def targets():
 
 @auth.requires_login()
 def targetgroups():
-    """
-    tlist = None
-    if request.vars.edit and request.vars.edit.startswith("delete"):
-        gl.delete_target(request.vars.edit.split(".")[1])
+    form_content_group = (Field('Name', requires=IS_NOT_EMPTY()),
+                          Field('Description'),
+                          Field('Tags'),
+                         )
+    form_group = SQLFORM.factory(*form_content_group, table_name="form_group")
 
-    if request.vars.edit and request.vars.edit.startswith("edit"):
-        pass
-    """
-    form_content = (Field('Name', requires=IS_NOT_EMPTY()),
-                    Field('Description'),
-                    Field('Tags')
-                   )
-    form = SQLFORM.factory(*form_content)
-    """
-    if "display" in request.args and not request.vars:
-        tlist = TargetList()
-        return dict(form=None, list=True, groups=tlist.list,
-                    all_targets=[], targetgroups=[])
-
-    if form.accepts(request.vars, session):
+    if form_group.accepts(request.vars, session):
         # Build group target list with posted data
         tlist = TargetList(request.vars)
-        return dict(form=form, list=True, groups=tlist.list,
-                    all_targets=[], targetgroups=[])"""
+
+    form_content_target = (Field('Name', requires=IS_NOT_EMPTY()),
+                    Field('Description', requires=IS_LENGTH(minsize=5,
+                                                            maxsize=50)),
+                    Field('email', requires=[IS_EMAIL(),
+                                             IS_NOT_IN_DB(db, db.target.url)]),
+                   )
+
+    form_target = SQLFORM.factory(*form_content_target,
+                                  table_name="form_target")
+
+    if form_target.accepts(request.vars, session):
+        c = request.vars
+        gl.create_target(c.Name, None, c.Description,
+                         c.email, "demo", "demo target")
 
     all_targets = []
     result = {}
@@ -89,8 +89,9 @@ def targetgroups():
             except KeyError:
                 result[group_q.id]["members"] = [target_data]
 
-    return dict(form=form, list=False, targets=None,
-                all_targets=all_targets, targetgroups=result)
+    return dict(form_target=form_target, form_group=form_group,
+                list=False, targets=None, all_targets=all_targets,
+                targetgroups=result)
 
 @auth.requires_login()
 def group_create():
