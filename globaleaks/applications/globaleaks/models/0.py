@@ -19,6 +19,7 @@ settings = Storage()
 settings.globals = ConfigFile(cfgfile, 'global')
 settings.private = Storage()
 settings.tulip = ConfigFile(cfgfile, 'tulip')
+settings.logging = ConfigFile(cfgfile, 'logging')
 settings.auth = auth.settings
 settings.mail = mail.settings
 

@@ -225,7 +225,7 @@ def config():
                                _value=settings.globals.author)),
             TR("author email", INPUT(_name='author_email', _type='text',
                                      _value=settings.globals.author_email)),
-            TR(INPUT(_type="sumbit"))
+            TR(INPUT(_type="submit"))
     ))
 
     if global_form.accepts(request.vars, keepvalues=True):
@@ -235,13 +235,13 @@ def config():
 
     if auth_form.accepts(request.vars, keepvalues=True):
         for var in auth_form.vars:
-            value = getarre(auth_form.vars, var)
+            value = getattr(auth_form.vars, var)
             setattr(settings.auth, var, value)
         # XXX: temporary added commit, there should be a class in config.py
         db.commit()
     if mail_form.accepts(request.vars, keepvalue=True):
         for var in mail_form.vars:
-            value = getattr(auth.form.vars, var)
+            value = getattr(auth_form.vars, var)
             setattr(settings.mail, var, value)
         # XXX: same as above.
         db.commit()
