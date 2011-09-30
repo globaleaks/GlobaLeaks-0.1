@@ -12,18 +12,17 @@ globaleaks/httpserver.log
 globaleaks/httpserver.pid
 cron.master
 
-globaleaks/applications/globaleaks/cache/
+globaleaks/applications/globaleaks/cache/*
 globaleaks/applications/globaleaks/databases/*
-globaleaks/applications/globaleaks/languages/
-globaleaks/applications/admin/
-globaleaks/applications/globaleaks/errors
-globaleaks/applications/globaleaks/sessions/
+globaleaks/applications/globaleaks/languages/*
+globaleaks/applications/globaleaks/errors/*
+globaleaks/applications/globaleaks/sessions/*
 globaleaks/applications/globaleaks/models/gleaks.cfg
 globaleaks/deposit/
-globaleaks/docs/build
+globaleaks/docs/build/
 globaleaks/material/
 globaleaks/logs/
-globaleaks/site-packages/
+globaleaks/site-packages/*
 globaleaks/applications/admin/languages/it-it.py
 globaleaks/applications/globaleaks/languages/it-it.py
-globaleaks/applications/globaleaks/uploads/
+globaleaks/applications/globaleaks/uploads/*
