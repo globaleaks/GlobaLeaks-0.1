@@ -10,5 +10,5 @@ def get_logger(settings):
         if settings.logging.server and settings.logging.client:
             logger.setLevel(logging.ERROR)
         else:
-        logger.setLevel(logging.INFO)
+            logger.setLevel(logging.INFO)
     return logger
