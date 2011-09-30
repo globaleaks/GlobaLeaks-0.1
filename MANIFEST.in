@@ -1,3 +1,4 @@
-recursive-include globaleaks/applications *
+recursive-include globaleaks/applications/globaleaks/ *
+recursive-include globaleaks/applications/admin/ *
 include globaleaks/VERSION
 include globaleaks/welcome.w2p
