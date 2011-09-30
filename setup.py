@@ -8,8 +8,6 @@ except ImportError:
     from setuptools import setup, find_packages
 import globaleaks
 
-packages = ['globaleaks']
-
 setup(name=globaleaks.__name__,
       version=globaleaks.__version__,
       description='The Opensource Whistleblowing Framework',
