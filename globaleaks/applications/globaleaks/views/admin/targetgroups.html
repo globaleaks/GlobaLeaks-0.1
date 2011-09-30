@@ -23,16 +23,20 @@ Creation of a target group is extremely useful, because your whistleblower could
   margin-top:  20px;
   width: 90%;
   margin: auto;
-  height: 200px;
+  padding: 20px;
+}
+
+#targetlist, .grouplist {
   overflow: auto;
+  height: 200px;
 }
 
 h3 {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.target{
+.target {
   font:bold 13px Arial, Helvetica, sans-serif;
   font-style:normal;
   color:#000000;
@@ -42,9 +46,9 @@ h3 {
   box-shadow:0px 0px 7px #000000;
   -moz-box-shadow:0px 0px 7px #000000;
   -webkit-box-shadow:0px 0px 7px #000000;
-  border-radius:20px 20px 20px 20px;
-  -moz-border-radius:20px 20px 20px 20px;
-  -webkit-border-radius:20px 20px 20px 20px;
+  border-radius:10px 10px 10px 10px;
+  -moz-border-radius:10px 10px 10px 10px;
+  -webkit-border-radius:10px 10px 10px 10px;
   width:160px;
   padding:12px;
   cursor:pointer;
@@ -54,6 +58,10 @@ h3 {
   z-index: 10;
 }
 
+.close:hover {
+  font-weight: bold;
+  color: #FF0000;
+}
 
 #selectActions span, #selectActions li {float: left; padding: 5px;}
 .dropTarget input { visibility: hidden; }
@@ -119,7 +127,7 @@ $(function(){
                 }
               });
               $(this).parent().remove();
-            }).css({paddingRight:'10px', float:"left"});
+            }).css({paddingRight:'10px', float:"left"}).attr("class", "close");
     $(e).append(del);
   });
   $('#dragSource').find("li").draggable({
@@ -130,38 +138,43 @@ $(function(){
       }
       var container = $('<div/>');
       container.append(selected.clone());
+      container.css({opacity: 0.5});
       return container;
     }
   });
 
   $('.dropTarget').droppable({
     tolerance: 'pointer',
-    drop: function(event, ui){
+    drop: function(event, ui) {
       var e = ui.helper.children();
+      e.each(function (k, v) {$(v).css({opacity: 1})});
       var group_id = $(this).attr("name");
-      var that = $(this);
+      var that = this;
       $(e).each(function(k, el) {
         var target_id = $(el).find('span').attr('class');
         var append = true;
-        $(this).children().each(function(k, elem) {
+        $(that).find("li.target").each(function(k, elem) {
           if ($(elem).find('span').attr('class')==target_id) {
             append = false;
+            return false;
           }
         });
         if (append) {
           var to_append = ui.helper.children();
-          var del = $('<span/>').text("X").click(function() {
-            $(this).parent().remove();
-            $.post('group_remove', {target: target_id, group: group_id},
-                   function(data) {
-              if ($.parseJSON(data).success == "false") {
-                alert("failed");
-              }
-          });
-          }).css({paddingRight:'10px', float:"left"});
           to_append.find("input").remove();
-          to_append.first().append(del);
-          that.find("ul.grouplist").append(to_append);
+          to_append.each(function (k, v) {
+            var del = $('<span/>').text("X").click(function() {
+              $(this).parent().remove();
+              $.post('group_remove', {target: target_id, group: group_id},
+                     function(data) {
+                if ($.parseJSON(data).success == "false") {
+                  alert("failed");
+                }
+            });
+            }).css({paddingLeft:'10px', float:"left"}).attr("class", "close");
+            $(v).append(del);
+          });
+          $(that).find("ul.grouplist").append(to_append);
           $.post('group_add', {target: target_id, group: group_id},
                  function(data) {
             if ($.parseJSON(data).success == "false") {
