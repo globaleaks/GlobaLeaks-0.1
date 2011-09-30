@@ -130,7 +130,8 @@ $(function(){
             }).css({paddingRight:'10px', float:"left"}).attr("class", "close");
     $(e).append(del);
   });
-  $('#dragSource').find("li").draggable({
+
+  $('#dragSource').find("li.target").draggable({
     helper: function(){
       var selected = $('#dragSource input:checked').parents('li');
       if (selected.length === 0) {
