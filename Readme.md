@@ -14,7 +14,7 @@ First of all you need to get a copy of web2py, you can install it doing
 
 then install Globaleaks
 
-    easy_install globaleaks
+    pip install git+git://github.com/globaleaks/GlobaLeaks.git#egg=globaleaks
 
 and start the service with:
     startglobaleaks
@@ -22,7 +22,7 @@ and start the service with:
 then you could found running those web services:
 
 * whistleblowing interface its bind at http://127.0.0.1:8000
-* node administrator targets configuratation http://127.0.0.1:8000/[targets|groups]
+* node administrator targets configuratation http://127.0.0.1:8000/globaleaks/admin/
 * debug only global view interface: http://127.0.0.1:8000/globalview
 * web2py developer access: http://127.0.0.1:8000/admin password "globaleaks"
 

@@ -11,9 +11,11 @@ globaleaks/parameters_8000.py
 globaleaks/httpserver.log
 globaleaks/httpserver.pid
 cron.master
+*.log
 
 globaleaks/applications/globaleaks/cache/*
-globaleaks/applications/globaleaks/databases/*
+globaleaks/applications/globaleaks/databases/*.table
+globaleaks/applications/globaleaks/databases/*.db
 globaleaks/applications/globaleaks/errors/*
 globaleaks/applications/globaleaks/sessions/*
 globaleaks/applications/admin/sessions/*
@@ -25,3 +27,4 @@ globaleaks/site-packages/*
 globaleaks/applications/admin/languages/it-it.py
 globaleaks/applications/globaleaks/languages/it-it.py
 globaleaks/applications/globaleaks/uploads/*
+!globaleaks/applications/globaleaks/uploads/.gitignore
