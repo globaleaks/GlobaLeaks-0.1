@@ -95,6 +95,7 @@
 'design': 'progetta',
 'done!': 'fatto!',
 'edit profile': 'modifica profilo',
+'enter a valid email address': 'enter a valid email address',
 'enter an integer between %(min)g and %(max)g': 'enter an integer between %(min)g and %(max)g',
 'export as csv file': 'esporta come file CSV',
 'has invalid extension.': 'has invalid extension.',

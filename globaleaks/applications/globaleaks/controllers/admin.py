@@ -7,7 +7,6 @@ def index():
 
 @auth.requires_login()
 def targets():
-
     if(request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
 
@@ -36,6 +35,11 @@ def targets():
 
 @auth.requires_login()
 def targetgroups():
+    """
+    Controller for the targets management page.
+    It creates two forms, one for creating a new target and one for
+    creating a new group.
+    """
     form_content_group = (Field('Name', requires=IS_NOT_EMPTY()),
                           Field('Description'),
                           Field('Tags'),
@@ -61,37 +65,12 @@ def targetgroups():
         gl.create_target(c.Name, None, c.Description,
                          c.email, "demo", "demo target")
 
-    all_targets = []
-    result = {}
-    for row in db().select(db.targetgroup.ALL):
-        result[row.id] = {}
-        result[row.id]["data"] = dict(row)
-        result[row.id]["members"] = []
-
-    # retrieving groups data from db
-    for row in db().select(db.target.ALL):
-        target_data = dict(row)
-        all_targets.append(target_data)
-        if not row.groups:
-            continue
-        groups = pickle.loads(row.groups)
-        for group in groups:
-            group_q = db(db.targetgroup.id==int(group)).select().first()
-            if not group_q:
-                continue
-            group_data = dict(group_q)
-            if not result.has_key(group_q.id):
-                result[group_q.id] = {}
-            if not result[group_q.id].has_key("data"):
-                result[group_q.id]["data"] = dict(group_q)
-            try:
-                result[group_q.id]["members"].append(target_data)
-            except KeyError:
-                result[group_q.id]["members"] = [target_data]
+    all_targets = gl.get_targets(None)
+    targetgroups = gl.get_targetgroups()
 
     return dict(form_target=form_target, form_group=form_group,
                 list=False, targets=None, all_targets=all_targets,
-                targetgroups=result)
+                targetgroups=targetgroups)
 
 
 @auth.requires_login()

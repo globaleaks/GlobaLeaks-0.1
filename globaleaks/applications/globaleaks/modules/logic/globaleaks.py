@@ -131,11 +131,11 @@ class Globaleaks(object):
         self._db.commit()
         return target_id
 
-    def delete_target(self, id):
+    def delete_target(self, target_id):
         """
         Deletes a target.
         """
-        self._db(self._db.target.id==id).delete()
+        self._db(self._db.target.id==target_id).delete()
         return True
 
     def get_targets(self, target_set):

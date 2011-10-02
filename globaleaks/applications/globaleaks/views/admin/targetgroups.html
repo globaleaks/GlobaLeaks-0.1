@@ -157,13 +157,13 @@ $(function() {
     var agree = confirm("Are you sure you want to delete that target?");
     var e = $(this);
     var target_id = e.parent().find(".target_id").attr("name");
-    $.post('/globaleaks/admin/target_delete', {target: target_id},
-      function(data) {
-        if ($.parseJSON(data).success == "false") {
-          alert("failed");
-        }
-    });
     if (agree) {
+      $.post('/globaleaks/admin/target_delete', {target: target_id},
+        function(data) {
+          if ($.parseJSON(data).success == "false") {
+            alert("failed");
+          }
+      });
       $(".target_id").each(function(k, v) {
         if ($(v).attr("name") == target_id) {
           $(v).closest("li.target").remove();
