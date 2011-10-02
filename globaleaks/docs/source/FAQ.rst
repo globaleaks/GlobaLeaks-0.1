@@ -41,3 +41,4 @@ GlobaLeaks VS $existing_solutions
    features (encryption).
  - Existing projects are less open that they want to make people believe.
  - Only commercial software or outsourced WhistleBlowing services.
+

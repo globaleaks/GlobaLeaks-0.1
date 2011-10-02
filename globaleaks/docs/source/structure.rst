@@ -21,3 +21,4 @@ The person running GlobaLeaks software, aware of the goals and motivations of
 their activities. He should choose the target list depending on the context and
 activities.
 
+
