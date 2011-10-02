@@ -21,7 +21,7 @@ def targets():
 
     form = SQLFORM.factory(*form_content)
 
-    targets = gl.get_targets("ANY")
+    targets = gl.get_targets(None)
 
     if "display" in request.args and not request.vars:
         return dict(form=None, list=True, targets=targets)
@@ -93,6 +93,7 @@ def targetgroups():
                 list=False, targets=None, all_targets=all_targets,
                 targetgroups=result)
 
+
 @auth.requires_login()
 def group_create():
     """
@@ -106,36 +107,23 @@ def group_create():
     except KeyError:
         return response.json({'success':'false'})
     else:
-        db.targetgroup.insert(name=name,
-                              desc=desc,
-                              tags=tags)
-        db.commit()
+        gl.create_targetgroup(name, desc, tags)
         return response.json({'success':'true'})
 
 @auth.requires_login()
 def group_delete():
-    """
-    Receives parameter "group" from POST.
-    Deletes that group
-    """
     try:
         group_id = request.post_vars["group"]
     except KeyError:
-        return response.json({'success':'false'})
+        pass
     else:
-        if db(db.targetgroup.id==group_id).select():
-            db(db.targetgroup.id==group_id).delete()
-            for row in db().select(db.target.ALL):
-                if row.groups:
-                    groups_list = pickle.loads(row.groups)
-                    groups_list.remove(group_id)
-                    db(db.target.id==row.id).update(
-                        groups=pickle.dumps(groups_list))
-        db.commit()
-        return response.json({'success':'true'})
+        result = gl.delete_targetgroup(group_id)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
 
 @auth.requires_login()
-def group_add():
+def target_add():
     """
     Receives parameters "target" and "group" from POST.
     Adds taget to group.
@@ -146,56 +134,51 @@ def group_add():
     except KeyError:
         pass
     else:
-        target_row = db(db.target.id==target_id).select().first()
-        group_row = db(db.targetgroup.id==group_id).select().first()
-
-        if target_row is not None and group_row is not None:
-            groups_p = target_row.groups
-            if not groups_p:
-                groups_p = pickle.dumps(set([group_id]))
-            else:
-                tmp = pickle.loads(groups_p)
-                tmp.add(group_id)
-                groups_p = pickle.dumps(tmp)
-            db(db.target.id==target_id).update(groups=groups_p)
-            db.commit()
+        result = gl.add_to_targetgroup(target_id, group_id)
+        if result:
             return response.json({'success':'true'})
-
     return response.json({'success':'false'})
 
-
 @auth.requires_login()
-def group_remove():
+def target_remove():
     """
     Receives parameters "target" and "group" from POST.
     Removes taget from group.
     """
-    # XXX fix to POST! get only for test
     try:
         target_id = request.post_vars["target"]
         group_id = request.post_vars["group"]
     except KeyError:
         pass
     else:
-        target_row = db(db.target.id==target_id).select().first()
-        group_row = db(db.targetgroup.id==group_id).select().first()
-
-        if target_row is not None and group_row is not None:
-            groups_p = target_row.groups
-            if groups_p:
-                tmp = pickle.loads(groups_p)
-                try:
-                    tmp.remove(group_id)
-                except KeyError:
-                    pass
-                else:
-                    groups_p = pickle.dumps(tmp)
-                    db(db.target.id==target_id).update(groups=groups_p)
-                    db.commit()
+        result = gl.remove_from_targetgroup(target_id, group_id)
+        if result:
             return response.json({'success':'true'})
-
     return response.json({'success':'false'})
 
+@auth.requires_login()
+def target_create():
+    try:
+        target_id = request.post_vars["target"]
+    except KeyError:
+        pass
+    else:
+        result = gl.create_target(target_id)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
+
+@auth.requires_login()
+def target_delete():
+    try:
+        target_id = request.post_vars["target"]
+    except KeyError:
+        pass
+    else:
+        result = gl.delete_target(target_id)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
 
 @auth.requires_login()
 def config():

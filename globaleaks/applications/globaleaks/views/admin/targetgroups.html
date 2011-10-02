@@ -24,8 +24,8 @@ Creation of a target group is extremely useful, because your whistleblower could
   {{pass}}
 </div>
 
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css" type="text/css" />
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="/globaleaks/static/css/jquery-ui.css" type="text/css" />
+<script src="/globaleaks/static/js/jquery-ui.min.js"></script>
 <style type="text/css" media="screen">
 
 .group {
@@ -38,7 +38,7 @@ Creation of a target group is extremely useful, because your whistleblower could
 
 #targetlist, .grouplist {
   overflow: auto;
-  height: 200px;
+  height: 150px;
 }
 
 h3 {
@@ -68,50 +68,78 @@ h3 {
   z-index: 10;
 }
 
+.close {
+  padding-right: 10px;
+  float: left;
+}
+
 .close:hover {
   font-weight: bold;
   color: #FF0000;
+}
+
+.delete_group {
+  float: right;
+  display: inline;
 }
 
 #selectActions span, #selectActions li {float: left; padding: 5px;}
 .dropTarget input { visibility: hidden; }
 </style>
 <div style="clear:both;">
-  <h3 style="margin-top:50px;">Target pool</h3>
-  <p id="targetpool"></p>
-  <div id="selectActions">
-    <span>Select:</span>
-    <ul>
-      <li><a id="selectAll" href="#">all</a></li>
-      <li><a id="selectNone" href="#">none</a></li>
-      <li><a id="selectInvert" href="#">invert</a></li>
-    </ul>
+  <div>
+    <h3 style="margin-top:50px;">Target pool</h3>
+    <p id="targetpool"></p>
+    <div id="selectActions">
+      <span>Select:</span>
+      <ul>
+        <li><a id="selectAll" href="#">all</a></li>
+        <li><a id="selectNone" href="#">none</a></li>
+        <li><a id="selectInvert" href="#">invert</a></li>
+      </ul>
+    </div>
   </div>
 
   <div style="clear:both;">
     <div id="dragSource" class="group">
-      <ul id="targetlist">
-      {{for target in all_targets:}}
-      <li class="target" onclick="$(this).find('ul').slideToggle();">
-        <input type="checkbox" style="float:left;"/>
-        <span class="{{=target['id']}}">{{=target['name']}}</span>
-        <ul style="display:none;">
-            <li>Description: {{=target['desc']}}</li>
-            <li>Email: {{=target['url']}}</li>
+      {{if all_targets:}}
+        <ul id="targetlist">
+        {{for target in all_targets:}}
+        <li class="target" onclick="$(this).find('ul').slideToggle();">
+          <span class="target_id" name="{{=target['id']}}"></span>
+          <span class="close delete_target">X</span>
+          <span>{{=target['name']}}</span>
+          <input type="checkbox" style="float:right;"/>
+          <ul style="display:none;">
+              <li>Description: {{=target['desc']}}</li>
+              <li>Email: {{=target['url']}}</li>
+          </ul>
+        </li>
+        {{pass}}
         </ul>
-      </li>
+      {{else:}}
+      <p class="intro" style="font-weight:bold; text-align:center">
+        There are no targets in your target list!
+      </p>
       {{pass}}
-      </ul>
     </div>
 
     {{for group in targetgroups:}}
     <div class="dropTarget group" name="{{=targetgroups[group]['data']['id']}}">
-      <h3>{{=targetgroups[group]['data']['name']}}</h3>
+      <h3 style="width:70%; display:inline;">{{=targetgroups[group]['data']['name']}}</h3>
+      <span class="delete delete_group"><button>delete</button></span>
+      <hr/>
+      <p class="intro">
+        {{=targetgroups[group]['data']['desc']}}<br/>
+        Tags: {{=targetgroups[group]['data']['tags']}}
+      </p>
+      <br/>
       <ul class="grouplist">
       {{for target in targetgroups[group]['members']:}}
       <li class="target" onclick="$(this).find('ul').slideToggle();">
+        <span class="target_id" name="{{=target['id']}}"></span>
         <input type="checkbox" style="float:left;"/>
-        <span class="{{=target['id']}}">{{=target['name']}}</span>
+        <span>{{=target['name']}}</span>
         <ul style="display:none;">
             <li>Description: {{=target['desc']}}</li>
             <li>Email: {{=target['url']}}</li>
@@ -124,22 +152,51 @@ h3 {
   </div>
 </div>
 <script>
-$(function(){
+$(function() {
+  $(".delete_target").click(function() {
+    var agree = confirm("Are you sure you want to delete that target?");
+    var e = $(this);
+    var target_id = e.parent().find(".target_id").attr("name");
+    $.post('/globaleaks/admin/target_delete', {target: target_id},
+      function(data) {
+        if ($.parseJSON(data).success == "false") {
+          alert("failed");
+        }
+    });
+    if (agree) {
+      $(".target_id").each(function(k, v) {
+        if ($(v).attr("name") == target_id) {
+          $(v).closest("li.target").remove();
+        }
+      });
+    }
+  });
+  $(".delete_group button").click(function() {
+    var group_id = $(this).closest("div").attr("name");
+    $.post('/globaleaks/admin/group_delete', {group: group_id},
+      function(data) {
+        if ($.parseJSON(data).success == "false") {
+          alert("failed");
+        }
+    });
+    $(this).closest("div").remove();
+  });
+
   $(".dropTarget").find("li").each(function(k, e) {
     if (!$(e).hasClass("target")) {
       return true;
     };
-    var target_id = $(e).find('span').attr('class');
+    var target_id = $(e).find('.target_id').attr('name');
     var group_id = $(e).parent().parent().attr("name");
     var del = $('<span/>').text("X").click(function() {
-              $.post('group_remove', {target: target_id, group: group_id},
+              $.post('/globaleaks/admin/target_remove', {target: target_id, group: group_id},
                      function(data) {
                 if ($.parseJSON(data).success == "false") {
                   alert("failed");
                 }
               });
               $(this).parent().remove();
-            }).css({paddingRight:'10px', float:"left"}).attr("class", "close");
+            }).attr("class", "close");
     $(e).append(del);
   });
 
@@ -164,11 +221,11 @@ $(function(){
       var group_id = $(this).attr("name");
       var that = this;
       $(e).each(function(k, el) {
-        var target_id = $(el).find('span').attr('class');
-        var append = true;
+        var target_id = $(el).find('.target_id').attr('name');
         console.log(target_id);
+        var append = true;
         $(that).find("li.target").each(function(k, elem) {
-          if ($(elem).find('span').attr('class') == target_id) {
+          if ($(elem).find('.target_id').attr('name') == target_id) {
             append = false;
             return false;
           }
@@ -177,19 +234,18 @@ $(function(){
           var to_append = $(el);
           to_append.find("input").remove();
           to_append.each(function (k, v) {
-            var del = $('<span/>').text("X").click(function() {
+            $(v).find("span.close").click(function() {
               $(this).parent().remove();
-              $.post('group_remove', {target: target_id, group: group_id},
+              $.post('/globaleaks/admin/target_remove', {target: target_id, group: group_id},
                      function(data) {
                 if ($.parseJSON(data).success == "false") {
                   alert("failed");
                 }
-            });
-            }).css({paddingLeft:'10px', float:"left"}).attr("class", "close");
-            $(v).append(del);
+              });
+            })
           });
           $(that).find("ul.grouplist").append(to_append);
-          $.post('group_add', {target: target_id, group: group_id},
+          $.post('/globaleaks/admin/target_add', {target: target_id, group: group_id},
                  function(data) {
             if ($.parseJSON(data).success == "false") {
               alert("failed");
@@ -250,8 +306,6 @@ $(function(){
               $(v).slideDown();
             }
           });
-          //$(list).find("li:not(:Contains(" + filter + "))").parent().slideUp();
-          //$(list).find("li:Contains(" + filter + ")").parent().slideDown();
         } else {
           $(list).find("li").slideDown();
         }
