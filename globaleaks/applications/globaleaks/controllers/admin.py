@@ -247,8 +247,13 @@ def wizard():
         Tulip settings: expiration date, maximum access and so on.
       step #4: {>>>skip}
         Advanced configs: author email, layout theme, keywords
-      step #5: {{>>>skip}}
+      step #5: {{>>skip}}
+        Logging Options
+      step #6: {{>>skip}}
         Create first grups
+
+    NOTE: {{>>skip}} should put some default values adequate for a normal
+    globaleaks node.
     """
 
     import_form = FORM(TR(INPUT(_name="imp_url", _type="url"),
@@ -288,10 +293,20 @@ def wizard():
         ))
 
 
+    # XXX: server logging depends on client logging!
+    step5_form = FORM(TABLE(
+        TR("Logging client-side", INPUT(_name="client", _type="text",
+                                        _value=settings.logging.client)),
+        TR("Logging server-side", INPUT(_name="server", _type="text",
+                                        _value=settings.logging.server)),
+        TR("Logging file", INPUT(_name="logfile", _type="file",
+                                 _value=settings.logging.logfile))
+        ))
+
     # set up here various groups: one group form + button "add group"
-    step5_form = None
+    step6_form = None
 
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,
-                step4=step4_form, step5=step5_form)
+                step4=step4_form, step5=step5_form, step6=step6_form)
 
