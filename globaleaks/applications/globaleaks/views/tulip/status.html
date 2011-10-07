@@ -42,7 +42,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
          <ul>
              <li>Do not spread this link, is intended be for your eyes only</li>
              <li>Analyze the received material, your contribution is useful to discern the truth</li>
-             <li>Ask useful details to the whistleblower (<b>Todo:</b>checks if comments are available)</li>
+             <li>Ask useful details to the whistleblower thru the comment box</li>
          </ul>
          {{pass}}
     </p>
@@ -67,11 +67,52 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         <div class="clear"></div>
 
     </div>
+    
+    <h2>Feedbacks and Pertinentness</h2>
+    
+    {{for feedback in feedbacks:}}
+        {{if not feedback.commenter_id:}}
+            <p>This is from the Whistleblower</p>
+            <p class="right_intro">{{=feedback.comment}}</p>
+        {{else:}}
+            {{if feedback.commenter_id == name:}}
+                <p>This is your feedback</p>
+                <p class="left_intro">{{=feedback.comment}}</p>
+            {{else:}}
+                <p>Author {{=feedback.commenter_id}}</p>
+                <p class="intro">{{=feedback.comment}}</p>
+            {{pass}}   
+        {{pass}}     
+    {{pass}}
+    
+    <form name="receiver_input" method="POST" action="">
+        <p>If you have questions for the Whistleblower, are invited to write them in this box. This message could be view from everyone with a Tulip pointing in this material</p>
+        <textarea rows="10" name="Comment" cols="40"></textarea>
+        <p>If you have downloaded the Material and evaluated the <i>pertinence</i> of the submitted data, you are invited in express a vote. This could help other receiver in avoid timeloss from misleading submission. When you express a vote, could be fair motivate it with an appropriate feedback.</p>
+        <br>
+        {{if not previous_vote:}}
+            <span id="is_pertinent"><a href="javascript:void()" onClick="isPertinent();">[IS PERTINENT]</a>,</span>
+            <span id="is_not_pertinent"> <a href="javascript:void()" onClick="notPertinent();">[IS NOT PERTINENT]</a>.</span>
+            <input type="hidden" name="Vote" id="expressed_vote">
+         {{else:}}
+             your previous vote was:<b>
+             {{if previous_vote == "-1":}}
+                 not pertinent 
+             {{else:}}
+                 pertinent
+             {{pass}}
+             </b>
+         {{pass}}
+        <input type="submit" name="send" value="Send your feedback">
+    </form>
+    <br>
 
-    <h2>Target list</h2>
+    <h2>Tulip accesses statistics</h2>
     <table class="targetlist">
         <thead>
-            <th>Anonymous Index</th>
+            <th>Id #</th>
+            <th class="downloads">pertinence value </th>
+            <th class="downloads">feedback</th>
             <th class="downloads">Views</th>
             <th class="downloads">Downloads</th>
         </thead>
@@ -85,6 +126,8 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                     <tr class="even">
                 {{pass}}
              <td class="name">{{=i}}</td>
+             <td class="downloads">{{=peer.express_vote}}</td>
+             <td class="downloads">{{=peer.feedbacks_provided}}</td>
              <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
              <td class="downloads">{{=peer.downloads_counter}}/{{=tulip_allowed_download}}</td>
             </tr>
@@ -101,5 +144,22 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     <script type="text/javascript">
     function notimpl() {
         jQuery("#messages").html("NOT IMPLEMENTED!");
+    }
+    function cleanPertinence() {
+        var toCleanDiv = document.getElementById("is_not_pertinent");
+        toCleanDiv.innerHTML = '';
+        toCleanDiv = document.getElementById("is_pertinent");
+        toCleanDiv.innerHTML = "<b>Thanks, you've express your vote, \"sent feedback\" to confirm</b>";
+    }
+    
+    function isPertinent() {
+        var hiddenVar = document.getElementById("expressed_vote");
+        hiddenVar.value = "+1";
+        cleanPertinence();
+    }
+    function notPertinent() {
+        var hiddenVar = document.getElementById("expressed_vote");
+        hiddenVar.value = "-1";
+        cleanPertinence();
     }
     </script>

@@ -242,6 +242,24 @@ border-radius:5px;
 	padding: 20px;
 }
 
+#content p.right_intro {
+	line-height: 20px;
+	text-align: right;
+    text-color: #14de14;
+	margin-bottom: 20px;
+	background: #ededed;
+	padding: 20px;
+}
+
+#content p.left_intro {
+	line-height: 20px;
+	text-align: left;
+    text-color: #14ae14;
+	margin-bottom: 20px;
+	background: #adadad;
+	padding: 20px;
+}
+
 #content .intro {
 	line-height: 20px;
 	text-align: justify;
