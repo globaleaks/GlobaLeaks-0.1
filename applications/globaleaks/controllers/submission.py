@@ -163,5 +163,44 @@ def upload():
                       tmp_file, dst_folder + filename)
 
             return response.json({'success':'true'})
+@service.xmlrpc
+def rpcsubmission():
+    if not session.files:
+        session.files = []
+    for f in request.vars:
+        if f == "qqfile":
+            filename = request.vars.qqfile
+            tmp_file = db.material.file.store(request.body, filename)
+
+            fls = Storage()
+            fls.filename = filename
+
+            fls.ext = mutils.file_type(filename.split(".")[-1])
+
+            tmp_fpath = os.path.join(request.folder, 'uploads/') + \
+                                tmp_file
+
+            fls.size = mutils.human_size(os.path.getsize(tmp_fpath))
+
+            session.files.append(fls)
+
+            fldr = db(db.submission.session==session.wb_id
+                         ).select().first()
+            if not fldr:
+                if not session.dirname:
+                    fldr = randomizer.generate_dirname()
+                    session.dirname = fldr
+                else:
+                    fldr = session.dirname
+            else:
+                fldr = str(fldr.dirname)
+            dst_folder = os.path.join(request.folder, 'material/' + fldr + '/')
+            if not os.path.isdir(dst_folder):
+                os.makedirs(dst_folder)
+            os.rename(os.path.join(request.folder, 'uploads/') +
+                      tmp_file, dst_folder + filename)
+
+            return response.json({'success':'true'})
+
 
 

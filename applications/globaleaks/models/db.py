@@ -28,9 +28,6 @@ randomizer = local_import('randomizer')
 
 # by default give a view/generic.extension to all actions from localhost
 # none otherwise. a pattern can be 'controller/function.extension'
-
-
-# Waste of time and useless piece of shit
 # response.generic_patterns = ['*'] if request.is_local else []
 
 #########################################################################
