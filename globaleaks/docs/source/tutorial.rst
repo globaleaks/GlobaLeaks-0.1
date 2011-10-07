@@ -16,22 +16,17 @@ GlobaLeaks depends on `web2py`_, which can be downloaded using pip ::
 
     $ sudo  easy_install web2py
 
-GlobaLeaks can be downloaded from `GitHub`_ via git: ::
+Download the lastest rev of GlobaLeaks from `GitHub`_ using git: ::
 
     $ git clone git://github.com/globaleaks/GlobaLeaks.git
 
-An then blablabla.
-
-Build
------
-
-Foobarbazspamcheese
+Then cd- into `GlobaLeaks/` ::
+    $ cd GlobaLeaks/
 
 Run
 ---
-To run web2py http server, run ::
+To run web2py http server, simply type ::
 
-    $ cd GlobaLeaks
     $ ./startglobaleaks
 
 Http applciation is avaible at `localhost`_ .
