@@ -47,9 +47,16 @@ If you are not interested in receive Tulips, or want change the segnalation prop
          {{pass}}
     </p>
 
-    <p class="description">{{=leak_desc}}</p>
-    <p class="description">{{=leak_tags}}</p>
-
+    {{if leak_desc:}}
+        <h2>Material description</h2>
+        <p class="description">{{=leak_desc}}</p>
+    {{pass}}
+    
+    {{if leak_tags:}}
+        <p class="left_title">Tags:</p>
+        <p class="description">{{=leak_tags}}</p>
+    {{pass}}
+    
     <div class="material">
         <h3>Material</h3>
         <ul>
@@ -68,40 +75,66 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 
     </div>
     
-    <h2>Feedbacks and Pertinentness</h2>
+    <h2>Feedbacks and Pertinentness (overall vote: {{=pertinentness}})</h2>
     
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
-            <p>This is from the Whistleblower</p>
+            <p class="right_title">This is from the Whistleblower</p>
             <p class="right_intro">{{=feedback.comment}}</p>
         {{else:}}
-            {{if feedback.commenter_id == name:}}
-                <p>This is your feedback</p>
+            {{if feedback.commenter_id == int(name):}}
+                <p class="left_title">This is your feedback</p>
                 <p class="left_intro">{{=feedback.comment}}</p>
             {{else:}}
-                <p>Author {{=feedback.commenter_id}}</p>
-                <p class="intro">{{=feedback.comment}}</p>
+                <p class="common_title">Receiver id #{{=feedback.commenter_id}}</p>
+                <p class="common_intro">{{=feedback.comment}}</p>
             {{pass}}   
         {{pass}}     
     {{pass}}
     
     <form name="receiver_input" method="POST" action="">
-        <p>If you have questions for the Whistleblower, are invited to write them in this box. This message could be view from everyone with a Tulip pointing in this material</p>
+        {{if not whistleblower: }}
+            <p>If you have questions for the Whistleblower, you are invited to write them in this box. This message can be viewed from anyone with a Tulip pointing to this material.</p>
+        {{else:}}
+            <p>A receiver could express doubt, ask for clarifications and request help in understanding your submitted material. You are invited to answer those questions with the area below.</p>
+        {{pass}}
         <textarea rows="10" name="Comment" cols="40"></textarea>
-        <p>If you have downloaded the Material and evaluated the <i>pertinence</i> of the submitted data, you are invited in express a vote. This could help other receiver in avoid timeloss from misleading submission. When you express a vote, could be fair motivate it with an appropriate feedback.</p>
+        <p>If you have downloaded the Material and evaluated the pertinence of the submitted data, you are invited to express a vote. This could help other receivers to avoid wasting time from misleading submissions. When you express a vote, it would be nice to motivate it with an appropriate feedback.</p>
         <br>
-        {{if not previous_vote:}}
-            <span id="is_pertinent"><a href="javascript:void()" onClick="isPertinent();">[IS PERTINENT]</a>,</span>
-            <span id="is_not_pertinent"> <a href="javascript:void()" onClick="notPertinent();">[IS NOT PERTINENT]</a>.</span>
-            <input type="hidden" name="Vote" id="expressed_vote">
-         {{else:}}
-             your previous vote was:<b>
-             {{if previous_vote == "-1":}}
-                 not pertinent 
+        {{if not whistleblower:}}
+            {{if not previous_vote:}}            
+                <table cellpadding="5" cellspacing="5" border="0" width="100%">
+                    <tr>
+                        <td><p class="voteImgText">IS pertinient</p></td>
+                        <td><p class="voteImgText">is NOT pertinent</p></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="voteImgText" id="is_pertinent">
+                            <a href="javascript:void()" onClick="isPertinent();">
+                            <img src="../globaleaks/static/images/isPertinent.png" class="voteImg" />
+                            </a>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="voteImgText" id="is_not_pertinent">
+                            <a href="javascript:void()" onClick="notPertinent();">
+                            <img src="../globaleaks/static/images/notPertinent.jpg" class="voteImg" />
+                            </a>
+                            </span>
+                        </td>
+                    </tr>
+                </table>  
+                <input type="hidden" name="Vote" id="expressed_vote">
              {{else:}}
-                 pertinent
+                 your previous vote was:<b>
+                 {{if previous_vote == "-1":}}
+                     not pertinent 
+                 {{else:}}
+                     pertinent
+                 {{pass}}
+                 </b>
              {{pass}}
-             </b>
          {{pass}}
         <input type="submit" name="send" value="Send your feedback">
     </form>
@@ -110,9 +143,9 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     <h2>Tulip accesses statistics</h2>
     <table class="targetlist">
         <thead>
-            <th>Id #</th>
-            <th class="downloads">pertinence value </th>
-            <th class="downloads">feedback</th>
+            <th class="downloads">Id #</th>
+            <th class="downloads">pertinence vote</th>
+            <th class="downloads">text feedbacks</th>
             <th class="downloads">Views</th>
             <th class="downloads">Downloads</th>
         </thead>
@@ -125,11 +158,19 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 {{else:}}
                     <tr class="even">
                 {{pass}}
-             <td class="name">{{=i}}</td>
-             <td class="downloads">{{=peer.express_vote}}</td>
-             <td class="downloads">{{=peer.feedbacks_provided}}</td>
-             <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
-             <td class="downloads">{{=peer.downloads_counter}}/{{=tulip_allowed_download}}</td>
+             {{if peer.target_id != "0":}}
+                 <td class="name">{{=i}}</td>
+                 <td class="downloads">{{=peer.express_vote}}</td>
+                 <td class="downloads">{{=peer.feedbacks_provided}}</td>
+                 <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
+                 <td class="downloads">{{=peer.downloads_counter}}/{{=tulip_allowed_download}}</td>
+             {{else:}}
+                 <td class="name">Whistleblower</td>
+                 <td class="downloads">not permitted</td>
+                 <td class="downloads">{{=peer.feedbacks_provided}}</td>
+                 <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
+                 <td class="downloads">not permitted</td>
+             {{pass}}
             </tr>
             {{pass}}
         </tbody>
@@ -149,7 +190,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         var toCleanDiv = document.getElementById("is_not_pertinent");
         toCleanDiv.innerHTML = '';
         toCleanDiv = document.getElementById("is_pertinent");
-        toCleanDiv.innerHTML = "<b>Thanks, you've express your vote, \"sent feedback\" to confirm</b>";
+        toCleanDiv.innerHTML = "<b>Thanks, you've express your vote, \"Send your feedback\" to confirm</b>";
     }
     
     function isPertinent() {

@@ -26,18 +26,18 @@ def index():
 
 
 # this is called only in the Target context
-def access_increment(t):
+def access_increment(tulip):
 
-    if t.accesses_counter:
-        new_count = int(t.accesses_counter) + 1
-        db.tulip[t.target].update_record(accesses_counter=new_count)
+    if tulip.accesses_counter:
+        new_count = int(tulip.accesses_counter) + 1
+        db.tulip[tulip.target].update_record(accesses_counter=new_count)
     else:
-        db.tulip[t.target].update_record(accesses_counter=1)
+        db.tulip[tulip.target].update_record(accesses_counter=1)
 
     db.commit()
 
-    if int(t.allowed_accesses) != 0 and \
-       int(t.accesses_counter) > int(t.allowed_accesses):
+    if int(tulip.allowed_accesses) != 0 and \
+       int(tulip.accesses_counter) > int(tulip.allowed_accesses):
         return True
     else:
         return False
@@ -49,14 +49,14 @@ def record_comment(comment_feedback, tulip):
     
     if tulip.feedbacks_provided:
         new_count = int(tulip.feedbacks_provided) + 1
-        db.tulip[tulip.target].update_record(feedbacks_provided=new_count)
+        db.tulip[tulip.id].update_record(feedbacks_provided=new_count)
     else:
-        db.tulip[tulip.target].update_record(feedbacks_provided=1)
+        db.tulip[tulip.id].update_record(feedbacks_provided=1)
     response.flash = "recorded comment"
 
 def record_vote(vote_feedback, tulip):
     int_vote = int(vote_feedback)
-    if int_vote <= 1 and int_vote >= (-1):
+    if int_vote <= 1 and int_vote >= (-1) and tulip.target != "0":
         tulip.set_vote(int_vote)
         response.flash = "Thanks for your contribution: actual Tulip pertinence rate: ", tulip.get_pertinentness()
     else:
@@ -122,7 +122,7 @@ def status():
     #    other receiver behaviour.
     # now is implement the extended version, but need to be selectable by the maintainer.
     tulipUsage = []
-    flowers = db().select(db.tulip.ALL)
+    flowers = db(db.tulip.leak_id == leak.get_id()).select()
     for singleTulip in flowers:
         if singleTulip.leak_id == tulip.get_id():
             tulipUsage.append(singleTulip)
@@ -153,7 +153,7 @@ def status():
             tulipUsage=tulipUsage,
             feedbacks=feedbacks,
             feedbacks_n=tulip.get_feedbacks_provided(),
-            perinentness=tulip.get_pertinentness(),
+            pertinentness=tulip.get_pertinentness(),
             previous_vote=tulip.get_vote(),
             name=tulip.target,
             target_url=target_url,
