@@ -11,7 +11,6 @@ class ConfigFile(Storage):
         # setting up confgiparser
         self._cfgparser = ConfigParser.ConfigParser()
         self._cfgparser.read([self._cfgfile])
-        #
         self._section = section
 
     def __getattr__(self, name):
@@ -30,6 +29,7 @@ class ConfigFile(Storage):
             return
 
         try:
+            # XXX: Automagically discover variable type
             self._cfgparser.set(self._section, name, value)
             self._cfgparser.write(open(self._cfgfile, 'w'))
         except ConfigParser.NoOptionError:

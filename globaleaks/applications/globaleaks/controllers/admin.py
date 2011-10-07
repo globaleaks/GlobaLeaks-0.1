@@ -191,6 +191,17 @@ def config():
             TR(INPUT(_type="submit"))
     ))
 
+    # XXX: client logging depends on server logging!
+    logging_form = FORM(TABLE(
+            TR("client", INPUT(_name='client', _type= 'text',
+                               _value=settings.logging.client)),
+            TR("server", INPUT(_name="server", _type="text",
+                               _value=settings.logging.server)),
+            TR("log file", INPUT(_name="logfile", _type="file",
+                                _value=settings.logging.logfile)),
+            TR(INPUT(_type="submit"))
+    ))
+
     if global_form.accepts(request.vars, keepvalues=True):
         for var in global_form.vars:
             value = getattr(global_form.vars, var)
@@ -202,6 +213,7 @@ def config():
             setattr(settings.auth, var, value)
         # XXX: temporary added commit, there should be a class in config.py
         db.commit()
+
     if mail_form.accepts(request.vars, keepvalue=True):
         for var in mail_form.vars:
             value = getattr(auth_form.vars, var)
@@ -209,10 +221,16 @@ def config():
         # XXX: same as above.
         db.commit()
 
+    if logging_form.accepts(request.vars, keepvalue=True):
+        for var in logging_form.vars:
+            value = getattr(global_form.vars, var)
+            setattr(settings.logging, vat, value)
+
     return dict(settings=settings,
                 global_form=global_form,
                 mail_form=mail_form,
-                auth_form=auth_form)
+                auth_form=auth_form,
+                logging_form=logging_form)
 
 @auth.requires_login()
 def wizard():
