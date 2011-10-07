@@ -15,7 +15,7 @@ class Zip:
             mat_dir = os.path.join(request.folder, 'material/') + fldr
             logger.info("mat_dir %s\n", mat_dir)
             logger.info("path %s\n",
-                             os.path.join(mat_dir, fldr + ".zip"))
+                        os.path.join(mat_dir, fldr + ".zip"))
             zipf = zipfile.ZipFile(mat_dir+".zip", 'w')
 
             for f in os.listdir(mat_dir):

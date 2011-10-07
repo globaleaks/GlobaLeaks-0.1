@@ -11,17 +11,17 @@ import logging
 
 MimeMail = local_import('mailer').MultiPart_Mail(settings)
 MessageContent = local_import('mailer').MessageContent()
-logger = local_import('logger').get_logger(settings)
+logger = local_import('logger').start_logger(settings.logging)
 compressor = local_import('compress_material').Zip()
 
 # conn = SESConnection(settings.aws_key, settings.aws_secret_key)
 
-logger.info(time.ctime()+"\n")
+logger.info('### Starting GlobaLeaks at: %s ###',  time.ctime())
 
 # Create first node administrator
-if(db.auth_user):
+if db.auth_user:
     # XXX Remove for non demo usage
-    if(not db(db.auth_user.email=="node@globaleaks.org").select().first()):
+    if not db(db.auth_user.email=="node@globaleaks.org").select().first():
         db.auth_user.insert(first_name="Globaleaks node administrator",
                             last_name="Globaleaks",email="node@globaleaks.org",
                             password=db.auth_user.password.validate("testing")[0])
