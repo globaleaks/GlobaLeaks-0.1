@@ -1,0 +1,327 @@
+{{extend 'layout.html'}}
+
+<style>
+div.flash {
+background-color: green;
+}
+</style>
+<h1>Node Admin <span>| Targets</span></h1>
+<p class="intro">
+Creation of a target group is extremely useful, because your whistleblower could select the appropriate audience for their submitted material.
+</p>
+
+<div style="float:left;width:45%;">
+  <h3>Create new target</h3>
+  <br/>
+  {{=form_target}}
+  {{pass}}
+</div>
+
+<div style="float:right;width:45%;">
+  <h3>Create new target group</h3>
+  <br/>
+  {{=form_group}}
+  {{pass}}
+</div>
+
+<link rel="stylesheet" href="/globaleaks/static/css/jquery-ui.css" type="text/css" />
+<script src="/globaleaks/static/js/jquery-ui.min.js"></script>
+<style type="text/css" media="screen">
+
+.group {
+  display: block;
+  margin-top:  20px;
+  width: 90%;
+  margin: auto;
+  padding: 20px;
+}
+
+#targetlist, .grouplist {
+  overflow: auto;
+  height: 150px;
+}
+
+h3 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.target {
+  font:bold 13px Arial, Helvetica, sans-serif;
+  font-style:normal;
+  color:#000000;
+  background:#f2f2f2;
+  border:0px solid #ffffff;
+  text-shadow:-1px 1px 0px #fff;
+  box-shadow:0px 0px 7px #000000;
+  -moz-box-shadow:0px 0px 7px #000000;
+  -webkit-box-shadow:0px 0px 7px #000000;
+  border-radius:10px 10px 10px 10px;
+  -moz-border-radius:10px 10px 10px 10px;
+  -webkit-border-radius:10px 10px 10px 10px;
+  width:160px;
+  padding:12px;
+  cursor:pointer;
+  margin:15px;
+  text-align:center;
+  float: left;
+  z-index: 10;
+}
+
+.close {
+  padding-right: 10px;
+  float: left;
+}
+
+.close:hover {
+  font-weight: bold;
+  color: #FF0000;
+}
+
+.delete_group {
+  float: right;
+  display: inline;
+}
+
+#selectActions span, #selectActions li {float: left; padding: 5px;}
+.dropTarget input { visibility: hidden; }
+</style>
+<div style="clear:both;">
+  <div>
+    <h3 style="margin-top:50px;">Target pool</h3>
+    <p id="targetpool"></p>
+    <div id="selectActions">
+      <span>Select:</span>
+      <ul>
+        <li><a id="selectAll" href="#">all</a></li>
+        <li><a id="selectNone" href="#">none</a></li>
+        <li><a id="selectInvert" href="#">invert</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="clear:both;">
+    <div id="dragSource" class="group">
+      {{if all_targets:}}
+        <ul id="targetlist">
+        {{for target in all_targets:}}
+        <li class="target" onclick="$(this).find('ul').slideToggle();">
+          <span class="target_id" name="{{=target['id']}}"></span>
+          <span class="close delete_target">X</span>
+          <span>{{=target['name']}}</span>
+          <input type="checkbox" style="float:right;"/>
+          <ul style="display:none;">
+              <li>Description: {{=target['desc']}}</li>
+              <li>Email: {{=target['url']}}</li>
+          </ul>
+        </li>
+        {{pass}}
+        </ul>
+      {{else:}}
+      <p class="intro" style="font-weight:bold; text-align:center">
+        There are no targets in your target list!
+      </p>
+      {{pass}}
+    </div>
+
+    {{for group in targetgroups:}}
+    <div class="dropTarget group" name="{{=targetgroups[group]['data']['id']}}">
+      <h3 style="width:70%; display:inline;">{{=targetgroups[group]['data']['name']}}</h3>
+      <span class="delete delete_group"><button>delete</button></span>
+      <hr/>
+      <p class="intro">
+        {{=targetgroups[group]['data']['desc']}}<br/>
+        Tags: {{=targetgroups[group]['data']['tags']}}
+      </p>
+      <br/>
+      <ul class="grouplist">
+      {{for target in targetgroups[group]['members']:}}
+      <li class="target" onclick="$(this).find('ul').slideToggle();">
+        <span class="target_id" name="{{=target['id']}}"></span>
+        <input type="checkbox" style="float:left;"/>
+        <span>{{=target['name']}}</span>
+        <ul style="display:none;">
+            <li>Description: {{=target['desc']}}</li>
+            <li>Email: {{=target['url']}}</li>
+        </ul>
+      </li>
+      {{pass}}
+      </ul>
+    </div>
+    {{pass}}
+  </div>
+</div>
+<script>
+$(function() {
+  $(".delete_target").click(function() {
+    var agree = confirm("Are you sure you want to delete that target?");
+    var e = $(this);
+    var target_id = e.parent().find(".target_id").attr("name");
+    if (agree) {
+      $.post('/globaleaks/admin/target_delete', {target: target_id},
+        function(data) {
+          if ($.parseJSON(data).success == "false") {
+            alert("failed");
+          }
+      });
+      $(".target_id").each(function(k, v) {
+        if ($(v).attr("name") == target_id) {
+          $(v).closest("li.target").remove();
+        }
+      });
+    }
+  });
+  $(".delete_group button").click(function() {
+    var group_id = $(this).closest("div").attr("name");
+    $.post('/globaleaks/admin/group_delete', {group: group_id},
+      function(data) {
+        if ($.parseJSON(data).success == "false") {
+          alert("failed");
+        }
+    });
+    $(this).closest("div").remove();
+  });
+
+  $(".dropTarget").find("li").each(function(k, e) {
+    if (!$(e).hasClass("target")) {
+      return true;
+    };
+    var target_id = $(e).find('.target_id').attr('name');
+    var group_id = $(e).parent().parent().attr("name");
+    var del = $('<span/>').text("X").click(function() {
+              $.post('/globaleaks/admin/target_remove', {target: target_id, group: group_id},
+                     function(data) {
+                if ($.parseJSON(data).success == "false") {
+                  alert("failed");
+                }
+              });
+              $(this).parent().remove();
+            }).attr("class", "close");
+    $(e).append(del);
+  });
+
+  $('#dragSource').find("li.target").draggable({
+    helper: function(){
+      var selected = $('#dragSource input:checked').parents('li');
+      if (selected.length === 0) {
+        selected = $(this);
+      }
+      var container = $('<div/>');
+      container.append(selected.clone());
+      container.css({opacity: 0.5});
+      return container;
+    }
+  });
+
+  $('.dropTarget').droppable({
+    tolerance: 'pointer',
+    drop: function(event, ui) {
+      var e = ui.helper.children();
+      e.each(function (k, v) {$(v).css({opacity: 1})});
+      var group_id = $(this).attr("name");
+      var that = this;
+      $(e).each(function(k, el) {
+        var target_id = $(el).find('.target_id').attr('name');
+        console.log(target_id);
+        var append = true;
+        $(that).find("li.target").each(function(k, elem) {
+          if ($(elem).find('.target_id').attr('name') == target_id) {
+            append = false;
+            return false;
+          }
+        });
+        if (append) {
+          var to_append = $(el);
+          to_append.find("input").remove();
+          to_append.each(function (k, v) {
+            $(v).find("span.close").click(function() {
+              $(this).parent().remove();
+              $.post('/globaleaks/admin/target_remove', {target: target_id, group: group_id},
+                     function(data) {
+                if ($.parseJSON(data).success == "false") {
+                  alert("failed");
+                }
+              });
+            })
+          });
+          $(that).find("ul.grouplist").append(to_append);
+          $.post('/globaleaks/admin/target_add', {target: target_id, group: group_id},
+                 function(data) {
+            if ($.parseJSON(data).success == "false") {
+              alert("failed");
+              }
+          });
+        }
+      });
+    }
+  });
+
+  $('#selectAll').click(function(){
+    $('#dragSource input').attr('checked', 'checked');
+    return false;
+  });
+
+  $('#selectNone').click(function(){
+    $('#dragSource input').removeAttr('checked');
+    return false;
+  });
+
+  $('#selectInvert').click(function(){
+    $('#dragSource input').each(function(){
+      var $this = $(this);
+      if ($this.attr('checked')) {
+        $this.removeAttr('checked');
+      }
+      else {
+        $this.attr('checked', 'checked');
+      }
+    });
+    return false;
+  });
+
+
+  // custom css expression for a case-insensitive contains()
+  jQuery.expr[':'].Contains = function(a,i,m){
+      return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
+  };
+
+
+  function listFilter(header, list) { // header is any element, list is an unordered list
+    // create and add the filter form to the header
+    var form = $("<form>").attr({"class":"filterform","action":"#"}).text("Filter: "),
+        input = $("<input>").attr({"class":"filterinput","type":"text"});
+    $(form).append(input).appendTo(header);
+
+    $(input)
+      .change( function () {
+        var filter = $(this).val();
+        if(filter) {
+          // this finds all links in a list that contain the input,
+          // and hide the ones not containing the input while showing the ones that do
+          $(list).find("li").each(function(k, v) {
+            if (!$(v).find("span").text().match(new RegExp(filter))) {
+              $(v).slideUp();
+            }
+            else {
+              $(v).slideDown();
+            }
+          });
+        } else {
+          $(list).find("li").slideDown();
+        }
+        return false;
+      })
+    .keyup( function () {
+        // fire the above change event after every letter
+        $(this).change();
+    });
+  }
+
+
+  //ondomready
+  $(function () {
+    listFilter($("#targetpool"), $("#targetlist"));
+  });
+
+});
+</script>
