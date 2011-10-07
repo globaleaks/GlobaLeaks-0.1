@@ -6,7 +6,6 @@ a GlobaLeaks node
 """
 
 import time
-import logging
 # from boto.ses.connection import SESConnection
 
 MimeMail = local_import('mailer').MultiPart_Mail(settings)
