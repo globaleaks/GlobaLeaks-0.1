@@ -2,5 +2,5 @@ import unittest
 
 main = unittest.main
 
-TestCase = unitest.TestCase
+TestCase = unittest.TestCase
 
