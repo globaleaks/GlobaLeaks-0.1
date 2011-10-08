@@ -132,10 +132,10 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
         <td class="name">URL</td>
         <td class="name">leak ID</td>
         <td class="description">target id</td> 
-        <td class="name">allow acc</td>
-        <td class="name">done acc</td>
-        <td class="name">allow downld</td>
-        <td class="name">done downld</td>
+        <td class="name">access done/allow</td>
+        <td class="name">vote</td>
+        <td class="name">downld done/allow</td>
+        <td class="name">feedbacks</td>
     </tr> 
     {{i=0}}
     {{for tulip in tulips:}}
@@ -148,10 +148,10 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
         <td class="name"><a href="/tulip/{{=tulip.url}}">{{=tulip.url[:10]}}</a></td>
         <td class="name">{{=tulip.leak_id}}</td>
         <td class="description">{{=tulip.target_id}}</td>    
-        <td class="description">{{=tulip.allowed_accesses}}</td>    
-        <td class="description">{{=tulip.accesses_counter}}</td>    
-        <td class="description">{{=tulip.allowed_downloads}}</td>    
-        <td class="description">{{=tulip.downloads_counter}}</td>
+        <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>    
+        <td class="description">{{=tulip.express_vote}}</td>    
+        <td class="description">{{=tulip.downloads_counter}}/{{=tulip.allowed_downloads}}</td>    
+        <td class="description">{{=tulip.feedbacks_provided}}</td>
     </tr>
     {{pass}}
 </table>
