@@ -7,10 +7,10 @@ def index():
 
 #@auth.requires_login()
 def targets():
-    if(request.vars.edit and request.vars.edit.startswith("delete")):
+    if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
 
-    if(request.vars.edit and request.vars.edit.startswith("edit")):
+    if (request.vars.edit and request.vars.edit.startswith("edit")):
         pass
 
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
@@ -97,6 +97,45 @@ def group_delete():
         pass
     else:
         result = gl.delete_targetgroup(group_id)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
+
+#@auth.requires_login()
+def group_rename():
+    try:
+        group_id = request.post_vars["group"]
+        name = request.post_vars["name"]
+    except KeyError:
+        pass
+    else:
+        result = gl.update_targetgroup(group_id, name=name)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
+
+#@auth.requires_login()
+def group_desc():
+    try:
+        group_id = request.post_vars["group"]
+        desc = request.post_vars["desc"]
+    except KeyError:
+        pass
+    else:
+        result = gl.update_targetgroup(group_id, desc=desc)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
+
+#@auth.requires_login()
+def group_tags():
+    try:
+        group_id = request.post_vars["group"]
+        tags = request.post_vars["tags"]
+    except KeyError:
+        pass
+    else:
+        result = gl.update_targetgroup(group_id, tags=tags)
         if result:
             return response.json({'success':'true'})
     return response.json({'success':'false'})
