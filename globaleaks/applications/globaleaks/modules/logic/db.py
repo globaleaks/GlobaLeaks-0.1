@@ -60,6 +60,8 @@ class DB(DAL):
             Field('url', unique=True),
             Field('leak_id', self.leak),
             Field('target_id'),
+            Field('feedbacks_provided'),
+            Field('express_vote'),
             Field('allowed_accesses'),
             Field('accesses_counter'),
             Field('allowed_downloads'),
