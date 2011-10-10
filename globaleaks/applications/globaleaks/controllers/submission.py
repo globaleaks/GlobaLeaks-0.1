@@ -147,7 +147,6 @@ def upload():
             else:
                 fldr = str(fldr.dirname)
             dst_folder = os.path.join(request.folder, 'material/' + fldr + '/')
-            print dst_folder
             if not os.path.isdir(dst_folder):
                 os.makedirs(dst_folder)
             os.rename(os.path.join(request.folder, 'uploads/') +
@@ -157,11 +156,8 @@ def upload():
 
         if f == "delete":
             for file in session.files:
-                print file
-                print request.vars.delete
                 if str(file.fileid) == str(request.vars.delete):
                     dst_folder = os.path.join(request.folder, 'material/' + session.dirname + '/')
-                    print dst_folder
                     os.remove(dst_folder + file.filename)
                     return response.json({'success':'true'})
 
