@@ -38,7 +38,7 @@ class ConfigFile(Storage):
 
 class ConfigAuth(Auth):
     """
-    A new auth class with is supposed to save data as soon as data changes.
+    A new Auth class with is supposed to save data as soon as data changes.
     """
     def __setattr__(self, name, value):
         super(ConfigAuth, self).__setattr__(name, value)
