@@ -5,10 +5,8 @@ GlobaLeaks is the first Open Source Whistleblowing Framework.
 
 It empowers anyone to easily setup and maintain their own Whistleblowing platform. It is also a collection of what are the best practices for people receiveiving and submitting material. GlobaLeaks works in various environments: media, activism, corporations, public agencies.
 
-Installation - not to be mistaken with setup.py
+Installation
 ------------------------------------------------------------------
-
-You should not run directly setup.py.
 
 First of all you need to get a copy of web2py, you can install it doing
 
