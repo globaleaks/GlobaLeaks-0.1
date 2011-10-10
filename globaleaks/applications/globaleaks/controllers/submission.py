@@ -15,23 +15,22 @@ def index():
     if not session.wb_id:
         session.wb_id = randomizer.generate_wb_id()
 
-    form = FORM(TABLE(
-            TR('Title', INPUT(_name='Title', requires=IS_NOT_EMPTY())),
-            TR('Description:',TEXTAREA(_name='Description',
-                                       requires=IS_NOT_EMPTY())),
-            TR('Material',DIV(_id='file-uploader'), _id='file-uploader-js'),
-            TR('Material:', INPUT(_name='material', _type='file'),
-                                  _id='file-uploader-nonjs'),
-            TR('Metadata:',INPUT(_name='metadata', _type='checkbox',
-                                 _class="notimplemented")),
-            TR('Accept Disclaimer:',
-               INPUT(_name='disclaimer',
-                     _type='checkbox',
-                     requires=IS_EQUAL_TO("on",
-                              error_message="Please accept the disclaimer"))),
-            TR('', INPUT(_name='submit', _type='submit'), _id="submit"),
-            TR('', 'File Upload In Progress...', _id="uploading", _style="display: none")
-            ))
+    material_js = TR('Material',DIV(_id='file-uploader'), _id='file-uploader-js')
+    material_njs = TR('Material:', INPUT(_name='material', _type='file'),\
+                                  _id='file-uploader-nonjs')
+
+    disclaimer_text = TR('Accept Disclaimer',settings.globals.disclaimer)
+    disclaimer = TR("",INPUT(_name='agree',value=True,_type='checkbox'))
+
+    form = SQLFORM(db.leak,
+            fields=['title','desc'],
+            labels={'title': 'Title', 'desc': 'Description'})
+
+    form[0].insert(-1, material_njs)
+    form[0].insert(-1, material_js)
+
+    form[0].insert(-1, disclaimer_text)
+    form[0].insert(-1, disclaimer)
 
     if form.accepts(request.vars, session):
         l = request.vars

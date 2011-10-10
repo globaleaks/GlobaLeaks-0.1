@@ -34,7 +34,7 @@ db.define_table('targetgroup',
 # should be removed and replaced with submission
 db.define_table('leak',
     Field('title'),
-    Field('desc'),
+    Field('desc', 'text'),
     Field('submission_timestamp'),
     Field('leaker_id', db.target),
     Field('whistleblower_access'),
