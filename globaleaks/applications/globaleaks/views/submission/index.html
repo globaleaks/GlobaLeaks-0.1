@@ -51,7 +51,19 @@ function createUploader(){
     var uploader = new qq.FileUploader({
         element: document.getElementById('file-uploader'),
         action: '/globaleaks/submission/upload',
+
         onComplete: function(id, fileName, responseJSON){
+            $(".qq-upload-delete").click(function(e) {
+                console.log(this);
+                $(this).parent().hide();
+                $.ajax({
+                    type: 'POST',
+                    url: '/globaleaks/submission/upload',
+                    data: {'delete' : responseJSON.fileid}
+                });
+                return false;
+            });
+
             $("#submit").show();
             $("#uploading").hide();
         },
@@ -69,6 +81,16 @@ function createUploader(){
         debug: false
     });
 }
+
+function DeleteFile(fileid) {
+    $.ajax({
+        type: 'POST',
+        url: '/globaleaks/submission/upload',
+        data: {'delete' : fileid}
+    });
+    return false;
+}
+
 window.onload = createUploader;
 $(document).ready(function() {
     $('#file-uploader-js').show();

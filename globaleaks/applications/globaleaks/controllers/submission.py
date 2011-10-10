@@ -1,4 +1,4 @@
-import os
+import os,random
 import pickle
 
 mutils = local_import('material').utils()
@@ -132,6 +132,8 @@ def upload():
 
             fls.size = mutils.human_size(os.path.getsize(tmp_fpath))
 
+            fls.fileid = random.randint(0,1000000000000000)
+
             session.files.append(fls)
 
             fldr = db(db.submission.session==session.wb_id
@@ -145,12 +147,25 @@ def upload():
             else:
                 fldr = str(fldr.dirname)
             dst_folder = os.path.join(request.folder, 'material/' + fldr + '/')
+            print dst_folder
             if not os.path.isdir(dst_folder):
                 os.makedirs(dst_folder)
             os.rename(os.path.join(request.folder, 'uploads/') +
                       tmp_file, dst_folder + filename)
 
-            return response.json({'success':'true'})
+            return response.json({'success':'true', 'fileid': fls.fileid})
+
+        if f == "delete":
+            for file in session.files:
+                print file
+                print request.vars.delete
+                if str(file.fileid) == str(request.vars.delete):
+                    dst_folder = os.path.join(request.folder, 'material/' + session.dirname + '/')
+                    print dst_folder
+                    os.remove(dst_folder + file.filename)
+                    return response.json({'success':'true'})
+
+
 @service.xmlrpc
 def rpcsubmission():
     if not session.files:
