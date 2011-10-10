@@ -6,15 +6,6 @@ mutils = local_import('material').utils()
 def index():
     leaker_number = None
 
-    """form_content = (Field('Title', requires=IS_NOT_EMPTY()),
-                    Field('Description', 'text', requires=IS_NOT_EMPTY()),
-                    Field('material1', 'upload', uploadfolder=os.path.join(request.folder,'uploads/')),
-                    Field('material2', 'upload', uploadfolder=os.path.join(request.folder,'uploads/')),
-                    Field('material3', 'upload', uploadfolder=os.path.join(request.folder,'uploads/')),
-                    Field('metadata', 'boolean', requires=NOT_IMPLEMENTED("tulip-metadata-sanitization")),
-                    Field('disclaimer', 'boolean', requires=IS_EQUAL_TO("on", error_message="Please read the disclaimer"))
-                    )
-    """
     # form = SQLFORM.factory(*form_content)
     # temporary comment: syntax error !?
     # form = SQLFORM.factory(*form_content,labels = {'disclaimer':'Accept and have read the disclaimer', 'metadata':'Metadata sanitization'})
@@ -41,8 +32,6 @@ def index():
             TR('', INPUT(_name='submit', _type='submit'), _id="submit"),
             TR('', 'File Upload In Progress...', _id="uploading", _style="display: none")
             ))
-
-    response.flash = "You are the Whistleblower"
 
     if form.accepts(request.vars, session):
         l = request.vars

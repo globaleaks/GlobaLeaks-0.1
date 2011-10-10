@@ -42,11 +42,11 @@ def access_increment(tulip):
     else:
         return False
 
-# http://games.adultswim.com/robot-unicorn-attack-twitchy-online-game.html 
+# http://games.adultswim.com/robot-unicorn-attack-twitchy-online-game.html
 def record_comment(comment_feedback, tulip):
     db.comment.insert(leak_id=tulip.get_leak().get_id(), commenter_id=tulip.get_target(), comment=comment_feedback)
     db.commit()
-    
+
     if tulip.feedbacks_provided:
         new_count = int(tulip.feedbacks_provided) + 1
         db.tulip[tulip.id].update_record(feedbacks_provided=new_count)
@@ -71,7 +71,7 @@ def status():
         return dict(err=True)
 
     leak = tulip.get_leak()
-    
+
     target = gl.get_target(tulip.target)
 
     if tulip.target == "0":
@@ -101,13 +101,13 @@ def status():
         counter_accesses = leak.whistleblower_access
         limit_counter = int("50") # settings.max_submitter_accesses
         access_available = True
-    
+
     # check if the comment or a vote has been provided:
     if request.vars and request.vars.Comment:
         record_comment(request.vars.Comment, tulip)
 
     if request.vars and request.vars.Vote:
-        record_vote(request.vars.Vote, tulip)  
+        record_vote(request.vars.Vote, tulip)
 
     # OTHER CODE USAGE WAS:
     # form_comment = (Field('Comment', requires=IS_NOT_EMPTY()))
@@ -129,13 +129,13 @@ def status():
         else:
             tulipUsage.append(singleTulip)
     # this else is obviously an unsolved bug, but at the moment 0 lines seem to match in leak_id
-    
+
     feedbacks = []
     usersComment = db(db.comment.leak_id == leak.get_id()).select()
     for singleComment in usersComment:
         if singleComment.leak_id == leak.get_id():
-            feedbacks.append(singleComment)         
-            
+            feedbacks.append(singleComment)
+
     return dict(err=None,
             access_available=access_available,
             download_available=download_available,

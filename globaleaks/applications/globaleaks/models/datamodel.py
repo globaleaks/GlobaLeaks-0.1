@@ -96,7 +96,7 @@ class Tulip(object):
             self._id = db(db.tulip.url==url).select().first().id
         else:
             self._id = id
-            
+
     def get_vote(self):
         return db.tulip[self.id].express_vote
     def set_vote(self, vote):
@@ -108,13 +108,15 @@ class Tulip(object):
             print "Error: tulip vote has range of -1, 0 and +1"
             pass
     vote = property(get_vote, set_vote)
-    
+
+    # LOL! Vecnish hit's again..
+    # XXX rename this function to "get_pertinence"
     def get_pertinentness(self):
         pertinentness = 0
         brotherTulips = db(db.tulip.leak_id == db.tulip[self.id].leak_id).select()
         for t in brotherTulips:
             if t.express_vote and t.target_id:
-                pertinentness += int(t.express_vote)               
+                pertinentness += int(t.express_vote)
         return pertinentness
     def set_pertinentness(self, value):
         print "Error: pertinentness is a collaborative value"
@@ -169,7 +171,7 @@ class Tulip(object):
         db.tulip[self.id].update_record(downloads_counter=downloads_counter)
         db.commit()
     downloads_counter = property(get_downloads_counter, set_downloads_counter)
-    
+
     def get_feedbacks_provided(self):
         return db.tulip[self.id].feedbacks_provided
     def set_feedbacks_provided(self, feed_numbers):

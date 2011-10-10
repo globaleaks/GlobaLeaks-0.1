@@ -13,8 +13,6 @@ def index():
 
     tulip_url = None
 
-    response.flash = "You are the Whistleblower"
-
     if request.vars:
         l = request.vars
         # Make the tulip work well
