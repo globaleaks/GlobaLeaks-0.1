@@ -7,10 +7,10 @@ def index():
 
 #@auth.requires_login()
 def targets():
-    if(request.vars.edit and request.vars.edit.startswith("delete")):
+    if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
 
-    if(request.vars.edit and request.vars.edit.startswith("edit")):
+    if (request.vars.edit and request.vars.edit.startswith("edit")):
         pass
 
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
@@ -97,6 +97,45 @@ def group_delete():
         pass
     else:
         result = gl.delete_targetgroup(group_id)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
+
+#@auth.requires_login()
+def group_rename():
+    try:
+        group_id = request.post_vars["group"]
+        name = request.post_vars["name"]
+    except KeyError:
+        pass
+    else:
+        result = gl.update_targetgroup(group_id, name=name)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
+
+#@auth.requires_login()
+def group_desc():
+    try:
+        group_id = request.post_vars["group"]
+        desc = request.post_vars["desc"]
+    except KeyError:
+        pass
+    else:
+        result = gl.update_targetgroup(group_id, desc=desc)
+        if result:
+            return response.json({'success':'true'})
+    return response.json({'success':'false'})
+
+#@auth.requires_login()
+def group_tags():
+    try:
+        group_id = request.post_vars["group"]
+        tags = request.post_vars["tags"]
+    except KeyError:
+        pass
+    else:
+        result = gl.update_targetgroup(group_id, tags=tags)
         if result:
             return response.json({'success':'true'})
     return response.json({'success':'false'})
@@ -191,6 +230,17 @@ def config():
             TR(INPUT(_type="submit"))
     ))
 
+    # XXX: client logging depends on server logging!
+    logging_form = FORM(TABLE(
+            TR("client", INPUT(_name='client', _type= 'text',
+                               _value=settings.logging.client)),
+            TR("server", INPUT(_name="server", _type="text",
+                               _value=settings.logging.server)),
+            TR("log file", INPUT(_name="logfile", _type="file",
+                                _value=settings.logging.logfile)),
+            TR(INPUT(_type="submit"))
+    ))
+
     if global_form.accepts(request.vars, keepvalues=True):
         for var in global_form.vars:
             value = getattr(global_form.vars, var)
@@ -202,6 +252,7 @@ def config():
             setattr(settings.auth, var, value)
         # XXX: temporary added commit, there should be a class in config.py
         db.commit()
+
     if mail_form.accepts(request.vars, keepvalue=True):
         for var in mail_form.vars:
             value = getattr(auth_form.vars, var)
@@ -209,10 +260,16 @@ def config():
         # XXX: same as above.
         db.commit()
 
+    if logging_form.accepts(request.vars, keepvalue=True):
+        for var in logging_form.vars:
+            value = getattr(global_form.vars, var)
+            setattr(settings.logging, vat, value)
+
     return dict(settings=settings,
                 global_form=global_form,
                 mail_form=mail_form,
-                auth_form=auth_form)
+                auth_form=auth_form,
+                logging_form=logging_form)
 
 #@auth.requires_login()
 def wizard():
@@ -229,8 +286,13 @@ def wizard():
         Tulip settings: expiration date, maximum access and so on.
       step #4: {>>>skip}
         Advanced configs: author email, layout theme, keywords
-      step #5: {{>>>skip}}
+      step #5: {{>>skip}}
+        Logging Options
+      step #6: {{>>skip}}
         Create first grups
+
+    NOTE: {{>>skip}} should put some default values adequate for a normal
+    globaleaks node.
     """
 
     import_form = FORM(TR(INPUT(_name="imp_url", _type="url"),
@@ -270,9 +332,19 @@ def wizard():
         ))
 
 
+    # XXX: server logging depends on client logging!
+    step5_form = FORM(TABLE(
+        TR("Logging client-side", INPUT(_name="client", _type="text",
+                                        _value=settings.logging.client)),
+        TR("Logging server-side", INPUT(_name="server", _type="text",
+                                        _value=settings.logging.server)),
+        TR("Logging file", INPUT(_name="logfile", _type="file",
+                                 _value=settings.logging.logfile))
+        ))
+
     # set up here various groups: one group form + button "add group"
-    step5_form = None
+    step6_form = None
 
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,
-                step4=step4_form, step5=step5_form)
+                step4=step4_form, step5=step5_form, step6=step6_form)

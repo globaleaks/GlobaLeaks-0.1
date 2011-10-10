@@ -39,6 +39,17 @@ class Globaleaks(object):
         self._db.commit()
         return result
 
+    def update_targetgroup(self, group_id, **kwargs):
+        """
+        Changes the name field of the targetgroup with the specified id.
+        """
+        result = False
+        if self._db(self._db.targetgroup.id==group_id).select():
+            result = True
+            self._db(self._db.targetgroup.id==group_id).update(**kwargs)
+            self._db.commit()
+        return result
+
     def add_to_targetgroup(self, target_id, group_id):
         """
         Adds the target with id target_id to the targetgroup with id

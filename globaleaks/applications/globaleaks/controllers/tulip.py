@@ -24,10 +24,7 @@ def index():
 
     return dict(form=None,tulip_url=None)
 
-
-# this is called only in the Target context
 def access_increment(tulip):
-
     if tulip.accesses_counter:
         new_count = int(tulip.accesses_counter) + 1
         db.tulip[tulip.target].update_record(accesses_counter=new_count)
@@ -71,7 +68,6 @@ def status():
         return dict(err=True)
 
     leak = tulip.get_leak()
-
     target = gl.get_target(tulip.target)
 
     if tulip.target == "0":
@@ -84,13 +80,13 @@ def status():
         response.flash = "You are the Target"
 
     if whistleblower == False:
-    # the stats of the whistleblower stay in the tulip entry (its unique!)
+        # the stats of the whistleblower don't stay in him own tulip (also ifi its unique!)
         download_available = int(tulip.downloads_counter) < int(tulip.allowed_downloads)
         access_available = access_increment(tulip)
         counter_accesses = tulip.accesses_counter
         limit_counter = tulip.allowed_accesses
     else:
-    # the stats of the whistleblower stay in the leak/material entry
+        # the stats of the whistleblower stay in the leak/material entry (is it right ?)
         download_available = False
         if leak.whistleblower_access:
             new_count = int(leak.whistleblowing_access) + 1
@@ -108,11 +104,6 @@ def status():
 
     if request.vars and request.vars.Vote:
         record_vote(request.vars.Vote, tulip)
-
-    # OTHER CODE USAGE WAS:
-    # form_comment = (Field('Comment', requires=IS_NOT_EMPTY()))
-    # comment_input = SQLFORM.factory(*form_comment, table_name="form_comment")
-    # if comment_input.accepts(request.vars, session):
 
     # configuration issue
     # *) if we want permit, in Tulip, to see how many download/clicks has been doing
