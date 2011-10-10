@@ -60,6 +60,9 @@ def record_vote(vote_feedback, tulip):
         response.flash = "Invalid vote provided thru HTTP header manipulation: do you wanna work with us ?"
 
 def status():
+    """
+    The main TULIP status page
+    """
     tulip_url = request.args[0]
 
     try:
@@ -71,17 +74,18 @@ def status():
     target = gl.get_target(tulip.target)
 
     if tulip.target == "0":
-        whistleblower=True
-        response.flash = "You are the Whistleblower"
+        whistleblower = True
         target_url = ''
     else:
-        whistleblower=False
+        whistleblower = False
         target_url = "target/" + tulip.url
-        response.flash = "You are the Target"
 
     if whistleblower == False:
         # the stats of the whistleblower don't stay in him own tulip (also ifi its unique!)
-        download_available = int(tulip.downloads_counter) < int(tulip.allowed_downloads)
+        if leak.spooled:
+            download_available = int(tulip.downloads_counter) < int(tulip.allowed_downloads)
+        else:
+            download_available = -1
         access_available = access_increment(tulip)
         counter_accesses = tulip.accesses_counter
         limit_counter = tulip.allowed_accesses

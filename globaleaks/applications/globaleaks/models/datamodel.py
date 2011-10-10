@@ -56,6 +56,13 @@ class Leak(object):
         pass
     material = property(get_material, set_material)
 
+    def get_spooled(self):
+        return db.leak[self.id].spooled
+    def set_spooled(self, material):
+        pass
+    spooled = property(get_spooled, set_spooled)
+
+
     #TODO: implement get/set targets
     def get_targets(self):
         pass

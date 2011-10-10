@@ -28,14 +28,19 @@ if db.auth_user:
         db.commit()
 
 new_material = db(db.leak.spooled==False).select()
+logger.info(new_material)
 
 for mat in new_material:
+    logger.info("blabla")
     compressor.create_zip(db, mat, request, logger)
+    db.leak[mat.id].update_record(spooled=True)
+    logger.info(mat)
+    db.commit()
 
 mails = db(db.mail).select()
 logger.info(str(mails)+"\n")
 
-if not mail:
+if len(mails) < 1:
     logger.info(time.ctime()+": NO MAILS TO SEND!\n")
 
 for m in mails:
@@ -61,5 +66,6 @@ for m in mails:
             db(db.mail.id==m.id).delete()
 
     # mail.send(to=m.address,subject="GlobaLeaks notification for: " + m.target,message=message)
+    db(db.mail.id==m.id).delete()
 
 db.commit()
