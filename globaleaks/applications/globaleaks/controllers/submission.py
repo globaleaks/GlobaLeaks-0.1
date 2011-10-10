@@ -19,6 +19,8 @@ def index():
     material_njs = TR('Material:', INPUT(_name='material', _type='file'),\
                                   _id='file-uploader-nonjs')
 
+    captcha = TR('Are you human?',auth.settings.captcha)
+
     disclaimer_text = TR('Accept Disclaimer',settings.globals.disclaimer)
     disclaimer = TR("",INPUT(_name='agree',value=True,_type='checkbox'))
 
@@ -28,7 +30,7 @@ def index():
 
     form[0].insert(-1, material_njs)
     form[0].insert(-1, material_js)
-
+    form[0].insert(-1, captcha)
     form[0].insert(-1, disclaimer_text)
     form[0].insert(-1, disclaimer)
 
