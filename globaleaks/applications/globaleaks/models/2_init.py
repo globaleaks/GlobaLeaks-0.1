@@ -1,22 +1,12 @@
-import ConfigParser
-import os.path
-
 from gluon.storage import Storage
 from gluon.tools import Mail, Auth
 
-from config import ConfigFile
-
-db = local_import('logic.db').DB()
 gl = local_import('logic.globaleaks').Globaleaks(db)
 
 mail = Mail(db)
 auth = Auth(db)
 
-cfgfile = os.path.join(os.path.dirname(__file__), 'gleaks.cfg')
-
 # bind everything to settings
-settings = Storage()
-settings.globals = ConfigFile(cfgfile, 'global')
 settings.private = Storage()
 settings.tulip = ConfigFile(cfgfile, 'tulip')
 settings.logging = ConfigFile(cfgfile, 'logging')
@@ -24,15 +14,16 @@ settings.auth = auth.settings
 settings.mail = mail.settings
 
 # GLOBAL setting
-settings.private.author_email = 'info@globaleaks.org'
-settings.private.database_uri = 'sqlite://storage.sqlite'
-settings.private.security_key = '7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'
-settings.private.email_server = 'localhost'
-settings.private.email_sender = 'node@globaleaks.org'
-settings.private.email_login = ''
-settings.private.login_method = 'local'
+settings.private.author_email = settings.globals.author_email
+settings.private.database_uri = settings.database.uri
+settings.private.security_key = settings.globals.security_key
+settings.private.email_server = settings.globals.email_server
+settings.private.email_sender = settings.globals.email_sender
+settings.private.email_login = settings.globals.email_login
+settings.private.login_method = settings.globals.login_method
 settings.private.login_config = ''
 settings.private.plugins = []
+
 # AWS configuration
 settings.private.aws_key = '<AWS-KEY>'
 settings.private.aws_secret_key = '<AWS-SECRET-KEY>'
