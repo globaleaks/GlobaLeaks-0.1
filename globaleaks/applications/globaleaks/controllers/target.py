@@ -30,6 +30,10 @@ def view():
     
     return dict(active=collectedUser, inactive=inactiveUser, flowers=leakActive, groups=groupsUsage, tulips=tulipAvail)
     # nevah forget http://uiu.me/Nr9G.png
+
+# this view is like a tulip: reachable only by a personal secret, stored in db.target.url
+def personal():
+    pass
     
 def subscribe():
     if not request.args:
