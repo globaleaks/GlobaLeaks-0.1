@@ -1,36 +1,36 @@
 def index(): return dict(message="hello from target.py")
 
 def view():
-    
+
     collectedUser = []
     targetList = db(db.target.status=="subscribed").select()
     for active_user in targetList:
         collectedUser.append(active_user)
-    
+
     inactiveUser = []
     unsubscribedList = db(db.target.status=="unsubscribed").select()
     for inactive_user in unsubscribedList:
          inactiveUser.append(inactive_user)
-    
+
     leakActive = []
     flowers = db().select(db.leak.ALL)
     for active_leak in flowers:
         leakActive.append(active_leak)
-        
+
     groupsUsage = []
     groupList = db().select(db.targetgroup.ALL)
     for group in groupList:
         groupsUsage.append(group)
-    
-    # this require to be splitted because tulip are leak x target matrix 
+
+    # this require to be splitted because tulip are leak x target matrix
     tulipAvail = []
     tulipList = db().select(db.tulip.ALL)
     for singleT in tulipList:
         tulipAvail.append(singleT)
-    
+
     return dict(active=collectedUser, inactive=inactiveUser, flowers=leakActive, groups=groupsUsage, tulips=tulipAvail)
     # nevah forget http://uiu.me/Nr9G.png
-    
+
 def subscribe():
     if not request.args:
         subscribe_form = SQLFORM.factory(

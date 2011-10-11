@@ -500,6 +500,7 @@ qq.FileUploader = function(o){
                 '<span class="qq-upload-failed-text">Failed</span>' +
             '</li>',
 
+
         classes: {
             // used to get elements from templates
             button: 'qq-upload-button',
@@ -614,6 +615,7 @@ qq.extend(qq.FileUploader.prototype, {
 
         // mark completed
         var item = this._getItemByFileId(id);
+        console.log(item);
         qq.remove(this._find(item, 'cancel'));
         qq.remove(this._find(item, 'spinner'));
 

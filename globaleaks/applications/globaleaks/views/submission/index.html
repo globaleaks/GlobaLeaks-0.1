@@ -53,7 +53,7 @@ function createUploader(){
         action: '/globaleaks/submission/upload',
 
         onComplete: function(id, fileName, responseJSON){
-            $(".qq-upload-delete").click(function(e) {
+            $("a.qq-upload-delete").click(function(e) {
                 console.log(this);
                 $(this).parent().hide();
                 $.ajax({
@@ -68,6 +68,38 @@ function createUploader(){
             $("#uploading").hide();
         },
         onProgress: function(id, fileName, loaded, total){
+            /*
+            XXX This needs to be cleaned up and implemented.
+
+            successful_upload = $('.qq-upload-list li');
+            adddescription = '<button id="adddescription">add description</button>';
+            console.log("successful_upload");
+            console.log(successful_upload);
+
+            titledescription = '<li id="title">'+
+                '<label>Title</label>'+
+                '<input type="text" name="title">'+
+                '</li>'+
+                '<li id="description">'+
+                '<label>Description</label>'+
+                '<textarea></textarea>'+
+                '</li>';
+
+            if(successful_upload.length == 1) {
+                successful_upload.append(titledescription);
+            }
+            else {
+                successful_upload.append(adddescription);
+                $('#adddescription').click(function(e) {
+                    console.log(e);
+                    return false;
+                });
+            }
+
+            console.log(id);
+            */
+
+            $('a.qq-upload-delete').hide();
             $("#submit").hide();
             $("#uploading").show();
         },
@@ -75,10 +107,11 @@ function createUploader(){
             $("#submit").show();
             $("#uploading").hide();
         },
+
         onSubmit: function(id, fileName){
 
         },
-        debug: false
+        debug: true
     });
 }
 
