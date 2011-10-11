@@ -32,6 +32,48 @@ From here you are able to set the following parameters:
     [database]
     uri = sqlite://storage.sqlite
 
+* To add custom FORM elements you should edit the XML file
+    * globaleaks/applications/globaleaks/models/extrafields.xml
+
+An example of how custom form elements look like is:
+    <fields>
+        <field>
+            <name>extratext</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field>
+        <field>
+            <name>textarea</name>
+            <label>Text Area</label>
+            <description>This is a text area</description>
+            <type>text</type>
+        </field>
+        <field>
+            <name>enable</name>
+            <label>Enable something</label>
+            <description>Enable the thing by checking the box</description>
+            <type>boolean</type>
+        </field>
+        <field>
+            <name>date</name>
+            <label>Date</label>
+            <description>Enter a date realted to your submission</description>
+            <type>date</type>
+        </field>
+        <field>
+            <name>menu</name>
+            <label>Menu</label>
+            <description>Select something from the drop down menu</description>
+            <type>list</type>
+            <list>
+                <el>Element1</el>
+                <el>Element2</el>
+                <el>Element3</el>
+            </list>
+        </field>
+    </fields>
+
 # Presentation
 For customizing the look of your site you should be looking at globaleaks/applications/globaleaks/views/.
 
