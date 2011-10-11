@@ -1,3 +1,55 @@
+###############################################
+# Parse the extra fields.
+###############################################
+#!/usr/bin/env python
+class ExtraField:
+    def __init__(self, filename):
+        from xml.dom.minidom import parse, parseString
+        from pprint import pprint
+
+        file = open(filename)
+        dom = parse(file)
+
+        self.fields = []
+
+        for i in dom.getElementsByTagName("field"):
+            self.fields.append(self.parse_field(i))
+
+
+    def get_content(self, field, tag):
+        return field.getElementsByTagName(tag)[0].childNodes[0].data
+
+    def parse_list(self, field):
+        list = []
+        for el in  field.getElementsByTagName("el"):
+            list.append(str(el.childNodes[0].data))
+        return list
+
+    def parse_field(self, field):
+        parsed = {}
+        parsed['name'] = self.get_content(field, "name")
+        parsed['label'] = self.get_content(field, "label")
+        parsed['desc']  = self.get_content(field, "description")
+        parsed['type']  = self.get_content(field, "type")
+        if parsed['type'] == "list":
+            parsed['list'] = self.parse_list(field)
+        return parsed
+    def gen_db(self):
+        if self.fields:
+            output = []
+            for i in self.fields:
+                if i['type'] == "list":
+                    output.append(Field(str(i['name']),requires=IS_IN_SET(i['list'])))
+                else:
+                    output.append(Field(str(i['name']), str(i['type'])))
+            return output
+
+extrafile = os.path.join(os.path.dirname(__file__), 'extrafields.xml')
+extrafields = ExtraField(extrafile)
+settings.extrafields = extrafields
+
+db_extrafields = extrafields.gen_db()
+
 ################################################
 # Define the main globaleaks database structure
 ################################################
@@ -39,6 +91,7 @@ db.define_table('leak',
     Field('leaker_id', db.target),
     Field('whistleblower_access'),
     Field('spooled', 'boolean', False),
+    *db_extrafields,
     format='%(name)s'
 )
 

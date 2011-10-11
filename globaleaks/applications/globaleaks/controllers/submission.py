@@ -23,10 +23,16 @@ def index():
 
     disclaimer_text = TR('Accept Disclaimer',settings.globals.disclaimer)
     disclaimer = TR("",INPUT(_name='agree',value=True,_type='checkbox'))
+    form_fields = ['title', 'desc']
+    form_labels={'title': 'Title', 'desc': 'Description'}
+
+    for i in settings.extrafields.fields:
+        form_fields.append(str(i['name']))
+        form_labels[str(i['name'])] = str(i['desc'])
 
     form = SQLFORM(db.leak,
-            fields=['title','desc'],
-            labels={'title': 'Title', 'desc': 'Description'})
+            fields=form_fields,
+            labels=form_labels)
 
     form[0].insert(-1, material_njs)
     form[0].insert(-1, material_js)
