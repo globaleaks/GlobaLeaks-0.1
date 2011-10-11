@@ -41,11 +41,9 @@ def index():
     form[0].insert(-1, disclaimer)
 
     if form.accepts(request.vars, session):
-        l = request.vars
 
-        leak_id = gl.create_leak(l.Title, l.Description, None, None,
-                                 "demo", l.Tags, number=leaker_number[1])
-
+        leak_id = gl.create_leak(form.vars.id, "ALL", leaker_number[1]) #l.Title, l.Description, None, None,
+                                 #"demo", l.Tags, number=leaker_number[1])
         # adding association submission -> leak_id
         if not db(db.submission.session==session.wb_id).select():
             db.submission.insert(session=session.wb_id,
