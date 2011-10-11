@@ -2,6 +2,7 @@
 The first place where you should look for customization is the GlobaLeaks config file.
 It is located in globaleaks/applications/globaleaks/models/gleaks.cfg.
 From here you are able to set the following parameters:
+
     [global]
     title = <the title of your site>
     subtitle = <subtitle>
@@ -33,9 +34,13 @@ From here you are able to set the following parameters:
 
 # Presentation
 For customizing the look of your site you should be looking at globaleaks/applications/globaleaks/views/.
-layout.html - Contains the main layout included in every page
+
+* layout.html - Contains the main layout included in every page
+
     * For customizing the logo in every page look for "header" and replace the image with your own logo.
 
-inside globaleaks/applications/globaleaks/static you will find all the .css files. The main css file is base.css.
+Inside globaleaks/applications/globaleaks/static you will find all the .css files.
+
+* base.css - the main .css file
 
 
