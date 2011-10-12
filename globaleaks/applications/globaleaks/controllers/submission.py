@@ -142,8 +142,7 @@ def upload():
 
             session.files.append(fls)
 
-            fldr = db(db.submission.session==session.wb_id
-                         ).select().first()
+            fldr = db(db.submission.session==session.wb_id).select().first()
             if not fldr:
                 if not session.dirname:
                     fldr = randomizer.generate_dirname()
@@ -157,6 +156,10 @@ def upload():
                 os.makedirs(dst_folder)
             os.rename(os.path.join(request.folder, 'uploads/') +
                       tmp_file, dst_folder + filename)
+                      
+            # this TODO XXX db.material.async_id need to be updated with fls.fileid
+            # and used as research key in sendinfo, to add details and title
+            # XXX XXX XXX XXX
 
             return response.json({'success':'true', 'fileid': fls.fileid})
 
@@ -166,6 +169,21 @@ def upload():
                     dst_folder = os.path.join(request.folder, 'material/' + session.dirname + '/')
                     os.remove(dst_folder + file.filename)
                     return response.json({'success':'true'})
+       
+def sendinfo(): 
+    logger = local_import('logger').start_logger(settings.logging)
+    
+    if not session.files:
+        session.files = []
+                   
+    for f in request.vars:
+        logger.info("field : %s", f)
+        if f == "info_id":
+            indexed_file_id = request.vars.info_id
+            logger.info("info-id: %s", indexed_file_id)
+    # odd ? /tmp/globaleaks.log return a very strange output
+            
+    return response.json({'success':'true'})
 
 
 @service.xmlrpc
@@ -189,8 +207,7 @@ def rpcsubmission():
 
             session.files.append(fls)
 
-            fldr = db(db.submission.session==session.wb_id
-                         ).select().first()
+            fldr = db(db.submission.session==session.wb_id).select().first()
             if not fldr:
                 if not session.dirname:
                     fldr = randomizer.generate_dirname()
@@ -206,6 +223,3 @@ def rpcsubmission():
                       tmp_file, dst_folder + filename)
 
             return response.json({'success':'true'})
-
-
-
