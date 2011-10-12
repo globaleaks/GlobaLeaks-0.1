@@ -47,13 +47,49 @@ div.flash {background-color: #888;}
 
         {{=form}}
 <script type="text/javascript">
+
+function sendInfo(id, jsonId)
+{
+    var linkUsed = document.getElementById("link_"+id);
+    linkUsed.innerHTML ='info already sent related ';
+
+    console.log("sono arrivato sin qui: " + id + " e " + jsonId);
+    $.ajax({
+        type: 'POST',
+        url: '/globaleaks/submission/upload',
+        data: {'info-id' : jsonId, 'title' : "world blah", 'desc' : "mad world blah" }
+    });
+}
+
+function addInfoRequest(id, fileName, responseJSON)
+{
+    /* remember, before was used the code: */
+    // qqElement_added = $('.qq-upload-list li');
+    // qqElement_added.append("text_string");
+
+    var father = document.getElementById('file-uploader');
+    var li_new = document.createElement("li");
+    li_new.className = 'qq-upload-size';
+
+    li_new.innerHTML = '<label>Title</label><br>'+
+                       '<input type="text" id="title_'+id+'" name="title" value="add file short title"><br>'+
+                       '<label>Description</label><br>'+
+                       '<textarea id="desc_'+id+'">add the complete explanation of the submitted data</textarea>'+
+                       '<br><a id="link_'+id+'" href="javascript:void(0)" onClick="javascript:sendInfo(' + 
+                       id + ', ' + responseJSON.fileid + ');">send info</a> file (' + fileName + ')';
+
+    console.log(li_new.innerHTML);
+    father.appendChild(li_new);
+}
+
 function createUploader(){
     var uploader = new qq.FileUploader({
         element: document.getElementById('file-uploader'),
         action: '/globaleaks/submission/upload',
 
         onComplete: function(id, fileName, responseJSON){
-            $(".qq-upload-delete").click(function(e) {
+            addInfoRequest(id, fileName, responseJSON);
+            $("a.qq-upload-delete").click(function(e) {
                 console.log(this);
                 $(this).parent().hide();
                 $.ajax({
@@ -68,6 +104,8 @@ function createUploader(){
             $("#uploading").hide();
         },
         onProgress: function(id, fileName, loaded, total){
+
+            $('a.qq-upload-delete').hide();
             $("#submit").hide();
             $("#uploading").show();
         },
@@ -75,10 +113,11 @@ function createUploader(){
             $("#submit").show();
             $("#uploading").hide();
         },
+
         onSubmit: function(id, fileName){
 
         },
-        debug: false
+        debug: true
     });
 }
 
