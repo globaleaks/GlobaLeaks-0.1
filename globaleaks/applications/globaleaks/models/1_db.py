@@ -106,6 +106,9 @@ db.define_table('material',
     Field('url'), #, unique=True),
     Field('leak_id', db.leak),
     Field('type'),
+    Field('async_id'),
+    Field('description'),
+    Field('details'),
     Field('file'),
     format='%(name)s'
 )
@@ -141,4 +144,3 @@ db.define_table('submission',
     Field('dirname'),
     format='%(name)s'
 )
-

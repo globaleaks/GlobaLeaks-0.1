@@ -500,7 +500,6 @@ qq.FileUploader = function(o){
                 '<span class="qq-upload-failed-text">Failed</span>' +
             '</li>',
 
-
         classes: {
             // used to get elements from templates
             button: 'qq-upload-button',

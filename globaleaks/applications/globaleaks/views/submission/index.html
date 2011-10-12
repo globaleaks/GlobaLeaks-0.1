@@ -47,12 +47,52 @@ div.flash {background-color: #888;}
 
         {{=form}}
 <script type="text/javascript">
+
+function sendInfo(id, jsonId)
+{
+    var linkUsed = document.getElementById("link_"+id);
+    linkUsed.innerHTML ='info already sent';
+
+    // XXX I don't know which kind of security analysis are performed by web2py, therefore maybe 
+    // other encoding ways are better
+    details_text = escape(document.getElementById("desc_"+id).innerHTML);
+    desc_title = escape(document.getElementById("title_"+id).value);
+
+    $.ajax({
+        type: 'POST',
+        url: '/globaleaks/submission/sendinfo',
+        data: {'info_id' : jsonId, 'title' : desc_title, 'details' : details_text }
+    });
+}
+
+function addInfoRequest(id, fileName, responseJSON)
+{
+    /* remember, before was used the code: */
+    // qqElement_added = $('.qq-upload-list li');
+    // qqElement_added.append("text_string");
+
+    var father = document.getElementById('file-uploader');
+    var li_new = document.createElement("li");
+    li_new.className = 'qq-upload-size';
+
+    li_new.innerHTML = '<label>Short description of ' + fileName + '</label><br>'+
+                       '<input type="text" id="title_'+id+'" name="title" value="add file short title"><br>'+
+                       '<label>Description</label><br>'+
+                       '<textarea id="desc_'+id+'">add the complete explanation of the submitted data</textarea>'+
+                       '<br><span id="link_'+id+'">' + fileName + ': <a href="javascript:void(0)" onClick="javascript:sendInfo(' + 
+                       id + ', ' + responseJSON.fileid + ');">send info</a></span><br><br>';
+
+    console.log(li_new.innerHTML);
+    father.appendChild(li_new);
+}
+
 function createUploader(){
     var uploader = new qq.FileUploader({
         element: document.getElementById('file-uploader'),
         action: '/globaleaks/submission/upload',
 
         onComplete: function(id, fileName, responseJSON){
+            addInfoRequest(id, fileName, responseJSON);
             $("a.qq-upload-delete").click(function(e) {
                 console.log(this);
                 $(this).parent().hide();
@@ -68,36 +108,6 @@ function createUploader(){
             $("#uploading").hide();
         },
         onProgress: function(id, fileName, loaded, total){
-            /*
-            XXX This needs to be cleaned up and implemented.
-
-            successful_upload = $('.qq-upload-list li');
-            adddescription = '<button id="adddescription">add description</button>';
-            console.log("successful_upload");
-            console.log(successful_upload);
-
-            titledescription = '<li id="title">'+
-                '<label>Title</label>'+
-                '<input type="text" name="title">'+
-                '</li>'+
-                '<li id="description">'+
-                '<label>Description</label>'+
-                '<textarea></textarea>'+
-                '</li>';
-
-            if(successful_upload.length == 1) {
-                successful_upload.append(titledescription);
-            }
-            else {
-                successful_upload.append(adddescription);
-                $('#adddescription').click(function(e) {
-                    console.log(e);
-                    return false;
-                });
-            }
-
-            console.log(id);
-            */
 
             $('a.qq-upload-delete').hide();
             $("#submit").hide();
