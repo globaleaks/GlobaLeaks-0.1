@@ -19,6 +19,9 @@ settings.logging = ConfigFile(cfgfile, 'logging')
 settings.auth = auth.settings
 settings.mail = mail.settings
 
+# Set up the logger to be shared with all
+logger = local_import('logger').start_logger(settings.logging)
+
 # GLOBAL setting
 settings.private.author_email = settings.globals.author_email
 settings.private.database_uri = settings.database.uri

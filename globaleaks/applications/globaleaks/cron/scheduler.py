@@ -27,8 +27,8 @@ if db.auth_user:
         logger.info("First launch of GlobaLeaks, creating node administrator!")
         db.commit()
 
-new_material = db(db.leak.spooled==False).select()
-logger.info(new_material)
+new_material = db(db.leak.spooled!=True).select()
+logger.info("New material: %s : ", new_material)
 
 for mat in new_material:
     logger.info("blabla")

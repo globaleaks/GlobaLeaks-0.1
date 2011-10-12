@@ -1,5 +1,7 @@
 import os,random
 import pickle
+import time
+from pprint import pprint
 
 mutils = local_import('material').utils()
 
@@ -41,11 +43,17 @@ def index():
     form[0].insert(-1, disclaimer_text)
     form[0].insert(-1, disclaimer)
 
-    if form.accepts(request.vars, session):
+    form.vars.spooled = False
+    form.vars.submission_timestamp=time.time()
 
+    if form.accepts(request.vars, session):
+        print form.vars.id
         leak_id = gl.create_leak(form.vars.id, "ALL", leaker_number[1]) #l.Title, l.Description, None, None,
                                  #"demo", l.Tags, number=leaker_number[1])
         # adding association submission -> leak_id
+        logger.debug("Submission %s", request.vars)
+        pprint(request.vars)
+
         if not db(db.submission.session==session.wb_id).select():
             db.submission.insert(session=session.wb_id,
                                  leak_id=leak_id,
@@ -87,6 +95,7 @@ def index():
                     os.rename(os.path.join(request.folder, 'uploads/') + \
                               tmp_file, dst_folder + filename)
                 except:
+                    logger.error("There was an error in processing the submission files.")
                     pass
         # XXX alarm alert, please sanitize this data properly XXX
         if not session.files:

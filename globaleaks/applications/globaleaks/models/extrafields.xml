@@ -5,7 +5,7 @@
         <description>This is a text field</description>
         <type>string</type>
     </field>
-    <field>
+    <!-- field>
         <name>textarea</name>
         <label>Text Area</label>
         <description>This is a text area</description>
@@ -33,5 +33,5 @@
             <el>Element2</el>
             <el>Element3</el>
         </list>
-    </field>
+    </field-->
 </fields>

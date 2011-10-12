@@ -53,7 +53,7 @@ function sendInfo(id, jsonId)
     var linkUsed = document.getElementById("link_"+id);
     linkUsed.innerHTML ='info already sent';
 
-    // XXX I don't know which kind of security analysis are performed by web2py, therefore maybe 
+    // XXX I don't know which kind of security analysis are performed by web2py, therefore maybe
     // other encoding ways are better
     details_text = escape(document.getElementById("desc_"+id).innerHTML);
     desc_title = escape(document.getElementById("title_"+id).value);
@@ -61,7 +61,7 @@ function sendInfo(id, jsonId)
     $.ajax({
         type: 'POST',
         url: '/globaleaks/submission/sendinfo',
-        data: {'info_id' : jsonId, 'title' : desc_title, 'details' : details_text }
+        data: {'info_id' : jsonId, 'title_mat' : desc_title, 'details' : details_text }
     });
 }
 
@@ -76,10 +76,10 @@ function addInfoRequest(id, fileName, responseJSON)
     li_new.className = 'qq-upload-size';
 
     li_new.innerHTML = '<label>Short description of ' + fileName + '</label><br>'+
-                       '<input type="text" id="title_'+id+'" name="title" value="add file short title"><br>'+
+                       '<input type="text" id="title_'+id+'" name="title_mat" value="add file short title"><br>'+
                        '<label>Description</label><br>'+
-                       '<textarea id="desc_'+id+'">add the complete explanation of the submitted data</textarea>'+
-                       '<br><span id="link_'+id+'">' + fileName + ': <a href="javascript:void(0)" onClick="javascript:sendInfo(' + 
+                       '<textarea id="desc_'+id+'" name="desc_mat">add the complete explanation of the submitted data</textarea>'+
+                       '<br><span id="link_'+id+'">' + fileName + ': <a href="javascript:void(0)" onClick="javascript:sendInfo(' +
                        id + ', ' + responseJSON.fileid + ');">send info</a></span><br><br>';
 
     console.log(li_new.innerHTML);
