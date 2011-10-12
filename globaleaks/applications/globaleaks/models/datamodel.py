@@ -96,6 +96,12 @@ class Leak(object):
     def add_material(self, leak_id, url, type, file):
         Material.create_new(leak_id, url, type, file)
 
+    def get_extra(self):
+        extra = {}
+        for row in db(db.leak.id==self._id).select():
+            for i in settings.extrafields.fields:
+                extra[i['name']] = row[i['name']]
+        return extra
 
 class Tulip(object):
     def __init__(self, id=None, url=None):

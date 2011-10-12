@@ -52,6 +52,10 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         <p class="description">{{=leak_desc}}</p>
     {{pass}}
 
+    {{if leak_extra:}}
+        {{=BEAUTIFY(leak_extra)}}
+    {{pass}}
+
     {{if leak_tags:}}
         <p class="left_title">Tags:</p>
         <p class="description">{{=leak_tags}}</p>

@@ -17,9 +17,9 @@ class Zip:
             logger.info("path %s\n",
                         os.path.join(mat_dir, fldr + ".zip"))
             zipf = zipfile.ZipFile(mat_dir+".zip", 'w')
-
-            for f in os.listdir(mat_dir):
-                zipf.write(mat_dir+"/"+f, f)
+            if mat_dir:
+                for f in os.listdir(mat_dir):
+                    zipf.write(mat_dir+"/"+f, f)
 
             zipf.close()
             db.leak[mat.id].update_record(spooled=True)

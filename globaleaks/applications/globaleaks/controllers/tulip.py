@@ -140,6 +140,7 @@ def status():
             leak_title=leak.title,
             leak_tags=leak.tags,
             leak_desc=leak.desc,
+            leak_extra=leak.get_extra(),
             leak_material=leak.material,
             tulip_accesses=counter_accesses,
             tulip_allowed_accesses=limit_counter,
