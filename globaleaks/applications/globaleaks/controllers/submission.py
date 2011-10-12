@@ -2,16 +2,71 @@ import os,random
 import pickle
 import time
 from pprint import pprint
+from gluon.tools import Service
+import gluon.contrib.simplejson as json
 
 mutils = local_import('material').utils()
 
+@service.json
+def info():
+    output = [{'label' : 'Description',
+            'type': 'text', 'name' : 'desc',
+            'desc': 'Describe your issue'},
+            {'label' : 'Title',
+            'type': 'string', 'name': 'title',
+            'desc': 'Give a title to your submission'}]
+    output.append(settings.extrafields.fields)
+    return output
+
+@service.json
+def post():
+    leaker_number = randomizer.generate_tulip_receipt()
+
+    data = json.loads(request.vars.fields)
+    data['spooled'] = False
+    data['submission_timestamp'] = time.time()
+
+    leak_id = db.leak.insert(**data)
+
+    gl.create_leak(leak_id, "ALL", leaker_number[1])
+
+    if not db(db.submission.session==session.wb_id).select():
+        db.submission.insert(session=session.wb_id,
+                             leak_id=leak_id,
+                             dirname=session.dirname)
+    if not session.files:
+        session.files = []
+    pfile = pickle.dumps(session.files)
+
+    leak = Leak(leak_id)
+    leak.add_material(leak_id, None, None, file=pfile)
+
+    for tulip in leak.tulips:
+        target = gl.get_target(tulip.target)
+
+        if tulip.target == "0":
+            leaker_tulip = tulip.url
+            continue
+
+        if target.status == "subscribed":
+            db.mail.insert(target=target.name,
+                    address=target.url, tulip=tulip.url)
+    pretty_number = leaker_number[0][:3] + " " + leaker_number[0][3:6] + \
+                    " " + leaker_number[0][6:]
+    session.dirname = None
+    session.wb_id = None
+    session.files = None
+
+    return json.dumps(dict(leak_id=leak_id, leaker_tulip=pretty_number,
+                form=None, tulip_url=tulip.url))
+
+
+
+def call():
+    return service()
+
 
 def index():
-    leaker_number = None
-
-    # form = SQLFORM.factory(*form_content)
-    # temporary comment: syntax error !?
-    # form = SQLFORM.factory(*form_content,labels = {'disclaimer':'Accept and have read the disclaimer', 'metadata':'Metadata sanitization'})
 
     leaker_number = randomizer.generate_tulip_receipt()
 
@@ -97,6 +152,7 @@ def index():
                 except:
                     logger.error("There was an error in processing the submission files.")
                     pass
+
         # XXX alarm alert, please sanitize this data properly XXX
         if not session.files:
             session.files = []
@@ -123,11 +179,13 @@ def index():
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
                     form=None, tulip_url=tulip.url)
+
     elif form.errors:
         response.flash = 'form has errors'
 
     return dict(form=form, leak_id=None, tulip=None, tulips=None)
 
+@service.json
 def upload():
     # File upload in a slightly smarter way
     # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
@@ -194,4 +252,7 @@ def sendinfo():
     # odd ? /tmp/globaleaks.log return a very strange output
 
     return response.json({'success':'true'})
+
+def call():
+    return service()
 

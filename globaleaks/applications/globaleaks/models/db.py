@@ -20,11 +20,6 @@ else:                                         # else use a normal relational dat
     db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
 """
 randomizer = local_import('randomizer')
-####
-# For the time being just use sqlite
-###
-
-# db = DAL('sqlite://storage.sqlite')
 
 # by default give a view/generic.extension to all actions from localhost
 # none otherwise. a pattern can be 'controller/function.extension'
