@@ -10,8 +10,12 @@ class Zip:
         Function to create an unencrypted zipfile
         """
         if db(db.material.leak_id==submission.id).select().first():
-            filedir = str(db(db.submission.leak_id==submission.id).select(
-                      db.submission.dirname).first().dirname)
+            try:
+                filedir = str(db(db.submission.leak_id==submission.id).select(
+                          db.submission.dirname).first().dirname)
+            except:
+                logger.error("create_zip: invalid filedir")
+                return dict(error='invalid filedir')
             
             mat_dir = os.path.join(request.folder, 'material/') + filedir
             logger.info("mat_dir %s\n", mat_dir)

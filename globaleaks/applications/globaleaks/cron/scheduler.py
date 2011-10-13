@@ -32,11 +32,11 @@ logger.info("New material: %s : ", unspooled)
 
 for submission in unspooled:
     logger.info("blabla")
-    
+
     compressor.create_zip(db, submission, request, logger)
     db.leak[submission.id].update_record(spooled=True)
     logger.info(submission)
-    
+
     db.commit()
 
 mails = db(db.mail).select()
@@ -56,7 +56,7 @@ for m in mails:
 
     # XXX Use for AWS
     # conn.send_email(source='node@globaleaks.org', \
-    #     subject='GlobaLeaks notification for:' + m.target,\ 
+    #     subject='GlobaLeaks notification for:' + m.target,\
     #     body=message, to_addresses=m.address, cc_addresses=None, \
     #     bcc_addresses=None, format='text', reply_addresses=None, \
     #     return_path=None)
