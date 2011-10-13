@@ -110,6 +110,18 @@ def index():
     # Add the extra settings that are not included in the DB
     form[0].insert(-1, material_njs)
     form[0].insert(-1, material_js)
+    
+    # Check to see if some files have been loaded from a previous session
+    if session.files:
+        filesul = UL(_id="stored_files")
+        # XXX Is this being sanitized?
+        for file in session.files:
+            filesul.append(LI(SPAN(str(file.filename)),A("delete", \
+                                                _href="", _class="stored_file_delete", \
+                                                _id=file.fileid)))
+            
+        form[0].insert(-1, TR('Stored files', filesul))
+        
     form[0].insert(-1, captcha)
     form[0].insert(-1, disclaimer_text)
     form[0].insert(-1, disclaimer)
@@ -276,10 +288,18 @@ def upload():
 
         if f == "delete":
             for file in session.files:
+                files = []
                 if str(file.fileid) == str(request.vars.delete):
                     dst_folder = os.path.join(request.folder, 'material/' + session.dirname + '/')
-                    os.remove(dst_folder + file.filename)
-                    return response.json({'success':'true'})
+                    try:
+                        os.remove(dst_folder + file.filename)
+                    except:
+                        logger.error("File requested for deletion is already deleted.")
+                else:
+                    files.append(file)
+                session.files = files
+                return response.json({'success':'true'})
+
 
 def sendinfo():
     logger = local_import('logger').start_logger(settings.logging)

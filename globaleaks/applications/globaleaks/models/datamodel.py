@@ -1,10 +1,6 @@
 import time
 import pickle
 
-# web2py's funny way to import "local" modules
-#db = local_import('sql').db
-#randomizer = local_import('randomizer')
-
 #XXX render all of the property setters pythonic
 # (i.e. @property and @<name>.setter)
 

@@ -138,6 +138,17 @@ window.onload = createUploader;
 $(document).ready(function() {
     $('#file-uploader-js').show();
     $('#file-uploader-nonjs').hide();
+    
+    $("a.stored_file_delete").click(function(e) {
+        $(this).parent().hide();
+        $.ajax({
+            type: 'POST',
+            url: '/globaleaks/submission/upload',
+            data: {'delete' : $(this).attr("id")}
+        });
+        return false;
+    });
+
 
 });
 </script>
