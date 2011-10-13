@@ -1,7 +1,9 @@
 ### required - do no delete
-def user(): return dict(form=auth())
+def user(): 
+    return dict(form=auth())
 
-def download(): return response.download(request,db)
+def download(): 
+    return response.download(request,db)
 
 def call():
     session.forget()
