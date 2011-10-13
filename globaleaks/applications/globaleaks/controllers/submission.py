@@ -6,66 +6,71 @@ import gluon.contrib.simplejson as json
 
 mutils = local_import('material').utils()
 
-@service.json
-def info():
-    output = [{'label' : 'Description',
-            'type': 'text', 'name' : 'desc',
-            'desc': 'Describe your issue'},
-            {'label' : 'Title',
-            'type': 'string', 'name': 'title',
-            'desc': 'Give a title to your submission'}]
-    output.append(settings.extrafields.fields)
-    return output
+@request.restful()
+def api():
+    response.view = 'generic.json' 
+    def GET(*r):
+        output = [{'label' : 'Description',
+                'type': 'text', 'name' : 'desc',
+                'desc': 'Describe your issue'},
+                {'label' : 'Title',
+                'type': 'string',  'name': 'title',
+                'desc': 'Give a title to your submission'}]
+        output.append(settings.extrafields.fields)
+        return dict(result=output)
+    
+    def POST(**data):
+        wb_number = randomizer.generate_tulip_receipt()
+    
+        data['spooled'] = False
+        data['submission_timestamp'] = str(time.time())
+    
+        print "inside the post %s " % data
+        
+        result = db.leak.validate_and_insert(**data)
+        
+        if result.error:
+            return result.error
+        else:
+            leak_id = result.id
+        
+        gl.create_leak(leak_id, "ALL", wb_number[1])
+    
+        # If a session has not been created yet, create one.
+        if not session.wb_id:
+            session.wb_id = randomizer.generate_wb_id()
+    
+        if not db(db.submission.session==session.wb_id).select():
+            db.submission.insert(session=session.wb_id,
+                                 leak_id=leak_id,
+                                 dirname=session.dirname)
+        if not session.files:
+            session.files = []
+        pfile = pickle.dumps(session.files)
+    
+        leak = Leak(leak_id)
+        leak.add_material(leak_id, None, None, file=pfile)
+    
+        for tulip in leak.tulips:
+            target = gl.get_target(tulip.target)
+    
+            if tulip.target == "0":
+                leaker_tulip = tulip.url
+                continue
+    
+            if target.status == "subscribed":
+                db.mail.insert(target=target.name,
+                        address=target.url, tulip=tulip.url)
+        pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
+                        " " + wb_number[0][6:]
+        session.dirname = None
+        session.wb_id = None
+        session.files = None
+    
+        return dict(leak_id=leak_id, leaker_tulip=pretty_number,
+                    form=None, tulip_url=tulip.url)
 
-@service.json
-def post():
-    wb_number = randomizer.generate_tulip_receipt()
-
-    data = json.loads(request.vars.fields)
-    data['spooled'] = False
-    data['submission_timestamp'] = time.time()
-
-    leak_id = db.leak.insert(**data)
-
-    gl.create_leak(leak_id, "ALL", wb_number[1])
-
-    # If a session has not been created yet, create one.
-    if not session.wb_id:
-        session.wb_id = randomizer.generate_wb_id()
-
-    if not db(db.submission.session==session.wb_id).select():
-        db.submission.insert(session=session.wb_id,
-                             leak_id=leak_id,
-                             dirname=session.dirname)
-    if not session.files:
-        session.files = []
-    pfile = pickle.dumps(session.files)
-
-    leak = Leak(leak_id)
-    leak.add_material(leak_id, None, None, file=pfile)
-
-    for tulip in leak.tulips:
-        target = gl.get_target(tulip.target)
-
-        if tulip.target == "0":
-            leaker_tulip = tulip.url
-            continue
-
-        if target.status == "subscribed":
-            db.mail.insert(target=target.name,
-                    address=target.url, tulip=tulip.url)
-    pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
-                    " " + wb_number[0][6:]
-    session.dirname = None
-    session.wb_id = None
-    session.files = None
-
-    return json.dumps(dict(leak_id=leak_id, leaker_tulip=pretty_number,
-                form=None, tulip_url=tulip.url))
-
-def call():
-    return service()
-
+    return locals()
 
 def index():
     """
@@ -290,7 +295,8 @@ def upload():
             for file in session.files:
                 files = []
                 if str(file.fileid) == str(request.vars.delete):
-                    dst_folder = os.path.join(request.folder, 'material/' + session.dirname + '/')
+                    dst_folder = os.path.join(request.folder, 'material/' \
+                                               + session.dirname + '/')
                     try:
                         os.remove(dst_folder + file.filename)
                     except:
