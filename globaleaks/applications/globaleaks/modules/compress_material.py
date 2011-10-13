@@ -16,15 +16,23 @@ class Zip:
             except:
                 logger.error("create_zip: invalid filedir")
                 return dict(error='invalid filedir')
-            
-            mat_dir = os.path.join(request.folder, 'material/') + filedir
-            logger.info("mat_dir %s\n", mat_dir)
-            logger.info("path %s\n",
-                        os.path.join(mat_dir, filedir + ".zip"))
-            zipf = zipfile.ZipFile(mat_dir+".zip", 'w')
-            if mat_dir:
-                for f in os.listdir(mat_dir):
-                    zipf.write(mat_dir+"/"+f, f)
+
+            try:
+                mat_dir = os.path.join(request.folder, 'material/') + filedir
+                logger.info("mat_dir %s\n", mat_dir)
+                logger.info("path %s\n",
+                            os.path.join(mat_dir, filedir + ".zip"))
+                zipf = zipfile.ZipFile(mat_dir+".zip", 'w')
+                if mat_dir:
+                    for f in os.listdir(mat_dir):
+                        zipf.write(mat_dir+"/"+f, f)
+            except:
+                logger.error("create_zip: error in creating zip")
+                try:
+                    zipf.close()
+                except:
+                    pass
+                return dict(error='error creating zip')
 
             zipf.close()
 
