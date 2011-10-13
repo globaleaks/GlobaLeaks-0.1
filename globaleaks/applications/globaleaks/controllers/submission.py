@@ -5,6 +5,7 @@ from gluon.tools import Service
 import gluon.contrib.simplejson as json
 
 mutils = local_import('material').utils()
+Anonymity    = local_import('anonymity')
 
 @request.restful()
 def api():
@@ -80,6 +81,9 @@ def index():
     # his submission
     wb_number = randomizer.generate_tulip_receipt()
 
+    # Perform a check to see if the client is using Tor
+    anonymity = Anonymity.Tor(request.client, request.env)
+    
     # If a session has not been created yet, create one.
     if not session.wb_id:
         session.wb_id = randomizer.generate_wb_id()
@@ -226,7 +230,8 @@ def index():
     elif form.errors:
         response.flash = 'form has errors'
 
-    return dict(form=form, leak_id=None, tulip=None, tulips=None)
+    return dict(form=form, leak_id=None,\
+                 tulip=None, tulips=None, anonymity=anonymity.result)
 
 @service.json
 def upload():

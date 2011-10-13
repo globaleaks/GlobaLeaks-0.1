@@ -14,5 +14,3 @@ settings = Storage()
 
 settings.globals = ConfigFile(cfgfile, 'global')
 settings.database = ConfigFile(cfgfile, 'database')
-
-
