@@ -29,6 +29,10 @@ def post():
 
     gl.create_leak(leak_id, "ALL", wb_number[1])
 
+    # If a session has not been created yet, create one.
+    if not session.wb_id:
+        session.wb_id = randomizer.generate_wb_id()
+
     if not db(db.submission.session==session.wb_id).select():
         db.submission.insert(session=session.wb_id,
                              leak_id=leak_id,

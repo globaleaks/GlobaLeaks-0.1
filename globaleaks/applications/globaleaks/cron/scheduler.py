@@ -27,14 +27,16 @@ if db.auth_user:
         logger.info("First launch of GlobaLeaks, creating node administrator!")
         db.commit()
 
-new_material = db(db.leak.spooled!=True).select()
-logger.info("New material: %s : ", new_material)
+unspooled = db(db.leak.spooled!=True).select()
+logger.info("New material: %s : ", unspooled)
 
-for mat in new_material:
+for submission in unspooled:
     logger.info("blabla")
-    compressor.create_zip(db, mat, request, logger)
-    db.leak[mat.id].update_record(spooled=True)
-    logger.info(mat)
+    
+    compressor.create_zip(db, submission, request, logger)
+    db.leak[submission.id].update_record(spooled=True)
+    logger.info(submission)
+    
     db.commit()
 
 mails = db(db.mail).select()
@@ -53,7 +55,11 @@ for m in mails:
     message_html = MessageContent.html(context)
 
     # XXX Use for AWS
-    # conn.send_email(source='node@globaleaks.org', subject='GlobaLeaks notification for:' + m.target, body=message, to_addresses=m.address, cc_addresses=None, bcc_addresses=None, format='text', reply_addresses=None, return_path=None)
+    # conn.send_email(source='node@globaleaks.org', \
+    #     subject='GlobaLeaks notification for:' + m.target,\ 
+    #     body=message, to_addresses=m.address, cc_addresses=None, \
+    #     bcc_addresses=None, format='text', reply_addresses=None, \
+    #     return_path=None)
 
     to = m.target + "<" + m.address + ">"
     subject = "[GlobaLeaks] A TULIP from node %s for %s - %s" % (
@@ -65,7 +71,9 @@ for m in mails:
             message_html=message_html):
             db(db.mail.id==m.id).delete()
 
-    # mail.send(to=m.address,subject="GlobaLeaks notification for: " + m.target,message=message)
+    # XXX Uncomment in real world environment
+    # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
+    #    m.target,message=message)
     db(db.mail.id==m.id).delete()
 
 db.commit()
