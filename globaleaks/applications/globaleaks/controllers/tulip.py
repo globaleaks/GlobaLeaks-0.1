@@ -1,6 +1,8 @@
 def index():
     import hashlib
 
+    form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
+   
     if form.accepts(request.vars, session):
         l = request.vars
 
@@ -9,20 +11,7 @@ def index():
         tulip_url = hashlib.sha256(leak_number).hexdigest()
         redirect("/tulip/" + tulip_url)
 
-    form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
-
-    if not form:
-        if form.accepts(request.vars, session):
-            l = request.vars
-
-            # Make the tulip work well
-            leak_number = l.Receipt.replace(' ','')
-            tulip_url = hashlib.sha256(leak_number).hexdigest()
-            redirect("/tulip/" + tulip_url)
-    else:
-        redirect("/")
-
-    return dict(form=None,tulip_url=None)
+    redirect("/")
 
 def access_increment(tulip):
     if tulip.accesses_counter:
