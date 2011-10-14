@@ -2,7 +2,7 @@ def index():
     import hashlib
 
     form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
-   
+
     if form.accepts(request.vars, session):
         l = request.vars
 
@@ -183,3 +183,29 @@ def download():
     return response.stream(open(os.path.join(request.folder, 'material/',
                            db(db.submission.leak_id==leak.id).select().first(
                            ).dirname + '.zip'),'rb'))
+
+def forward():
+    """
+    Controller for the page that lets the target to forward the tulip to
+    another group.
+    """
+    tulip_url = request.args[0]
+
+    try:
+        tulip = Tulip(url=tulip_url)
+    except:
+        return dict(err=True, groups=None)
+
+    # Trying to get group id from POST
+    try:
+        group_id = request.post_vars["group"]
+    except KeyError:
+        # if there's no post data get all targets for the view
+        # the view will create a form to submit the group to
+        # send material to
+        groups = gl.get_targetgroups()
+        return dict(err=False, groups=groups)
+    else:
+        # XXX write the code to forward leak to group_id
+        pass
+
