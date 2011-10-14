@@ -3,10 +3,12 @@ import pickle
 import time
 from gluon.tools import Service
 import gluon.contrib.simplejson as json
+import shutil, base64
 
 mutils = local_import('material').utils()
 Anonymity    = local_import('anonymity')
 jQueryHelper = local_import('jquery_helper')
+FileHelper = local_import('file_helper')
 
 @request.restful()
 def api():
@@ -169,7 +171,6 @@ def index():
 
     # Insert all the data into the db
     if form.accepts(request.vars, session):
-        print "FORM WORKED!!!!!!!!!!!!!!"
         # XXX Refactor this into something that makes sense
         #
         # Create the leak with the GlobaLeaks factory
@@ -197,6 +198,7 @@ def index():
                 try:
                     f = Storage()
                     f.filename = request.vars.material.filename
+                    
                     tmp_file = db.material.file.store(request.body, filename)
 
                     f.ext = mutils.file_type(filename.split(".")[-1])
@@ -251,7 +253,6 @@ def index():
         session.dirname = None
         session.wb_id = None
         session.files = None
-        print leak_id
         
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
                     form=None, tulip_url=tulip.url, jQuery_templates=None)
@@ -274,33 +275,68 @@ def upload():
     # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
     if not session.files:
         session.files = []
-        
+    
+    if not session.fileresume:
+        session.fileresume = {}
+    
+    # Little hack to make the loop run once more
+    request.vars.extra = "don't make me a target"
     for f in request.vars:
-        # Process the qqfile POST vars
-        if f == "files[]":
-            file = request.vars["files[]"]
-            filename = file.filename
-            
-            # Store the file to a temporary location and get the path
-            tmp_file = db.material.file.store(file.file, filename)
+        if f == "files[]" or request.env.http_x_file_name:
+            logger.info("POSTed a file")
+            print request.env.http_x_file_name
+            if request.env.http_x_file_name != "":
+                file = request.body
+                filename = request.env.http_x_file_name
+            else:
+                file = request.vars["files[]"]
+                filename = file.filename
+
+            filedata = Storage()
+            # Generate a random file ID
+            # XXX is this a good way of doing it?
+            filedata.fileid = random.randint(0,1000000000000000)
             
             # Store filename and extention            
-            filedata = Storage()
             filedata.filename = filename
             filedata.ext = mutils.file_type(filename.split(".")[-1])
-
-            tmp_fpath = os.path.join(request.folder, 'uploads/') + \
-                                tmp_file
+            # Store the file to a temporary location and get the path
+            # tmp_file = db.material.file.store(file.file, filename)
             
+            if(filename in session.fileresume.values()):
+                for x in session.fileresume.items():
+                    if x[1] == filename:
+                        filedata.fileid = x[0]
+                        pass
+            else:
+                session.fileresume[filedata.fileid] = filename
+            
+            # Use a temporary path the
+            tmp_fpath = os.path.join(request.folder, 'uploads/') + \
+                            str(filedata.fileid) + base64.b16encode(filename).lower()
+            
+            # Check if the file already exists
+            try:
+                open(tmp_fpath)
+                # If it does append
+                dest_file = open(tmp_fpath, "ab")
+            except:
+                # Otherwise create a new one
+                dest_file = open(tmp_fpath, "w+b")
+            
+            try:
+                shutil.copyfileobj(file.file, dest_file)
+            finally:
+                dest_file.close()
+            
+            #tmp_fpath = os.path.join(request.folder, 'uploads/') + \
+            #                    tmp_file
+                        
             # Store the number of bytes of the uploaded file
             filedata.bytes = os.path.getsize(tmp_fpath)
             
             # Store the file size in human readable format
             filedata.size = mutils.human_size(filedata.bytes)
-
-            # Generate a random file ID
-            # XXX is this a good way of doing it?
-            filedata.fileid = random.randint(0,1000000000000000)
 
             # Store all the data reated to the file to a sessions variable
             session.files.append(filedata)
@@ -317,26 +353,60 @@ def upload():
                     filedir = session.dirname
             else:
                 filedir = str(filedir.dirname)
+            
             dst_folder = os.path.join(request.folder, 'material/' + filedir + '/')
             
             if not os.path.isdir(dst_folder):
                 os.makedirs(dst_folder)
-            os.rename(os.path.join(request.folder, 'uploads/') +
-                      tmp_file, dst_folder + filename)
+            #os.rename(os.path.join(request.folder, 'uploads/') +
+            #          tmp_file, dst_folder + filename)
+            
+            dst_file = open(dst_folder + filename, "w+b")
+            try:
+                shutil.copyfileobj(file.file, dst_file)
+            finally:
+                dst_file.close()
 
             # this TODO XXX db.material.async_id need to be updated with filedata.fileid
             # and used as research key in sendinfo, to add details and title
             # XXX XXX XXX XXX
-
+            
+            
             return response.json(
-                                 [{"name": filedata.filename,"size":int(filedata.bytes),
+                                 [{"name": session.fileresume.pop(filedata.fileid),"size":int(filedata.bytes),
                                    "url":"",
                                    "thumbnail_url":"",
                                    "delete_url":"/globaleaks/submission/upload?delete=" + str(filedata.fileid),
                                    "delete_type":"GET"}]
                                  )
+        if f == "filebytes":
+            logger.info("Requested filebytes")
+            if(request.vars.filebytes in session.fileresume.values()):
+                for x in session.fileresume.items():
+                    if x[1] == request.vars.filebytes:
+                        filedata.fileid = x[0]
+                        return response.json([{"name": request.vars.filebytes,
+                                               "size":int(os.path.getsize(
+                                                                          os.path.join(request.folder, 'uploads/') + \
+                                                                          str(filedata.fileid) + \
+                                                                          base64.b16encode(request.vars.filebytes).lower()
+                                                                          )
+                                                          ),
+                                               "url":"",
+                                               "thumbnail_url":"",
+                                               "delete_url":"/globaleaks/submission/upload?delete=" + str(filedata.fileid),
+                                               "delete_type":"GET"}])
+            else:
+                return response.json([{"name": request.vars.filebytes,
+                                        "size": 0,
+                                        "url":"",
+                                        "thumbnail_url":"",
+                                        "delete_url":"/globaleaks/submission/upload",
+                                        "delete_type":"GET"}])
+
 
         if f == "delete":
+            logger.info("Requested delete")
             for file in session.files:
                 files = []
                 if str(file.fileid) == str(request.vars.delete):
