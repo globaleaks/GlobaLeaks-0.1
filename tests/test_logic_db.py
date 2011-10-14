@@ -1,24 +1,20 @@
-import tests
-
-from globaleaks.applications.globaleaks.modules.logic import db
+import unittest
 
 import os
 import tempfile
 
-# Change current working dir into a new, temporary directory
-dir_name = tempfile.mkdtemp()
-os.chdir(dir_name)
-
-class TestDB(tests.TestCase):
+class TestDB(unittest.TestCase):
     """
     Varius test intended to check a new, mock database integrity.
     """
 
     def setUp(self):
-        self.db = db.DB()
+        # Change current working dir into a new, temporary directory
+        dir_name = tempfile.mkdtemp()
+        os.chdir(dir_name)
+        self.db = db #.DB()
 
     def test_create(self):
-        self.assertTrue(os.path.exists('storage.db'))
         self.assertNotEqual(self.db.tables, [])
 
         self.assertIn('desc', self.db.leak)
@@ -30,5 +26,5 @@ class TestDB(tests.TestCase):
         os.removedirs(dir_name)
 
 if __name__ == '__main__':
-    tests.main()
-
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestDB)
+    unittest.TextTestRunner(verbosity=2).run(suite)

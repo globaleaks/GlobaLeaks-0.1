@@ -1,6 +1,6 @@
-import tests
+import unittest
 
-class TestFoo(tests.TestCase):
+class TestFoo(unittest.TestCase):
     def setUp(self):
         self.s = "foobarbaz"
 
@@ -8,4 +8,5 @@ class TestFoo(tests.TestCase):
         self.assertTrue(self.s.startswith('foo'))
 
 if __name__ == '__main__':
-    tests.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestFoo)
+    unittest.TextTestRunner(verbosity=2).run(suite)
