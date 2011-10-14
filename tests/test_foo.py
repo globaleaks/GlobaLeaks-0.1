@@ -1,6 +1,6 @@
-from globaleaks import test
+import tests
 
-class TestFoo(test.TestCase):
+class TestFoo(tests.TestCase):
     def setUp(self):
         self.s = "foobarbaz"
 
@@ -8,4 +8,4 @@ class TestFoo(test.TestCase):
         self.assertTrue(self.s.startswith('foo'))
 
 if __name__ == '__main__':
-    test.main()
+    tests.main()
