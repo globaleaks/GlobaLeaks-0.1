@@ -1,11 +1,14 @@
 {{extend 'layout.html'}}
-<script type="text/javascript" src="/globaleaks/static/js/fileupload/fileuploader.js"></script>
+<!-- script type="text/javascript" src="/globaleaks/static/js/fileupload/fileuploader.js"></script-->
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" id="theme">
 
+<link rel="stylesheet" href="/globaleaks/static/css/jquery.fileupload-ui.css">
 <style>
+/* 
 .qq-uploader { position:relative; width: 100%;}
 
 .qq-upload-button {
-    display:block; /* or inline-block */
+    display:block;
     width: 105px; padding: 7px 0; text-align:center;
     background:#880000; border-bottom:1px solid #ddd;color:#fff;
 }
@@ -33,8 +36,9 @@
 
 .qq-upload-failed-text {display:none;}
 .qq-upload-fail .qq-upload-failed-text {display:inline;}
+*/
 
-#file-uploader-js {
+#fileupload {
     display: none;
 }
 
@@ -46,7 +50,8 @@ div.flash {background-color: #888;}
     {{=BEAUTIFY(anonymity)}}
     <p class="intro">You are the Whistleblower and this is the Submission interface from which you can send material to be received as a TULIP by the Targets. Once you have successfully submitted the form you will be given a Reciept allowing you to check back on the status of the TULIP, view statistics (access/downloads counters), send and receive comments and upload new material. The Target group responsible for analyzing and recieving the material may be selected by the Whistleblower (NOT IMPLEMENTED for details see the <a href="https://blueprints.launchpad.net/globaleaks/+spec/submission-targets-configurable">blueprint</a>)</p>
 
-        {{=form}}
+        	{{=form}}
+
 <script type="text/javascript">
 
 function sendInfo(id, jsonId)
@@ -135,9 +140,9 @@ function DeleteFile(fileid) {
     return false;
 }
 
-window.onload = createUploader;
+//window.onload = createUploader;
 $(document).ready(function() {
-    $('#file-uploader-js').show();
+    $('#fileupload').show();
     $('#file-uploader-nonjs').hide();
     
     $("a.stored_file_delete").click(function(e) {
@@ -154,6 +159,55 @@ $(document).ready(function() {
 });
 </script>
 
+<script id="template-upload" type="text/x-jquery-tmpl">
+	{{=jQuery_templates[0]}}
+</script>
+<script id="template-download" type="text/x-jquery-tmpl">
+	{{=jQuery_templates[1]}}
+</script>
+
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script> -->
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.iframe-transport.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.fileupload.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
+
+<script>
+	$(function () {
+    'use strict';
+    $('#fileupload').show();
+    $('#file-uploader-nonjs').hide();
+
+    // Initialize the jQuery File Upload widget:
+    $('#fileupload').fileupload({
+    	url: "/globaleaks/submission/upload"
+    });
+
+    // Load existing files:
+    $.getJSON($('#fileupload form').prop('action'), function (files) {
+        var fu = $('#fileupload').data('fileupload');
+        fu._adjustMaxNumberOfFiles(-files.length);
+        fu._renderDownload(files)
+            .appendTo($('#fileupload .files'))
+            .fadeIn(function () {
+                // Fix for IE7 and lower:
+                $(this).show();
+            });
+    });
+
+    // Open download dialogs via iframes,
+    // to prevent aborting current uploads:
+    $('#fileupload .files a:not([target^=_blank])').live('click', function (e) {
+        e.preventDefault();
+        $('<iframe style="display:none;"></iframe>')
+            .prop('src', this.href)
+            .appendTo('body');
+    });
+
+});
+</script>
 
 {{pass}}
 
@@ -220,3 +274,6 @@ $(document).ready(function() {
 </script>
 
 {{pass}}
+
+</body> 
+

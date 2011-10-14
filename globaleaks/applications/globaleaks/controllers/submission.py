@@ -88,6 +88,91 @@ def index():
     if not session.wb_id:
         session.wb_id = randomizer.generate_wb_id()
 
+    # Tor Browser Bundle has JS enabled by default!
+    # Hurray! I love you all!!
+    # Yeah, even *you* the anti-JS taliban hater!
+    # As someone put it, if you think JS is evil remember
+    # that the world is in technicolor and not in black and white.
+    # Look up, the sun is shining, thanks to jQuery.
+    jQueryFileUpload =   TR(T('Material'), DIV( DIV(
+                               LABEL(
+                                     SPAN(T("Add Files")),
+                                     INPUT(_type="file", _name="files[]"),
+                                     _class="fileinput-button"), \
+                               BUTTON(T("Start upload"), _type="submit", _class="start"), \
+                               BUTTON(T("Cancel upload"), _type="reset", _class="cancel"), \
+                               BUTTON(T("Delete Files"), _type="button", _class="delete"),
+                               _class="fileupload-buttonbar"),
+                            DIV(
+                                TABLE(_class="files"),
+                                DIV(_class="fileupload-progressbar"),
+                                _class="fileupload-content"),
+                            _id="fileupload")
+                            )
+    
+    # XXX move these to a separate file
+    #     This is necessary because otherwise web2py will go crqzy when it sees {{ }}
+    upload_template = """<tr class="template-upload{{if error}} ui-state-error{{/if}}">
+        <td class="preview"></td>
+        <td class="name">${name}</td>
+        <td class="size">${sizef}</td>
+        {{if error}}
+            <td class="error" colspan="2">Error:
+                {{if error === 'maxFileSize'}}File is too big
+                {{else error === 'minFileSize'}}File is too small
+                {{else error === 'acceptFileTypes'}}Filetype not allowed
+                {{else error === 'maxNumberOfFiles'}}Max number of files exceeded
+                {{else}}${error}
+                {{/if}}
+            </td>
+        {{else}}
+            <td class="progress"><div></div></td>
+            <td class="start"><button>Start</button></td>
+        {{/if}}
+        <td class="cancel"><button>Cancel</button></td>
+    </tr>"""
+    
+    download_template = """
+        <tr class="template-download{{if error}} ui-state-error{{/if}}">
+        {{if error}}
+            <td></td>
+            <td class="name">${name}</td>
+            <td class="size">${sizef}</td>
+            <td class="error" colspan="2">Error:
+                {{if error === 1}}File exceeds upload_max_filesize (php.ini directive)
+                {{else error === 2}}File exceeds MAX_FILE_SIZE (HTML form directive)
+                {{else error === 3}}File was only partially uploaded
+                {{else error === 4}}No File was uploaded
+                {{else error === 5}}Missing a temporary folder
+                {{else error === 6}}Failed to write file to disk
+                {{else error === 7}}File upload stopped by extension
+                {{else error === 'maxFileSize'}}File is too big
+                {{else error === 'minFileSize'}}File is too small
+                {{else error === 'acceptFileTypes'}}Filetype not allowed
+                {{else error === 'maxNumberOfFiles'}}Max number of files exceeded
+                {{else error === 'uploadedBytes'}}Uploaded bytes exceed file size
+                {{else error === 'emptyResult'}}Empty file upload result
+                {{else}}${error}
+                {{/if}}
+            </td>
+        {{else}}
+            <td class="preview">
+                {{if thumbnail_url}}
+                    <a href="${url}" target="_blank"><img src="${thumbnail_url}"></a>
+                {{/if}}
+            </td>
+            <td class="name">
+                <a href="${url}"{{if thumbnail_url}} target="_blank"{{/if}}>${name}</a>
+            </td>
+            <td class="size">${sizef}</td>
+            <td colspan="2"></td>
+        {{/if}}
+        <td class="delete">
+            <button data-type="${delete_type}" data-url="${delete_url}">Delete</button>
+        </td>
+    </tr>
+    """
+    
     # Generate the material upload elements
     # JavaScript version
     material_js = TR('Material',DIV(_id='file-uploader'), _id='file-uploader-js')
@@ -118,7 +203,7 @@ def index():
 
     # Add the extra settings that are not included in the DB
     form[0].insert(-1, material_njs)
-    form[0].insert(-1, material_js)
+    form[0].insert(-1, jQueryFileUpload)
     
     # Check to see if some files have been loaded from a previous session
     if session.files:
@@ -141,7 +226,7 @@ def index():
 
     # Insert all the data into the db
     if form.accepts(request.vars, session):
-
+        print "FORM WORKED!!!!!!!!!!!!!!"
         # XXX Refactor this into something that makes sense
         #
         # Create the leak with the GlobaLeaks factory
@@ -223,15 +308,17 @@ def index():
         session.dirname = None
         session.wb_id = None
         session.files = None
-
+        print leak_id
+        
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
-                    form=None, tulip_url=tulip.url)
+                    form=None, tulip_url=tulip.url, jQuery_templates=None)
 
     elif form.errors:
         response.flash = 'form has errors'
 
     return dict(form=form, leak_id=None,\
-                 tulip=None, tulips=None, anonymity=anonymity.result)
+                 tulip=None, tulips=None, anonymity=anonymity.result,
+                 jQuery_templates=(XML(upload_template), XML(download_template)))
 
 @service.json
 def upload():
@@ -247,11 +334,12 @@ def upload():
         
     for f in request.vars:
         # Process the qqfile POST vars
-        if f == "qqfile":
-            filename = request.vars.qqfile
+        if f == "files[]":
+            file = request.vars["files[]"]
+            filename = file.filename
             
             # Store the file to a temporary location and get the path
-            tmp_file = db.material.file.store(request.body, filename)
+            tmp_file = db.material.file.store(file.file, filename)
             
             # Store filename and extention            
             filedata = Storage()
@@ -261,8 +349,11 @@ def upload():
             tmp_fpath = os.path.join(request.folder, 'uploads/') + \
                                 tmp_file
             
+            # Store the number of bytes of the uploaded file
+            filedata.bytes = os.path.getsize(tmp_fpath)
+            
             # Store the file size in human readable format
-            filedata.size = mutils.human_size(os.path.getsize(tmp_fpath))
+            filedata.size = mutils.human_size(filedata.bytes)
 
             # Generate a random file ID
             # XXX is this a good way of doing it?
@@ -294,7 +385,13 @@ def upload():
             # and used as research key in sendinfo, to add details and title
             # XXX XXX XXX XXX
 
-            return response.json({'success':'true', 'fileid': filedata.fileid})
+            return response.json(
+                                 [{"name": filedata.filename,"size":int(filedata.bytes),
+                                   "url":"",
+                                   "thumbnail_url":"",
+                                   "delete_url":"/globaleaks/submission/upload?delete=" + str(filedata.fileid),
+                                   "delete_type":"GET"}]
+                                 )
 
         if f == "delete":
             for file in session.files:
