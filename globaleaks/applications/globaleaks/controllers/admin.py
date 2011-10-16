@@ -5,7 +5,9 @@ Contains every controller that must run with admin privileges.
 
 Every controller in this file must have the @auth.requires_login() decorator
 """
+from shutil import copyfile
 
+from config import projroot, cfgfile
 
 #@auth.requires_login()
 def index():
@@ -285,7 +287,7 @@ def config():
     if logging_form.accepts(request.vars, keepvalue=True):
         for var in logging_form.vars:
             value = getattr(global_form.vars, var)
-            setattr(settings.logging, vat, value)
+            setattr(settings.logging, var, value)
 
     return dict(settings=settings,
                 global_form=global_form,
@@ -329,13 +331,15 @@ def wizard():
             SELECT(OPTION('Local Municipality Activism', _value='lma'),
                    OPTION('Public Agencies', _value='pa'),
                    OPTION('Public Safety', _value='ps'),
-                   OPTION('Corporate Transparency', _value='ct'))),
+                   OPTION('Corporate Transparency', _value='ct'),
+                   _name='activity')),
         TR("Leak author", INPUT(_name= "author", _type="text",
             _value=settings.globals.author)),
         TR("Leak title", INPUT(_name="title", _type="text",
             _value=settings.globals.title)),
         TR("Leak description", INPUT(_name="subtitle", _type="text",
-            _value=settings.globals.subtitle))
+            _value=settings.globals.subtitle)),
+        TR(INPUT(_type="submit"))
         ))
 
     step2_form = FORM(TABLE(
@@ -373,6 +377,17 @@ def wizard():
 
     # set up here various groups: one group form + button "add group"
     step6_form = None
+
+    if step1_form.accepts(request.vars, keepvalue=True):
+        # copy config template to GlobaLeaks/gleaks.cfg
+        if step1_form.vars.activity:
+            copyfile(os.path.join(projroot, 'stdcfgs', '%s.cfg' %
+                                  step1_form.vars.activity),
+                     cfgfile)
+        # fill the new config file with the described global attributes
+    if step2_form.accepts(request.vars, keepvalue=True):
+        pass
+
 
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,

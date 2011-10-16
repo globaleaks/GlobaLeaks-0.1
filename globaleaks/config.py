@@ -5,7 +5,9 @@ import ConfigParser
 import os.path
 
 # XXX: find a better place for gleaks.cfg ;  $HOME if installed
-cfgfile = os.path.join(os.path.dirname(__file__), 'gleaks.cfg')
+projroot = os.path.abspath(__file__).rsplit('GlobaLeaks', 1)[0] + 'GlobaLeaks'
+cfgfile = os.path.join(projroot, 'gleaks.cfg')
+
 
 class ConfigFile(Storage):
 
