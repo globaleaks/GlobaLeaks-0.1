@@ -36,6 +36,11 @@ def api():
 
     def POST(**data):
         wb_number = randomizer.generate_tulip_receipt()
+        # XXX verify that it's working
+        if not data.has_key("targetgroups"):
+            group_ids = []
+        else:
+            group_ids = data["targetgroups"].split(",")
 
         data['spooled'] = False
         data['submission_timestamp'] = str(time.time())
@@ -49,7 +54,7 @@ def api():
         else:
             leak_id = result.id
 
-        gl.create_leak(leak_id, "ALL", wb_number[1])
+        gl.create_leak(leak_id, group_ids, wb_number[1])
 
         # If a session has not been created yet, create one.
         if not session.wb_id:
@@ -208,22 +213,7 @@ def index():
 
     # Insert all the data into the db
     if form.accepts(request.vars, session):
-        # XXX Refactor this into something that makes sense
-        #
-        # Create the leak with the GlobaLeaks factory
-        # (the data has actually already been added to db leak,
-        #  this just creates the tulips)
-        leak_id = gl.create_leak(form.vars.id, "ALL", wb_number[1])
-
         logger.debug("Submission %s", request.vars)
-
-        # XXX probably a better way to do this
-        # Create a record in submission db associated with leak_id
-        # used to keep track of sessions
-        if not db(db.submission.session==session.wb_id).select():
-            db.submission.insert(session=session.wb_id,
-                                 leak_id=leak_id,
-                                 dirname=session.dirname)
 
         group_ids = []  # Will contain all the groups selected by the WB
 
@@ -264,12 +254,26 @@ def index():
             if var.startswith("target_") and var.split("_")[-1].isdigit():
                 group_ids.append(var.split("_")[-1])
 
+        # XXX Refactor this into something that makes sense
+        #
+        # Create the leak with the GlobaLeaks factory
+        # (the data has actually already been added to db leak,
+        #  this just creates the tulips)
+        leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
+
+        # XXX probably a better way to do this
+        # Create a record in submission db associated with leak_id
+        # used to keep track of sessions
+        if not db(db.submission.session==session.wb_id).select():
+            db.submission.insert(session=session.wb_id,
+                                 leak_id=leak_id,
+                                 dirname=session.dirname)
+
         # The metadata associated with the file is stored inside
         # the session variable this should be safe to use this way.
         if not session.files:
             session.files = []
-        # XXX verify that this is safe - THAT'S NOT SAFE!
-        # it allows arbitrary remote code execution
+        # XXX verify that this is safe
         # FIXME FIXME FIXME
         pfile = pickle.dumps(session.files)
 
@@ -278,7 +282,7 @@ def index():
         # Create the material entry for the submitted data
         leak.add_material(leak_id, None, "localfs", file=pfile)
 
-        # Go trough all of the previously generated TULIPs
+        # Go through all of the previously generated TULIPs
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)
 
@@ -288,7 +292,7 @@ def index():
 
             if target.status == "subscribed":
                 # add subscribed targets to the mail db
-                # when the cron job passes they will recieve a mail
+                # when the cron job passes they will receieve a mail
                 db.mail.insert(target=target.name,
                                address=target.url,
                                tulip=tulip.url)
