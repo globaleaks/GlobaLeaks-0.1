@@ -1,7 +1,5 @@
 import socket
 
-knowngood = "121.166.74.76.8333.31.70.229.38.ip-port.exitlist.torproject.org"
-
 class Tor:
     def __init__(self, ip, headers):
         self.result = {}

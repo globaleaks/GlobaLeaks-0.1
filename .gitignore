@@ -22,7 +22,7 @@ globaleaks/applications/globaleaks/sessions/*
 globaleaks/applications/admin/sessions/*
 globaleaks/deposit/
 globaleaks/docs/build/
-globaleaks/material/
+globaleaks/applications/globaleaks/material/
 globaleaks/logs/
 globaleaks/site-packages/*
 globaleaks/applications/admin/languages/it-it.py

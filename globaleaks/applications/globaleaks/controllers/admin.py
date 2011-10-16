@@ -1,9 +1,16 @@
 # coding: utf8
-# try something like
+"""
+Controller module for the admin interface.
+Contains every controller that must run with admin privileges.
+
+Every controller in this file must have the @auth.requires_login() decorator
+"""
+
 
 #@auth.requires_login()
 def index():
     return dict(message="hello from admin.py")
+
 
 #@auth.requires_login()
 def targets():
@@ -14,8 +21,10 @@ def targets():
         pass
 
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
-                    Field('Description', requires=IS_LENGTH(minsize=5,maxsize=50)),
-                    Field('email', requires=[IS_EMAIL(), IS_NOT_IN_DB(db, db.target.url)])
+                    Field('Description', requires=IS_LENGTH(minsize=5,
+                                                            maxsize=50)),
+                    Field('email', requires=[IS_EMAIL(),
+                                             IS_NOT_IN_DB(db, db.target.url)])
                    )
 
     form = SQLFORM.factory(*form_content)
@@ -27,11 +36,13 @@ def targets():
 
     if form.accepts(request.vars, session):
         c = request.vars
-        gl.create_target(c.Name, None, c.Description, c.email, "demo", "demo target")
+        gl.create_target(c.Name, None, c.Description, c.email, "demo",
+                         "demo target")
         targets = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets)
 
     return dict(form=form, list=False, targets=targets)
+
 
 #@auth.requires_login()
 def targetgroups():
@@ -84,10 +95,11 @@ def group_create():
         desc = request.post_vars["desc"]
         tags = request.post_vars["tags"]
     except KeyError:
-        return response.json({'success':'false'})
+        return response.json({'success': 'false'})
     else:
         gl.create_targetgroup(name, desc, tags)
-        return response.json({'success':'true'})
+        return response.json({'success': 'true'})
+
 
 #@auth.requires_login()
 def group_delete():
@@ -98,8 +110,9 @@ def group_delete():
     else:
         result = gl.delete_targetgroup(group_id)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def group_rename():
@@ -111,8 +124,9 @@ def group_rename():
     else:
         result = gl.update_targetgroup(group_id, name=name)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def group_desc():
@@ -124,8 +138,9 @@ def group_desc():
     else:
         result = gl.update_targetgroup(group_id, desc=desc)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def group_tags():
@@ -137,8 +152,9 @@ def group_tags():
     else:
         result = gl.update_targetgroup(group_id, tags=tags)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def target_add():
@@ -154,8 +170,9 @@ def target_add():
     else:
         result = gl.add_to_targetgroup(target_id, group_id)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def target_remove():
@@ -171,8 +188,9 @@ def target_remove():
     else:
         result = gl.remove_from_targetgroup(target_id, group_id)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def target_create():
@@ -183,8 +201,9 @@ def target_create():
     else:
         result = gl.create_target(target_id)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def target_delete():
@@ -195,8 +214,9 @@ def target_delete():
     else:
         result = gl.delete_target(target_id)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def config():
@@ -209,12 +229,14 @@ def config():
             TR(INPUT(_type="submit"))
             ))
     auth_form = FORM(TABLE(
-            TR("verification", INPUT(_name="registration_requires_verification",
-                                     _type="text",
-                                     _value=settings.auth.registration_requires_verification)),
-            TR("approval" , INPUT(_name="registration_requires_approval",
-                                  _type="text",
-                                  _value=settings.auth.registration_requires_approval)),
+            TR("verification",
+               INPUT(_name="registration_requires_verification",
+                     _type="text",
+                     _value=settings.auth.registration_requires_verification)),
+            TR("approval",
+               INPUT(_name="registration_requires_approval",
+                     _type="text",
+                     _value=settings.auth.registration_requires_approval)),
             TR(INPUT(_type="submit"))
             ))
 
@@ -232,7 +254,7 @@ def config():
 
     # XXX: client logging depends on server logging!
     logging_form = FORM(TABLE(
-            TR("client", INPUT(_name='client', _type= 'text',
+            TR("client", INPUT(_name='client', _type='text',
                                _value=settings.logging.client)),
             TR("server", INPUT(_name="server", _type="text",
                                _value=settings.logging.server)),
@@ -270,6 +292,7 @@ def config():
                 mail_form=mail_form,
                 auth_form=auth_form,
                 logging_form=logging_form)
+
 
 #@auth.requires_login()
 def wizard():
@@ -316,8 +339,10 @@ def wizard():
         ))
 
     step2_form = FORM(TABLE(
-        TR("E-Mail Messages", INPUT(_name="mail", _type="checkbox", _value=True)),
-        TR("SMS Messages", INPUT(_name="SMS", _type="checkbox", _value=True))
+        TR("E-Mail Messages",
+           INPUT(_name="mail", _type="checkbox", _value=True)),
+        TR("SMS Messages",
+           INPUT(_name="SMS", _type="checkbox", _value=True))
         ))
 
     step3_form = FORM(TABLE(
@@ -335,7 +360,6 @@ def wizard():
         TR("HTML Keyword", INPUT(_name="html_keyword", _type="text",
                                 _value=settings.globals.html_keyword))
         ))
-
 
     # XXX: server logging depends on client logging!
     step5_form = FORM(TABLE(

@@ -178,11 +178,11 @@ class Globaleaks(object):
         """
         return self._db(self._db.target.id==target_id).select().first()
 
-    def create_leak(self, id, target_set, number=None): #title, desc, leaker, material,
+    def create_leak(self, id_, target_set, number=None): #title, desc, leaker, material,
                     #target_set, tags="", number=None):
         #FIXME insert new tags into DB first
         #Create leak and insert into DB
-        leak_id = id #self._db.leak.insert(title=title, desc=desc,
+        leak_id = id_ #self._db.leak.insert(title=title, desc=desc,
                   #                     submission_timestamp=time.time(),
                   #                     leaker_id=0, spooled=False)
         targets = self.get_targets(target_set)
