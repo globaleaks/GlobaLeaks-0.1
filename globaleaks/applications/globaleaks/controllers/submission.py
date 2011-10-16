@@ -93,13 +93,17 @@ def api():
     return locals()
 
 FileUpload = UploadHandler()
+
 @request.restful()
 def fileupload():
     response.view = 'generic.json'
-    def GET():
+    
+    def GET(*vars):
+        print 'in da get'
         return FileUpload.get()
     
-    def POST():
+    def POST(**vars):
+        print 'in da post'
         return FileUpload.post()
     
     def DELETE():
