@@ -141,10 +141,22 @@ def index():
                      DIV(_id='file-uploader'),
                      _id='file-uploader-js')
     # .. and non JavaScript
-    material_njs = TR('Material:',
+    material_njs = TR('Material',
                       INPUT(_name='material',
                             _type='file'),
                       _id='file-uploader-nonjs')
+
+    # Creating a list of targetgroups
+    groups_data = gl.get_targetgroups()
+    grouplist = UL()
+    for group_id in groups_data:
+        group = groups_data[group_id]['data']
+        grouplist.insert(-1, LI(SPAN(T(group["name"])),
+                                SPAN(T(group["tags"]),
+                                     _class="group_tags"),
+                                INPUT(_type="checkbox", _value="on",
+                                      _name="target_%d" % group_id)))
+    targetgroups = TR('Targets', DIV(grouplist))
 
     # Use the web2py captcha setting to generate a Captcha
     captcha = TR('Are you human?', auth.settings.captcha)
@@ -184,6 +196,8 @@ def index():
 
         form[0].insert(-1, TR('Stored files', filesul))
 
+    form[0].insert(-1, targetgroups)
+
     form[0].insert(-1, captcha)
     form[0].insert(-1, disclaimer_text)
     form[0].insert(-1, disclaimer)
@@ -211,13 +225,15 @@ def index():
                                  leak_id=leak_id,
                                  dirname=session.dirname)
 
+        group_ids = []  # Will contain all the groups selected by the WB
+
         # XXX Since files are processed via AJAX, maybe this is unecessary?
         #     if we want to keep it to allow legacy file upload, then the
         #     file count should only be one.
         # File upload in a slightly smarter way
         # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
-        for file_var in request.vars:
-            if file_var == "material":
+        for var in request.vars:
+            if var == "material":
                 try:
                     f = Storage()
                     f.filename = request.vars.material.filename
@@ -243,15 +259,18 @@ def index():
                                            tmp_file),
                               dst_folder + filename)
                 except:
-                    logger.error("There was an error in processing the"
+                    logger.error("There was an error in processing the "
                                  "submission files.")
-                    pass
+            if var.startswith("target_") and var.split("_")[-1].isdigit():
+                group_ids.append(var.split("_")[-1])
 
         # The metadata associated with the file is stored inside
         # the session variable this should be safe to use this way.
         if not session.files:
             session.files = []
-        # XXX verify that this is safe
+        # XXX verify that this is safe - THAT'S NOT SAFE!
+        # it allows arbitrary remote code execution
+        # FIXME FIXME FIXME
         pfile = pickle.dumps(session.files)
 
         # Instantiate the Leak object
@@ -271,7 +290,8 @@ def index():
                 # add subscribed targets to the mail db
                 # when the cron job passes they will recieve a mail
                 db.mail.insert(target=target.name,
-                        address=target.url, tulip=tulip.url)
+                               address=target.url,
+                               tulip=tulip.url)
 
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
@@ -336,7 +356,7 @@ def upload():
             # Store the file to a temporary location and get the path
             # tmp_file = db.material.file.store(file.file, filename)
 
-            if(filename in session.fileresume.values()):
+            if (filename in session.fileresume.values()):
                 for x in session.fileresume.items():
                     if x[1] == filename:
                         filedata.fileid = x[0]

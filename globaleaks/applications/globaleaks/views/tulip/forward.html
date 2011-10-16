@@ -1,3 +1,13 @@
 {{extend 'layout.html'}}
 
-<h1>Please WRITE ME!</h1>
+<h1>Forward <span>Tulip to another Targetgroup</span></h1>
+<form method="POST" action="">
+  <ul>
+    {{for group in targetgroups:}}
+      <li>
+      <input>{{=group}}
+      </li>
+    {{pass}}
+  </ul>
+  <input type="submit" value="forward" />
+</form>

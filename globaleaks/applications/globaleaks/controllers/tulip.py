@@ -218,7 +218,7 @@ def forward():
     try:
         tulip = Tulip(url=tulip_url)
     except:
-        return dict(err=True, groups=None)
+        return dict(err=True, targetgroups=[])
 
     # Trying to get group id from POST
     try:
@@ -228,7 +228,7 @@ def forward():
         # the view will create a form to submit the group to
         # send material to
         groups = gl.get_targetgroups()
-        return dict(err=False, groups=groups)
+        return dict(err=False, targetgroups=groups)
     else:
         # XXX write the code to forward leak to group_id
         pass
