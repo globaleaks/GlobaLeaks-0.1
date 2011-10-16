@@ -92,6 +92,20 @@ def api():
 
     return locals()
 
+FileUpload = UploadHandler()
+@request.restful()
+def fileupload():
+    response.view = 'generic.json'
+    def GET():
+        return FileUpload.get()
+    
+    def POST():
+        return FileUpload.post()
+    
+    def DELETE():
+        return FileUpload.delete()
+        
+    return locals()
 
 def index():
     """
