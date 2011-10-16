@@ -36,9 +36,9 @@ randomizer = local_import('randomizer')
 #########################################################################
 
 from gluon.tools import Crud, Service, PluginManager, prettydate
-crud = Crud(db)                                                # for CRUD helpers using auth
-service = Service()                                            # for json, xml, jsonrpc, xmlrpc, amfrpc
-plugins = PluginManager()                                      # for configuring plugins
+crud = Crud(db)             # for CRUD helpers using auth
+service = Service()         # for json, xml, jsonrpc, xmlrpc, amfrpc
+plugins = PluginManager()   # for configuring plugins
 
 
 #########################################################################
@@ -76,4 +76,3 @@ plugins = PluginManager()                                      # for configuring
 # mail.settings.server = settings.private.email_server
 # mail.settings.sender = settings.private.email_sender
 # mail.settings.login = settings.private.email_login
-

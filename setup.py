@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Script to install GlobaLeaks
+"""
 
 try:
     from setuptools import setup, find_packages

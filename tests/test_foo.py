@@ -1,6 +1,6 @@
-from globaleaks import test
+import unittest
 
-class TestFoo(test.TestCase):
+class TestFoo(unittest.TestCase):
     def setUp(self):
         self.s = "foobarbaz"
 
@@ -8,4 +8,5 @@ class TestFoo(test.TestCase):
         self.assertTrue(self.s.startswith('foo'))
 
 if __name__ == '__main__':
-    test.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestFoo)
+    unittest.TextTestRunner(verbosity=2).run(suite)
