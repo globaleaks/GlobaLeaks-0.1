@@ -17,7 +17,6 @@ Anonymity = local_import('anonymity')
 jQueryHelper = local_import('jquery_helper')
 FileHelper = local_import('file_helper')
 
-
 @request.restful()
 def api():
     response.view = 'generic.json'
@@ -97,18 +96,18 @@ FileUpload = UploadHandler()
 @request.restful()
 def fileupload():
     response.view = 'generic.json'
-    
+
     def GET(*vars):
         print 'in da get'
         return FileUpload.get()
-    
+
     def POST(**vars):
         print 'in da post'
         return FileUpload.post()
-    
+
     def DELETE():
         return FileUpload.delete()
-        
+
     return locals()
 
 def index():
