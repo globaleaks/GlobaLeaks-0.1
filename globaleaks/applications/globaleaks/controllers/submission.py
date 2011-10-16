@@ -341,8 +341,9 @@ def upload():
     for f in request.vars:
         if f == "files[]" or request.env.http_x_file_name:
             logger.info("POSTed a file")
-            print request.env.http_x_file_name
-            if request.env.http_x_file_name != "":
+
+            if request.env.http_x_file_name:
+                print "in here"
                 file = request.body
                 filename = request.env.http_x_file_name
             else:
