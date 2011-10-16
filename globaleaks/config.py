@@ -1,6 +1,11 @@
 from gluon.storage import Storage
 from gluon.tools import Auth, Mail
+
 import ConfigParser
+import os.path
+
+# XXX: find a better place for gleaks.cfg ;  $HOME if installed
+cfgfile = os.path.join(os.path.dirname(__file__), 'gleaks.cfg')
 
 class ConfigFile(Storage):
 

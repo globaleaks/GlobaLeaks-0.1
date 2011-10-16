@@ -302,6 +302,11 @@ def wizard():
                       )
 
     step1_form = FORM(TABLE(
+        TR("Type of activity",
+            SELECT(OPTION('Local Municipality Activism', _value='lma'),
+                   OPTION('Public Agencies', _value='pa'),
+                   OPTION('Public Safety', _value='ps'),
+                   OPTION('Corporate Transparency', _value='ct'))),
         TR("Leak author", INPUT(_name= "author", _type="text",
             _value=settings.globals.author)),
         TR("Leak title", INPUT(_name="title", _type="text",
