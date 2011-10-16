@@ -1,3 +1,10 @@
+#coding: utf-8
+"""
+This controller module contains every controller for accessing the tulip
+from a target
+"""
+
+
 def index():
     import hashlib
 
@@ -7,11 +14,12 @@ def index():
         l = request.vars
 
         # Make the tulip work well
-        leak_number = l.Receipt.replace(' ','')
+        leak_number = l.Receipt.replace(' ', '')
         tulip_url = hashlib.sha256(leak_number).hexdigest()
         redirect("/tulip/" + tulip_url)
 
     redirect("/")
+
 
 def access_increment(tulip):
     if tulip.accesses_counter:
@@ -28,9 +36,12 @@ def access_increment(tulip):
     else:
         return False
 
+
 # http://games.adultswim.com/robot-unicorn-attack-twitchy-online-game.html
 def record_comment(comment_feedback, tulip):
-    db.comment.insert(leak_id=tulip.get_leak().get_id(), commenter_id=tulip.get_target(), comment=comment_feedback)
+    db.comment.insert(leak_id=tulip.get_leak().get_id(),
+                      commenter_id=tulip.get_target(),
+                      comment=comment_feedback)
     db.commit()
 
     if tulip.feedbacks_provided:
@@ -40,13 +51,17 @@ def record_comment(comment_feedback, tulip):
         db.tulip[tulip.id].update_record(feedbacks_provided=1)
     response.flash = "recorded comment"
 
+
 def record_vote(vote_feedback, tulip):
     int_vote = int(vote_feedback)
     if int_vote <= 1 and int_vote >= (-1) and tulip.target != "0":
         tulip.set_vote(int_vote)
-        response.flash = "Thanks for your contribution: actual Tulip pertinence rate: ", tulip.get_pertinentness()
+        response.flash = ("Thanks for your contribution: actual Tulip "
+                         "pertinence rate: "), tulip.get_pertinentness()
     else:
-        response.flash = "Invalid vote provided thru HTTP header manipulation: do you wanna work with us ?"
+        response.flash = ("Invalid vote provided thru HTTP header "
+                          "manipulation: do you wanna work with us?")
+
 
 def status():
     """
@@ -70,25 +85,28 @@ def status():
         target_url = "target/" + tulip.url
 
     if whistleblower == False:
-        # the stats of the whistleblower don't stay in him own tulip (also ifi its unique!)
+        # the stats of the whistleblower don't stay in him own tulip
+        # (also ifi its unique!)
         if leak.spooled:
-            download_available = int(tulip.downloads_counter) < int(tulip.allowed_downloads)
+            download_available = int(tulip.downloads_counter) < \
+                                 int(tulip.allowed_downloads)
         else:
             download_available = -1
         access_available = access_increment(tulip)
         counter_accesses = tulip.accesses_counter
         limit_counter = tulip.allowed_accesses
     else:
-        # the stats of the whistleblower stay in the leak/material entry (is it right ?)
+        # the stats of the whistleblower stay in the leak/material
+        # entry (is it right ?)
         download_available = False
         if leak.whistleblower_access:
             new_count = int(leak.whistleblowing_access) + 1
-            leak.whistleblower_access=new_count
+            leak.whistleblower_access = new_count
         else:
-            leak.whistleblower_counter=1
+            leak.whistleblower_counter = 1
 
         counter_accesses = leak.whistleblower_access
-        limit_counter = int("50") # settings.max_submitter_accesses
+        limit_counter = int("50")  # settings.max_submitter_accesses
         access_available = True
 
     # check if the comment or a vote has been provided:
@@ -99,12 +117,14 @@ def status():
         record_vote(request.vars.Vote, tulip)
 
     # configuration issue
-    # *) if we want permit, in Tulip, to see how many download/clicks has been doing
-    #    from the receiver, we need to pass the entire tulip list, because in fact
-    #    the information about "counter_access" "downloaded_access" are different for each tulip.
-    # or if we want not permit this information crossing, the interface simply has to stop in printing
-    #    other receiver behaviour.
-    # now is implement the extended version, but need to be selectable by the maintainer.
+    # *) if we want permit, in Tulip, to see how many download/clicks has
+    #    been doing from the receiver, we need to pass the entire tulip
+    #    list, because in fact the information about "counter_access"
+    #    "downloaded_access" are different for each tulip.
+    # or if we want not permit this information crossing, the interface simply
+    # has to stop in printing other receiver behaviour.
+    # now is implement the extended version, but need to be selectable by the
+    # maintainer.
     tulipUsage = []
     flowers = db(db.tulip.leak_id == leak.get_id()).select()
     for singleTulip in flowers:
@@ -112,7 +132,8 @@ def status():
             tulipUsage.append(singleTulip)
         else:
             tulipUsage.append(singleTulip)
-    # this else is obviously an unsolved bug, but at the moment 0 lines seem to match in leak_id
+    # this else is obviously an unsolved bug, but at the moment 0 lines seem
+    # to match in leak_id
 
     feedbacks = []
     usersComment = db(db.comment.leak_id == leak.get_id()).select()
@@ -145,6 +166,7 @@ def status():
             targets=gl.get_targets("ANY"),
             files=pickle.loads(leak.material.file))
 
+
 def download_increment(t):
 
     if (int(t.downloads_counter) > int(t.allowed_downloads)):
@@ -159,6 +181,7 @@ def download_increment(t):
     db.commit()
     return True
 
+
 def download():
     import os
 
@@ -167,12 +190,12 @@ def download():
     try:
         t = Tulip(url=tulip_url)
     except:
-        redirect("/tulip/" + tulip_url);
+        redirect("/tulip/" + tulip_url)
 
     target = gl.get_target(t.target)
 
     if(download_increment(t)):
-        redirect("/tulip/" + tulip_url);
+        redirect("/tulip/" + tulip_url)
 
     leak = t.get_leak()
 
@@ -182,7 +205,8 @@ def download():
     # XXX to make proper handlers to manage the fetch of dirname
     return response.stream(open(os.path.join(request.folder, 'material/',
                            db(db.submission.leak_id==leak.id).select().first(
-                           ).dirname + '.zip'),'rb'))
+                           ).dirname + '.zip'), 'rb'))
+
 
 def forward():
     """
@@ -208,4 +232,3 @@ def forward():
     else:
         # XXX write the code to forward leak to group_id
         pass
-
