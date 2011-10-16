@@ -92,6 +92,20 @@ def api():
 
     return locals()
 
+FileUpload = UploadHandler()
+@request.restful()
+def fileupload():
+    response.view = 'generic.json'
+    def GET():
+        return FileUpload.get()
+    
+    def POST():
+        return FileUpload.post()
+    
+    def DELETE():
+        return FileUpload.delete()
+        
+    return locals()
 
 def index():
     """
@@ -153,15 +167,16 @@ def index():
 
     # Creating a list of targetgroups
     groups_data = gl.get_targetgroups()
-    grouplist = UL()
+    grouplist = UL(_id="group_list")
     for group_id in groups_data:
         group = groups_data[group_id]['data']
-        grouplist.insert(-1, LI(SPAN(T(group["name"])),
+        grouplist.insert(-1, LI(INPUT(_type="checkbox", _value="on",
+                                      _name="target_%d" % group_id),
+                                SPAN(T(group["name"])),
                                 SPAN(T(group["tags"]),
-                                     _class="group_tags"),
-                                INPUT(_type="checkbox", _value="on",
-                                      _name="target_%d" % group_id)))
-    targetgroups = TR('Targets', DIV(grouplist))
+                                     _class="group_tags")))
+    targetgroups = TR('Targets', DIV(DIV(_id="group_filter"),
+                                     DIV(grouplist)))
 
     # Use the web2py captcha setting to generate a Captcha
     captcha = TR('Are you human?', auth.settings.captcha)
