@@ -75,7 +75,7 @@ db.define_table('target',
 
 # The table for target groups
 db.define_table('targetgroup',
-    Field('name'),
+    Field('name', unique=True),
     Field('desc'),
     Field('tags'),
     format='%(name)s'
