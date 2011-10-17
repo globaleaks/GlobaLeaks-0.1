@@ -272,7 +272,8 @@ def config():
     if mail_form.accepts(request.vars, keepvalue=True):
         copyform(mail_form.vars, settings.mail)
     if logging_form.accepts(request.vars, keepvalue=True):
-        copyform(logging_form.vars, settings.logging)
+        if logging_form.vars.logfile:
+            copyform(logging_form.vars, settings.logging)
 
     return dict(settings=settings,
                 global_form=global_form,
