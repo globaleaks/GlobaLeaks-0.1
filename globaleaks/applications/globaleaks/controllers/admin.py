@@ -7,7 +7,7 @@ Every controller in this file must have the @auth.requires_login() decorator
 """
 from shutil import copyfile
 
-from config import projroot, cfgfile
+from config import projroot, cfgfile, copyform
 
 #@auth.requires_login()
 def index():
@@ -164,15 +164,20 @@ def target_add():
     Receives parameters "target" and "group" from POST.
     Adds taget to group.
     """
+    print "target add!!"
     try:
         target_id = request.post_vars["target"]
         group_id = request.post_vars["group"]
     except KeyError:
         pass
-    else:
-        result = gl.add_to_targetgroup(target_id, group_id)
-        if result:
-            return response.json({'success': 'true'})
+
+    result = gl.add_to_targetgroup(target_id, group_id)
+    
+    print "RESULT %s " % result
+    
+    if result:
+        return response.json({'success': 'true'})
+    
     return response.json({'success': 'false'})
 
 
@@ -266,28 +271,14 @@ def config():
     ))
 
     if global_form.accepts(request.vars, keepvalues=True):
-        for var in global_form.vars:
-            value = getattr(global_form.vars, var)
-            setattr(settings.globals, var, value)
-
+        copyform(global_form.vars, settings.globals)
     if auth_form.accepts(request.vars, keepvalues=True):
-        for var in auth_form.vars:
-            value = getattr(auth_form.vars, var)
-            setattr(settings.auth, var, value)
-        # XXX: temporary added commit, there should be a class in config.py
-        db.commit()
-
+        copyform(auth_form.vars, settings.auth)
     if mail_form.accepts(request.vars, keepvalue=True):
-        for var in mail_form.vars:
-            value = getattr(auth_form.vars, var)
-            setattr(settings.mail, var, value)
-        # XXX: same as above.
-        db.commit()
-
+        copyform(mail_form.vars, settings.mail)
     if logging_form.accepts(request.vars, keepvalue=True):
-        for var in logging_form.vars:
-            value = getattr(global_form.vars, var)
-            setattr(settings.logging, var, value)
+        if logging_form.vars.logfile:
+            copyform(logging_form.vars, settings.logging)
 
     return dict(settings=settings,
                 global_form=global_form,
@@ -381,13 +372,12 @@ def wizard():
     if step1_form.accepts(request.vars, keepvalue=True):
         # copy config template to GlobaLeaks/gleaks.cfg
         if step1_form.vars.activity:
-            copyfile(os.path.join(projroot, 'stdcfgs', '%s.cfg' %
+            copyfile(os.path.join(projroot, 'stdcfgs', '%s.conf' %
                                   step1_form.vars.activity),
                      cfgfile)
         # fill the new config file with the described global attributes
     if step2_form.accepts(request.vars, keepvalue=True):
         pass
-
 
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,
