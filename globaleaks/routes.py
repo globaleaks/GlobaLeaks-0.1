@@ -12,6 +12,7 @@ routes_in = (
              ('^/groups(/)?', '/globaleaks/admin/targetgroups'),
              ('^/globalview(/)?', '/globaleaks/target/view'),
              ('^/receiver(/)?', '/globaleaks/target/receiver'),
-             ('^/bouquet/(?P<target_id>[\w]+)', '/globaleaks/target/buoquet/\g<target_id>')
+             ('^/bouquet/(?P<target_id>[\w]+)', '/globaleaks/target/bouquet/\g<target_id>'),
+             ('^/bouquet', '/globaleaks/target/bouquet')
             )
 

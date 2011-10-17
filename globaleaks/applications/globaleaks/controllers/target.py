@@ -40,22 +40,24 @@ def receiver():
    
     if form.accepts(request.vars, session):
         l = request.vars
-        
+
         target_url = hashlib.sha256(l.TargetID.replace).hexdigest()
         redirect("/bouquet/" + target_url)
 
-    redirect("/")
+    return dict(TargetID=False)
 
 # this page is indexed by an uniq identifier by the receiver, and show all him accessible
 # Tulips, its the page where she/he could change their preferences
 def bouquet():
-   
-    target_url = request.args[0]
+    if request and request.args:
+        target_url = request.args[0]
+    else:
+        return dict(err="password not supply")
 
     try:
         Receiver = Target(hashpass=target_url)
     except:
-        return dict(err=True)
+        return dict(err="invald password supply")
 
     # this require to be splitted because tulip are leak x target matrix
     Bouquet = []
