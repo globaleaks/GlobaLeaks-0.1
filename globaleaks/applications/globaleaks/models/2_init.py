@@ -1,5 +1,5 @@
 from gluon.storage import Storage
-from gluon.tools import Mail, Auth
+from config import Mail, Auth
 from gluon.tools import Recaptcha
 
 gl = local_import('logic.globaleaks').Globaleaks(db)
