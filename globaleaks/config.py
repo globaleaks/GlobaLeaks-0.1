@@ -1,5 +1,5 @@
 from gluon.storage import Storage
-from gluon.tools import Auth, Mail
+from gluon.tools import Mail, Auth
 
 import ConfigParser
 import os.path
@@ -50,24 +50,4 @@ class ConfigFile(Storage):
     def commit(self):
         self._cfgparser.write(open(self._cfgfile, 'w'))
 
-class ConfigAuth(Auth):
-    """
-    A new Auth class with is supposed to save data as soon as data changes.
-    """
-    def __setattr__(self, name, value):
-        super(ConfigAuth, self).__setattr__(name, value)
-
-    def commit(self):
-        db.commit()
-
-
-class ConfigMail(Mail):
-    """
-    A new Mail class which is supposed to save data as soon as data changes.
-    """
-    def __setattr__(self, name, value):
-        super(ConfigMail, self).__setattr__(name, value)
-
-    def commit(self):
-        db.commit()
 

@@ -1,16 +1,11 @@
 from gluon.storage import Storage
-from config import ConfigMail, ConfigAuth
+from config import Mail, Auth
 from gluon.tools import Recaptcha
 
 gl = local_import('logic.globaleaks').Globaleaks(db)
 
-mail = ConfigMail(db)
-auth = ConfigAuth(db)
-
-# reCAPTCHA support
-auth.settings.captcha = Recaptcha(request,
-        '6LdZ9sgSAAAAAAg621OrrkKkrCjbr3Zu4LFCZlY1',
-        '6LdZ9sgSAAAAAAJCZqqo2qLYa2wPzaZorEmc-qdJ')
+mail = Mail(db)
+auth = Auth(db)
 
 # bind everything to settings
 settings.private = Storage()
@@ -18,6 +13,15 @@ settings.tulip = ConfigFile(cfgfile, 'tulip')
 settings.logging = ConfigFile(cfgfile, 'logging')
 settings.auth = auth.settings
 settings.mail = mail.settings
+
+# XXX: hack
+settings.mail.__dict__['commit'] = db.commit
+settings.auth.__dict__['commit'] = db.commit
+#
+# reCAPTCHA support
+auth.settings.captcha = Recaptcha(request,
+        '6LdZ9sgSAAAAAAg621OrrkKkrCjbr3Zu4LFCZlY1',
+        '6LdZ9sgSAAAAAAJCZqqo2qLYa2wPzaZorEmc-qdJ')
 
 # Set up the logger to be shared with all
 logger = local_import('logger').start_logger(settings.logging)
