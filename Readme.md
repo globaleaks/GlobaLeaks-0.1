@@ -6,12 +6,13 @@ GlobaLeaks is the first Open Source Whistleblowing Framework.
 It empowers anyone to easily setup and maintain their own Whistleblowing platform. It is also a collection of what are the best practices for people receiveiving and submitting material. GlobaLeaks works in various environments: media, activism, corporations, public agencies.
 
                                         DISCLAIMER
-                                GlobaLeaks it's under Development
+                                GlobaLeaks is under Development
+                                
 
 Installation
 ------------------------------------------------------------------
 
-First of all you need to get a copy of web2py, you can install it doing
+First of all you need to get a copy of web2py, you can install it by doing
 
     pip install web2py
 
@@ -25,12 +26,12 @@ under Linux, use the script:
 Under Windows|MacOSX|whatever, start the service with:
     globaleaks/startglobaleaks
 
-then you could found running those web services:
+then you will find running as a web service the following:
 
-* whistleblowing interface its bind at http://127.0.0.1:8000
-* node administrator targets configuratation http://127.0.0.1:8000/globaleaks/admin/
-* debug only global view interface: http://127.0.0.1:8000/globalview
-* web2py developer access: http://127.0.0.1:8000/admin password "globaleaks"
+*  whistleblowing interface binds to http://127.0.0.1:8000
+*  node administrator targets configuratation http://127.0.0.1:8000/globaleaks/admin/
+*  debug only global view interface: http://127.0.0.1:8000/globalview
+*  web2py developer access: http://127.0.0.1:8000/admin password "globaleaks"
 
 How to hack on it
 -----------------
@@ -59,7 +60,7 @@ updated link-o-graphy
 * [GL's twitter](https://twitter.com/#!/globaleaks)
 * [GlobaLeaks documentation](https://github.com/globaleaks/advocacy)
 
-eldest pages reference, documentation
+older pages: reference, documentation
 -------------------------------------
 
 * [launchpad old project page](https://launchpad.net/globaleaks)
