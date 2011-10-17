@@ -8,6 +8,12 @@ import os.path
 projroot = os.path.abspath(__file__).rsplit('GlobaLeaks', 1)[0] + 'GlobaLeaks'
 cfgfile = os.path.join(projroot, 'gleaks.cfg')
 
+def copyform(form, settings):
+    """Copy each form value into the specific settings subsection. """
+    for name, value in form.iteritems():
+        setattr(settings, name, value)
+    settings.commit()
+
 
 class ConfigFile(Storage):
 
@@ -38,10 +44,11 @@ class ConfigFile(Storage):
         try:
             # XXX: Automagically discover variable type
             self._cfgparser.set(self._section, name, value)
-            self._cfgparser.write(open(self._cfgfile, 'w'))
         except ConfigParser.NoOptionError:
             raise NameError(name)
 
+    def commit(self):
+        self._cfgparser.write(open(self._cfgfile, 'w'))
 
 class ConfigAuth(Auth):
     """
@@ -49,6 +56,8 @@ class ConfigAuth(Auth):
     """
     def __setattr__(self, name, value):
         super(ConfigAuth, self).__setattr__(name, value)
+
+    def commit(self):
         db.commit()
 
 
@@ -58,5 +67,7 @@ class ConfigMail(Mail):
     """
     def __setattr__(self, name, value):
         super(ConfigMail, self).__setattr__(name, value)
+
+    def commit(self):
         db.commit()
 

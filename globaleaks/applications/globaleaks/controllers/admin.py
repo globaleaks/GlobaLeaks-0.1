@@ -7,7 +7,7 @@ Every controller in this file must have the @auth.requires_login() decorator
 """
 from shutil import copyfile
 
-from config import projroot, cfgfile
+from config import projroot, cfgfile, copyform
 
 #@auth.requires_login()
 def index():
@@ -266,28 +266,13 @@ def config():
     ))
 
     if global_form.accepts(request.vars, keepvalues=True):
-        for var in global_form.vars:
-            value = getattr(global_form.vars, var)
-            setattr(settings.globals, var, value)
-
+        copyform(global_form.vars, settings.globals)
     if auth_form.accepts(request.vars, keepvalues=True):
-        for var in auth_form.vars:
-            value = getattr(auth_form.vars, var)
-            setattr(settings.auth, var, value)
-        # XXX: temporary added commit, there should be a class in config.py
-        db.commit()
-
+        copyform(auth_form.vars, settings.auth)
     if mail_form.accepts(request.vars, keepvalue=True):
-        for var in mail_form.vars:
-            value = getattr(auth_form.vars, var)
-            setattr(settings.mail, var, value)
-        # XXX: same as above.
-        db.commit()
-
+        copyform(mail_form.vars, settings.mail)
     if logging_form.accepts(request.vars, keepvalue=True):
-        for var in logging_form.vars:
-            value = getattr(global_form.vars, var)
-            setattr(settings.logging, var, value)
+        copyform(logging_form.vars, settings.logging)
 
     return dict(settings=settings,
                 global_form=global_form,
@@ -387,7 +372,6 @@ def wizard():
         # fill the new config file with the described global attributes
     if step2_form.accepts(request.vars, keepvalue=True):
         pass
-
 
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,
