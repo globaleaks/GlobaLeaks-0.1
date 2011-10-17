@@ -1,5 +1,6 @@
 import random
 import hashlib, os
+import string
 
 def generate_tulip_receipt():
     #FIXME is this a good idea?
@@ -18,7 +19,13 @@ def generate_dirname():
     return hashlib.sha256(os.urandom(1024)).hexdigest()
 
 def generate_leaker_id():
-    return hashlib.sha256(os.urandom(100)).hexdigest()
+    return hashlib.sha256(os.urandom(1024)).hexdigest()
 
 def generate_tulip_url():
-    return hashlib.sha256(os.urandom(100)).hexdigest()
+    return hashlib.sha256(os.urandom(1024)).hexdigest()
+
+def alphanumeric(n):
+    output = ""
+    for i in range(1, n):
+        output += random.choice(string.ascii_letters+string.digits)
+    return output

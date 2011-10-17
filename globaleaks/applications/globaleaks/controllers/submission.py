@@ -98,11 +98,9 @@ def fileupload():
     response.view = 'generic.json'
 
     def GET(*vars):
-        print 'in da get'
         return FileUpload.get()
 
     def POST(**vars):
-        print 'in da post'
         return FileUpload.post()
 
     def DELETE():
@@ -361,7 +359,6 @@ def upload():
             logger.info("POSTed a file")
 
             if request.env.http_x_file_name:
-                print "in here"
                 file = request.body
                 filename = request.env.http_x_file_name
             else:
