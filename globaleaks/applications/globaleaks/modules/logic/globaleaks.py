@@ -50,13 +50,18 @@ class Globaleaks(object):
             self._db(self._db.targetgroup.id==group_id).update(**kwargs)
             self._db.commit()
         return result
+    
+    def get_group_id(self, group_name):
+        return self._db(self._db.targetgroup.name==group_name).select().first().id
 
-    def add_to_targetgroup(self, target_id, group_id):
+    def add_to_targetgroup(self, target_id, group_id=None, group_name=None):
         """
         Adds the target with id target_id to the targetgroup with id
         group_id.
         Returns True if the operation was successful
         """
+        if group_name:
+            group_id = self.get_group_id(group_name)
         target_row = self._db(self._db.target.id==target_id).select().first()
         group_row = self._db(self._db.targetgroup.id==group_id
                             ).select().first()
@@ -157,12 +162,13 @@ class Globaleaks(object):
         Returns the id of the new record.
         """
         target_id = self._db.target.insert(name=name,
-            groups=pickle.dumps([category]) if category else "",
             desc=desc, url=url, type=type, info=info,
             status="subscribed", tulip_counter=0,
             download_counter=0) #, last_send_tulip=None,
             #last_access=None, last_download=None,
             #tulip_counter=None, download_counter=None
+        if category:
+            self.add_to_targetgroup(target_id, group_name=category)
         self._db.commit()
         return target_id
 

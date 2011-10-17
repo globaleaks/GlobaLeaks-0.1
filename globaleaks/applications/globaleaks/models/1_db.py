@@ -69,7 +69,7 @@ db.define_table('target',
     Field('last_download'),
     Field('tulip_counter'),
     Field('download_counter'),
-    Field('groups'),
+    # Field('groups'),
     format='%(name)s'
     )
 
