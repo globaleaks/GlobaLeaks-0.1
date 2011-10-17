@@ -6,14 +6,13 @@ import os.path
 
 # XXX: find a better place for gleaks.cfg ;  $HOME if installed
 projroot = os.path.abspath(__file__).rsplit('GlobaLeaks', 1)[0] + 'GlobaLeaks'
-cfgfile = os.path.join(projroot, 'gleaks.cfg')
+cfgfile = os.path.join(projroot, 'globaleaks', 'globaleaks.conf')
 
 def copyform(form, settings):
     """Copy each form value into the specific settings subsection. """
     for name, value in form.iteritems():
         setattr(settings, name, value)
     settings.commit()
-
 
 class ConfigFile(Storage):
 

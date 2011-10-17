@@ -366,7 +366,7 @@ def wizard():
     if step1_form.accepts(request.vars, keepvalue=True):
         # copy config template to GlobaLeaks/gleaks.cfg
         if step1_form.vars.activity:
-            copyfile(os.path.join(projroot, 'stdcfgs', '%s.cfg' %
+            copyfile(os.path.join(projroot, 'stdcfgs', '%s.conf' %
                                   step1_form.vars.activity),
                      cfgfile)
         # fill the new config file with the described global attributes
