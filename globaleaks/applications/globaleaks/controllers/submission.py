@@ -17,7 +17,6 @@ Anonymity = local_import('anonymity')
 jQueryHelper = local_import('jquery_helper')
 FileHelper = local_import('file_helper')
 
-
 @request.restful()
 def api():
     response.view = 'generic.json'
@@ -92,6 +91,22 @@ def api():
 
     return locals()
 
+FileUpload = UploadHandler()
+
+@request.restful()
+def fileupload():
+    response.view = 'generic.json'
+
+    def GET(*vars):
+        return FileUpload.get()
+
+    def POST(**vars):
+        return FileUpload.post()
+
+    def DELETE():
+        return FileUpload.delete()
+
+    return locals()
 
 def index():
     """
@@ -344,7 +359,6 @@ def upload():
             logger.info("POSTed a file")
 
             if request.env.http_x_file_name:
-                print "in here"
                 file = request.body
                 filename = request.env.http_x_file_name
             else:
