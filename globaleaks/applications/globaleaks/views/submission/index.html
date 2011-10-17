@@ -233,18 +233,16 @@ div.flash {background-color: #888;}
     $('#fileupload').fileupload({
     	url: "/globaleaks/submission/fileupload",
     	autoUpload: true,
-    	// XXX these two should be enabled for resume support
-    	//     currently broken :'((((
-    	// maxChunkSize: 10000000,
-    	// multipart: false,
-    	/* add: function (e, data) {
+    	maxChunkSize: 1000000,
+    	multipart: false,
+    	add: function (e, data) {
         	var that = this;
-        	$.getJSON('/globaleaks/submission/upload', {filebytes: data.files[0].name}, function (file) {
+        	$.getJSON('/globaleaks/submission/fileupload', {file: data.files[0].name}, function (file) {
             	data.uploadedBytes = file && file.size;
             	$.blueimpUI.fileupload.prototype
                 	.options.add.call(that, e, data);
         });
-    }*/
+    }
 
    	});
 

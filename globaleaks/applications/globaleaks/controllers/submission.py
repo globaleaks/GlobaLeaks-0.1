@@ -44,8 +44,6 @@ def api():
         data['spooled'] = False
         data['submission_timestamp'] = str(time.time())
 
-        print "inside the post %s " % data
-
         result = db.leak.validate_and_insert(**data)
 
         if result.error:
@@ -96,12 +94,57 @@ FileUpload = UploadHandler()
 @request.restful()
 def fileupload():
     response.view = 'generic.json'
+    if not session.files:
+        session.files = []
 
-    def GET(*vars):
-        return FileUpload.get()
+
+    def GET(file):
+        upload = json.loads(FileUpload.get())
+        
+        filedir = FileUpload.get_file_dir()
+        
+        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
+        dst_folder = os.path.join(request.folder, 'material', filedir)
+                
+        return json.dumps(upload)
 
     def POST(**vars):
-        return FileUpload.post()
+        upload = FileUpload.post()
+        
+        upload = json.loads(upload)
+        
+        filedata = Storage()
+        
+        # Store the number of bytes of the uploaded file
+        filedata.bytes = upload[0]['size']
+
+        # Store the file size in human readable format
+        filedata.size = mutils.human_size(filedata.bytes)
+        
+        filedata.fileid = upload[0]['id']
+
+        # Store filename and extention
+        filedata.filename = upload[0]['name']
+
+        filedata.ext = mutils.file_type(upload[0]['name'].split(".")[-1])
+        
+        session.files.append(filedata)
+        
+        filedir = FileUpload.get_file_dir()
+        
+        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
+        dst_folder = os.path.join(request.folder, 'material', filedir)
+
+        if not os.path.isdir(dst_folder):
+            os.makedirs(dst_folder)
+        
+        #print "The size now: %s" % upload[0]['size']
+        
+        if upload[0]['size'] == os.path.getsize(src_file):
+            #print "THEY MATCH!!!!!.... %s != %s" % (upload[0]['size'], os.path.getsize(src_file))
+            os.rename(src_file, os.path.join(dst_folder, upload[0]['name']))
+
+        return json.dumps(upload)
 
     def DELETE():
         return FileUpload.delete()
@@ -219,7 +262,7 @@ def index():
 
     form[0].insert(-1, targetgroups)
 
-    form[0].insert(-1, captcha)
+    #form[0].insert(-1, captcha)
     form[0].insert(-1, disclaimer_text)
     form[0].insert(-1, disclaimer)
 
@@ -276,7 +319,8 @@ def index():
         # Create the leak with the GlobaLeaks factory
         # (the data has actually already been added to db leak,
         #  this just creates the tulips)
-        print "groups id : %s " % group_id       
+        print "groups id : %s " % group_id
+        
         leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
 
         # XXX probably a better way to do this
@@ -414,9 +458,6 @@ def upload():
 
             # Store the file size in human readable format
             filedata.size = mutils.human_size(filedata.bytes)
-
-            # Store all the data reated to the file to a sessions variable
-            session.files.append(filedata)
 
             filedir = db(db.submission.session ==
                          session.wb_id).select().first()

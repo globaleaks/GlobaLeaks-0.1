@@ -53,7 +53,7 @@ class Globaleaks(object):
     
     def get_group_id(self, group_name):
         return self._db(self._db.targetgroup.name==group_name).select().first().id
-
+    
     def add_to_targetgroup(self, target_id, group_id=None, group_name=None):
         """
         Adds the target with id target_id to the targetgroup with id
@@ -86,7 +86,6 @@ class Globaleaks(object):
             #self._db(self._db.target.id==target_id).update(groups=groups_p)
             result = self._db(self._db.targetgroup.id==group_id).update(targets=targets_j)
             self._db.commit()
-            
         return result
 
     def remove_from_targetgroup(self, target_id, group_id):
@@ -186,32 +185,38 @@ class Globaleaks(object):
         If target_set is a list of groups it returns a rowset of targets
         that belong to these groups.
         """
-        if not isinstance(target_set, list):
-            return self._db(self._db.target).select()
-        rows = self._db().select(self._db.target)
         result = []
-        for row in rows:
-            if row.groups:
-                groups = pickle.loads(row.groups)
-                done = False
-                for elem in target_set:
-                    if elem in groups:
-                        done = True
-                        break
-                if done:
-                    result.append(row)
+        logger.error("asdadsdasdsa")
+        for x in target_set:
+            logger.error("TTS: %s" % x)
+            targets = self._db(self._db.targetgroup.id==x).select().first()
+            logger.error("TARGETS: %s" % targets)
+            result.append(json.loads(targets))
+        
         return result
+        
+#        if not isinstance(target_set, list):
+#            return self._db(self._db.target).select()
+#        rows = self._db().select(self._db.target)
+#        result = []
+#        for row in rows:
+#            if row.groups:
+#                groups = pickle.loads(row.groups)
+#                done = False
+#                for elem in target_set:
+#                    if elem in groups:
+#                        done = True
+#                        break
+#                if done:
+#                    result.append(row)
+#        return result
 
     def get_target(self, target_id):
         """
         Returns the target with the specified id
         """
-        target_set = []
-        for x in target_id:
-            target_set.append(self._db(self._db.target.id==x).select().first())
+        return self._db(self._db.target.id==target_id).select().first()
             
-        return target_set
-
     def create_leak(self, id_, target_set, number=None): #title, desc, leaker, material,
                     #target_set, tags="", number=None):
         #FIXME insert new tags into DB first
@@ -219,6 +224,7 @@ class Globaleaks(object):
         leak_id = id_ #self._db.leak.insert(title=title, desc=desc,
                   #                     submission_timestamp=time.time(),
                   #                     leaker_id=0, spooled=False)
+        logger.error('blablabla')
         targets = self.get_targets(target_set)
         
         for t in targets:

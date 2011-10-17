@@ -9,7 +9,7 @@ projroot = os.path.abspath(__file__).rsplit('GlobaLeaks', 1)[0] + 'GlobaLeaks'
 cfgfile = os.path.join(projroot, 'globaleaks', 'globaleaks.conf')
 
 def copyform(form, settings):
-    """Copy each form value into the specific settings subsection. """
+    """Copy each form value into the specific settings subsection. """  
     for name, value in form.iteritems():
         setattr(settings, name, value)
     settings.commit()
