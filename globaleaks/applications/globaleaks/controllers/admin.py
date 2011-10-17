@@ -1,11 +1,12 @@
 # coding: utf8
 # try something like
 
-#@auth.requires_login()
+
+@auth.requires_login()
 def index():
     return dict(message="hello from admin.py")
 
-#@auth.requires_login()
+@auth.requires_login()
 def targets():
     if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
@@ -15,7 +16,7 @@ def targets():
 
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description', requires=IS_LENGTH(minsize=5,maxsize=50)),
-                    Field('email', requires=[IS_EMAIL(), IS_NOT_IN_DB(db, db.target.url)])
+                    Field('email', requires=[IS_EMAIL(), IS_NOT_IN_DB(db, db.target.email)])
                    )
 
     form = SQLFORM.factory(*form_content)
@@ -27,13 +28,13 @@ def targets():
 
     if form.accepts(request.vars, session):
         c = request.vars
-        gl.create_target(c.Name, None, c.Description, c.email, "demo", "demo target")
+        gl.create_target(c.Name, None, c.Description, c.email, "subscribed")
         targets = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets)
 
     return dict(form=form, list=False, targets=targets)
 
-#@auth.requires_login()
+@auth.requires_login()
 def targetgroups():
     """
     Controller for the targets management page.
@@ -62,8 +63,8 @@ def targetgroups():
 
     if form_target.accepts(request.vars, session):
         c = request.vars
-        gl.create_target(c.Name, None, c.Description,
-                         c.email, "demo", "demo target")
+        randomPass = randomizer.generate_target_passphrase()
+        gl.create_target(c.Name, None, c.Description, c.email, randomPass, "subscribed")
 
     all_targets = gl.get_targets(None)
     targetgroups = gl.get_targetgroups()
@@ -73,7 +74,7 @@ def targetgroups():
                 targetgroups=targetgroups)
 
 
-#@auth.requires_login()
+@auth.requires_login()
 def group_create():
     """
     Receives parameters "name", "desc", and "tags" from POST.
@@ -89,7 +90,7 @@ def group_create():
         gl.create_targetgroup(name, desc, tags)
         return response.json({'success':'true'})
 
-#@auth.requires_login()
+@auth.requires_login()
 def group_delete():
     try:
         group_id = request.post_vars["group"]
@@ -101,7 +102,7 @@ def group_delete():
             return response.json({'success':'true'})
     return response.json({'success':'false'})
 
-#@auth.requires_login()
+@auth.requires_login()
 def group_rename():
     try:
         group_id = request.post_vars["group"]
@@ -127,7 +128,7 @@ def group_desc():
             return response.json({'success':'true'})
     return response.json({'success':'false'})
 
-#@auth.requires_login()
+@auth.requires_login()
 def group_tags():
     try:
         group_id = request.post_vars["group"]
@@ -140,7 +141,7 @@ def group_tags():
             return response.json({'success':'true'})
     return response.json({'success':'false'})
 
-#@auth.requires_login()
+@auth.requires_login()
 def target_add():
     """
     Receives parameters "target" and "group" from POST.
@@ -157,7 +158,7 @@ def target_add():
             return response.json({'success':'true'})
     return response.json({'success':'false'})
 
-#@auth.requires_login()
+@auth.requires_login()
 def target_remove():
     """
     Receives parameters "target" and "group" from POST.
@@ -174,19 +175,27 @@ def target_remove():
             return response.json({'success':'true'})
     return response.json({'success':'false'})
 
+###
+#  THIS IS NEVER CALLED!!
+#
+#  fF GlobaLeaks $ grep -R target_create .
+# ./globaleaks/applications/globaleaks/controllers/admin.py:def target_create():
+# ./globaleaks/applications/globaleaks/controllers/admin.py.bak:def target_create():
+#
+###
 #@auth.requires_login()
-def target_create():
-    try:
-        target_id = request.post_vars["target"]
-    except KeyError:
-        pass
-    else:
-        result = gl.create_target(target_id)
-        if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+#def target_create():
+#    try:
+#        target_id = request.post_vars["target"]
+#    except KeyError:
+#        pass
+#    else:
+#        result = gl.create_target(target_id)
+#        if result:
+#            return response.json({'success':'true'})
+#    return response.json({'success':'false'})
 
-#@auth.requires_login()
+@auth.requires_login()
 def target_delete():
     try:
         target_id = request.post_vars["target"]
@@ -198,7 +207,7 @@ def target_delete():
             return response.json({'success':'true'})
     return response.json({'success':'false'})
 
-#@auth.requires_login()
+@auth.requires_login()
 def config():
     response.flash = ("Welcome to the Globaleaks new wizard application")
 
@@ -271,7 +280,7 @@ def config():
                 auth_form=auth_form,
                 logging_form=logging_form)
 
-#@auth.requires_login()
+@auth.requires_login()
 def wizard():
     """
     Wizard page should be avaible only on startup, and provide with a cool

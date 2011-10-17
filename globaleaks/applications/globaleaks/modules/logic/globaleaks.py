@@ -127,18 +127,29 @@ class Globaleaks(object):
                     result[group_q.id]["members"] = [target_data]
         return result
 
-    def create_target(self, name, category, desc, url, type, info):
+    # by default, a target is inserted with an email type only as contact_type,
+    # in the personal page, the receiver should change that or the contact type 
+    # (eg: facebook, irc ?, encrypted mail setting up a gpg pubkey)
+    def create_target(self, name, category, desc, email, initial_hashpass, req_status):
         """
         Creates a new target with the specified parameters.
         Returns the id of the new record.
+
+        |contact_type| supported values: [email]
+        |type| supported values: [plain*|pgp]
+        |status|: [subscribed*|unsubscribed|selfproposed]
+
+        * = default
         """
+        if req_status is not "subscribed" or req_status is not "selfproposed":
+            return 0
+
         target_id = self._db.target.insert(name=name,
             groups=pickle.dumps([category]) if category else "",
-            desc=desc, url=url, type=type, info=info,
-            status="subscribed", tulip_counter=0,
-            download_counter=0) #, last_send_tulip=None,
-            #last_access=None, last_download=None,
-            #tulip_counter=None, download_counter=None
+            desc=desc, contact_type="email", 
+            contact=email, type="plain", info="",
+            status=req_status, tulip_counter=0,
+            download_counter=0, hashpass=initial_hashpass) 
         self._db.commit()
         return target_id
 

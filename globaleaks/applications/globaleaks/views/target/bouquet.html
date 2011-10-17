@@ -1,0 +1,18 @@
+
+{{extend 'layout.html'}}
+<h1>This is the target/bouquet.html template</h1>
+{{=BEAUTIFY(response._vars)}}
+
+<h1>starting of the tulip list </h1>
+
+<pre>
+{{for tulip in Bouquet:}}
+    {{=tulip}}
+    {{pass}}
+</pre>
+
+
+<h1>change your authentication passphrase</h1>
+<h1>change your material receiving method</h1>
+<h1>change your contact method</h1>
+

@@ -1,5 +1,6 @@
 def index(): return dict(message="hello from target.py")
 
+@auth.requires_login()
 def view():
 
     collectedUser = []
@@ -32,8 +33,37 @@ def view():
     # nevah forget http://uiu.me/Nr9G.png
 
 # this view is like a tulip: reachable only by a personal secret, stored in db.target.url
-def personal():
-    pass
+def receiver():
+    import hashlib
+
+    form = SQLFORM.factory(Field('TargetID', requires=IS_NOT_EMPTY()))
+   
+    if form.accepts(request.vars, session):
+        l = request.vars
+        
+        target_url = hashlib.sha256(l.TargetID.replace).hexdigest()
+        redirect("/bouquet/" + target_url)
+
+    redirect("/")
+
+# this page is indexed by an uniq identifier by the receiver, and show all him accessible
+# Tulips, its the page where she/he could change their preferences
+def bouquet():
+   
+    target_url = request.args[0]
+
+    try:
+        Receiver = Target(hashpass=target_url)
+    except:
+        return dict(err=True)
+
+    # this require to be splitted because tulip are leak x target matrix
+    Bouquet = []
+    tulipList = db(db.tulip.target==Receiver.id).select()
+    for singleT in tulipList:
+        Bouquet.append(singleT)
+
+    return dict(bouquet=Bouquet,target=Receiver)
     
 def subscribe():
     if not request.args:
