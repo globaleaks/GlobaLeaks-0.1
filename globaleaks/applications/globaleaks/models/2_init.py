@@ -1,11 +1,11 @@
 from gluon.storage import Storage
-from config import Mail, Auth
+from config import ConfigMail, ConfigAuth
 from gluon.tools import Recaptcha
 
 gl = local_import('logic.globaleaks').Globaleaks(db)
 
-mail = Mail(db)
-auth = Auth(db)
+mail = ConfigMail(db)
+auth = ConfigAuth(db)
 
 # reCAPTCHA support
 auth.settings.captcha = Recaptcha(request,
