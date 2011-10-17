@@ -60,7 +60,6 @@ class Globaleaks(object):
                             ).select().first()
         result = False
         if target_row is not None and group_row is not None:
-            #groups_p = target_row.groups
             targets_j = group_row.targets
             if not targets_j:
                 # Dumps the json to the group table
@@ -112,10 +111,14 @@ class Globaleaks(object):
         for row in self._db().select(self._db.targetgroup.ALL):
             result[row.id] = {}
             result[row.id]["data"] = dict(row)
+            result[row.id]["members"] = []
 
             if result[row.id]["data"]['targets']:
                 members = result[row.id]["data"]['targets']
-                result[row.id]["members"] = json.loads(members)
+                for member in json.loads(members):
+                    member_data  =self._db(self._db.target.id==int(member)
+                                          ).select().first()
+                    result[row.id]["members"].append(dict(member_data))
             else:
                 result[row.id]["members"] = []
         return result
