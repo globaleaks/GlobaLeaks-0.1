@@ -164,15 +164,20 @@ def target_add():
     Receives parameters "target" and "group" from POST.
     Adds taget to group.
     """
+    print "target add!!"
     try:
         target_id = request.post_vars["target"]
         group_id = request.post_vars["group"]
     except KeyError:
         pass
-    else:
-        result = gl.add_to_targetgroup(target_id, group_id)
-        if result:
-            return response.json({'success': 'true'})
+
+    result = gl.add_to_targetgroup(target_id, group_id)
+    
+    print "RESULT %s " % result
+    
+    if result:
+        return response.json({'success': 'true'})
+    
     return response.json({'success': 'false'})
 
 

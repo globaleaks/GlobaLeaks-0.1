@@ -267,6 +267,7 @@ def index():
                 except:
                     logger.error("There was an error in processing the "
                                  "submission files.")
+                    
             if var.startswith("target_") and var.split("_")[-1].isdigit():
                 group_ids.append(var.split("_")[-1])
 
@@ -275,6 +276,7 @@ def index():
         # Create the leak with the GlobaLeaks factory
         # (the data has actually already been added to db leak,
         #  this just creates the tulips)
+        print "groups id : %s " % group_id       
         leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
 
         # XXX probably a better way to do this
