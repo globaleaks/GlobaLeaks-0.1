@@ -369,14 +369,14 @@ def wizard():
     # set up here various groups: one group form + button "add group"
     step6_form = None
 
-    if step1_form.accepts(request.vars, keepvalue=True):
+    if step1_form.accepts(request.vars):
         # copy config template to GlobaLeaks/globaleaks.conf
         if step1_form.vars.activity:
             copyfile(os.path.join(projroot, 'config_templates', '%s.conf' %
                                   step1_form.vars.activity),
                      cfgfile)
         # fill the new config file with the described global attributes
-    if step2_form.accepts(request.vars, keepvalue=True):
+    if step2_form.accepts(request.vars):
         pass
 
     return dict(import_form=import_form,

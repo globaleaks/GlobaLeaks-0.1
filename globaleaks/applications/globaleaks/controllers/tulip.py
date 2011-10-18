@@ -178,7 +178,6 @@ def download_increment(t):
     else:
         db.tulip[t.target].update_record(downloads_counter=1)
 
-    db.commit()
     return True
 
 
@@ -194,7 +193,7 @@ def download():
 
     target = gl.get_target(t.target)
 
-    if(download_increment(t)):
+    if not download_increment(t):
         redirect("/tulip/" + tulip_url)
 
     leak = t.get_leak()
@@ -202,10 +201,13 @@ def download():
     response.headers['Content-Type'] = "application/octet"
     response.headers['Content-Disposition'] = 'attachment; filename="' + \
                                               tulip_url + '.zip"'
-    # XXX to make proper handlers to manage the fetch of dirname
-    return response.stream(open(os.path.join(request.folder, 'material/',
+
+    download_file = os.path.join(request.folder, 'material/',
                            db(db.submission.leak_id==leak.id).select().first(
-                           ).dirname + '.zip'), 'rb'))
+                           ).dirname + '.zip')
+
+    # XXX to make proper handlers to manage the fetch of dirname
+    return response.stream(open(download_file, 'rb'))
 
 
 def forward():

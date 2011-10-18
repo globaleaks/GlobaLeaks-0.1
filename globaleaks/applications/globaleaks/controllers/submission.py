@@ -252,7 +252,7 @@ def index():
         filesul = UL(_id="stored_files")
         # XXX Is this being sanitized?
         for file in session.files:
-            filesul.append(LI(SPAN(str(file.filename)),
+            filesul.append(LI(SPAN(file.filename),
                               A("delete",
                                 _href="",
                                 _class="stored_file_delete",
@@ -318,9 +318,7 @@ def index():
         #
         # Create the leak with the GlobaLeaks factory
         # (the data has actually already been added to db leak,
-        #  this just creates the tulips)
-        print "groups id : %s " % group_id
-        
+        #  this just creates the tulips)        
         leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
 
         # XXX probably a better way to do this

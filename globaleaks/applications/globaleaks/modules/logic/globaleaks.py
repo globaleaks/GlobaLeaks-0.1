@@ -154,13 +154,20 @@ class Globaleaks(object):
         that belong to these groups.
         """
         result = []
-        logger.error("asdadsdasdsa")
+        if target_set == "ANY":
+            targets = self._db().select(self._db.target.ALL)
+            return targets
+            for target in targets:
+                result.append(target)
+            return result
+        
         for x in target_set:
-            logger.error("TTS: %s" % x)
-            targets = self._db(self._db.targetgroup.id==x).select().first()
-            logger.error("TARGETS: %s" % targets)
-            result.append(json.loads(targets))
-
+            targets = self._db(self._db.targetgroup.id==x).select().first().targets
+            if targets:
+                target_ids = json.loads(targets)
+                for t in target_ids:
+                    target = self._db(self._db.target.id==x).select().first()
+                    result.append(target)
         return result
 
 #        if not isinstance(target_set, list):
@@ -191,7 +198,6 @@ class Globaleaks(object):
         leak_id = id_ #self._db.leak.insert(title=title, desc=desc,
                   #                     submission_timestamp=time.time(),
                   #                     leaker_id=0, spooled=False)
-        logger.error('blablabla')
         targets = self.get_targets(target_set)
 
         for t in targets:
