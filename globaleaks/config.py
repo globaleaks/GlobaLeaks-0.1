@@ -1,6 +1,18 @@
 from gluon.storage import Storage
-from gluon.tools import Auth, Mail
+from gluon.tools import Mail, Auth
+
 import ConfigParser
+import os.path
+
+# XXX: find a better place for gleaks.cfg ;  $HOME if installed
+projroot = os.path.abspath(__file__).rsplit('GlobaLeaks', 1)[0] + 'GlobaLeaks'
+cfgfile = os.path.join(projroot, 'globaleaks', 'globaleaks.conf')
+
+def copyform(form, settings):
+    """Copy each form value into the specific settings subsection. """
+    for name, value in form.iteritems():
+        setattr(settings, name, value)
+    settings.commit()
 
 class ConfigFile(Storage):
 
@@ -31,25 +43,10 @@ class ConfigFile(Storage):
         try:
             # XXX: Automagically discover variable type
             self._cfgparser.set(self._section, name, value)
-            self._cfgparser.write(open(self._cfgfile, 'w'))
         except ConfigParser.NoOptionError:
             raise NameError(name)
 
+    def commit(self):
+        self._cfgparser.write(open(self._cfgfile, 'w'))
 
-class ConfigAuth(Auth):
-    """
-    A new Auth class with is supposed to save data as soon as data changes.
-    """
-    def __setattr__(self, name, value):
-        super(ConfigAuth, self).__setattr__(name, value)
-        db.commit()
-
-
-class ConfigMail(Mail):
-    """
-    A new Mail class which is supposed to save data as soon as data changes.
-    """
-    def __setattr__(self, name, value):
-        super(ConfigMail, self).__setattr__(name, value)
-        db.commit()
 

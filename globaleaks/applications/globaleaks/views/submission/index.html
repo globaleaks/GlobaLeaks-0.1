@@ -1,11 +1,14 @@
 {{extend 'layout.html'}}
-<script type="text/javascript" src="/globaleaks/static/js/fileupload/fileuploader.js"></script>
+<!-- script type="text/javascript" src="/globaleaks/static/js/fileupload/fileuploader.js"></script-->
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" id="theme">
 
+<link rel="stylesheet" href="/globaleaks/static/css/jquery.fileupload-ui.css">
 <style>
+/*
 .qq-uploader { position:relative; width: 100%;}
 
 .qq-upload-button {
-    display:block; /* or inline-block */
+    display:block;
     width: 105px; padding: 7px 0; text-align:center;
     background:#880000; border-bottom:1px solid #ddd;color:#fff;
 }
@@ -33,126 +36,248 @@
 
 .qq-upload-failed-text {display:none;}
 .qq-upload-fail .qq-upload-failed-text {display:inline;}
+*/
 
-#file-uploader-js {
+#fileupload {
     display: none;
 }
 
 div.flash {background-color: #888;}
+
+#group_list {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.group_tags {
+  font-weight: normal;
+  font-style: italic;
+  padding-left: 20px;
+}
 </style>
+
+<script type="text/javascript">
+  // custom css expression for a case-insensitive contains()
+  jQuery.expr[':'].Contains = function(a,i,m){
+      return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
+  };
+
+  function listFilter(header, list) { // header is any element, list is an unordered list
+    // create and add the filter form to the header
+    var form = $("<form>").attr({"class":"filterform","action":"#"}).text("Filter: "),
+        input = $("<input>").attr({"class":"filterinput","type":"text"});
+    $(form).append(input).appendTo(header);
+
+    $(input)
+      .change( function () {
+        var filter = $(this).val();
+        if(filter) {
+          // this finds all links in a list that contain the input,
+          // and hide the ones not containing the input while showing the ones that do
+          $(list).find("li").each(function(k, v) {
+            if (!$(v).find("span").text().match(new RegExp(filter))) {
+              $(v).slideUp();
+            }
+            else {
+              $(v).slideDown();
+            }
+          });
+        } else {
+          $(list).find("li").slideDown();
+        }
+        return false;
+      })
+    .keyup( function () {
+        // fire the above change event after every letter
+        $(this).change();
+    });
+  }
+
+  //ondomready
+  $(function () {
+    listFilter($("#group_filter"), $("#group_list"));
+  });
+</script>
 
 {{if form:}}
     <h1>Whistleblower<span> | Submission interface</span></h1>
+    {{=BEAUTIFY(anonymity)}}
     <p class="intro">You are the Whistleblower and this is the Submission interface from which you can send material to be received as a TULIP by the Targets. Once you have successfully submitted the form you will be given a Reciept allowing you to check back on the status of the TULIP, view statistics (access/downloads counters), send and receive comments and upload new material. The Target group responsible for analyzing and recieving the material may be selected by the Whistleblower (NOT IMPLEMENTED for details see the <a href="https://blueprints.launchpad.net/globaleaks/+spec/submission-targets-configurable">blueprint</a>)</p>
 
-        {{=form}}
+        	{{=form}}
+
 <script type="text/javascript">
-
-function sendInfo(id, jsonId)
-{
-    var linkUsed = document.getElementById("link_"+id);
-    linkUsed.innerHTML ='info already sent';
-
-    // XXX I don't know which kind of security analysis are performed by web2py, therefore maybe
-    // other encoding ways are better
-    details_text = escape(document.getElementById("desc_"+id).innerHTML);
-    desc_title = escape(document.getElementById("title_"+id).value);
-
-    $.ajax({
-        type: 'POST',
-        url: '/globaleaks/submission/sendinfo',
-        data: {'info_id' : jsonId, 'title_mat' : desc_title, 'details' : details_text }
-    });
-}
-
-function addInfoRequest(id, fileName, responseJSON)
-{
-    /* remember, before was used the code: */
-    // qqElement_added = $('.qq-upload-list li');
-    // qqElement_added.append("text_string");
-
-    var father = document.getElementById('file-uploader');
-    var li_new = document.createElement("li");
-    li_new.className = 'qq-upload-size';
-
-    li_new.innerHTML = '<label>Short description of ' + fileName + '</label><br>'+
-                       '<input type="text" id="title_'+id+'" name="title_mat" value="add file short title"><br>'+
-                       '<label>Description</label><br>'+
-                       '<textarea id="desc_'+id+'" name="desc_mat">add the complete explanation of the submitted data</textarea>'+
-                       '<br><span id="link_'+id+'">' + fileName + ': <a href="javascript:void(0)" onClick="javascript:sendInfo(' +
-                       id + ', ' + responseJSON.fileid + ');">send info</a></span><br><br>';
-
-    console.log(li_new.innerHTML);
-    father.appendChild(li_new);
-}
-
-function createUploader(){
-    var uploader = new qq.FileUploader({
-        element: document.getElementById('file-uploader'),
-        action: '/globaleaks/submission/upload',
-
-        onComplete: function(id, fileName, responseJSON){
-            addInfoRequest(id, fileName, responseJSON);
-            $("a.qq-upload-delete").click(function(e) {
-                console.log(this);
-                $(this).parent().hide();
-                $.ajax({
-                    type: 'POST',
-                    url: '/globaleaks/submission/upload',
-                    data: {'delete' : responseJSON.fileid}
-                });
-                return false;
-            });
-
-            $("#submit").show();
-            $("#uploading").hide();
-        },
-        onProgress: function(id, fileName, loaded, total){
-
-            $('a.qq-upload-delete').hide();
-            $("#submit").hide();
-            $("#uploading").show();
-        },
-        onCancel: function(id, fileName){
-            $("#submit").show();
-            $("#uploading").hide();
-        },
-
-        onSubmit: function(id, fileName){
-
-        },
-        debug: true
-    });
-}
-
-function DeleteFile(fileid) {
-    $.ajax({
-        type: 'POST',
-        url: '/globaleaks/submission/upload',
-        data: {'delete' : fileid}
-    });
-    return false;
-}
-
-window.onload = createUploader;
-$(document).ready(function() {
-    $('#file-uploader-js').show();
-    $('#file-uploader-nonjs').hide();
-    
-    $("a.stored_file_delete").click(function(e) {
-        $(this).parent().hide();
-        $.ajax({
-            type: 'POST',
-            url: '/globaleaks/submission/upload',
-            data: {'delete' : $(this).attr("id")}
-        });
-        return false;
-    });
-
-
-});
+//
+// function sendInfo(id, jsonId)
+// {
+    // var linkUsed = document.getElementById("link_"+id);
+    // linkUsed.innerHTML ='info already sent';
+//
+    // // XXX I don't know which kind of security analysis are performed by web2py, therefore maybe
+    // // other encoding ways are better
+    // details_text = escape(document.getElementById("desc_"+id).innerHTML);
+    // desc_title = escape(document.getElementById("title_"+id).value);
+//
+    // $.ajax({
+        // type: 'POST',
+        // url: '/globaleaks/submission/sendinfo',
+        // data: {'info_id' : jsonId, 'title_mat' : desc_title, 'details' : details_text }
+    // });
+// }
+//
+// function addInfoRequest(id, fileName, responseJSON)
+// {
+    // /* remember, before was used the code: */
+    // // qqElement_added = $('.qq-upload-list li');
+    // // qqElement_added.append("text_string");
+//
+    // var father = document.getElementById('file-uploader');
+    // var li_new = document.createElement("li");
+    // li_new.className = 'qq-upload-size';
+//
+    // li_new.innerHTML = '<label>Short description of ' + fileName + '</label><br>'+
+                       // '<input type="text" id="title_'+id+'" name="title_mat" value="add file short title"><br>'+
+                       // '<label>Description</label><br>'+
+                       // '<textarea id="desc_'+id+'" name="desc_mat">add the complete explanation of the submitted data</textarea>'+
+                       // '<br><span id="link_'+id+'">' + fileName + ': <a href="javascript:void(0)" onClick="javascript:sendInfo(' +
+                       // id + ', ' + responseJSON.fileid + ');">send info</a></span><br><br>';
+//
+    // console.log(li_new.innerHTML);
+    // father.appendChild(li_new);
+// }
+//
+// function createUploader(){
+    // var uploader = new qq.FileUploader({
+        // element: document.getElementById('file-uploader'),
+        // action: '/globaleaks/submission/upload',
+//
+        // onComplete: function(id, fileName, responseJSON){
+            // addInfoRequest(id, fileName, responseJSON);
+            // $("a.qq-upload-delete").click(function(e) {
+                // console.log(this);
+                // $(this).parent().hide();
+                // $.ajax({
+                    // type: 'POST',
+                    // url: '/globaleaks/submission/upload',
+                    // data: {'delete' : responseJSON.fileid}
+                // });
+                // return false;
+            // });
+//
+            // $("#submit").show();
+            // $("#uploading").hide();
+        // },
+        // onProgress: function(id, fileName, loaded, total){
+//
+            // $('a.qq-upload-delete').hide();
+            // $("#submit").hide();
+            // $("#uploading").show();
+        // },
+        // onCancel: function(id, fileName){
+            // $("#submit").show();
+            // $("#uploading").hide();
+        // },
+//
+        // onSubmit: function(id, fileName){
+//
+        // },
+        // debug: true
+    // });
+// }
+//
+// function DeleteFile(fileid) {
+    // $.ajax({
+        // type: 'POST',
+        // url: '/globaleaks/submission/upload',
+        // data: {'delete' : fileid}
+    // });
+    // return false;
+// }
+//
+// //window.onload = createUploader;
+// $(document).ready(function() {
+    // $('#fileupload').show();
+    // $('#file-uploader-nonjs').hide();
+//
+    // $("a.stored_file_delete").click(function(e) {
+        // $(this).parent().hide();
+        // $.ajax({
+            // type: 'POST',
+            // url: '/globaleaks/submission/upload',
+            // data: {'delete' : $(this).attr("id")}
+        // });
+        // return false;
+    // });
+//
+//
+// });
 </script>
 
+<script id="template-upload" type="text/x-jquery-tmpl">
+	{{=jQuery_templates[0]}}
+</script>
+<script id="template-download" type="text/x-jquery-tmpl">
+	{{=jQuery_templates[1]}}
+</script>
+
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script> -->
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.iframe-transport.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.fileupload.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
+
+<script>
+	$(function () {
+    'use strict';
+    $('#fileupload').show();
+    $('#file-uploader-nonjs').hide();
+
+    // Initialize the jQuery File Upload widget:
+    $('#fileupload').fileupload({
+    	url: "/globaleaks/submission/fileupload",
+    	autoUpload: true,
+    	// XXX these two should be enabled for resume support
+    	//     currently broken :'((((
+    	// maxChunkSize: 10000000,
+    	// multipart: false,
+    	/* add: function (e, data) {
+        	var that = this;
+        	$.getJSON('/globaleaks/submission/upload', {filebytes: data.files[0].name}, function (file) {
+            	data.uploadedBytes = file && file.size;
+            	$.blueimpUI.fileupload.prototype
+                	.options.add.call(that, e, data);
+        });
+    }*/
+
+   	});
+
+    // Load existing files:
+    $.getJSON($('#fileupload form').prop('action'), function (files) {
+        var fu = $('#fileupload').data('fileupload');
+        fu._adjustMaxNumberOfFiles(-files.length);
+        fu._renderDownload(files)
+            .appendTo($('#fileupload .files'))
+            .fadeIn(function () {
+                // Fix for IE7 and lower:
+                $(this).show();
+            });
+    });
+
+    // Open download dialogs via iframes,
+    // to prevent aborting current uploads:
+    $('#fileupload .files a:not([target^=_blank])').live('click', function (e) {
+        e.preventDefault();
+        $('<iframe style="display:none;"></iframe>')
+            .prop('src', this.href)
+            .appendTo('body');
+    });
+
+});
+
+
+</script>
 
 {{pass}}
 
@@ -219,3 +344,6 @@ $(document).ready(function() {
 </script>
 
 {{pass}}
+
+</body>
+

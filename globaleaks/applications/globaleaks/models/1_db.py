@@ -71,15 +71,16 @@ db.define_table('target',
     Field('last_download'),
     Field('tulip_counter'),
     Field('download_counter'),
-    Field('groups'),
+    # Field('groups'),
     format='%(name)s'
     )
 
 # The table for target groups
 db.define_table('targetgroup',
-    Field('name'),
+    Field('name', unique=True),
     Field('desc'),
     Field('tags'),
+    Field('targets'),
     format='%(name)s'
     )
 

@@ -1,5 +1,13 @@
 # coding: utf8
-# try something like
+"""
+Controller module for the admin interface.
+Contains every controller that must run with admin privileges.
+
+Every controller in this file must have the @auth.requires_login() decorator
+"""
+from shutil import copyfile
+
+from config import projroot, cfgfile, copyform
 
 
 @auth.requires_login()
@@ -85,10 +93,11 @@ def group_create():
         desc = request.post_vars["desc"]
         tags = request.post_vars["tags"]
     except KeyError:
-        return response.json({'success':'false'})
+        return response.json({'success': 'false'})
     else:
         gl.create_targetgroup(name, desc, tags)
-        return response.json({'success':'true'})
+        return response.json({'success': 'true'})
+
 
 @auth.requires_login()
 def group_delete():
@@ -99,8 +108,9 @@ def group_delete():
     else:
         result = gl.delete_targetgroup(group_id)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 @auth.requires_login()
 def group_rename():
@@ -112,8 +122,9 @@ def group_rename():
     else:
         result = gl.update_targetgroup(group_id, name=name)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 #@auth.requires_login()
 def group_desc():
@@ -125,8 +136,9 @@ def group_desc():
     else:
         result = gl.update_targetgroup(group_id, desc=desc)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 @auth.requires_login()
 def group_tags():
@@ -138,8 +150,9 @@ def group_tags():
     else:
         result = gl.update_targetgroup(group_id, tags=tags)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 @auth.requires_login()
 def target_add():
@@ -147,16 +160,22 @@ def target_add():
     Receives parameters "target" and "group" from POST.
     Adds taget to group.
     """
+    print "target add!!"
     try:
         target_id = request.post_vars["target"]
         group_id = request.post_vars["group"]
     except KeyError:
         pass
-    else:
-        result = gl.add_to_targetgroup(target_id, group_id)
-        if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+
+    result = gl.add_to_targetgroup(target_id, group_id)
+    
+    print "RESULT %s " % result
+    
+    if result:
+        return response.json({'success': 'true'})
+    
+    return response.json({'success': 'false'})
+
 
 @auth.requires_login()
 def target_remove():
@@ -172,8 +191,9 @@ def target_remove():
     else:
         result = gl.remove_from_targetgroup(target_id, group_id)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 ###
 #  THIS IS NEVER CALLED!!
@@ -183,7 +203,6 @@ def target_remove():
 # ./globaleaks/applications/globaleaks/controllers/admin.py.bak:def target_create():
 #
 ###
-#@auth.requires_login()
 #def target_create():
 #    try:
 #        target_id = request.post_vars["target"]
@@ -204,8 +223,9 @@ def target_delete():
     else:
         result = gl.delete_target(target_id)
         if result:
-            return response.json({'success':'true'})
-    return response.json({'success':'false'})
+            return response.json({'success': 'true'})
+    return response.json({'success': 'false'})
+
 
 @auth.requires_login()
 def config():
@@ -218,12 +238,14 @@ def config():
             TR(INPUT(_type="submit"))
             ))
     auth_form = FORM(TABLE(
-            TR("verification", INPUT(_name="registration_requires_verification",
-                                     _type="text",
-                                     _value=settings.auth.registration_requires_verification)),
-            TR("approval" , INPUT(_name="registration_requires_approval",
-                                  _type="text",
-                                  _value=settings.auth.registration_requires_approval)),
+            TR("verification",
+               INPUT(_name="registration_requires_verification",
+                     _type="text",
+                     _value=settings.auth.registration_requires_verification)),
+            TR("approval",
+               INPUT(_name="registration_requires_approval",
+                     _type="text",
+                     _value=settings.auth.registration_requires_approval)),
             TR(INPUT(_type="submit"))
             ))
 
@@ -241,7 +263,7 @@ def config():
 
     # XXX: client logging depends on server logging!
     logging_form = FORM(TABLE(
-            TR("client", INPUT(_name='client', _type= 'text',
+            TR("client", INPUT(_name='client', _type='text',
                                _value=settings.logging.client)),
             TR("server", INPUT(_name="server", _type="text",
                                _value=settings.logging.server)),
@@ -251,28 +273,14 @@ def config():
     ))
 
     if global_form.accepts(request.vars, keepvalues=True):
-        for var in global_form.vars:
-            value = getattr(global_form.vars, var)
-            setattr(settings.globals, var, value)
-
+        copyform(global_form.vars, settings.globals)
     if auth_form.accepts(request.vars, keepvalues=True):
-        for var in auth_form.vars:
-            value = getattr(auth_form.vars, var)
-            setattr(settings.auth, var, value)
-        # XXX: temporary added commit, there should be a class in config.py
-        db.commit()
-
+        copyform(auth_form.vars, settings.auth)
     if mail_form.accepts(request.vars, keepvalue=True):
-        for var in mail_form.vars:
-            value = getattr(auth_form.vars, var)
-            setattr(settings.mail, var, value)
-        # XXX: same as above.
-        db.commit()
-
+        copyform(mail_form.vars, settings.mail)
     if logging_form.accepts(request.vars, keepvalue=True):
-        for var in logging_form.vars:
-            value = getattr(global_form.vars, var)
-            setattr(settings.logging, vat, value)
+        if logging_form.vars.logfile:
+            copyform(logging_form.vars, settings.logging)
 
     return dict(settings=settings,
                 global_form=global_form,
@@ -311,17 +319,26 @@ def wizard():
                       )
 
     step1_form = FORM(TABLE(
+        TR("Type of activity",
+            SELECT(OPTION('Local Municipality Activism', _value='lma'),
+                   OPTION('Public Agencies', _value='pa'),
+                   OPTION('Public Safety', _value='ps'),
+                   OPTION('Corporate Transparency', _value='ct'),
+                   _name='activity')),
         TR("Leak author", INPUT(_name= "author", _type="text",
             _value=settings.globals.author)),
         TR("Leak title", INPUT(_name="title", _type="text",
             _value=settings.globals.title)),
         TR("Leak description", INPUT(_name="subtitle", _type="text",
-            _value=settings.globals.subtitle))
+            _value=settings.globals.subtitle)),
+        TR(INPUT(_type="submit"))
         ))
 
     step2_form = FORM(TABLE(
-        TR("E-Mail Messages", INPUT(_name="mail", _type="checkbox", _value=True)),
-        TR("SMS Messages", INPUT(_name="SMS", _type="checkbox", _value=True))
+        TR("E-Mail Messages",
+           INPUT(_name="mail", _type="checkbox", _value=True)),
+        TR("SMS Messages",
+           INPUT(_name="SMS", _type="checkbox", _value=True))
         ))
 
     step3_form = FORM(TABLE(
@@ -340,7 +357,6 @@ def wizard():
                                 _value=settings.globals.html_keyword))
         ))
 
-
     # XXX: server logging depends on client logging!
     step5_form = FORM(TABLE(
         TR("Logging client-side", INPUT(_name="client", _type="text",
@@ -353,6 +369,16 @@ def wizard():
 
     # set up here various groups: one group form + button "add group"
     step6_form = None
+
+    if step1_form.accepts(request.vars, keepvalue=True):
+        # copy config template to GlobaLeaks/gleaks.cfg
+        if step1_form.vars.activity:
+            copyfile(os.path.join(projroot, 'stdcfgs', '%s.conf' %
+                                  step1_form.vars.activity),
+                     cfgfile)
+        # fill the new config file with the described global attributes
+    if step2_form.accepts(request.vars, keepvalue=True):
+        pass
 
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,

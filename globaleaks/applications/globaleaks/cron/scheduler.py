@@ -21,9 +21,11 @@ logger.info('### Starting GlobaLeaks at: %s ###',  time.ctime())
 if db.auth_user:
     # XXX Remove for non demo usage
     if not db(db.auth_user.email=="node@globaleaks.org").select().first():
-        db.auth_user.insert(first_name="Globaleaks node administrator",
-                            last_name="Globaleaks",email="node@globaleaks.org",
-                            password=db.auth_user.password.validate("testing")[0])
+        db.auth_user.insert(
+            first_name="Globaleaks node administrator",
+            last_name="Globaleaks",
+            email="node@globaleaks.org",
+            password=db.auth_user.password.validate("testing")[0])
         logger.info("First launch of GlobaLeaks, creating node administrator!")
         db.commit()
 
@@ -31,18 +33,15 @@ unspooled = db(db.leak.spooled!=True).select()
 logger.info("New material: %s : ", unspooled)
 
 for submission in unspooled:
-    logger.info("blabla")
-    
     compressor.create_zip(db, submission, request, logger)
     db.leak[submission.id].update_record(spooled=True)
     logger.info(submission)
-    
     db.commit()
 
 mails = db(db.mail).select()
 logger.info(str(mails)+"\n")
 
-if len(mails) < 1:
+if not mails:
     logger.info(time.ctime()+": NO MAILS TO SEND!\n")
 
 for m in mails:
@@ -56,7 +55,7 @@ for m in mails:
 
     # XXX Use for AWS
     # conn.send_email(source='node@globaleaks.org', \
-    #     subject='GlobaLeaks notification for:' + m.target,\ 
+    #     subject='GlobaLeaks notification for:' + m.target,\
     #     body=message, to_addresses=m.address, cc_addresses=None, \
     #     bcc_addresses=None, format='text', reply_addresses=None, \
     #     return_path=None)
@@ -67,9 +66,9 @@ for m in mails:
     logger.info("Sending to %s\n", m.target)
 
     if MimeMail.send(to=to, subject=subject,
-            message_text=message_txt,
-            message_html=message_html):
-            db(db.mail.id==m.id).delete()
+                     message_text=message_txt,
+                     message_html=message_html):
+        db(db.mail.id==m.id).delete()
 
     # XXX Uncomment in real world environment
     # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \

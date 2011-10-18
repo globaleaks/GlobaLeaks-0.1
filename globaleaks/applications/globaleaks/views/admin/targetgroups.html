@@ -281,7 +281,6 @@ h3 {
       var that = this;
       $(e).each(function(k, el) {
         var target_id = $(el).find('.target_id').attr('name');
-        console.log(target_id);
         var append = true;
         $(that).find("li.target").each(function(k, elem) {
           if ($(elem).find('.target_id').attr('name') == target_id) {
