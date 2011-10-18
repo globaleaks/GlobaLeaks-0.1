@@ -1,6 +1,5 @@
 import randomizer
 import time
-import pickle
 from gluon.contrib import simplejson as json
 
 class Globaleaks(object):
@@ -30,13 +29,6 @@ class Globaleaks(object):
         if self._db(self._db.targetgroup.id==group_id).select():
             result = True
             self._db(self._db.targetgroup.id==group_id).delete()
-#            for row in self._db().select(self._db.target.ALL):
-#                if row.groups:
-#                    groups_list = pickle.loads(row.groups)
-#                    groups_list.remove(group_id)
-#                    self._db(self._db.target.id==row.id).update(
-#                             groups=pickle.dumps(groups_list))
-            
         self._db.commit()
         return result
 
@@ -50,10 +42,11 @@ class Globaleaks(object):
             self._db(self._db.targetgroup.id==group_id).update(**kwargs)
             self._db.commit()
         return result
-    
+
     def get_group_id(self, group_name):
-        return self._db(self._db.targetgroup.name==group_name).select().first().id
-    
+        return self._db(self._db.targetgroup.name==group_name
+                       ).select().first().id
+
     def add_to_targetgroup(self, target_id, group_id=None, group_name=None):
         """
         Adds the target with id target_id to the targetgroup with id
@@ -67,25 +60,18 @@ class Globaleaks(object):
                             ).select().first()
         result = False
         if target_row is not None and group_row is not None:
-            #groups_p = target_row.groups
             targets_j = group_row.targets
             if not targets_j:
-                # Dump the pickle to the target table
-                #groups_p = pickle.dumps(set([group_id]))
-                
+                # Dumps the json to the group table
                 targets_j = json.dumps([target_id])
             else:
-                #tmp = pickle.loads(groups_p)
-                #tmp.add(group_id)
-                #groups_p = pickle.dumps(tmp)
-
                 tmp_j = json.loads(targets_j)
                 tmp_j.append(group_id)
                 targets_j = json.dumps(tmp_j)
-                
-            #self._db(self._db.target.id==target_id).update(groups=groups_p)
-            result = self._db(self._db.targetgroup.id==group_id).update(targets=targets_j)
+            result = self._db(self._db.targetgroup.id==group_id
+                             ).update(targets=targets_j)
             self._db.commit()
+
         return result
 
     def remove_from_targetgroup(self, target_id, group_id):
@@ -99,22 +85,17 @@ class Globaleaks(object):
         result = False
         if target_row is not None and group_row is not None:
             result = True
-            # groups_p = target_row.groups
             targets_j = group_row.targets
 
             if not targets_j:
-                # groups_p = pickle.dumps(set([group_id]))
                 targets_j = json.dumps([target_id])
             else:
-                # tmp = pickle.loads(groups_p)
-                # tmp.remove(group_id)
-                # groups_p = pickle.dumps(tmp)
                 tmp = json.loads(targets_j)
                 tmp.remove(target_id)
                 targets_j = json.dumps(tmp)
-                
-            # self._db(self._db.target.id==target_id).update(groups=groups_p)
-            self._db(self._db.targetgroup.id==group_id).update(targets=targets_j)
+
+            self._db(self._db.targetgroup.id==group_id
+                    ).update(targets=targets_j)
             self._db.commit()
         return result
 
@@ -130,29 +111,16 @@ class Globaleaks(object):
         for row in self._db().select(self._db.targetgroup.ALL):
             result[row.id] = {}
             result[row.id]["data"] = dict(row)
+            result[row.id]["members"] = []
 
             if result[row.id]["data"]['targets']:
-                result[row.id]["members"] = json.loads(result[row.id]["data"]['targets'])
+                members = result[row.id]["data"]['targets']
+                for member in json.loads(members):
+                    member_data  =self._db(self._db.target.id==int(member)
+                                          ).select().first()
+                    result[row.id]["members"].append(dict(member_data))
             else:
                 result[row.id]["members"] = []
-            
-#        for row in self._db().select(self._db.target.ALL):
-#            target_data = dict(row)
-#            if not row.groups:
-#                continue
-#            groups = pickle.loads(row.groups)
-#            for group in groups:
-#                group_q = self._db(self._db.targetgroup.id==int(group)
-#                                  ).select().first()
-#                if not group_q:
-#                    continue
-#                result[group_q.id] = {}
-#                result[group_q.id]["data"] = dict(group_q)
-#                try:
-#                    result[group_q.id]["members"].append(target_data)
-#                except KeyError:
-#                    result[group_q.id]["members"] = [target_data]
-
         return result
 
     def create_target(self, name, category, desc, url, type, info):
@@ -192,9 +160,9 @@ class Globaleaks(object):
             targets = self._db(self._db.targetgroup.id==x).select().first()
             logger.error("TARGETS: %s" % targets)
             result.append(json.loads(targets))
-        
+
         return result
-        
+
 #        if not isinstance(target_set, list):
 #            return self._db(self._db.target).select()
 #        rows = self._db().select(self._db.target)
@@ -216,9 +184,8 @@ class Globaleaks(object):
         Returns the target with the specified id
         """
         return self._db(self._db.target.id==target_id).select().first()
-            
-    def create_leak(self, id_, target_set, number=None): #title, desc, leaker, material,
-                    #target_set, tags="", number=None):
+
+    def create_leak(self, id_, target_set, number=None):
         #FIXME insert new tags into DB first
         #Create leak and insert into DB
         leak_id = id_ #self._db.leak.insert(title=title, desc=desc,
@@ -226,7 +193,7 @@ class Globaleaks(object):
                   #                     leaker_id=0, spooled=False)
         logger.error('blablabla')
         targets = self.get_targets(target_set)
-        
+
         for t in targets:
         #Create a tulip for each target and insert into DB
         #for target_url, allowed_downloads in targets.iteritems():
