@@ -12,6 +12,8 @@ import gluon.contrib.simplejson as json
 import shutil
 import base64
 
+FormWizard = local_import('plugin_PowerFormWizard')
+
 mutils = local_import('material').utils()
 Anonymity = local_import('anonymity')
 jQueryHelper = local_import('jquery_helper')
@@ -172,7 +174,10 @@ def index():
     # As someone put it, if you think JS is evil remember
     # that the world is in technicolor and not in black and white.
     # Look up, the sun is shining, thanks to jQuery.
-    jQueryFileUpload = TR(T('Material'),
+    #jQueryFileUpload = TR(T('Material'),
+    jQueryFileUpload = DIV(
+                           DIV(LABEL("Material:"),
+                                _class="w2p_fl"),
                           DIV(DIV(LABEL(SPAN(T("Add Files")),
                                         INPUT(_type="file",
                                               _name="files[]"),
@@ -190,7 +195,9 @@ def index():
                                   DIV(TABLE(_class="files"),
                                       DIV(_class="fileupload-progressbar"),
                                       _class="fileupload-content"),
-                                  _id="fileupload"))
+                                  _id="fileupload", _class="w2p_fl"),
+                            DIV(_class="w2p_fc"),
+                                _id="material__row")
 
     # This is necessary because otherwise web2py will go crazy when
     # it sees {{ }}
@@ -203,11 +210,14 @@ def index():
     material_js = TR('Material',
                      DIV(_id='file-uploader'),
                      _id='file-uploader-js')
+    
     # .. and non JavaScript
-    material_njs = TR('Material',
-                      INPUT(_name='material',
-                            _type='file'),
-                      _id='file-uploader-nonjs')
+    material_njs = DIV(DIV(LABEL("Material:"),
+                                _class="w2p_fl"),
+                            DIV(INPUT(_name='material', _type='file', 
+                                      _id='file-uploader-nonjs'),
+                                _class="w2p_fc"),
+                                _id="file-uploader-nonjs")
 
     # Creating a list of targetgroups
     groups_data = gl.get_targetgroups()
@@ -231,18 +241,31 @@ def index():
     # The default fields and labels
     form_fields = ['title', 'desc']
     form_labels = {'title': 'Title', 'desc': 'Description'}
-
+    
+    form_extras = []
+    
     # Add to the fields to be displayed the ones inside of
     # the extrafields setting
     for i in settings.extrafields.fields:
+        form_extras.append(str(i['name']))
         form_fields.append(str(i['name']))
-        form_labels[str(i['name'])] = str(i['desc'])
+        form_labels[str(i['name'])] = i['desc']
 
     # Create the actual form
     form = SQLFORM(db.leak,
             fields=form_fields,
             labels=form_labels)
 
+    mysteps = [
+               dict(title='Step 1', legend='Fist step', fields=['title', 'desc']),               
+               dict(title='Step 1', legend='Fist step', fields=form_extras),
+               ]
+
+    form = FormWizard.PowerFormWizard(
+               db.leak,
+               steps=mysteps,
+               )
+    
     # Add the extra settings that are not included in the DB
     form[0].insert(-1, material_njs)
     form[0].insert(-1, jQueryFileUpload)

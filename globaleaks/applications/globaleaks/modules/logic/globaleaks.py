@@ -154,7 +154,7 @@ class Globaleaks(object):
         that belong to these groups.
         """
         result = []
-        if target_set == "ANY":
+        if target_set == "ANY" or target_set is None:
             targets = self._db().select(self._db.target.ALL)
             return targets
             for target in targets:
