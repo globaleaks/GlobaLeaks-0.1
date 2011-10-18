@@ -10,19 +10,30 @@
 </style>
 
 <script type="text/javascript">
+    var curstep = 1
     function next_step()
     {
-    ;
+        if (curstep == 5)
+            alert("Finish!");
+        else {
+            $('#step'+curstep).hide('slow',
+                function(){
+                    curstep++;
+                    $('#step'+curstep).show('slow')
+                })
+            $(window).scrollTop($(document).height()+500);
+
+
+        }
     }
 </script>
 <h1> Globaleaks <span>| setup Wizard </span></h1>
 <hr>
 <br>
-<br>
 
 
 <!-- create here a cool show/hide <-->
-<div class="more"><a href="javascript:void();"><img src="images/more.png" alt="" border="0" /></a></div>
+<div class="menu"><a href="javascript:void();"><img src="images/more.png" alt="" border="0" /></a></div>
 			<div class="title"><p class="menu">Side Options</p></div>
 			<div class="clear"></div>
             <div class="spot">
@@ -80,5 +91,8 @@
 </div>
 
 <hr>
-<input id="next" type="submit" value="Next" disabled="disabled" float="right"
-       onclick="next_step()" \>
+<td align="right">
+     <a  onClick="next_step();">
+         <input id="next_step" type="submit" value="Next" name=2 \>
+     </a>
+</td>
