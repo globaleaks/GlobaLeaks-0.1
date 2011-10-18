@@ -1,0 +1,38 @@
+<wizard>
+    <step number="1">
+        <field>
+            <name>title</name>
+            <label>title</label>
+            <description>this is the main title of the submission</description>
+            <type>string</type>
+        </field>
+        <field>
+            <name>desc</name>
+            <label>Description</label>
+            <description>Describe your submission in this box</description>
+            <type>text</type>
+        </field>
+        <grouplist></grouplist>
+    </step>
+
+    <step number="2">
+        <material></material>
+        <field>
+            <name>extratext</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field>
+    </step>
+
+    <step number="3">
+        <field>
+            <name>date</name>
+            <label>Date</label>
+            <description>Enter a date realted to your submission</description>
+            <type>date</type>
+        </field>
+        <disclaimer></disclaimer>
+        <captcha></captcha>
+    </step>
+</wizard>
