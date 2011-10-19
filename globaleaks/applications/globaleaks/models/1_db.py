@@ -51,7 +51,7 @@ class ExtraField:
 
     def parse_step(self, step):
         steps = []
-        
+
         for node in step.childNodes:
             if node.nodeName == "field":
                 steps.append(self.parse_field(node))
@@ -63,14 +63,14 @@ class ExtraField:
                 steps.append("disclaimer")
             elif node.nodeName == "captcha":
                 steps.append("captcha")
-        
+
         return steps
 
     def gen_wizard(self):
         steps = self.dom.getElementsByTagName("step")
-        
+
         wizard = []
-        
+
         for i in range(0, len(steps)):
             nstep = self.get_step_n(steps, i+1)
             if nstep:
@@ -138,6 +138,7 @@ db.define_table('leak',
     Field('submission_timestamp'),
     Field('leaker_id', db.target),
     Field('whistleblower_access'),
+    Field('notified_groups'),
     Field('spooled', 'boolean', False),
     *db_extrafields,
     format='%(name)s'

@@ -5,9 +5,54 @@
   <ul>
     {{for group in targetgroups:}}
       <li>
-      <input>{{=group}}
+      <input type="checkbox" name="group" value="{{=group}}" />
+      <span>{{=targetgroups[group]['data']['name']}}</span>
+      <span>{{=targetgroups[group]['data']['tags']}}</span>
       </li>
     {{pass}}
   </ul>
-  <input type="submit" value="forward" />
+  <input type="submit" />
 </form>
+
+<script type="text/javascript">
+  // custom css expression for a case-insensitive contains()
+  jQuery.expr[':'].Contains = function(a,i,m){
+      return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase(>
+  };
+
+  function listFilter(header, list) { // header is any element, list is an unordered list
+    // create and add the filter form to the header
+    var form = $("<form>").attr({"class":"filterform","action":"#"}).text("Filter: "),
+        input = $("<input>").attr({"class":"filterinput","type":"text"});
+    $(form).append(input).appendTo(header);
+
+    $(input)
+      .change( function () {
+        var filter = $(this).val();
+        if(filter) {
+          // this finds all links in a list that contain the input,
+          // and hide the ones not containing the input while showing the ones that do
+          $(list).find("li").each(function(k, v) {
+            if (!$(v).find("span").text().match(new RegExp(filter))) {
+              $(v).slideUp();
+            }
+            else {
+              $(v).slideDown();
+            }
+          });
+        } else {
+          $(list).find("li").slideDown();
+        }
+        return false;
+      })
+    .keyup( function () {
+        // fire the above change event after every letter
+        $(this).change();
+    });
+  }
+
+  //ondomready
+  $(function () {
+    listFilter($("#group_filter"), $("#group_list"));
+  });
+</script>

@@ -38,11 +38,12 @@ def api():
     def POST(**data):
         wb_number = randomizer.generate_tulip_receipt()
         # XXX verify that it's working
-        if not data.has_key("targetgroups"):
-            group_ids = []
+        if not data.has_key("targetgroup"):
+            return result.error
         else:
-            group_ids = data["targetgroups"].split(",")
-
+            group_ids = data["targetgroup"]
+        # change group names to group ids
+        group_ids = [gl.get_group_id(g) for g in group_ids]
         data['spooled'] = False
         data['submission_timestamp'] = str(time.time())
 
@@ -102,46 +103,46 @@ def fileupload():
 
     def GET(file):
         upload = json.loads(FileUpload.get())
-        
+
         filedir = FileUpload.get_file_dir()
-        
+
         src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
         dst_folder = os.path.join(request.folder, 'material', filedir)
-                
+
         return json.dumps(upload)
 
     def POST(**vars):
         upload = FileUpload.post()
-        
+
         upload = json.loads(upload)
-        
+
         filedata = Storage()
-        
+
         # Store the number of bytes of the uploaded file
         filedata.bytes = upload[0]['size']
 
         # Store the file size in human readable format
         filedata.size = mutils.human_size(filedata.bytes)
-        
+
         filedata.fileid = upload[0]['id']
 
         # Store filename and extention
         filedata.filename = upload[0]['name']
 
         filedata.ext = mutils.file_type(upload[0]['name'].split(".")[-1])
-        
+
         session.files.append(filedata)
-        
+
         filedir = FileUpload.get_file_dir()
-        
+
         src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
         dst_folder = os.path.join(request.folder, 'material', filedir)
 
         if not os.path.isdir(dst_folder):
             os.makedirs(dst_folder)
-        
+
         #print "The size now: %s" % upload[0]['size']
-        
+
         if upload[0]['size'] == os.path.getsize(src_file):
             #print "THEY MATCH!!!!!.... %s != %s" % (upload[0]['size'], os.path.getsize(src_file))
             os.rename(src_file, os.path.join(dst_folder, upload[0]['name']))
@@ -210,11 +211,11 @@ def index():
     material_js = TR('Material',
                      DIV(_id='file-uploader'),
                      _id='file-uploader-js')
-    
+
     # .. and non JavaScript
     material_njs = DIV(DIV(LABEL("Material:"),
                                 _class="w2p_fl"),
-                            DIV(INPUT(_name='material', _type='file', 
+                            DIV(INPUT(_name='material', _type='file',
                                       _id='file-uploader-nonjs'),
                                 _class="w2p_fc"),
                                 _id="file-uploader-nonjs")
@@ -241,9 +242,9 @@ def index():
     # The default fields and labels
     form_fields = ['title', 'desc']
     form_labels = {'title': 'Title', 'desc': 'Description'}
-    
+
     form_extras = []
-    
+
     # Add to the fields to be displayed the ones inside of
     # the extrafields setting
     for i in settings.extrafields.fields:
@@ -257,7 +258,7 @@ def index():
             labels=form_labels)
 
     mysteps = [
-               dict(title='Step 1', legend='Fist step', fields=['title', 'desc']),               
+               dict(title='Step 1', legend='Fist step', fields=['title', 'desc']),
                dict(title='Step 1', legend='Fist step', fields=form_extras),
                ]
 
@@ -265,7 +266,7 @@ def index():
                db.leak,
                steps=mysteps,
                )
-    
+
     # Add the extra settings that are not included in the DB
     form[0].insert(-1, material_njs)
     form[0].insert(-1, jQueryFileUpload)
@@ -333,15 +334,14 @@ def index():
                 except:
                     logger.error("There was an error in processing the "
                                  "submission files.")
-                    
-            if var.startswith("target_") and var.split("_")[-1].isdigit():
-                group_ids.append(var.split("_")[-1])
 
+            if var.startswith("target_") and var.split("_")[-1].isdigit():
+                group_ids.append(int(var.split("_")[-1]))
         # XXX Refactor this into something that makes sense
         #
         # Create the leak with the GlobaLeaks factory
         # (the data has actually already been added to db leak,
-        #  this just creates the tulips)        
+        #  this just creates the tulips)
         leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
 
         # XXX probably a better way to do this
