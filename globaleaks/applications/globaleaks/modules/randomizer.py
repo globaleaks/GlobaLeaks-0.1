@@ -15,6 +15,7 @@ def generate_wb_id():
     #      should i be converting the random number string to bytes?
     return hashlib.sha256(os.urandom(1024)).hexdigest()
 
+# Maybe these three should be merged into one
 def generate_dirname():
     return hashlib.sha256(os.urandom(1024)).hexdigest()
 
@@ -24,6 +25,7 @@ def generate_leaker_id():
 def generate_tulip_url():
     return hashlib.sha256(os.urandom(1024)).hexdigest()
 
+#
 def alphanumeric(n):
     output = ""
     for i in range(1, n):
