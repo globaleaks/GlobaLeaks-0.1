@@ -1,6 +1,11 @@
 {{extend 'layout.html'}}
 
 <h1>Forward <span>Tulip to another Targetgroup</span></h1>
+{{if not targetgroups:}}
+<p class="intro" style="font-weight:bold; text-align:center;">
+  There are no targetgroups to forward the tulip to
+</p>
+{{else:}}
 <form method="POST" action="">
   <ul>
     {{for group in targetgroups:}}
@@ -13,7 +18,7 @@
   </ul>
   <input type="submit" />
 </form>
-
+{{pass}}
 <script type="text/javascript">
   // custom css expression for a case-insensitive contains()
   jQuery.expr[':'].Contains = function(a,i,m){

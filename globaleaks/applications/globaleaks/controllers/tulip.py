@@ -252,5 +252,6 @@ def forward():
         for group_id in group_ids:
             tulip.get_leak().notify_targetgroup(group_id)
         redirect("/")
+        # XXX What to do when done?
         #return dict(err=False, targetgroups=groups,
         #            notified_groups=notified_groups)
