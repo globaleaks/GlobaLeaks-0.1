@@ -1,5 +1,6 @@
 import time
 import pickle
+from gluon.contrib import simplejson as json
 
 #XXX render all of the property setters pythonic
 # (i.e. @property and @<name>.setter)
@@ -98,6 +99,38 @@ class Leak(object):
             for i in settings.extrafields.fields:
                 extra[i['name']] = row[i['name']]
         return extra
+
+    def get_notified_targetgroups(self):
+        """
+        Returns a list of ids of the groups that had been notified of
+        this leak
+        """
+        return json.loads(db.leak[self.id].notified_groups)
+
+    def notify_targetgroup(self, group_id):
+        """
+        Notifies the targets of the selected targetgroup that have not
+        been notified yet. Then adds that group to the notified_groups
+        list
+        """
+        notified_groups = self.get_notified_targetgroups()
+        notified_targets = [x.id for x in gl.get_targets(notified_groups)]
+        to_notify = [x.id for x in gl.get_targets([group_id])]
+        to_notify = set(to_notify).difference(notified_targets)
+        for target_id in to_notify:
+            target = gl.get_target(target_id)
+            tulip_id = gl.create_tulip(self._id, target)
+            tulip_url = db.tulip[tulip_id].url
+            if target.status == "subscribed":
+                db.mail.insert(target=target.name,
+                               address=target.url,
+                               tulip=tulip_url)
+        notified_groups += [group_id]
+        notified_groups = list(set(notified_groups))  # deletes duplicates
+        db.leak[self._id].update_record(
+            notified_groups=json.dumps(notified_groups))
+        db.commit()
+
 
 class Tulip(object):
     def __init__(self, id=None, url=None):

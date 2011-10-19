@@ -67,7 +67,10 @@ def status():
     """
     The main TULIP status page
     """
-    tulip_url = request.args[0]
+    try:
+        tulip_url = request.args[0]
+    except IndexError:
+        return dict(err=True)
 
     try:
         tulip = Tulip(url=tulip_url)
@@ -184,7 +187,10 @@ def download_increment(t):
 def download():
     import os
 
-    tulip_url = request.args[0]
+    try:
+        tulip_url = request.args[0]
+    except IndexError:
+        return dict(err=True)
 
     try:
         t = Tulip(url=tulip_url)
@@ -215,22 +221,37 @@ def forward():
     Controller for the page that lets the target to forward the tulip to
     another group.
     """
-    tulip_url = request.args[0]
+    try:
+        tulip_url = request.args[0]
+    except IndexError:
+        return dict(err=True)
 
     try:
         tulip = Tulip(url=tulip_url)
     except:
         return dict(err=True, targetgroups=[])
 
-    # Trying to get group id from POST
+    notified_groups = tulip.get_leak().get_notified_targetgroups()
+    all_groups = gl.get_targetgroups()
+    groups = {}
+    for group in all_groups:
+        if not group in notified_groups:
+            groups[group] = all_groups[group]
+    # Trying to get group ids from POST
     try:
-        group_id = request.post_vars["group"]
-    except KeyError:
+        print request.post_vars["group"]
+        group_ids = [int(x) for x in request.post_vars["group"]]
+        print group_ids
+    except (KeyError, ValueError):
         # if there's no post data get all targets for the view
         # the view will create a form to submit the group to
         # send material to
-        groups = gl.get_targetgroups()
-        return dict(err=False, targetgroups=groups)
+        return dict(err=False, targetgroups=groups,
+                    notified_groups=notified_groups)
     else:
-        # XXX write the code to forward leak to group_id
-        pass
+        for group_id in group_ids:
+            tulip.get_leak().notify_targetgroup(group_id)
+        redirect("/")
+        # XXX What to do when done?
+        #return dict(err=False, targetgroups=groups,
+        #            notified_groups=notified_groups)

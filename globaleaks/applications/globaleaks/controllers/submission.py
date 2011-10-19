@@ -40,11 +40,12 @@ def api():
     def POST(**data):
         wb_number = randomizer.generate_tulip_receipt()
         # XXX verify that it's working
-        if not data.has_key("targetgroups"):
-            group_ids = []
+        if not data.has_key("targetgroup"):
+            return result.error
         else:
-            group_ids = data["targetgroups"].split(",")
-
+            group_ids = data["targetgroup"]
+        # change group names to group ids
+        group_ids = [gl.get_group_id(g) for g in group_ids]
         data['spooled'] = False
         data['submission_timestamp'] = str(time.time())
 
