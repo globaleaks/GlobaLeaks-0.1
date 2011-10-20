@@ -181,12 +181,12 @@ def target_add():
         pass
 
     result = gl.add_to_targetgroup(target_id, group_id)
-    
+
     print "RESULT %s " % result
-    
+
     if result:
         return response.json({'success': 'true'})
-    
+
     return response.json({'success': 'false'})
 
 
@@ -383,14 +383,14 @@ def wizard():
     # set up here various groups: one group form + button "add group"
     step6_form = None
 
-    if step1_form.accepts(request.vars, keepvalue=True):
-        # copy config template to GlobaLeaks/gleaks.cfg
+    if step1_form.accepts(request.vars):
+        # copy config template to GlobaLeaks/globaleaks.conf
         if step1_form.vars.activity:
-            copyfile(os.path.join(projroot, 'stdcfgs', '%s.conf' %
+            copyfile(os.path.join(projroot, 'config_templates', '%s.conf' %
                                   step1_form.vars.activity),
                      cfgfile)
         # fill the new config file with the described global attributes
-    if step2_form.accepts(request.vars, keepvalue=True):
+    if step2_form.accepts(request.vars):
         pass
 
     return dict(import_form=import_form,

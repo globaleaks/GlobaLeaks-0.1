@@ -9,8 +9,13 @@ class ExtraField:
 
         file = open(filename)
         dom = parse(file)
+        self.dom = dom
+        self.wizard = False
 
         self.fields = []
+
+        if dom.getElementsByTagName("wizard"):
+            self.wizard = True
 
         for i in dom.getElementsByTagName("field"):
             self.fields.append(self.parse_field(i))
@@ -20,8 +25,8 @@ class ExtraField:
 
     def parse_list(self, field):
         list = []
-        for el in  field.getElementsByTagName("el"):
-            list.append(str(el.childNodes[0].data))
+        for el in field.getElementsByTagName("el"):
+            list.append(el.childNodes[0].data)
         return list
 
     def parse_field(self, field):
@@ -33,14 +38,56 @@ class ExtraField:
         if parsed['type'] == "list":
             parsed['list'] = self.parse_list(field)
         return parsed
+
+    def get_step(self, el):
+        return el.getAttributeNode("number").value
+
+    def get_step_n(self, steps, n):
+        for step in steps:
+            if self.get_step(step) == n:
+                return step
+        return None
+
+    def parse_step(self, step):
+        steps = []
+
+        for node in step.childNodes:
+            if node.nodeName == "field":
+                steps.append(self.parse_field(node))
+            elif node.nodeName == "material":
+                steps.append("material")
+            elif node.nodeName == "grouplist":
+                steps.append("grouplist")
+            elif node.nodeName == "disclaimer":
+                steps.append("disclaimer")
+            elif node.nodeName == "captcha":
+                steps.append("captcha")
+
+        return steps
+
+    def gen_wizard(self):
+        steps = self.dom.getElementsByTagName("step")
+
+        wizard = []
+
+        for i in range(0, len(steps)):
+            nstep = self.get_step_n(steps, i+1)
+            if nstep:
+                wizard.append(self.parse_step(nstep))
+            else:
+                wizard.append(self.parse_step(steps[i]))
+        print wizard
+
     def gen_db(self):
         if self.fields:
             output = []
             for i in self.fields:
                 if i['type'] == "list":
                     output.append(Field(str(i['name']),requires=IS_IN_SET(i['list'])))
+                    #output.append((str(i['name']), i['list']))
                 else:
                     output.append(Field(str(i['name']), str(i['type'])))
+                    #output.append((str(i['name']), str(i['type'])))
             return output
 
 extrafile = os.path.join(os.path.dirname(__file__), 'extrafields.xml')
@@ -92,6 +139,7 @@ db.define_table('leak',
     Field('submission_timestamp'),
     Field('leaker_id', db.target),
     Field('whistleblower_access'),
+    Field('notified_groups'),
     Field('spooled', 'boolean', False),
     *db_extrafields,
     format='%(name)s'

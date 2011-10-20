@@ -171,8 +171,9 @@ class Globaleaks(object):
         If target_set is a list of groups it returns a rowset of targets
         that belong to these groups.
         """
-        if not isinstance(target_set, list):
-            return self._db(self._db.target).select()
+        if target_set == "ANY" or target_set is None:
+            targets = self._db().select(self._db.target.ALL)
+            return targets
          
         target_rows = self._db(self._db.target).select()
         group_rows = self._db(self._db.targetgroup).select()
@@ -201,20 +202,48 @@ class Globaleaks(object):
  
         return results
 
+#       XXX -- conflict merge: what's could be kept ?
+#        for x in target_set:
+#            targets = self._db(self._db.targetgroup.id==x).select().first().targets
+#            if targets:
+#                target_ids = json.loads(targets)
+#                for t in target_ids:
+#                    target = self._db(self._db.target.id==x).select().first()
+#                    result.append(target)
+#        return result
+
     def get_target(self, target_id):
         """
         Returns the target with the specified id
         """
         return self._db(self._db.target.id==target_id).select().first()
 
+    def create_tulip(self, leak_id, target):
+        """
+        Creates a tulip for the target and inserts it into the db
+        """
+        tulip = self._db.tulip.insert(
+            url=randomizer.generate_tulip_url(),
+            leak_id=leak_id,
+            target_id=target.id, #FIXME get target_id_properly
+            allowed_accesses=0, # inf
+            accesses_counter=0,
+            allowed_downloads=5,
+            downloads_counter=0,
+            expiry_time=0)
+        self._db.commit()
+        return tulip
+
     def create_leak(self, id_, target_set, number=None):
-                    #title, desc, leaker, material,
-                    #target_set, tags="", number=None):
         #FIXME insert new tags into DB first
         #Create leak and insert into DB
         leak_id = id_ #self._db.leak.insert(title=title, desc=desc,
                   #                     submission_timestamp=time.time(),
                   #                     leaker_id=0, spooled=False)
+        # save notified groups in the db
+        self._db(self._db.leak.id==id_).update(
+            notified_groups=json.dumps(target_set))
+        # get only selected targets
         targets = self.get_targets(target_set)
 
         for t in targets:
@@ -229,12 +258,15 @@ class Globaleaks(object):
                 allowed_downloads=5,
                 downloads_counter=0,
                 expiry_time=0)
-        
+        #    self.create_tulip(leak_id, t) -- maybe now need to be used create_tulip ? 
+        #    and self.create_tulip(leak_id, 0) ? has been forgotten or throw away ? 
+        #    create_tulip at the moment is never called!
+
         # tulip for the whistleblower
         self._db.tulip.insert(
                 url=number,
                 leak_id=leak_id,
-                target_id=0, #FIXME get target_id_properly
+                target_id=0, # whistleblower is always 0
                 allowed_accesses=0, # inf
                 accesses_counter=0,
                 allowed_downloads=5,

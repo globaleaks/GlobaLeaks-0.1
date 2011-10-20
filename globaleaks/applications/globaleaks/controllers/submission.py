@@ -12,6 +12,8 @@ import gluon.contrib.simplejson as json
 import shutil
 import base64
 
+FormWizard = local_import('plugin_PowerFormWizard')
+
 mutils = local_import('material').utils()
 Anonymity = local_import('anonymity')
 jQueryHelper = local_import('jquery_helper')
@@ -36,15 +38,14 @@ def api():
     def POST(**data):
         wb_number = randomizer.generate_tulip_receipt()
         # XXX verify that it's working
-        if not data.has_key("targetgroups"):
-            group_ids = []
+        if not data.has_key("targetgroup"):
+            return result.error
         else:
-            group_ids = data["targetgroups"].split(",")
-
+            group_ids = data["targetgroup"]
+        # change group names to group ids
+        group_ids = [gl.get_group_id(g) for g in group_ids]
         data['spooled'] = False
         data['submission_timestamp'] = str(time.time())
-
-        print "inside the post %s " % data
 
         result = db.leak.validate_and_insert(**data)
 
@@ -96,12 +97,57 @@ FileUpload = UploadHandler()
 @request.restful()
 def fileupload():
     response.view = 'generic.json'
+    if not session.files:
+        session.files = []
 
-    def GET(*vars):
-        return FileUpload.get()
+
+    def GET(file):
+        upload = json.loads(FileUpload.get())
+
+        filedir = FileUpload.get_file_dir()
+
+        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
+        dst_folder = os.path.join(request.folder, 'material', filedir)
+
+        return json.dumps(upload)
 
     def POST(**vars):
-        return FileUpload.post()
+        upload = FileUpload.post()
+
+        upload = json.loads(upload)
+
+        filedata = Storage()
+
+        # Store the number of bytes of the uploaded file
+        filedata.bytes = upload[0]['size']
+
+        # Store the file size in human readable format
+        filedata.size = mutils.human_size(filedata.bytes)
+
+        filedata.fileid = upload[0]['id']
+
+        # Store filename and extention
+        filedata.filename = upload[0]['name']
+
+        filedata.ext = mutils.file_type(upload[0]['name'].split(".")[-1])
+
+        session.files.append(filedata)
+
+        filedir = FileUpload.get_file_dir()
+
+        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
+        dst_folder = os.path.join(request.folder, 'material', filedir)
+
+        if not os.path.isdir(dst_folder):
+            os.makedirs(dst_folder)
+
+        #print "The size now: %s" % upload[0]['size']
+
+        if upload[0]['size'] == os.path.getsize(src_file):
+            #print "THEY MATCH!!!!!.... %s != %s" % (upload[0]['size'], os.path.getsize(src_file))
+            os.rename(src_file, os.path.join(dst_folder, upload[0]['name']))
+
+        return json.dumps(upload)
 
     def DELETE():
         return FileUpload.delete()
@@ -129,7 +175,10 @@ def index():
     # As someone put it, if you think JS is evil remember
     # that the world is in technicolor and not in black and white.
     # Look up, the sun is shining, thanks to jQuery.
-    jQueryFileUpload = TR(T('Material'),
+    #jQueryFileUpload = TR(T('Material'),
+    jQueryFileUpload = DIV(
+                           DIV(LABEL("Material:"),
+                                _class="w2p_fl"),
                           DIV(DIV(LABEL(SPAN(T("Add Files")),
                                         INPUT(_type="file",
                                               _name="files[]"),
@@ -147,7 +196,9 @@ def index():
                                   DIV(TABLE(_class="files"),
                                       DIV(_class="fileupload-progressbar"),
                                       _class="fileupload-content"),
-                                  _id="fileupload"))
+                                  _id="fileupload", _class="w2p_fl"),
+                            DIV(_class="w2p_fc"),
+                                _id="material__row")
 
     # This is necessary because otherwise web2py will go crazy when
     # it sees {{ }}
@@ -160,11 +211,14 @@ def index():
     material_js = TR('Material',
                      DIV(_id='file-uploader'),
                      _id='file-uploader-js')
+
     # .. and non JavaScript
-    material_njs = TR('Material',
-                      INPUT(_name='material',
-                            _type='file'),
-                      _id='file-uploader-nonjs')
+    material_njs = DIV(DIV(LABEL("Material:"),
+                                _class="w2p_fl"),
+                            DIV(INPUT(_name='material', _type='file',
+                                      _id='file-uploader-nonjs'),
+                                _class="w2p_fc"),
+                                _id="file-uploader-nonjs")
 
     # Creating a list of targetgroups
     groups_data = gl.get_targetgroups()
@@ -189,16 +243,29 @@ def index():
     form_fields = ['title', 'desc']
     form_labels = {'title': 'Title', 'desc': 'Description'}
 
+    form_extras = []
+
     # Add to the fields to be displayed the ones inside of
     # the extrafields setting
     for i in settings.extrafields.fields:
+        form_extras.append(str(i['name']))
         form_fields.append(str(i['name']))
-        form_labels[str(i['name'])] = str(i['desc'])
+        form_labels[str(i['name'])] = i['desc']
 
     # Create the actual form
     form = SQLFORM(db.leak,
             fields=form_fields,
             labels=form_labels)
+
+    mysteps = [
+               dict(title='Step 1', legend='Fist step', fields=['title', 'desc']),
+               dict(title='Step 1', legend='Fist step', fields=form_extras),
+               ]
+
+    form = FormWizard.PowerFormWizard(
+               db.leak,
+               steps=mysteps,
+               )
 
     # Add the extra settings that are not included in the DB
     form[0].insert(-1, material_njs)
@@ -209,7 +276,7 @@ def index():
         filesul = UL(_id="stored_files")
         # XXX Is this being sanitized?
         for file in session.files:
-            filesul.append(LI(SPAN(str(file.filename)),
+            filesul.append(LI(SPAN(file.filename),
                               A("delete",
                                 _href="",
                                 _class="stored_file_delete",
@@ -219,7 +286,7 @@ def index():
 
     form[0].insert(-1, targetgroups)
 
-    form[0].insert(-1, captcha)
+    #form[0].insert(-1, captcha)
     form[0].insert(-1, disclaimer_text)
     form[0].insert(-1, disclaimer)
 
@@ -267,16 +334,14 @@ def index():
                 except:
                     logger.error("There was an error in processing the "
                                  "submission files.")
-                    
-            if var.startswith("target_") and var.split("_")[-1].isdigit():
-                group_ids.append(var.split("_")[-1])
 
+            if var.startswith("target_") and var.split("_")[-1].isdigit():
+                group_ids.append(int(var.split("_")[-1]))
         # XXX Refactor this into something that makes sense
         #
         # Create the leak with the GlobaLeaks factory
         # (the data has actually already been added to db leak,
         #  this just creates the tulips)
-        print "groups id : %s " % group_id       
         leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
 
         # XXX probably a better way to do this
@@ -414,9 +479,6 @@ def upload():
 
             # Store the file size in human readable format
             filedata.size = mutils.human_size(filedata.bytes)
-
-            # Store all the data reated to the file to a sessions variable
-            session.files.append(filedata)
 
             filedir = db(db.submission.session ==
                          session.wb_id).select().first()
