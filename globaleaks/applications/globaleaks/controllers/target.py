@@ -48,9 +48,7 @@ def receiver():
 
     try:
         passphrase = request.post_vars["targetid"]
-        # target_url = hashlib.sha256(passphrase).hexdigest()
-        target_url = passphrase # ARGH - yes temp, at the moment is not hashed when recorded the first time
-        print "diomerda in receiver [%s]" % target_url
+        target_url = hashlib.sha256(passphrase).hexdigest()
         redirect("/bouquet/" + target_url)
     except KeyError:
         return dict(err=True)
@@ -64,9 +62,10 @@ def bouquet():
     else:
         return dict(err="password not supply")
 
-    print "porcodio [%s]" % target_url
-
     # maybe better continue to devel Target class in datamodel.py
+    # XXX here security issue to think about, create_target involved.
+    # X&Y challenge response required
+
     receiver_row = db(db.target.hashpass==target_url).select()
     if len(receiver_row) == 0:
         return dict(err="invald password supply")
