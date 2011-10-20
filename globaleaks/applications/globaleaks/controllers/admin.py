@@ -390,8 +390,18 @@ def wizard():
                                   step1_form.vars.activity),
                      cfgfile)
         # fill the new config file with the described global attributes
+        settings.globals.author = step1_form.vars.author
+        settings.globals.title = step1_form.vars.title
+        settings.globals.subtitle = step1_form.vars.subtitle
     if step2_form.accepts(request.vars):
+        # XXX: Add sms/e-mail notification support in config
         pass
+    if step3_form.accepts(request.vars):
+        copyform(step3_form.vars, settings.tulip)
+    if step4_form.accepts(request.vars):
+        copyform(step4_form.vars, settings.globals)
+    if step5_form.accepts(request.vars):
+        copyform(step5_form.vars, settings.logging)
 
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,
