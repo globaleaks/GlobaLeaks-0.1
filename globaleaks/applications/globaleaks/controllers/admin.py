@@ -13,6 +13,12 @@ from config import projroot, cfgfile, copyform
 @auth.requires_login()
 def index():
     return dict(message="hello from admin.py")
+    
+def obtain_secret(input_secret):
+    if not input_secret:
+        return randomizer.generate_target_passphrase()
+    else:
+        return input_secret        
 
 @auth.requires_login()
 def targets():
@@ -22,9 +28,12 @@ def targets():
     if (request.vars.edit and request.vars.edit.startswith("edit")):
         pass
 
+    # is hardcoded email, supposing that, at the moment, every subscription happen with email
+    # only. in the future, other kind of contacts could be setup from the start.
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description', requires=IS_LENGTH(minsize=5,maxsize=50)),
-                    Field('email', requires=[IS_EMAIL(), IS_NOT_IN_DB(db, db.target.email)])
+                    Field('contact', requires=[IS_EMAIL(), IS_NOT_IN_DB(db, db.target.contact)]),
+                    Field('passphrase'),
                    )
 
     form = SQLFORM.factory(*form_content)
@@ -36,7 +45,11 @@ def targets():
 
     if form.accepts(request.vars, session):
         c = request.vars
-        gl.create_target(c.Name, None, c.Description, c.email, "subscribed")
+        
+        passphrase = obtain_secret(c.passphrase)  
+        
+        # XXX here need to be hashed/whatever "passphrase", or in create_target ?
+        gl.create_target(c.Name, None, c.Description, c.contact, passphrase, "subscribed")
         targets = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets)
 
@@ -62,8 +75,9 @@ def targetgroups():
     form_content_target = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description', requires=IS_LENGTH(minsize=5,
                                                             maxsize=50)),
-                    Field('email', requires=[IS_EMAIL(),
-                                             IS_NOT_IN_DB(db, db.target.url)]),
+                    Field('contact', requires=[IS_EMAIL(),
+                                             IS_NOT_IN_DB(db, db.target.contact)]),
+                    Field('passphrase'),                         
                    )
 
     form_target = SQLFORM.factory(*form_content_target,
@@ -71,8 +85,8 @@ def targetgroups():
 
     if form_target.accepts(request.vars, session):
         c = request.vars
-        randomPass = randomizer.generate_target_passphrase()
-        gl.create_target(c.Name, None, c.Description, c.email, randomPass, "subscribed")
+        passphrase = obtain_secret(c.passphrase)
+        gl.create_target(c.Name, None, c.Description, c.contact, passphrase, "subscribed")
 
     all_targets = gl.get_targets(None)
     targetgroups = gl.get_targetgroups()
@@ -80,7 +94,6 @@ def targetgroups():
     return dict(form_target=form_target, form_group=form_group,
                 list=False, targets=None, all_targets=all_targets,
                 targetgroups=targetgroups)
-
 
 @auth.requires_login()
 def group_create():

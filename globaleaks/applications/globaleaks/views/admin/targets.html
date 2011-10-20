@@ -11,6 +11,7 @@ background-color: green;
     be able to properly construct a target list. The target list will be composed of valuable people that are willing to analyze the information
     that is sent to them. The target lists need to be as diversified as possible. The diversification of interests serves to incentivize targets into
     properly analyzing the information submitted by the Whistleblower.</p>
+    <input type="button" value="randomize input" onClick="randomizevalue()" />
 
 {{=form}}
 <a class="button targetlist" href="/globaleaks/admin/targets/display">View target list</a>
@@ -29,7 +30,8 @@ background-color: green;
 <table class="targetlist">
 <thead>
     <th>Name</th>
-    <th>Email</th>
+    <th>Type</th>
+    <th>Contact</th>
     <th>Description</th>
     <th>Delete</th>
 </thead>
@@ -43,7 +45,8 @@ background-color: green;
     <tr class="odd" id="target-{{=target.id}}">
     {{pass}}
         <td class="name">{{=target.name}}</td>
-        <td class="email">{{=target.url}}</td>
+        <td class="email">{{=target.contact_type}}</td>
+        <td class="email">{{=target.contact}}</td>
         <td class="description">{{=target.desc}}</td>
         <td class="delete">
             <button name="delete" onclick="clicked({{=target.id}}, 'delete')">delete</button>
@@ -53,7 +56,7 @@ background-color: green;
 {{pass}}
 </table>
 
-<a class="button whistleblower" href="/submit">Be the Whistleblower</a>
+<!-- <a class="button whistleblower" href="/submit">Be the Whistleblower</a> -->
 
 <a class="button addtarget" href="/globaleaks/admin/targets">Add target</a>
 
@@ -67,5 +70,12 @@ function clicked(id, action) {
       ajax('targets', ['edit'], '');
       jQuery('#target-' + id).hide();
       return false;
+}
+
+function randomizevalue() {
+    document.getElementById("no_table_Name").value = "random-" + Math.floor(Math.random()*987654321);
+    document.getElementById("no_table_Description").value = "random-Desc-" + Math.floor(Math.random()*987654321);
+    document.getElementById("no_table_contact").value = "random@" + Math.floor(Math.random()*987654321) + ".tld";
+    document.getElementById("no_table_passphrase").value = "test" + Math.floor(Math.random()*99);
 }
 </script>

@@ -58,7 +58,6 @@ class Leak(object):
         pass
     spooled = property(get_spooled, set_spooled)
 
-
     #TODO: implement get/set targets
     def get_targets(self):
         pass
@@ -194,6 +193,18 @@ class Tulip(object):
         print "Error: leak is read only"
         pass
     leak = property(get_leak, set_leak)
+
+# need to be continued, or is almost useless ? 
+class Target(object):
+    def __init__(self, id):
+        self._id = id
+
+    def get_id(self):
+        return self._id
+    def set_id(self):
+        print "Error: id is read only"
+        pass
+    id = property(get_id, set_id)
 
 class Material(object):
     def __init__(self, id, url=None):

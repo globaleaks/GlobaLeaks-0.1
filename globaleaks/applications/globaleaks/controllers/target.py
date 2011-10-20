@@ -46,36 +46,40 @@ def view():
 def receiver():
     import hashlib
 
-    form = SQLFORM.factory(Field('TargetID', requires=IS_NOT_EMPTY()))
-   
-    if form.accepts(request.vars, session):
-        l = request.vars
-
-        target_url = hashlib.sha256(l.TargetID.replace).hexdigest()
+    try:
+        passphrase = request.post_vars["targetid"]
+        # target_url = hashlib.sha256(passphrase).hexdigest()
+        target_url = passphrase # ARGH - yes temp, at the moment is not hashed when recorded the first time
+        print "diomerda in receiver [%s]" % target_url
         redirect("/bouquet/" + target_url)
-
-    return dict(TargetID=False)
+    except KeyError:
+        return dict(err=True)
 
 # this page is indexed by an uniq identifier by the receiver, and show all him accessible
 # Tulips, its the page where she/he could change their preferences
 def bouquet():
+
     if request and request.args:
         target_url = request.args[0]
     else:
         return dict(err="password not supply")
 
-    try:
-        Receiver = Target(hashpass=target_url)
-    except:
+    print "porcodio [%s]" % target_url
+
+    # maybe better continue to devel Target class in datamodel.py
+    receiver_row = db(db.target.hashpass==target_url).select()
+    if len(receiver_row) == 0:
         return dict(err="invald password supply")
+    if len(receiver_row) > 1:
+        return dict(err="temporary fault: collision detected, two target with the same password")
 
     # this require to be splitted because tulip are leak x target matrix
     Bouquet = []
-    tulipList = db(db.tulip.target==Receiver.id).select()
+    tulipList = db(db.tulip.target_id==receiver_row[0].id).select()
     for singleT in tulipList:
         Bouquet.append(singleT)
 
-    return dict(bouquet=Bouquet,target=Receiver)
+    return dict(err=False,bouquet=Bouquet,target=receiver_row[0])
 
 def subscribe():
     if not request.args:

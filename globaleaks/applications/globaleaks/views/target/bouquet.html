@@ -6,16 +6,40 @@
     Please back to the <a href="/receiver/">receiver</a> page.
 {{else:}}
     <h2>Hello receiver, this is your Bouquet:</h2>
-    <pre>
-        {{for tulip in Bouquet:}}
-            {{=tulip}}
-            {{pass}}
-    </pre>
+
+<table class="targetlist">
+    <tr class="even">
+        <td class="name">URL</td>
+        <td class="name">leak ID</td>
+        <td class="description">target id</td> 
+        <td class="name">access done/allow</td>
+        <td class="name">vote</td>
+        <td class="name">downld done/allow</td>
+        <td class="name">feedbacks</td>
+    </tr> 
+    {{i=0}}
+    {{for tulip in bouquet:}}
+        {{i+=1}}
+        {{if i % 2 == 1: }}
+            <tr class="odd">
+        {{else:}}
+            <tr class="even">
+        {{pass}}
+        <td class="name"><a href="/tulip/{{=tulip.url}}">{{=tulip.url[:10]}}</a></td>
+        <td class="name">{{=tulip.leak_id}}</td>
+        <td class="description">{{=tulip.target_id}}</td>    
+        <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>    
+        <td class="description">{{=tulip.express_vote}}</td>    
+        <td class="description">{{=tulip.downloads_counter}}/{{=tulip.allowed_downloads}}</td>    
+        <td class="description">{{=tulip.feedbacks_provided}}</td>
+    </tr>
+</table>
+    {{pass}}
 
     <br>
-    <h2>change your authentication passphrase</h2>
-
-    <h2>change your material receiving method</h2>
-
-    <h2>change your contact method</h2>
+    <ul>
+    <li>change your authentication passphrase</li>
+    <li>change your material receiving method</li>
+    <li>change your contact method</li>
+    </ul>
 {{pass}}
