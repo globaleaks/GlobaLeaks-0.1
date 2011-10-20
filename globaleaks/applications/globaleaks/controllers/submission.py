@@ -80,7 +80,7 @@ def api():
 
             if target.status == "subscribed":
                 db.mail.insert(target=target.name,
-                        address=target.url, tulip=tulip.url)
+                        address=target.contact_type, tulip=tulip.url)
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
                         " " + wb_number[0][6:]
         session.dirname = None
@@ -373,7 +373,7 @@ def index():
             if tulip.target == "0":
                 continue
 
-            if target.status == "subscribed":
+            if target.status is "subscribed":
                 # add subscribed targets to the mail db
                 # when the cron job passes they will receieve a mail
                 db.mail.insert(target=target.name,

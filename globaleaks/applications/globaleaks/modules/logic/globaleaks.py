@@ -123,19 +123,31 @@ class Globaleaks(object):
                 result[row.id]["members"] = []
         return result
 
-    def create_target(self, name, category, desc, url, type, info):
+    # by default, a target is inserted with an email type only as contact_type,
+    # in the personal page, the receiver should change that or the contact type 
+    # (eg: facebook, irc ?, encrypted mail setting up a gpg pubkey)
+    def create_target(self, name, category, desc, contact_mail, initial_hashpass, req_status):
         """
         Creates a new target with the specified parameters.
         Returns the id of the new record.
+
+        |contact_type| supported values: [email]
+        |type| supported values: [plain*|pgp]
+        |status|: [subscribed*|unsubscribed|selfproposed]
+
+        * = default
         """
+
+        if req_status is not "subscribed" and req_status is not "selfproposed":
+            print "bad usage of create_target: req_status is different from expected (%s)", req_status
+            return 0
+
         target_id = self._db.target.insert(name=name,
-            desc=desc, url=url, type=type, info=info,
-            status="subscribed", tulip_counter=0,
-            download_counter=0) #, last_send_tulip=None,
-            #last_access=None, last_download=None,
-            #tulip_counter=None, download_counter=None
-        if category:
-            self.add_to_targetgroup(target_id, group_name=category)
+            # groups=pickle.dumps([category]) if category else "",
+            desc=desc, contact_type="email", 
+            contact=contact_mail, type="plain", info="",
+            status=req_status, tulip_counter=0,
+            download_counter=0, hashpass=initial_hashpass) 
         self._db.commit()
         return target_id
 
@@ -146,6 +158,12 @@ class Globaleaks(object):
         self._db(self._db.target.id==target_id).delete()
         return True
 
+    # uniq() by http://www.peterbe.com/plog/uniqifiers-benchmark
+    def f7(self, seq):
+        seen = set()
+        seen_add = seen.add
+        return [ x for x in seq if x not in seen and not seen_add(x)]
+
     def get_targets(self, target_set):
         """
         If target_set is not a list it returns a rowset with all
@@ -153,37 +171,45 @@ class Globaleaks(object):
         If target_set is a list of groups it returns a rowset of targets
         that belong to these groups.
         """
-        result = []
         if target_set == "ANY" or target_set is None:
             targets = self._db().select(self._db.target.ALL)
             return targets
-            for target in targets:
-                result.append(target)
-            return result
+         
+        target_rows = self._db(self._db.target).select()
+        group_rows = self._db(self._db.targetgroup).select()
 
-        for x in target_set:
-            targets = self._db(self._db.targetgroup.id==x).select().first().targets
-            if targets:
-                target_ids = json.loads(targets)
-                for t in target_ids:
-                    target = self._db(self._db.target.id==x).select().first()
-                    result.append(target)
-        return result
+        target_id_list = []
+        for g in group_rows:
+            if str(g.id) in target_set:
+                # XXX maybe it is not very clean...
+                for single_target_id in g.targets.replace('"', "'"):
+                    try:
+                        intval = int(single_target_id, 10)
+                        target_id_list.append(intval)
+                    except ValueError:
+                        pass
+       
+        results = []             
+        if not len(target_id_list):
+            return results
+               
+        target_id_list = self.f7(target_id_list)
+                           
+        for t in target_rows:
+            for choosen in target_id_list:
+                if choosen == t.id:
+                    results.append(t)     
+ 
+        return results
 
-#        if not isinstance(target_set, list):
-#            return self._db(self._db.target).select()
-#        rows = self._db().select(self._db.target)
-#        result = []
-#        for row in rows:
-#            if row.groups:
-#                groups = pickle.loads(row.groups)
-#                done = False
-#                for elem in target_set:
-#                    if elem in groups:
-#                        done = True
-#                        break
-#                if done:
-#                    result.append(row)
+#       XXX -- conflict merge: what's could be kept ?
+#        for x in target_set:
+#            targets = self._db(self._db.targetgroup.id==x).select().first().targets
+#            if targets:
+#                target_ids = json.loads(targets)
+#                for t in target_ids:
+#                    target = self._db(self._db.target.id==x).select().first()
+#                    result.append(target)
 #        return result
 
     def get_target(self, target_id):
@@ -208,7 +234,6 @@ class Globaleaks(object):
         self._db.commit()
         return tulip
 
-
     def create_leak(self, id_, target_set, number=None):
         #FIXME insert new tags into DB first
         #Create leak and insert into DB
@@ -224,12 +249,24 @@ class Globaleaks(object):
         for t in targets:
         #Create a tulip for each target and insert into DB
         #for target_url, allowed_downloads in targets.iteritems():
-            self.create_tulip(leak_id, t)
+            self._db.tulip.insert(
+                url=randomizer.generate_tulip_url(),
+                leak_id=leak_id,
+                target_id=t.id, #FIXME get target_id_properly
+                allowed_accesses=0, # inf
+                accesses_counter=0,
+                allowed_downloads=5,
+                downloads_counter=0,
+                expiry_time=0)
+        #    self.create_tulip(leak_id, t) -- maybe now need to be used create_tulip ? 
+        #    and self.create_tulip(leak_id, 0) ? has been forgotten or throw away ? 
+        #    create_tulip at the moment is never called!
 
+        # tulip for the whistleblower
         self._db.tulip.insert(
                 url=number,
                 leak_id=leak_id,
-                target_id=0, #FIXME get target_id_properly
+                target_id=0, # whistleblower is always 0
                 allowed_accesses=0, # inf
                 accesses_counter=0,
                 allowed_downloads=5,

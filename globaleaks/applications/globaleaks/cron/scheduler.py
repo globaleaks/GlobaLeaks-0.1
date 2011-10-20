@@ -41,8 +41,8 @@ for submission in unspooled:
 mails = db(db.mail).select()
 logger.info(str(mails)+"\n")
 
-if not mails:
-    logger.info(time.ctime()+": NO MAILS TO SEND!\n")
+#if not mails:
+#    logger.info(time.ctime()+": NO MAILS TO SEND!\n")
 
 for m in mails:
     context = dict(name=m.target,

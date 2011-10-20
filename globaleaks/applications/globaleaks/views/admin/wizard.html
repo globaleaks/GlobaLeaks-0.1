@@ -16,14 +16,9 @@
         if (curstep == 5)
             alert("Finish!");
         else {
-            $('#step'+curstep).hide('slow',
-                function(){
-                    curstep++;
-                    $('#step'+curstep).show('slow')
-                })
-            $(window).scrollTop($(document).height()+500);
-
-
+            $('#step'+curstep).hide("slide")
+            curstep++;
+            $('#step'+curstep).show("slide")
         }
     }
 </script>
@@ -50,18 +45,24 @@
     <h1>Step #1 <span>| Node description</span></h1>
     <intro> Be careful when setting the node description. Using "Antani" as author
     name could give supercow powers to your pc and destroy the world.</intro>
+    <br>
+    <br>
     {{=step1}}
 </div>
 
 <div id="step2" class="step" style="display:none">
     <h1>Step #2 <span>| Supported output</span></h1>
     <intro>A small description here too, please</intro>
+    <br>
+    <br>
     {{=step2}}
 </div>
 
 <div id="step3" class="step" style="display:none">
     <h1>Step #3 <span>| Tulip settings</span></h1>
     <intro>Another another small description </intro>
+    <br>
+    <br>
     {{=step3}}
 </div>
 
@@ -70,6 +71,8 @@
     <small class="skipstep"><a href="#step5"> >>Skip </a></small>
 
     <intro>Advanced configs here</intro>
+    <br>
+    <br>
     {{=step4}}
 </div>
 
@@ -92,7 +95,6 @@
 
 <hr>
 <td align="right">
-     <a  onClick="next_step();">
-         <input id="next_step" type="submit" value="Next" name=2 \>
-     </a>
+         <input id="next_step" type="submit" value="Next" name=2
+          onClick="next_step();"\>
 </td>

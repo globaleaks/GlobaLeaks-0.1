@@ -9,8 +9,9 @@ Those are the brave active users! added with <a href="targets/">insertion interf
     <tr class="even">
         <td class="name">id</td>
         <td class="name">name</td>
-        <td class="description">description</td>    
-        <td class="description">email</td>  
+        <td class="description">description</td>
+        <td class="description">contact type</td>
+        <td class="description">contact</td>  
     </tr>  
     {{i=0}}
     {{for target in active:}}
@@ -23,7 +24,8 @@ Those are the brave active users! added with <a href="targets/">insertion interf
     <td class="name">{{=target.id}}</td>
     <td class="name">{{=target.name}}</td>
     <td class="description">{{=target.desc}}</td>  
-    <td class="description">{{=target.url}}</td>  
+    <td class="description">{{=target.contact_type}}</td>  
+    <td class="description">{{=target.contact}}</td>  
     </tr>
     {{pass}}
 </table>
@@ -112,7 +114,7 @@ The <b>Groups</b>That are the context your node is capable to handle; added by <
         {{pass}}
         <td class="name">{{=single.name}}</td>
         <td class="name">{{=single.id}}</td>
-        <td class="description">{{=single.tags}}</td>    
+        <td class="description"><a href="/groups" title="targets ID:{{=single.targets}}">{{=single.tags}}</a></td>    
     </tr>
     {{pass}}
 </table>

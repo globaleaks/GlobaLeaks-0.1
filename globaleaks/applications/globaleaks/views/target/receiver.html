@@ -1,0 +1,18 @@
+{{extend 'layout.html'}}
+<h1>Receiver homepage</h1>
+
+{{if err:}}
+    <h2>Invalid submitted passphrase</h2>
+{{pass}}
+
+<div> 
+    <form action="" method="POST">
+    <input type="text" name="targetid" style="width: 350px" />    
+    <input type="submit" name="send" value="Procedee to your Bouquet" />
+    <a href="receiver/recovery.html">Do you forget your secret ?</a>    
+    </form>
+</div>
+
+<div class="blah">
+if you're blah blah, you could propose yourself as data receiver, Read the <a href="something-blah">receiver ethics agreement</a>, and if fit in your person, propose yourself to be part of the receiver. This is not an automatical procedure and usually involve some pre shared knowledge about the people that became receiver: <a href="receiver/subscribe.html">propose yourself</a>
+</div>
