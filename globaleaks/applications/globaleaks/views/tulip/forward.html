@@ -1,5 +1,9 @@
 {{extend 'layout.html'}}
 
+{{if err:}}
+<h2>Tulip not found!</h2>
+{{else:}}
+
 <h1>Forward <span>Tulip to another Targetgroup</span></h1>
 {{if not targetgroups:}}
 <p class="intro" style="font-weight:bold; text-align:center;">
@@ -61,3 +65,4 @@
     listFilter($("#group_filter"), $("#group_list"));
   });
 </script>
+{{pass}}
