@@ -66,7 +66,7 @@ class Globaleaks(object):
                 targets_j = json.dumps([target_id])
             else:
                 tmp_j = json.loads(targets_j)
-                tmp_j.append(group_id)
+                tmp_j.append(target_id)
                 targets_j = json.dumps(tmp_j)
             result = self._db(self._db.targetgroup.id==group_id
                              ).update(targets=targets_j)
@@ -124,7 +124,7 @@ class Globaleaks(object):
         return result
 
     # by default, a target is inserted with an email type only as contact_type,
-    # in the personal page, the receiver should change that or the contact type 
+    # in the personal page, the receiver should change that or the contact type
     # (eg: facebook, irc ?, encrypted mail setting up a gpg pubkey)
     def create_target(self, name, category, desc, contact_mail, initial_hashpass, req_status):
         """
@@ -144,10 +144,10 @@ class Globaleaks(object):
 
         target_id = self._db.target.insert(name=name,
             # groups=pickle.dumps([category]) if category else "",
-            desc=desc, contact_type="email", 
+            desc=desc, contact_type="email",
             contact=contact_mail, type="plain", info="",
             status=req_status, tulip_counter=0,
-            download_counter=0, hashpass=initial_hashpass) 
+            download_counter=0, hashpass=initial_hashpass)
         self._db.commit()
         return target_id
 
@@ -158,59 +158,32 @@ class Globaleaks(object):
         self._db(self._db.target.id==target_id).delete()
         return True
 
-    # uniq() by http://www.peterbe.com/plog/uniqifiers-benchmark
-    def f7(self, seq):
-        seen = set()
-        seen_add = seen.add
-        return [ x for x in seq if x not in seen and not seen_add(x)]
-
-    def get_targets(self, target_set):
+    def get_targets(self, group_set, target_set=[]):
         """
         If target_set is not a list it returns a rowset with all
         targets.
         If target_set is a list of groups it returns a rowset of targets
         that belong to these groups.
         """
-        if target_set == "ANY" or target_set is None:
-            targets = self._db().select(self._db.target.ALL)
-            return targets
-         
-        target_rows = self._db(self._db.target).select()
-        group_rows = self._db(self._db.targetgroup).select()
+        result_id = []
+        if not isinstance(group_set, list):
+            for target in self._db(self._db.target).select():
+                result_id.append(target.id)
+        else:
+            rows = self._db(self._db.targetgroup).select()
+            for row in rows:
+                if row.id in group_set:
+                    targets = json.loads(row.targets)
+                    for t_id in targets:
+                        result_id.append(self._db(self._db.target.id==t_id
+                                                 ).select().first().id)
+        result_id += target_set
 
-        target_id_list = []
-        for g in group_rows:
-            if str(g.id) in target_set:
-                # XXX maybe it is not very clean...
-                for single_target_id in g.targets.replace('"', "'"):
-                    try:
-                        intval = int(single_target_id, 10)
-                        target_id_list.append(intval)
-                    except ValueError:
-                        pass
-       
-        results = []             
-        if not len(target_id_list):
-            return results
-               
-        target_id_list = self.f7(target_id_list)
-                           
-        for t in target_rows:
-            for choosen in target_id_list:
-                if choosen == t.id:
-                    results.append(t)     
- 
-        return results
+        result = []
+        for target_id in set(result_id):
+            result.append(self.get_target(target_id))
 
-#       XXX -- conflict merge: what's could be kept ?
-#        for x in target_set:
-#            targets = self._db(self._db.targetgroup.id==x).select().first().targets
-#            if targets:
-#                target_ids = json.loads(targets)
-#                for t in target_ids:
-#                    target = self._db(self._db.target.id==x).select().first()
-#                    result.append(target)
-#        return result
+        return result
 
     def get_target(self, target_id):
         """
@@ -240,26 +213,23 @@ class Globaleaks(object):
         leak_id = id_ #self._db.leak.insert(title=title, desc=desc,
                   #                     submission_timestamp=time.time(),
                   #                     leaker_id=0, spooled=False)
-        # save notified groups in the db
-        self._db(self._db.leak.id==id_).update(
-            notified_groups=json.dumps(target_set))
         # get only selected targets
-        targets = self.get_targets(target_set)
+        #targets = self.get_targets(target_set)
 
-        for t in targets:
+        #for t in targets:
         #Create a tulip for each target and insert into DB
         #for target_url, allowed_downloads in targets.iteritems():
-            self._db.tulip.insert(
-                url=randomizer.generate_tulip_url(),
-                leak_id=leak_id,
-                target_id=t.id, #FIXME get target_id_properly
-                allowed_accesses=0, # inf
-                accesses_counter=0,
-                allowed_downloads=5,
-                downloads_counter=0,
-                expiry_time=0)
-        #    self.create_tulip(leak_id, t) -- maybe now need to be used create_tulip ? 
-        #    and self.create_tulip(leak_id, 0) ? has been forgotten or throw away ? 
+            #self._db.tulip.insert(
+            #    url=randomizer.generate_tulip_url(),
+            #    leak_id=leak_id,
+            #    target_id=t.id, #FIXME get target_id_properly
+            #    allowed_accesses=0, # inf
+            #    accesses_counter=0,
+            #    allowed_downloads=5,
+            #    downloads_counter=0,
+            #    expiry_time=0)
+        #    self.create_tulip(leak_id, t) -- maybe now need to be used create_tulip ?
+        #    and self.create_tulip(leak_id, 0) ? has been forgotten or throw away ?
         #    create_tulip at the moment is never called!
 
         # tulip for the whistleblower
