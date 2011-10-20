@@ -9,12 +9,18 @@ from shutil import copyfile
 
 from config import projroot, cfgfile, copyform
 
-#@auth.requires_login()
+
+@auth.requires_login()
 def index():
     return dict(message="hello from admin.py")
+    
+def obtain_secret(input_secret):
+    if not input_secret:
+        return randomizer.generate_target_passphrase()
+    else:
+        return input_secret        
 
-
-#@auth.requires_login()
+@auth.requires_login()
 def targets():
     if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
@@ -22,11 +28,12 @@ def targets():
     if (request.vars.edit and request.vars.edit.startswith("edit")):
         pass
 
+    # is hardcoded email, supposing that, at the moment, every subscription happen with email
+    # only. in the future, other kind of contacts could be setup from the start.
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
-                    Field('Description', requires=IS_LENGTH(minsize=5,
-                                                            maxsize=50)),
-                    Field('email', requires=[IS_EMAIL(),
-                                             IS_NOT_IN_DB(db, db.target.url)])
+                    Field('Description', requires=IS_LENGTH(minsize=5,maxsize=50)),
+                    Field('contact', requires=[IS_EMAIL(), IS_NOT_IN_DB(db, db.target.contact)]),
+                    Field('passphrase'),
                    )
 
     form = SQLFORM.factory(*form_content)
@@ -38,15 +45,17 @@ def targets():
 
     if form.accepts(request.vars, session):
         c = request.vars
-        gl.create_target(c.Name, None, c.Description, c.email, "demo",
-                         "demo target")
+        
+        passphrase = obtain_secret(c.passphrase)  
+        
+        # XXX here need to be hashed/whatever "passphrase", or in create_target ?
+        gl.create_target(c.Name, None, c.Description, c.contact, passphrase, "subscribed")
         targets = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets)
 
     return dict(form=form, list=False, targets=targets)
 
-
-#@auth.requires_login()
+@auth.requires_login()
 def targetgroups():
     """
     Controller for the targets management page.
@@ -66,8 +75,9 @@ def targetgroups():
     form_content_target = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description', requires=IS_LENGTH(minsize=5,
                                                             maxsize=50)),
-                    Field('email', requires=[IS_EMAIL(),
-                                             IS_NOT_IN_DB(db, db.target.url)]),
+                    Field('contact', requires=[IS_EMAIL(),
+                                             IS_NOT_IN_DB(db, db.target.contact)]),
+                    Field('passphrase'),                         
                    )
 
     form_target = SQLFORM.factory(*form_content_target,
@@ -75,8 +85,8 @@ def targetgroups():
 
     if form_target.accepts(request.vars, session):
         c = request.vars
-        gl.create_target(c.Name, None, c.Description,
-                         c.email, "demo", "demo target")
+        passphrase = obtain_secret(c.passphrase)
+        gl.create_target(c.Name, None, c.Description, c.contact, passphrase, "subscribed")
 
     all_targets = gl.get_targets(None)
     targetgroups = gl.get_targetgroups()
@@ -85,8 +95,7 @@ def targetgroups():
                 list=False, targets=None, all_targets=all_targets,
                 targetgroups=targetgroups)
 
-
-#@auth.requires_login()
+@auth.requires_login()
 def group_create():
     """
     Receives parameters "name", "desc", and "tags" from POST.
@@ -103,7 +112,7 @@ def group_create():
         return response.json({'success': 'true'})
 
 
-#@auth.requires_login()
+@auth.requires_login()
 def group_delete():
     try:
         group_id = request.post_vars["group"]
@@ -116,7 +125,7 @@ def group_delete():
     return response.json({'success': 'false'})
 
 
-#@auth.requires_login()
+@auth.requires_login()
 def group_rename():
     try:
         group_id = request.post_vars["group"]
@@ -144,7 +153,7 @@ def group_desc():
     return response.json({'success': 'false'})
 
 
-#@auth.requires_login()
+@auth.requires_login()
 def group_tags():
     try:
         group_id = request.post_vars["group"]
@@ -158,7 +167,7 @@ def group_tags():
     return response.json({'success': 'false'})
 
 
-#@auth.requires_login()
+@auth.requires_login()
 def target_add():
     """
     Receives parameters "target" and "group" from POST.
@@ -181,7 +190,7 @@ def target_add():
     return response.json({'success': 'false'})
 
 
-#@auth.requires_login()
+@auth.requires_login()
 def target_remove():
     """
     Receives parameters "target" and "group" from POST.
@@ -199,20 +208,26 @@ def target_remove():
     return response.json({'success': 'false'})
 
 
-#@auth.requires_login()
-def target_create():
-    try:
-        target_id = request.post_vars["target"]
-    except KeyError:
-        pass
-    else:
-        result = gl.create_target(target_id)
-        if result:
-            return response.json({'success': 'true'})
-    return response.json({'success': 'false'})
+###
+#  THIS IS NEVER CALLED!!
+#
+#  fF GlobaLeaks $ grep -R target_create .
+# ./globaleaks/applications/globaleaks/controllers/admin.py:def target_create():
+# ./globaleaks/applications/globaleaks/controllers/admin.py.bak:def target_create():
+#
+###
+#def target_create():
+#    try:
+#        target_id = request.post_vars["target"]
+#    except KeyError:
+#        pass
+#    else:
+#        result = gl.create_target(target_id)
+#        if result:
+#            return response.json({'success':'true'})
+#    return response.json({'success':'false'})
 
-
-#@auth.requires_login()
+@auth.requires_login()
 def target_delete():
     try:
         target_id = request.post_vars["target"]
@@ -225,7 +240,7 @@ def target_delete():
     return response.json({'success': 'false'})
 
 
-#@auth.requires_login()
+@auth.requires_login()
 def config():
     response.flash = ("Welcome to the Globaleaks new wizard application")
 
@@ -286,8 +301,7 @@ def config():
                 auth_form=auth_form,
                 logging_form=logging_form)
 
-
-#@auth.requires_login()
+@auth.requires_login()
 def wizard():
     """
     Wizard page should be avaible only on startup, and provide with a cool
@@ -376,8 +390,18 @@ def wizard():
                                   step1_form.vars.activity),
                      cfgfile)
         # fill the new config file with the described global attributes
+        settings.globals.author = step1_form.vars.author
+        settings.globals.title = step1_form.vars.title
+        settings.globals.subtitle = step1_form.vars.subtitle
     if step2_form.accepts(request.vars):
+        # XXX: Add sms/e-mail notification support in config
         pass
+    if step3_form.accepts(request.vars):
+        copyform(step3_form.vars, settings.tulip)
+    if step4_form.accepts(request.vars):
+        copyform(step4_form.vars, settings.globals)
+    if step5_form.accepts(request.vars):
+        copyform(step5_form.vars, settings.logging)
 
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,

@@ -18,6 +18,7 @@ globaleaks/applications/globaleaks/databases/*.table
 globaleaks/applications/globaleaks/databases/*.db
 globaleaks/applications/globaleaks/databases/*.sqlite
 globaleaks/applications/globaleaks/errors/*
+globaleaks/applications/admin/errors/*
 globaleaks/applications/globaleaks/sessions/*
 globaleaks/applications/admin/sessions/*
 globaleaks/deposit/

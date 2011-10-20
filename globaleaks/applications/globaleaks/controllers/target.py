@@ -7,7 +7,7 @@ to edits its settings. (E.g.: Unsubscribe from a GL node)
 def index():
     return dict(message="hello from target.py")
 
-
+@auth.requires_login()
 def view():
     collectedUser = []
     targetList = db(db.target.status=="subscribed").select()
@@ -42,12 +42,44 @@ def view():
                 tulips=tulipAvail)
     # nevah forget http://uiu.me/Nr9G.png
 
+# this view is like a tulip: reachable only by a personal secret, stored in db.target.url
+def receiver():
+    import hashlib
 
-# this view is like a tulip: reachable only by a personal secret,
-# stored in db.target.url
-def personal():
-    pass
+    try:
+        passphrase = request.post_vars["targetid"]
+        # target_url = hashlib.sha256(passphrase).hexdigest()
+        target_url = passphrase # ARGH - yes temp, at the moment is not hashed when recorded the first time
+        print "diomerda in receiver [%s]" % target_url
+        redirect("/bouquet/" + target_url)
+    except KeyError:
+        return dict(err=True)
 
+# this page is indexed by an uniq identifier by the receiver, and show all him accessible
+# Tulips, its the page where she/he could change their preferences
+def bouquet():
+
+    if request and request.args:
+        target_url = request.args[0]
+    else:
+        return dict(err="password not supply")
+
+    print "porcodio [%s]" % target_url
+
+    # maybe better continue to devel Target class in datamodel.py
+    receiver_row = db(db.target.hashpass==target_url).select()
+    if len(receiver_row) == 0:
+        return dict(err="invald password supply")
+    if len(receiver_row) > 1:
+        return dict(err="temporary fault: collision detected, two target with the same password")
+
+    # this require to be splitted because tulip are leak x target matrix
+    Bouquet = []
+    tulipList = db(db.tulip.target_id==receiver_row[0].id).select()
+    for singleT in tulipList:
+        Bouquet.append(singleT)
+
+    return dict(err=False,bouquet=Bouquet,target=receiver_row[0])
 
 def subscribe():
     if not request.args:
@@ -90,7 +122,6 @@ def subscribe():
             return dict(message="subscribed", subscribe=None)
 
     return dict(message="this is logically impossible", subscribe=None)
-
 
 def unsubscribe():
     if request.args:

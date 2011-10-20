@@ -20,7 +20,6 @@ class ExtraField:
         for i in dom.getElementsByTagName("field"):
             self.fields.append(self.parse_field(i))
 
-
     def get_content(self, field, tag):
         return field.getElementsByTagName(tag)[0].childNodes[0].data
 
@@ -107,7 +106,9 @@ db.define_table('target',
     Field('name'),
     Field('hidden'),
     Field('desc'),
-    Field('url'),
+    Field('contact_type'),
+    Field('contact'),
+    Field('hashpass'),
     Field('type'),
     Field('info'),
     Field('status'),
@@ -116,7 +117,7 @@ db.define_table('target',
     Field('last_download'),
     Field('tulip_counter'),
     Field('download_counter'),
-    # Field('groups'),
+    # Field('groups'), # not used except in globaleaks.py create_target ? remind to check
     format='%(name)s'
     )
 
