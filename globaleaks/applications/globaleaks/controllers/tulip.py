@@ -224,7 +224,7 @@ def forward():
     try:
         tulip_url = request.args[0]
     except IndexError:
-        return dict(err=True)
+        return dict(err=True, targetgroups=[])
 
     try:
         tulip = Tulip(url=tulip_url)
