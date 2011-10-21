@@ -1,4 +1,3 @@
-import time
 import pickle
 from gluon.contrib import simplejson as json
 
@@ -155,7 +154,6 @@ class Tulip(object):
             db.commit()
         else:
             print "Error: tulip vote has range of -1, 0 and +1"
-            pass
     vote = property(get_vote, set_vote)
 
     # LOL! Vecnish hit's again..
@@ -169,7 +167,6 @@ class Tulip(object):
         return pertinentness
     def set_pertinentness(self, value):
         print "Error: pertinentness is a collaborative value"
-        pass
     pertinentness = property(set_pertinentness, get_pertinentness)
 
     def get_id(self):
