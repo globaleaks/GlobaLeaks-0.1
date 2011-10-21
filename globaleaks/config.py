@@ -1,5 +1,4 @@
 from gluon.storage import Storage
-from gluon.tools import Mail, Auth
 
 import ConfigParser
 import os.path
@@ -9,12 +8,16 @@ projroot = os.path.abspath(__file__).rsplit('GlobaLeaks', 1)[0] + 'GlobaLeaks'
 cfgfile = os.path.join(projroot, 'globaleaks', 'globaleaks.conf')
 
 def copyform(form, settings):
-    """Copy each form value into the specific settings subsection. """  
+    """Copy each form value into the specific settings subsection. """
     for name, value in form.iteritems():
         setattr(settings, name, value)
     settings.commit()
 
 class ConfigFile(Storage):
+    """
+    A Storage-like class which loads and store each attribute into a portable
+    conf file.
+    """
 
     def __init__(self, cfgfile, section):
         super(ConfigFile, self).__init__()
@@ -47,6 +50,9 @@ class ConfigFile(Storage):
             raise NameError(name)
 
     def commit(self):
+        """
+        Commit changes in config file.
+        """
         self._cfgparser.write(open(self._cfgfile, 'w'))
 
 

@@ -1,4 +1,3 @@
-import time
 import pickle
 from gluon.contrib import simplejson as json
 
@@ -104,7 +103,11 @@ class Leak(object):
         Returns a list of ids of the groups that had been notified of
         this leak
         """
-        return json.loads(db.leak[self.id].notified_groups)
+        notified = db.leak[self.id].notified_groups
+        if notified is None:
+            return []
+        else:
+            return json.loads(notified)
 
     def notify_targetgroup(self, group_id):
         """
@@ -118,11 +121,15 @@ class Leak(object):
         to_notify = set(to_notify).difference(notified_targets)
         for target_id in to_notify:
             target = gl.get_target(target_id)
-            tulip_id = gl.create_tulip(self._id, target)
+            previously_generated = [tulip.target for tulip in self.tulips]
+            # generate a tulip for targets thats haven't one
+            if target not in previously_generated:
+                tulip_id = gl.create_tulip(self._id, target)
             tulip_url = db.tulip[tulip_id].url
             if target.status == "subscribed":
+                # Add mail to db, sending managed by scheduler
                 db.mail.insert(target=target.name,
-                               address=target.url,
+                               address=target.contact,
                                tulip=tulip_url)
         notified_groups += [group_id]
         notified_groups = list(set(notified_groups))  # deletes duplicates
@@ -147,7 +154,6 @@ class Tulip(object):
             db.commit()
         else:
             print "Error: tulip vote has range of -1, 0 and +1"
-            pass
     vote = property(get_vote, set_vote)
 
     # LOL! Vecnish hit's again..
@@ -161,7 +167,6 @@ class Tulip(object):
         return pertinentness
     def set_pertinentness(self, value):
         print "Error: pertinentness is a collaborative value"
-        pass
     pertinentness = property(set_pertinentness, get_pertinentness)
 
     def get_id(self):
@@ -227,7 +232,7 @@ class Tulip(object):
         pass
     leak = property(get_leak, set_leak)
 
-# need to be continued, or is almost useless ? 
+# need to be continued, or is almost useless ?
 class Target(object):
     def __init__(self, id):
         self._id = id
