@@ -6,12 +6,15 @@ Contains every controller that must run with admin privileges.
 Every controller in this file must have the @auth.requires_login() decorator
 """
 from shutil import copyfile
-
+import hashlib
 from config import projroot, cfgfile, copyform
 
 
 @auth.requires_login()
 def index():
+    """
+    Controller for admin index page
+    """
     return dict(message="hello from admin.py")
 
 def obtain_secret(input_secret):
@@ -22,8 +25,9 @@ def obtain_secret(input_secret):
 
 @auth.requires_login()
 def targets():
-    import hashlib
-
+    """
+    Controller for page that lets the admin to create new targets
+    """
     if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
 
@@ -43,27 +47,25 @@ def targets():
 
     form = SQLFORM.factory(*form_content)
 
-    targets = gl.get_targets(None)
+    targets_list = gl.get_targets(None)
 
     if "display" in request.args and not request.vars:
-        return dict(form=None, list=True, targets=targets)
+        return dict(form=None, list=True, targets=targets_list)
 
     if form.accepts(request.vars, session):
-        c = request.vars
+        req = request.vars
 
         passphrase = obtain_secret(c.passphrase)
 
-        gl.create_target(c.Name, None, c.Description, c.contact,
+        gl.create_target(req.Name, None, req.Description, req.contact,
                          hashlib.sha256(passphrase).hexdigest() , "subscribed")
-        targets = gl.get_targets("ANY")
-        return dict(form=form, list=True, targets=targets)
+        targets_list = gl.get_targets("ANY")
+        return dict(form=form, list=True, targets=targets_list)
 
-    return dict(form=form, list=False, targets=targets)
+    return dict(form=form, list=False, targets=targets_list)
 
 @auth.requires_login()
 def targetgroups():
-    import hashlib
-
     """
     Controller for the targets management page.
     It creates two forms, one for creating a new target and one for
@@ -77,13 +79,14 @@ def targetgroups():
 
     if form_group.accepts(request.vars, session):
         # Build group target list with posted data
-        tlist = TargetList(request.vars)
+        TargetList(request.vars)
 
     form_content_target = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description', requires=IS_LENGTH(minsize=5,
                                                             maxsize=50)),
-                    Field('contact', requires=[IS_EMAIL(),
-                                             IS_NOT_IN_DB(db, db.target.contact)]),
+                    Field('contact',
+                          requires=[IS_EMAIL(),
+                                    IS_NOT_IN_DB(db, db.target.contact)]),
                     Field('passphrase'),
                    )
 
@@ -91,17 +94,17 @@ def targetgroups():
                                   table_name="form_target")
 
     if form_target.accepts(request.vars, session):
-        c = request.vars
+        req = request.vars
         passphrase = obtain_secret(c.passphrase)
-        gl.create_target(c.Name, None, c.Description, c.contact,
+        gl.create_target(req.Name, None, req.Description, req.contact,
                          hashlib.sha256(passphrase).hexdigest(), "subscribed")
 
     all_targets = gl.get_targets(None)
-    targetgroups = gl.get_targetgroups()
+    targetgroups_list = gl.get_targetgroups()
 
     return dict(form_target=form_target, form_group=form_group,
                 list=False, targets=None, all_targets=all_targets,
-                targetgroups=targetgroups)
+                targetgroups=targetgroups_list)
 
 @auth.requires_login()
 def group_create():
@@ -122,6 +125,10 @@ def group_create():
 
 @auth.requires_login()
 def group_delete():
+    """
+    Receives parameter "group" with the group id from POST.
+    Deletes the target group with the specified parameters
+    """
     try:
         group_id = request.post_vars["group"]
     except KeyError:
@@ -135,6 +142,11 @@ def group_delete():
 
 @auth.requires_login()
 def group_rename():
+    """
+    Receives the parameter "group" with the group id and "name"
+    with the new name for the group from POST.
+    Renames the group with the new name.
+    """
     try:
         group_id = request.post_vars["group"]
         name = request.post_vars["name"]
@@ -149,6 +161,11 @@ def group_rename():
 
 #@auth.requires_login()
 def group_desc():
+    """
+    Receives the parameter "group" with the group id and "desc"
+    with the new description for the group from POST.
+    Updates the group desc
+    """
     try:
         group_id = request.post_vars["group"]
         desc = request.post_vars["desc"]
@@ -163,6 +180,11 @@ def group_desc():
 
 @auth.requires_login()
 def group_tags():
+    """
+    Receives the parameter "group" with the group id and "tags"
+    with the new tags for the group from POST.
+    Updates the group tags.
+    """
     try:
         group_id = request.post_vars["group"]
         tags = request.post_vars["tags"]
