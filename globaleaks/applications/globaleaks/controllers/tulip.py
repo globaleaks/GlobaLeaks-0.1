@@ -224,7 +224,7 @@ def forward():
     try:
         tulip_url = request.args[0]
     except IndexError:
-        return dict(err=True)
+        return dict(err=True, targetgroups=[])
 
     try:
         tulip = Tulip(url=tulip_url)
@@ -239,9 +239,7 @@ def forward():
             groups[group] = all_groups[group]
     # Trying to get group ids from POST
     try:
-        print request.post_vars["group"]
         group_ids = [int(x) for x in request.post_vars["group"]]
-        print group_ids
     except (KeyError, ValueError):
         # if there's no post data get all targets for the view
         # the view will create a form to submit the group to

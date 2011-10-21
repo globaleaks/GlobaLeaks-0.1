@@ -71,16 +71,9 @@ def api():
         leak = Leak(leak_id)
         leak.add_material(leak_id, None, None, file=pfile)
 
-        for tulip in leak.tulips:
-            target = gl.get_target(tulip.target)
+        for group_id in group_ids:
+            leak.notify_targetgroup(group_id)
 
-            if tulip.target == "0":
-                leaker_tulip = tulip.url
-                continue
-
-            if target.status == "subscribed":
-                db.mail.insert(target=target.name,
-                        address=target.contact_type, tulip=tulip.url)
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
                         " " + wb_number[0][6:]
         session.dirname = None
@@ -88,7 +81,7 @@ def api():
         session.files = None
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
-                    form=None, tulip_url=tulip.url)
+                    form=None, tulip_url=wb_number[1])
 
     return locals()
 
@@ -365,6 +358,8 @@ def index():
         # Create the material entry for the submitted data
         leak.add_material(leak_id, None, "localfs", file=pfile)
 
+        # XXX is that needed?
+        """
         # Go through all of the previously generated TULIPs
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)
@@ -379,6 +374,10 @@ def index():
                 db.mail.insert(target=target.name,
                                address=target.url,
                                tulip=tulip.url)
+        """
+        for group_id in group_ids:
+            print "notifying group ", group_id
+            leak.notify_targetgroup(group_id)
 
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
@@ -390,7 +389,7 @@ def index():
         session.files = None
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
-                    form=None, tulip_url=tulip.url, jQuery_templates=None)
+                    form=None, tulip_url=wb_number[0], jQuery_templates=None)
 
     elif form.errors:
         response.flash = 'form has errors'

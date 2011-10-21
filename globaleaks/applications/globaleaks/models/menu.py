@@ -6,9 +6,11 @@ response.meta.description = settings.description
 response.menu = [
     (T('Index'),URL('default','index')==URL(),URL('default','index'),[]),
     (T('Submission'),URL('submission', 'index')==URL(),URL('submission','index'),[]),
-    (T('Global View'), '/globalview'==URL(), '/globalview', []),
+    (T('Receiver'), '/receiver'==URL(), '/receiver', []),
+    (T('Node View'), '/globalview'==URL(), '/globalview', []),
     (T('Targets'),'/targets'==URL(), '/targets'),
     (T('Groups'),'/groups'==URL(),'/groups'),
-    (T('Tulips'),URL('tulip','index')==URL(),URL('tulip','index'),[]),
+    # (T('Tulips'),URL('tulip','index')==URL(),URL('tulip','index'),[]),
+    # "Tulips" redirect to index, why keeping that ? 
 ]
 

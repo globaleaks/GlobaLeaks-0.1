@@ -22,6 +22,8 @@ def obtain_secret(input_secret):
 
 @auth.requires_login()
 def targets():
+    import hashlib
+
     if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
 
@@ -48,8 +50,8 @@ def targets():
         
         passphrase = obtain_secret(c.passphrase)  
         
-        # XXX here need to be hashed/whatever "passphrase", or in create_target ?
-        gl.create_target(c.Name, None, c.Description, c.contact, passphrase, "subscribed")
+        gl.create_target(c.Name, None, c.Description, c.contact, 
+                         hashlib.sha256(passphrase).hexdigest() , "subscribed")
         targets = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets)
 
@@ -57,6 +59,8 @@ def targets():
 
 @auth.requires_login()
 def targetgroups():
+    import hashlib
+
     """
     Controller for the targets management page.
     It creates two forms, one for creating a new target and one for
@@ -86,7 +90,8 @@ def targetgroups():
     if form_target.accepts(request.vars, session):
         c = request.vars
         passphrase = obtain_secret(c.passphrase)
-        gl.create_target(c.Name, None, c.Description, c.contact, passphrase, "subscribed")
+        gl.create_target(c.Name, None, c.Description, c.contact, 
+                         hashlib.sha256(passphrase).hexdigest(), "subscribed")
 
     all_targets = gl.get_targets(None)
     targetgroups = gl.get_targetgroups()
