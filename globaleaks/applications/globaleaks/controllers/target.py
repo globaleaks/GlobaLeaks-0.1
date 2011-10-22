@@ -46,6 +46,9 @@ def view():
 def receiver():
     import hashlib
 
+    if not request or not request.post_vars or not request.post_vars["targetid"]:
+        return dict(err=False)
+
     try:
         passphrase = request.post_vars["targetid"]
         target_url = hashlib.sha256(passphrase).hexdigest()
@@ -72,13 +75,45 @@ def bouquet():
     if len(receiver_row) > 1:
         return dict(err="temporary fault: collision detected, two target with the same password")
 
+    # addiction information could be present in the POST
+    # here are treated the configuration option, and returned in the variable "response"
+    response_t = ""
+
+    form_password = (   Field('new_passphrase', requires=IS_NOT_EMPTY()), 
+                        Field('recovery'),
+                        Field('new_gpg'),
+                    )
+    password_info = SQLFORM.factory(*form_password, table_name="pass_update")
+
+    if password_info.accepts(request.vars, session):
+        response_t += "password accepted "
+        print "password accepted"
+
+    form_receiving = (  Field('new_server', requires=IS_NOT_EMPTY()), 
+                        Field('scp_enable_copy'), 
+                        Field('new_key', requires=IS_NOT_EMPTY()), 
+                    )
+    receiving_info = SQLFORM.factory(*form_receiving, table_name="receiving_update")
+
+    if receiving_info.accepts(request.vars, session):
+        response_t += "receiving update accepted "
+        print "receiving update accepted"
+
+    # the contact-type required to be updated
+    form_contact = (  Field('new_contact'), Field('new_email'), )
+    contact_info = SQLFORM.factory(*form_contact, table_name="contact_update")
+
+    if contact_info.accepts(request.vars, session):
+        response_t += "contact update accepted "
+        print "contact update accepted"
+
     # this require to be splitted because tulip are leak x target matrix
     Bouquet = []
     tulipList = db(db.tulip.target_id==receiver_row[0].id).select()
     for singleT in tulipList:
         Bouquet.append(singleT)
 
-    return dict(err=False,bouquet=Bouquet,target=receiver_row[0])
+    return dict(err=False,bouquet=Bouquet,target=receiver_row[0],answer=response_t)
 
 def subscribe():
     if not request.args:
