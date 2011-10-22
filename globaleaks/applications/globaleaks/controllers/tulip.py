@@ -11,10 +11,10 @@ def index():
     form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
 
     if form.accepts(request.vars, session):
-        l = request.vars
+        req = request.vars
 
         # Make the tulip work well
-        leak_number = l.Receipt.replace(' ', '')
+        leak_number = req.Receipt.replace(' ', '')
         tulip_url = hashlib.sha256(leak_number).hexdigest()
         redirect("/tulip/" + tulip_url)
 
@@ -78,7 +78,6 @@ def status():
         return dict(err=True)
 
     leak = tulip.get_leak()
-    target = gl.get_target(tulip.target)
 
     if tulip.target == "0":
         whistleblower = True
@@ -128,21 +127,21 @@ def status():
     # has to stop in printing other receiver behaviour.
     # now is implement the extended version, but need to be selectable by the
     # maintainer.
-    tulipUsage = []
+    tulip_usage = []
     flowers = db(db.tulip.leak_id == leak.get_id()).select()
-    for singleTulip in flowers:
-        if singleTulip.leak_id == tulip.get_id():
-            tulipUsage.append(singleTulip)
+    for single_tulip in flowers:
+        if single_tulip.leak_id == tulip.get_id():
+            tulip_usage.append(single_tulip)
         else:
-            tulipUsage.append(singleTulip)
+            tulip_usage.append(single_tulip)
     # this else is obviously an unsolved bug, but at the moment 0 lines seem
     # to match in leak_id
 
     feedbacks = []
-    usersComment = db(db.comment.leak_id == leak.get_id()).select()
-    for singleComment in usersComment:
-        if singleComment.leak_id == leak.get_id():
-            feedbacks.append(singleComment)
+    users_comment = db(db.comment.leak_id == leak.get_id()).select()
+    for single_comment in users_comment:
+        if single_comment.leak_id == leak.get_id():
+            feedbacks.append(single_comment)
 
     return dict(err=None,
             access_available=access_available,
@@ -159,7 +158,7 @@ def status():
             tulip_allowed_accesses=limit_counter,
             tulip_download=tulip.downloads_counter,
             tulip_allowed_download=tulip.allowed_downloads,
-            tulipUsage=tulipUsage,
+            tulipUsage=tulip_usage,
             feedbacks=feedbacks,
             feedbacks_n=tulip.get_feedbacks_provided(),
             pertinentness=tulip.get_pertinentness(),
@@ -170,16 +169,16 @@ def status():
             files=pickle.loads(leak.material.file))
 
 
-def download_increment(t):
+def download_increment(tulip):
 
-    if (int(t.downloads_counter) > int(t.allowed_downloads)):
+    if (int(tulip.downloads_counter) > int(tulip.allowed_downloads)):
         return False
 
     if t.downloads_counter:
-        new_count = int(t.downloads_counter) + 1
-        db.tulip[t.target].update_record(downloads_counter=new_count)
+        new_count = int(tulip.downloads_counter) + 1
+        db.tulip[tulip.target].update_record(downloads_counter=new_count)
     else:
-        db.tulip[t.target].update_record(downloads_counter=1)
+        db.tulip[tulip.target].update_record(downloads_counter=1)
 
     return True
 
@@ -196,8 +195,6 @@ def download():
         t = Tulip(url=tulip_url)
     except:
         redirect("/tulip/" + tulip_url)
-
-    target = gl.get_target(t.target)
 
     if not download_increment(t):
         redirect("/tulip/" + tulip_url)
