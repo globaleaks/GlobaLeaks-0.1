@@ -1,7 +1,7 @@
 ========
 Tutorial
 ========
-This tutorial is intended to help developers dowload and build
+This tutorial is intended to help developers download and build
 GlobaLeaks from scratch. After downloading and building ANTANII
 
 .. note:: Stable dowloads for PC/Mac/Linux are avaible in the `download`_

@@ -3,9 +3,9 @@ GlobaLeaks Structure
 ====================
 
 
-The Wirstleblower
+The Whistleblower
 -----------------
-The wirstleblower is an active citzen aware of some malpratice and/or
+The whistleblower is an active citizen aware of some malpratice and/or
 wringdoing, who will notify the relative `Globaleaks node` of such information.
 
 
