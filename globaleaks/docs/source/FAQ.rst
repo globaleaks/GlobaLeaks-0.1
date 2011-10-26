@@ -12,7 +12,7 @@ What is Whistleblowing?
 -----------------------
  - A whistleblower is somebody that informs of illicit activity.
  - Activates citizens in their own local politics.
- - Activate people in their global view.
+ - Activates people in their global view.
 
 What is Globaleaks?
 -------------------
@@ -26,7 +26,7 @@ corporations, public agencies.
 Why does GlobaLeaks Exist?
 --------------------------
 Main goals and motivations are:
- - Becouse we want to change the world into a better place.
+ - Because we want to change the world into a better place.
  - We strive to increase transparency and accountability in our society
 
 Why GlobaLeaks will survive?
@@ -37,7 +37,7 @@ Why GlobaLeaks will survive?
 
 GlobaLeaks VS $existing_solutions
 ---------------------------------
- - The existing software lacked basic privacy- aware (anonymity) and security
+ - The existing software lacked basic privacy-aware (anonymity) and security
    features (encryption).
  - Existing projects are less open that they want to make people believe.
  - Only commercial software or outsourced WhistleBlowing services.
