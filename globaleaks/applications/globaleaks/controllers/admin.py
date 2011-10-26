@@ -55,7 +55,7 @@ def targets():
     if form.accepts(request.vars, session):
         req = request.vars
 
-        passphrase = obtain_secret(c.passphrase)
+        passphrase = obtain_secret(req.passphrase)
 
         gl.create_target(req.Name, None, req.Description, req.contact,
                          hashlib.sha256(passphrase).hexdigest() , "subscribed")
