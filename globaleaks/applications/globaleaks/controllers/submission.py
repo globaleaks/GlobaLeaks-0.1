@@ -73,16 +73,9 @@ def api():
         leak = Leak(leak_id)
         leak.add_material(leak_id, None, None, file=pfile)
 
-        for tulip in leak.tulips:
-            target = gl.get_target(tulip.target)
+        for group_id in group_ids:
+            leak.notify_targetgroup(group_id)
 
-            if tulip.target == "0":
-                leaker_tulip = tulip.url
-                continue
-
-            if target.status == "subscribed":
-                db.mail.insert(target=target.name,
-                        address=target.contact_type, tulip=tulip.url)
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
                         " " + wb_number[0][6:]
         session.dirname = None
@@ -90,7 +83,7 @@ def api():
         session.files = None
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
-                    form=None, tulip_url=tulip.url)
+                    form=None, tulip_url=wb_number[1])
 
     return locals()
 
@@ -184,24 +177,24 @@ def index():
     jQueryFileUpload = DIV(
                            DIV(LABEL("Material:"),
                                 _class="w2p_fl"),
-                          DIV(DIV(LABEL(SPAN(T("Add Files")),
-                                        INPUT(_type="file",
-                                              _name="files[]"),
-                                              _class="fileinput-button"),
-                                  BUTTON(T("Start upload"),
-                                           _type="submit",
-                                           _class="start"),
-                                  BUTTON(T("Cancel upload"),
-                                           _type="reset",
-                                           _class="cancel"),
-                                  BUTTON(T("Delete Files"),
-                                           _type="button",
-                                           _class="delete"),
+                           DIV(DIV(LABEL(SPAN(T("Add Files")),
+                                         INPUT(_type="file",
+                                               _name="files[]"),
+                                               _class="fileinput-button"),
+                                   BUTTON(T("Start upload"),
+                                            _type="submit",
+                                            _class="start"),
+                                   BUTTON(T("Cancel upload"),
+                                            _type="reset",
+                                            _class="cancel"),
+                                   BUTTON(T("Delete Files"),
+                                            _type="button",
+                                            _class="delete"),
                                    _class="fileupload-buttonbar"),
-                                  DIV(TABLE(_class="files"),
-                                      DIV(_class="fileupload-progressbar"),
-                                      _class="fileupload-content"),
-                                  _id="fileupload", _class="w2p_fl"),
+                                   DIV(TABLE(_class="files"),
+                                       DIV(_class="fileupload-progressbar"),
+                                       _class="fileupload-content"),
+                                   _id="fileupload", _class="w2p_fl"),
                             DIV(_class="w2p_fc"),
                                 _id="material__row")
 
@@ -263,14 +256,15 @@ def index():
             labels=form_labels)
 
     mysteps = [
-               dict(title='Step 1', legend='Fist step', fields=['title', 'desc']),
+               dict(title='Step 1', legend='Fist step',
+                    fields=['title', 'desc']),
                dict(title='Step 1', legend='Fist step', fields=form_extras),
                ]
 
     form = FormWizard.PowerFormWizard(
                db.leak,
-               steps=mysteps,
-               )
+               steps=mysteps
+           )
 
     # Add the extra settings that are not included in the DB
     form[0].insert(-1, material_njs)
@@ -280,12 +274,12 @@ def index():
     if session.files:
         filesul = UL(_id="stored_files")
         # XXX Is this being sanitized?
-        for file in session.files:
-            filesul.append(LI(SPAN(file.filename),
+        for f in session.files:
+            filesul.append(LI(SPAN(f.filename),
                               A("delete",
                                 _href="",
                                 _class="stored_file_delete",
-                                _id=file.fileid)))
+                                _id=f.fileid)))
 
         form[0].insert(-1, TR('Stored files', filesul))
 
@@ -304,6 +298,16 @@ def index():
         logger.debug("Submission %s", request.vars)
 
         group_ids = []  # Will contain all the groups selected by the WB
+        for var in request.vars:
+            if var.startswith("target_") and var.split("_")[-1].isdigit():
+                group_ids.append(int(var.split("_")[-1]))
+
+        # XXX Refactor this into something that makes sense
+        #
+        # Create the leak with the GlobaLeaks factory
+        # (the data has actually already been added to db leak,
+        #  this just creates the tulips)
+        leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
 
         # XXX Since files are processed via AJAX, maybe this is unecessary?
         #     if we want to keep it to allow legacy file upload, then the
@@ -336,6 +340,7 @@ def index():
                                            'uploads',
                                            tmp_file),
                               dst_folder + filename)
+                # XXX define exception for this except
                 except:
                     logger.error("There was an error in processing the "
                                  "submission files.")
@@ -371,6 +376,8 @@ def index():
         # Create the material entry for the submitted data
         leak.add_material(leak_id, None, "localfs", file=pfile)
 
+        # XXX is that needed?
+        """
         # Go through all of the previously generated TULIPs
         for tulip in leak.tulips:
             target = gl.get_target(tulip.target)
@@ -385,6 +392,9 @@ def index():
                 db.mail.insert(target=target.name,
                                address=target.url,
                                tulip=tulip.url)
+        """
+        for group_id in group_ids:
+            leak.notify_targetgroup(group_id)
 
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
@@ -396,7 +406,7 @@ def index():
         session.files = None
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
-                    form=None, tulip_url=tulip.url, jQuery_templates=None)
+                    form=None, tulip_url=wb_number[0], jQuery_templates=None)
 
     elif form.errors:
         response.flash = 'form has errors'
@@ -453,7 +463,6 @@ def upload():
                 for x in session.fileresume.items():
                     if x[1] == filename:
                         filedata.fileid = x[0]
-                        pass
             else:
                 session.fileresume[filedata.fileid] = filename
 
@@ -468,6 +477,7 @@ def upload():
                 open(tmp_fpath)
                 # If it does append
                 dest_file = open(tmp_fpath, "ab")
+            # XXX specify exception
             except:
                 # Otherwise create a new one
                 dest_file = open(tmp_fpath, "w+b")
@@ -568,7 +578,7 @@ def upload():
                                               session.dirname)
                     try:
                         os.remove(dst_folder + file.filename)
-                    except:
+                    except OSError:
                         logger.error("File requested for deletion is "
                                      "already deleted.")
                 else:

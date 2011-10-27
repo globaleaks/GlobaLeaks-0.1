@@ -1,7 +1,9 @@
 ###############################################
 # Parse the extra fields.
 ###############################################
-#!/usr/bin/env python
+
+FormWizard = local_import('plugin_PowerFormWizard')
+
 class ExtraField:
     def __init__(self, filename):
         from xml.dom.minidom import parse, parseString
@@ -76,7 +78,7 @@ class ExtraField:
                 wizard.append(self.parse_step(nstep))
             else:
                 wizard.append(self.parse_step(steps[i]))
-        print wizard
+        print wizard        
 
     def gen_db(self):
         if self.fields:

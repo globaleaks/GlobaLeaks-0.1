@@ -1,5 +1,5 @@
 from gluon.storage import Storage
-from config import Mail, Auth
+from gluon.tools import Mail, Auth
 from gluon.tools import Recaptcha
 
 gl = local_import('logic.globaleaks').Globaleaks(db)
@@ -17,6 +17,7 @@ settings.mail = mail.settings
 # XXX: hack
 settings.mail.__dict__['commit'] = db.commit
 settings.auth.__dict__['commit'] = db.commit
+
 #
 # reCAPTCHA support
 auth.settings.captcha = Recaptcha(request,
