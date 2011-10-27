@@ -33,6 +33,7 @@ background-color: green;
     <th>Type</th>
     <th>Contact</th>
     <th>Description</th>
+    <th>remove cap</th>
     <th>Delete</th>
 </thead>
 <tbody>
@@ -48,6 +49,7 @@ background-color: green;
         <td class="email">{{=target.contact_type}}</td>
         <td class="email">{{=target.contact}}</td>
         <td class="description">{{=target.desc}}</td>
+        <td class="description">{{=target.delete_cap}}</td>
         <td class="delete">
             <button name="delete" onclick="clicked({{=target.id}}, 'delete')">delete</button>
         </td>

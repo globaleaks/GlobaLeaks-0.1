@@ -391,7 +391,7 @@ def index():
         session.files = None
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number,
-                    form=None, tulip_url=wb_number[0], jQuery_templates=None)
+                    form=None, tulip_url=wb_number[1], jQuery_templates=None)
 
     elif form.errors:
         response.flash = 'form has errors'

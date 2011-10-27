@@ -42,7 +42,7 @@ def targets():
                           requires=IS_LENGTH(minsize=5, maxsize=50)),
                     Field('contact', requires=[IS_EMAIL(),
                           IS_NOT_IN_DB(db, db.target.contact)]),
-                    Field('passphrase'),
+                    Field('passphrase'), Field('coulddelete', 'boolean'), #extern the text in view
                    )
 
     form = SQLFORM.factory(*form_content)
@@ -57,7 +57,7 @@ def targets():
 
         passphrase = obtain_secret(req.passphrase)
 
-        gl.create_target(req.Name, None, req.Description, req.contact,
+        gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
                          hashlib.sha256(passphrase).hexdigest() , "subscribed")
         targets_list = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets_list)
@@ -87,7 +87,7 @@ def targetgroups():
                     Field('contact',
                           requires=[IS_EMAIL(),
                                     IS_NOT_IN_DB(db, db.target.contact)]),
-                    Field('passphrase'),
+                    Field('passphrase'), Field('coulddelete', 'boolean'), # extern in view the text
                    )
 
     form_target = SQLFORM.factory(*form_content_target,
@@ -95,8 +95,8 @@ def targetgroups():
 
     if form_target.accepts(request.vars, session):
         req = request.vars
-        passphrase = obtain_secret(c.passphrase)
-        gl.create_target(req.Name, None, req.Description, req.contact,
+        passphrase = obtain_secret(req.passphrase)
+        gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
                          hashlib.sha256(passphrase).hexdigest(), "subscribed")
 
     all_targets = gl.get_targets(None)
@@ -236,26 +236,6 @@ def target_remove():
         if result:
             return response.json({'success': 'true'})
     return response.json({'success': 'false'})
-
-
-###
-#  THIS IS NEVER CALLED!!
-#
-#  fF GlobaLeaks $ grep -R target_create .
-# ./globaleaks/applications/globaleaks/controllers/admin.py:def target_create():
-# ./globaleaks/applications/globaleaks/controllers/admin.py.bak:def target_create():
-#
-###
-#def target_create():
-#    try:
-#        target_id = request.post_vars["target"]
-#    except KeyError:
-#        pass
-#    else:
-#        result = gl.create_target(target_id)
-#        if result:
-#            return response.json({'success':'true'})
-#    return response.json({'success':'false'})
 
 @auth.requires_login()
 def target_delete():

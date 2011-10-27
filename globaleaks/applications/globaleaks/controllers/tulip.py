@@ -20,7 +20,6 @@ def index():
 
     redirect("/")
 
-
 def access_increment(tulip):
     if tulip.accesses_counter:
         new_count = int(tulip.accesses_counter) + 1
@@ -75,16 +74,25 @@ def status():
     try:
         tulip = Tulip(url=tulip_url)
     except:
-        return dict(err=True)
+        return dict(err=True, delete=None)
 
     leak = tulip.get_leak()
-
+    
     if tulip.target == "0":
         whistleblower = True
         target_url = ''
+        delete_capability = False
     else:
         whistleblower = False
         target_url = "target/" + tulip.url
+        delete_capability = (gl.get_target(int(tulip.get_target()))).delete_cap
+        
+    # check if the tulip has been requested to be deleted
+    if request.vars and request.vars.delete and delete_capability:
+        deleted_tulips = tulip.delete_bros()
+        # TODO delete_bros clean tulip table only. masterial & leak need to be 
+        # cleaned too
+        return dict(err=False, delete=deleted_tulips)
 
     if whistleblower == False:
         # the stats of the whistleblower don't stay in him own tulip
@@ -143,7 +151,7 @@ def status():
         if single_comment.leak_id == leak.get_id():
             feedbacks.append(single_comment)
 
-    return dict(err=None,
+    return dict(err=None,delete=None,
             access_available=access_available,
             download_available=download_available,
             whistleblower=whistleblower,
@@ -164,6 +172,7 @@ def status():
             pertinentness=tulip.get_pertinentness(),
             previous_vote=tulip.get_vote(),
             name=tulip.target,
+            target_del_cap=delete_capability,
             target_url=target_url,
             targets=gl.get_targets("ANY"),
             files=pickle.loads(leak.material.file))

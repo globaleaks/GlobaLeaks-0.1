@@ -9,7 +9,9 @@ ARGD=0
 # When more args are provided: debug mode is enabled
 if [ $# -ne "$ARGD" ]
 then
-    echo "enabling log in directory [$1]: useful for development: DO NOT USE IN PRODUCTION"
+    red="\e[1;31m"
+    echo -e "${red}enabling log in directory [$1]: useful for development: DO NOT USE IN PRODUCTION"
+    reset
     LOG_OPTION="-l $1"
     # TODO - check if a name/directory where store log file could be set here
 
