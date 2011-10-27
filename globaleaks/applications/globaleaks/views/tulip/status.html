@@ -1,8 +1,11 @@
 {{extend 'layout.html'}}
 
-{{if err:}}
-
-<h2>Tulip not found!</h2>
+{{if err or delete:}}
+    {{if err:}}
+        <h2>invalid receipt: Tulip not found!</h2>
+    {{else:}}
+        <h2>Tulip removed and all relatives (#{{=delete}} tulips)</h2>
+    {{pass}}
 
 {{else:}}
 
@@ -185,6 +188,15 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             {{pass}}
         </tbody>
     </table>
+    
+    {{if target_del_cap:}}
+    <div class="description">You have the right to delete this submitted material. This effect delete also all the related Tulips for the other receiver.</div>
+    <form name="delete_tulips" method="POST" action="">
+        I want delete this tulip and all the tulips derived from the same material: <input type="checkbox" name="delete" />
+        <br>
+        <input type="submit" name="send" value="Yes I'm sure, I want delete all the tulips related" /> 
+    </form>
+    {{pass}}  
 
 </div>
 

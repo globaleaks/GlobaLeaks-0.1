@@ -7,46 +7,52 @@ to edits its settings. (E.g.: Unsubscribe from a GL node)
 def index():
     return dict(message="hello from target.py")
 
+
 @auth.requires_login()
 def view():
-    collectedUser = []
-    targetList = db(db.target.status=="subscribed").select()
-    for active_user in targetList:
-        collectedUser.append(active_user)
+    collected_user = []
+    target_list = db(db.target.status=="subscribed").select()
+    for active_user in target_list:
+        collected_user.append(active_user)
 
-    inactiveUser = []
-    unsubscribedList = db(db.target.status=="unsubscribed").select()
-    for inactive_user in unsubscribedList:
-        inactiveUser.append(inactive_user)
+    inactive_user = []
+    unsubscribed_list = db(db.target.status=="unsubscribed").select()
+    for user in unsubscribed_list:
+        inactive_user.append(user)
 
-    leakActive = []
+    leak_active = []
     flowers = db().select(db.leak.ALL)
-    for active_leak in flowers:
-        leakActive.append(active_leak)
+    for leak in flowers:
+        leak_active.append(leak)
 
-    groupsUsage = []
-    groupList = db().select(db.targetgroup.ALL)
-    for group in groupList:
-        groupsUsage.append(group)
+    groups_usage = []
+    group_list = db().select(db.targetgroup.ALL)
+    for group in group_list:
+        groups_usage.append(group)
 
     # this require to be splitted because tulip are leak x target matrix
-    tulipAvail = []
-    tulipList = db().select(db.tulip.ALL)
-    for singleT in tulipList:
-        tulipAvail.append(singleT)
+    tulip_avail = []
+    tulip_list = db().select(db.tulip.ALL)
+    for single_t in tulip_list:
+        tulip_avail.append(single_t)
 
-    return dict(active=collectedUser,
-                inactive=inactiveUser,
-                flowers=leakActive,
-                groups=groupsUsage,
-                tulips=tulipAvail)
+    return dict(active=collected_user,
+                inactive=inactive_user,
+                flowers=leak_active,
+                groups=groups_usage,
+                tulips=tulip_avail)
     # nevah forget http://uiu.me/Nr9G.png
 
-# this view is like a tulip: reachable only by a personal secret, stored in db.target.url
+
 def receiver():
+    """
+    This view is like a tulip: reachable only by a personal secret,
+    stored in db.target.url
+    """
     import hashlib
 
-    if not request or not request.post_vars or not request.post_vars["targetid"]:
+    if not request or not request.post_vars or \
+       not request.post_vars["targetid"]:
         return dict(err=False)
 
     try:
@@ -56,10 +62,12 @@ def receiver():
     except KeyError:
         return dict(err=True)
 
-# this page is indexed by an uniq identifier by the receiver, and show all him accessible
-# Tulips, its the page where she/he could change their preferences
 def bouquet():
-
+    """
+    This page is indexed by an uniq identifier by the receiver, and shows
+    all him accessible Tulips, its the page where she/he could change their
+    preferences
+    """
     if request and request.args:
         target_url = request.args[0]
     else:
@@ -73,15 +81,17 @@ def bouquet():
     if len(receiver_row) == 0:
         return dict(err="invald password supply")
     if len(receiver_row) > 1:
-        return dict(err="temporary fault: collision detected, two target with the same password")
+        return dict(err="temporary fault: collision detected, two target"
+                        "with the same password")
 
     # addiction information could be present in the POST
-    # here are treated the configuration option, and returned in the variable "response"
+    # here are treated the configuration option, and returned in the variable
+    # "response"
     response_t = ""
 
-    form_password = (   Field('new_passphrase', requires=IS_NOT_EMPTY()), 
-                        Field('recovery'),
-                        Field('new_gpg'),
+    form_password = (Field('new_passphrase', requires=IS_NOT_EMPTY()),
+                     Field('recovery'),
+                     Field('new_gpg'),
                     )
     password_info = SQLFORM.factory(*form_password, table_name="pass_update")
 
@@ -89,11 +99,12 @@ def bouquet():
         response_t += "password accepted "
         print "password accepted"
 
-    form_receiving = (  Field('new_server', requires=IS_NOT_EMPTY()), 
-                        Field('scp_enable_copy'), 
-                        Field('new_key', requires=IS_NOT_EMPTY()), 
+    form_receiving = (  Field('new_server', requires=IS_NOT_EMPTY()),
+                        Field('scp_enable_copy'),
+                        Field('new_key', requires=IS_NOT_EMPTY()),
                     )
-    receiving_info = SQLFORM.factory(*form_receiving, table_name="receiving_update")
+    receiving_info = SQLFORM.factory(*form_receiving,
+                                     table_name="receiving_update")
 
     if receiving_info.accepts(request.vars, session):
         response_t += "receiving update accepted "
@@ -108,12 +119,16 @@ def bouquet():
         print "contact update accepted"
 
     # this require to be splitted because tulip are leak x target matrix
-    Bouquet = []
-    tulipList = db(db.tulip.target_id==receiver_row[0].id).select()
-    for singleT in tulipList:
-        Bouquet.append(singleT)
+    bouquet_list = []
+    tulip_list = db(db.tulip.target_id==receiver_row[0].id).select()
+    for single_t in tulip_list:
+        bouquet_list.append(single_t)
 
-    return dict(err=False,bouquet=Bouquet,target=receiver_row[0],answer=response_t)
+    return dict(err=False,
+                bouquet=bouquet_list,
+                target=receiver_row[0],
+                answer=response_t)
+
 
 def subscribe():
     if not request.args:
@@ -136,6 +151,7 @@ def subscribe():
 
     try:
         tulip = Tulip(url=tulip_url)
+    # XXX specify exception
     except:
         return dict(message="Error!", subscribe=None)
 
@@ -157,6 +173,7 @@ def subscribe():
 
     return dict(message="this is logically impossible", subscribe=None)
 
+
 def unsubscribe():
     if request.args:
         tulip_url = request.args[0]
@@ -165,6 +182,7 @@ def unsubscribe():
 
     try:
         tulip = Tulip(url=tulip_url)
+    # XXX specify exception
     except:
         return dict(message="Error!")
 

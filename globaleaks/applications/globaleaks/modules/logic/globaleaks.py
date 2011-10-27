@@ -126,7 +126,7 @@ class Globaleaks(object):
     # by default, a target is inserted with an email type only as contact_type,
     # in the personal page, the receiver should change that or the contact type
     # (eg: facebook, irc ?, encrypted mail setting up a gpg pubkey)
-    def create_target(self, name, category, desc, contact_mail, initial_hashpass, req_status):
+    def create_target(self, name, category, desc, contact_mail, could_del, initial_hashpass, req_status):
         """
         Creates a new target with the specified parameters.
         Returns the id of the new record.
@@ -134,6 +134,7 @@ class Globaleaks(object):
         |contact_type| supported values: [email]
         |type| supported values: [plain*|pgp]
         |status|: [subscribed*|unsubscribed|selfproposed]
+        |could_del|: true or false*, mean: could delete material
 
         * = default
         """
@@ -146,7 +147,7 @@ class Globaleaks(object):
             # groups=pickle.dumps([category]) if category else "",
             desc=desc, contact_type="email",
             contact=contact_mail, type="plain", info="",
-            status=req_status, tulip_counter=0,
+            status=req_status, delete_cap=could_del, tulip_counter=0,
             download_counter=0, hashpass=initial_hashpass)
         self._db.commit()
         return target_id

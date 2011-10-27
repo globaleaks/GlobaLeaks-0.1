@@ -169,6 +169,12 @@ class Tulip(object):
         print "Error: pertinentness is a collaborative value"
     pertinentness = property(set_pertinentness, get_pertinentness)
 
+    # delete_bros used to delete the tulip self and all the legit brothers
+    def delete_bros(self):
+        retval = db(db.tulip.leak_id == db.tulip[self.id].leak_id).count()
+        db(db.tulip.leak_id == db.tulip[self.id].leak_id).delete()
+        return retval
+
     def get_id(self):
         return self._id
     def set_id(self, id):
