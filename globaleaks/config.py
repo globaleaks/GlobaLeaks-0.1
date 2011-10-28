@@ -33,7 +33,13 @@ class ConfigFile(Storage):
             return self.__dict__.get(name, None)
 
         try:
-            return self._cfgparser.get(self._section, name)
+            value = self._cfgparser.get(self._section, name)
+            if value.isdigit():
+                return int(value)
+            elif value.lower() in ('true', 'false'):
+                return bool(value)
+            else:
+                return value
         except ConfigParser.NoOptionError:
             raise NameError(name)
 

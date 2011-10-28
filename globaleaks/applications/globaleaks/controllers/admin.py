@@ -286,10 +286,7 @@ def config():
 
     # XXX: client logging depends on server logging!
     logging_form = FORM(TABLE(
-            TR("client", INPUT(_name='client', _type='text',
-                               _value=settings.logging.client)),
-            TR("server", INPUT(_name="server", _type="text",
-                               _value=settings.logging.server)),
+            # XXX: create a list imported from the dict present in logging
             TR("log file", INPUT(_name="logfile", _type="file",
                                 _value=settings.logging.logfile)),
             TR(INPUT(_type="submit"))
