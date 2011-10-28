@@ -16,7 +16,4 @@ routes_in = (
              ('^/bouquet', '/globaleaks/target/bouquet')
             )
 
-routes_onerror = (
-             ('*/404', '/globaleaks/default/notfound'),
-             ('*/*', '/globaleaks/deafult/oops')
-            )
+

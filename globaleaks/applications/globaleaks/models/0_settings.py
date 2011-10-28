@@ -19,26 +19,27 @@ settings.database = ConfigFile(cfgfile, 'database')
 ######
 
 class FormShaman(SQLFORM):
-    def __init__(self, steps, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         self.special_fields = {
                        'disclaimer' : '',#settings.globals.disclaimer_html,
-                       'captcha' : auth.settings.captcha,
+                       'captcha' : '' ,#auth.settings.captcha,
                        'material': '',#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
                        'grouplist': ''
                        }
-        print self.steps
-        if steps:
-            self.steps = steps
-            fields = []
-            labels = []
-            for step in self.steps:
-                for special_field in (x for x in step if x in self.special_fields):
-                    fields.append(special_field['name'])
-                    labels.append({ special_field['name'] :
-                                    special_field['label'] })
 
-        super(FormShaman, self).__init__(*args, fields=fields, labels=labels, **kwargs)
+        if kwargs['steps']:
+            self.steps = kwargs['steps']
+            kwargs['fields'] = []
+            kwargs['labels'] = []
+            for step in self.steps:
+                for x in step:
+                    if x not in self.special_fields.keys():
+                        kwargs['fields'].append(str(x['name']))
+                        kwargs['labels'].append({ str(x['name']) :
+                                    x['label'] })
+
+        super(FormShaman, self).__init__(*args, **kwargs)
 
 
     def createform(self, xfields):
@@ -73,5 +74,10 @@ class FormShaman(SQLFORM):
 
         except:
             raise RuntimeError, 'formstyle not supported'
+
+        response.files.append(URL('static','FormShaman',args=['css','smart_wizard.css']))
+        response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js'])) 
+
+        print table
 
         return table
