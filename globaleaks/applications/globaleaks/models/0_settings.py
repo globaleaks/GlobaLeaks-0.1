@@ -56,13 +56,16 @@ class FormShaman(SQLFORM):
         
         try:
             i = 1
+            j = 0
             for step in self.steps:
                 step_html = DIV(_id="step-"+str(i))
                 for field in step:
                     if field in self.special_fields.keys():
                         step_html.append(self.special_fields[field])
                     else:
-                        step_html.append(DIV(xfields[i-1][1],xfields[i-1][2],_id=xfields[i-1][0]))
+                        step_html.append(DIV(xfields[j][1],xfields[j][2],_id=xfields[j][0]))
+                        j += 1
+
                 table.append(step_html)
                 i += 1
                 
