@@ -250,10 +250,49 @@ def index():
         form_fields.append(str(i['name']))
         form_labels[str(i['name'])] = i['desc']
 
+    the_steps = [
+            [
+                {'desc': 
+                u'this is the main title of the submission', 
+                'type': u'string', 
+                'name': u'title', 
+                'label': u'title'
+                }, 
+                
+                {'desc': 
+                    u'Describe your submission in this box', 
+                'type': u'text', 
+                'name': u'desc', 
+                'label': u'Description'
+                }, 
+                
+                'grouplist'
+            ], 
+            
+            [
+                'material', 
+                
+                {'desc': u'This is a text field', 'type': u'string', 'name': u'extratext', 'label': u'Text'}
+            ], 
+            
+            [
+                #{'desc': u'Enter a date realted to your submission', 'type': u'date', 'name': u'date', 'label': u'Date'}, 
+                
+                'disclaimer', 
+                
+                'captcha'
+            ]
+            
+    ]
+
+
     # Create the actual form
-    form = SQLFORM(db.leak,
-            fields=form_fields,
-            labels=form_labels)
+    #form = SQLFORM(db.leak,
+    #        fields=form_fields,
+    #        labels=form_labels)
+    form = FormShaman(db.leak,
+            steps=the_steps)
+
 
     mysteps = [
                dict(title='Step 1', legend='Fist step',
@@ -261,14 +300,14 @@ def index():
                dict(title='Step 1', legend='Fist step', fields=form_extras),
                ]
 
-    form = FormWizard.PowerFormWizard(
-               db.leak,
-               steps=mysteps
-           )
+    #form = FormWizard.PowerFormWizard(
+    #           db.leak,
+    #           steps=mysteps
+    #       )
 
     # Add the extra settings that are not included in the DB
-    form[0].insert(-1, material_njs)
-    form[0].insert(-1, jQueryFileUpload)
+    #form[0].insert(-1, material_njs)
+    #form[0].insert(-1, jQueryFileUpload)
 
     # Check to see if some files have been loaded from a previous session
     if session.files:
@@ -283,11 +322,11 @@ def index():
 
         form[0].insert(-1, TR('Stored files', filesul))
 
-    form[0].insert(-1, targetgroups)
+    #form[0].insert(-1, targetgroups)
 
     #form[0].insert(-1, captcha)
-    form[0].insert(-1, disclaimer_text)
-    form[0].insert(-1, disclaimer)
+    #form[0].insert(-1, disclaimer_text)
+    #form[0].insert(-1, disclaimer)
 
     # Make the submission not spooled and set the timestamp
     form.vars.spooled = False
