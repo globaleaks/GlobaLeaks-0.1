@@ -13,31 +13,34 @@ settings = Storage()
 settings.globals = ConfigFile(cfgfile, 'global')
 settings.database = ConfigFile(cfgfile, 'database')
 
+
+#######
+# XXX: SHIT HAPPENS
+######
+
 class FormShaman(SQLFORM):
-    def __init__(self, *args, **kwargs):
-        
+    def __init__(self, steps, *args, **kwargs):
+
         self.special_fields = {
                        'disclaimer' : '',#settings.globals.disclaimer_html,
                        'captcha' : auth.settings.captcha,
                        'material': '',#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
                        'grouplist': ''
                        }
-        
-        if kwargs['steps']:
-            self.steps = kwargs['steps']
-            kwargs['fields'] = []
-            kwargs['labels'] = []
-            for step in kwargs['steps']:
-                for a in step:
-                    if a not in self.special_fields.keys():
-                        kwargs['fields'].append(str(a['name']))
-                        kwargs['labels'].append({ str(a['name']) : str(a['label']) })
-        
-        print kwargs['labels']
-        print kwargs['fields']
-        super(FormShaman, self).__init__(*args, **kwargs)
-        
-    
+        print self.steps
+        if steps:
+            self.steps = steps
+            fields = []
+            labels = []
+            for step in self.steps:
+                for special_field in (x for x in step if x in self.special_fields):
+                    fields.append(special_field['name'])
+                    labels.append({ special_field['name'] :
+                                    special_field['label'] })
+
+        super(FormShaman, self).__init__(*args, fields=fields, labels=labels, **kwargs)
+
+
     def createform(self, xfields):
 
         table = DIV(_id="wizard", _class="swMain")
@@ -52,8 +55,7 @@ class FormShaman(SQLFORM):
                                 )
                              )
         table.append(step_head)
-        #print "fields: %s " % self.fields
-        
+
         try:
             i = 1
             for step in self.steps:
@@ -65,8 +67,8 @@ class FormShaman(SQLFORM):
                         step_html.append(DIV(xfields[i-1][1],xfields[i-1][2],_id=xfields[i-1][0]))
                 table.append(step_html)
                 i += 1
-                
+
         except:
             raise RuntimeError, 'formstyle not supported'
-        
+
         return table
