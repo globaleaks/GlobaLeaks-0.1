@@ -26,23 +26,34 @@ class GLogger(logging.FileHandler):
         return log(self.SERVER, msg, *args, **kwargs)
 
 
+levels = dict(debug = logging.DEBUG,
+              info = logging.INFO,
+              warning = logging.WARNING,
+              error = logging.ERROR,
+              fatal = logging.FATAL,
+              client = GLogger.CLIENT,
+              server = GLogger.SERVER)
+
+
 def start_logger(logsettings):
     """
     Start a new logger, set formatting options, and tune level according to use
     configuration.
     """
-    logger = logging.getLogger()
+    logger = logging.getLogger('')
     if logger.handlers:
         hdlr = GLogger(logsettings.logfile)
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         hdlr.setFormatter(formatter)
         logger.addHandler(hdlr)
 
-        if logsettings.server:
-            logger.setLevel(GLogger.SERVER)
-        elif logsettings.client:
-            logger.setLevel(GLogger.CLIENT)
-        else:
-            logger.setLevel(logging.NOTSET)
+
+
+        level = levels.get(logsettings.level, None)
+        if not level:
+            level = levels['fatal']
+            logger.waring('Invalid level in config file.')
+
+        logger.setLevel(level)
 
     return logger

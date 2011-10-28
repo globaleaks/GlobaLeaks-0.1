@@ -3,6 +3,7 @@
 Controller for the index
 """
 
+import logging
 
 ### required - do not delete
 def user():
@@ -39,6 +40,13 @@ def index():
 
     return dict(tulip_url=None)
 
+def notfound():
+    logging.debug('404 Error detected')
+    return dict()
+
+def oops():
+    logging.error('Error %s : %%(ticket)s.' % request.url)
+    return dict()
 
 def error():
     return {}

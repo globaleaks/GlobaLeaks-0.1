@@ -21,12 +21,12 @@ then
     export PYTHONMALLOCSTATS=1
 else
     LOG_OPTION=""
+    if [ ! -z $FOLDER ]; then
+        cd $FOLDER
+    fi
+    ln -sf /dev/null applications/globaleaks/errors
 fi
 
 
-if [[ -z $FOLDER ]]; then
-    python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION 
-else
-    cd $FOLDER
-    python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION
-fi
+
+python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION
