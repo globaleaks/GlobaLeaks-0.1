@@ -2,7 +2,7 @@
 # Parse the extra fields.
 ###############################################
 
-FormWizard = local_import('plugin_PowerFormWizard')
+#FormWizard = local_import('plugin_PowerFormWizard')
 
 class ExtraField:
     def __init__(self, filename):

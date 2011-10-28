@@ -12,7 +12,7 @@ import gluon.contrib.simplejson as json
 import shutil
 import base64
 
-FormWizard = local_import('plugin_PowerFormWizard')
+#FormWizard = local_import('plugin_PowerFormWizard')
 
 mutils = local_import('material').utils()
 Anonymity = local_import('anonymity')
