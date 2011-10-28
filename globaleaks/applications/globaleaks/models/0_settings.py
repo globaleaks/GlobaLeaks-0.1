@@ -19,7 +19,7 @@ settings.database = ConfigFile(cfgfile, 'database')
 ######
 
 class FormShaman(SQLFORM):
-    def __init__(self, steps, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         self.special_fields = {
                        'disclaimer' : '',#settings.globals.disclaimer_html,
@@ -27,17 +27,19 @@ class FormShaman(SQLFORM):
                        'material': '',#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
                        'grouplist': ''
                        }
-        print self.steps
-        if steps:
-            self.steps = steps
-            fields = []
-            labels = []
-            for step in self.steps:
-                for special_field in (x for x in step if x in self.special_fields):
-                    fields.append(special_field['name'])
-                    labels.append({ special_field['name'] :
-                                    special_field['label'] })
+        self.steps = kwargs.get('steps', None)
+        if not self.steps:
+            raise ValueError('FormShaman needs a steps argument')
+        fields = []
+        labels = []
+        for step in self.steps:
+            for norm_field in filter(lambda x: x not in self.special_fields.keys(),
+                                     step):
+                fields.append(norm_field['name'])
+                labels.append({ norm_field['name'] :
+                                norm_field['label'] })
 
+        # set up everything launching the parent class' init
         super(FormShaman, self).__init__(*args, fields=fields, labels=labels, **kwargs)
 
 
