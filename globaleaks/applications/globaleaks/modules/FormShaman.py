@@ -1,135 +1,29 @@
-# coding: utf8
-"""
-
-FormShaman by GlobaLeaks (http://globaleaks.org/)
-
-Based on PowerFormWizard Plugin for web2py by
-Bruno Cezar Rocha @rochacbruno
-
-The MIT License
-
-Copyright (c) 2010 Washington Botelho dos Santos (stepy)
-Copyright (c) 2011 Bruno Cezar Rocha (PowerFormWizard Plugin for web2py)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-"""
 from gluon import *
 
-class PowerFormWizard(SQLFORM):
-    """
-    ## Dependencies
-    - web2py framework 1.97.1+
-    - jquery
-    - web2py_ajax (included in web2py scaffold)
-    - jquery stepy plugin (included in this plugin)
-    - jquery validate plugin (included in stepy plugin)
-    - jquery.stepy.css (included)
-    - some optional images (included)
-
-    ## How to use:
-    1 Download the plugin in http://labs.blouweb.com/plugins/powerformwizard
-    2 Include the plugin in your app via web2py admin interface
-    
-    3 in controllers
-    #################################################################################
-    # controllers/default.py
-    #################################################################################
-    def index():
-        #steps is a dict eith the keys: title, legend, fields
-        mysteps = [dict(title='Passo 1', legend='First Step', fields=['name','lastname']),
-                   dict(fields=['colors','picture','bio']),
-                   dict(title='Passo 3', legend='Second Step',fields=['email','password'])]
-        
-        # import the module
-        from plugin_PowerFormWizard import PowerFormWizard
-        
-        # create the form  
-        # You can pass in any SQLFORM attibute or _html attribute          
-        form = PowerFormWizard(
-                               db.person,                   # A table
-                               steps=mysteps,               # steps is a dictionary
-                               options=dict(validate=True)  # options is a dict, in this case activate client side validation 
-                               ) 
-        
-        # do the form validation
-        if form.accepts(request.vars, session):
-            response.flash = "Records inserted"
-        elif form.errors:
-            form.step_validation() # IMPORTANT FOR VALIDATION
-            response.flash = "Errors in form, take a look"
-        
-        # THE FORM IS DONE, ENJOY!
-        return dict(form=form) 
-    
-    ###################################################################################
-    #  OPTIONS is a dictionary - if not passed the default is assumed
-    ###################################################################################
-
-    # Callbacks receives 'index' as argument, index is the number of the next step
-    options = {
-                'back': None,                       # JS Callback before the backward action.
-                'backLabel': str(T('< Back'))       # Change the back button label.
-                'block': True,                      # **Block the next step if the current is invalid
-                'description': False,               # Choose if the description of the titles will be showed
-                'errorImage': True,                 # ** If an error, shows an image at teh step title
-                'finish': None,                     # JS Callback before finish
-                'finishButton': True,               # Include or not the button submit at the end
-                'nextLabel': str(T('Next >')),      # Change the label of Next button
-                'legend': False,                    # Choose if the legends will be showed
-                'next': None,                       # JS Callback for next button
-                'titleClick':True,                  # Active the action for title click
-                'titleTarget': '',                  # Choose the place qhere title will appear
-                'validate': False,                  # Activate client side validations
-              }
-
-    ###################################################################################
-    # NOTES
-    ###################################################################################
-    
-    Client side validation is activated with options=dict(validate=True,)
-    this validations is done by jquery validate and is based on db/FORM validators 
-    defined in .requires
-
-
-    Client side validation is not supposed to validate everything!
-    Know Java Script? Wanna contribute?
-
-    """
-    
-    def __init__(self, 
-                 table, 
-                 steps, 
-                 formstyle = 'divs',
-                 options={},
-                 _id = 'powerformwizard',
-                 record = None,
-                 fields = None,
-                 ignore_rw = False, 
-                 record_id=None,
-                 **attributes
-                 ):
-
-        if formstyle not in ['divs','ul']:
-            raise AttributeError("SQLFORM formstyle not accepted")
-        
-        
+class FormShaman(SQLFORM):
+    def __init__(
+        self,
+        table,
+        record = None,
+        deletable = False,
+        linkto = None,
+        upload = None,
+        fields = None,
+        labels = None,
+        col3 = {},
+        submit_button = 'Submit',
+        delete_label = 'Check to delete:',
+        showid = True,
+        readonly = False,
+        comments = True,
+        keepopts = [],
+        ignore_rw = False,
+        record_id = None,
+        formstyle = 'table3cols',
+        buttons = ['submit'],
+        separator = ': ',
+        **attributes
+        ):
         
         # Special fields to be replaced with custom HTML
         
@@ -178,33 +72,36 @@ class PowerFormWizard(SQLFORM):
                                }
         
         from gluon import current
-        response = current.response
-        self.T = current.T
-        self.table = table
-        self.formstyle = formstyle
-        self.attributes = attributes
-        self.ignore_rw = ignore_rw
-        self.record_id = record_id
-        self.options = options
-        self._id = _id
+        super(SQLFORM, self).__init__(
+                                    table,
+                                    record = None,
+                                    deletable = False,
+                                    linkto = None,
+                                    upload = None,
+                                    fields = None,
+                                    labels = None,
+                                    col3 = {},
+                                    submit_button = 'Submit',
+                                    delete_label = 'Check to delete:',
+                                    showid = True,
+                                    readonly = False,
+                                    comments = True,
+                                    keepopts = [],
+                                    ignore_rw = False,
+                                    record_id = None,
+                                    formstyle = 'table3cols',
+                                    buttons = ['submit'],
+                                    separator = ': ',
+                                    **attributes
+                                    )
 
-        self.fields = []
-        self.indexes = []
-        for s in steps:
-            for field in s['fields']:
-                self.fields.append(field)
+        # Check if the number of step descriptions are the same as the fields
+        if len(steps) == len(fields):
+            self.p_steps = steps # [{'title': 'Step 1', 'desc': 'Step 1 description'}, {'title': 'Step 2', 'desc': 'Step 2 description'}]
+        else:
+            return False
         
-        self.record = record
-
-        from gluon.storage import Storage   
-        self.custom = Storage() # Needed to silence errors, but Custom Forms are not allowed!
-
-        # NEEDED TO CREATE A SQLFORM OBJECT HERE TO EXTRACT DOM ELEMENTS, HOW TO DO BETTER?
-        form = SQLFORM(self.table, formstyle=self.formstyle, **attributes)
-        
-
-        self.p_form = form
-        self.p_steps = steps # [{'title':'Step Title', 'fields':['fieldname1','fieldname2']}]
+        # [{'title':'Step Title', 'fields':['fieldname1','fieldname2']}]
         self.p_tablename = form.table._tablename
         self.p_attributes = form.attributes
         self.p_elements = [e.parent for e in form.elements('.w2p_fw')]
@@ -215,18 +112,31 @@ class PowerFormWizard(SQLFORM):
         FORM.__init__(self, _id=self._id ,*self.splitted_steps, **attributes)
 
 
-        response.files.append(URL('static','plugin_PowerFormWizard',args=['css','jquery.stepy.css']))
-        response.files.append(URL('static','plugin_PowerFormWizard',args=['js','jquery.stepy.min.js'])) 
-        response.files.append(URL('static','plugin_PowerFormWizard',args=['js','jquery.validate.min.js'])) 
-        
+        response.files.append(URL('static','FormShaman',args=['css','smart_wizard.css']))
+        response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js'])) 
         
         self.append_js()       
 
+    def __make_fields(self, step):
+        for field in step:
+            {'desc': 
+                u'this is the main title of the submission', 
+                'type': u'string', 
+                'name': u'title', 
+                'label': u'title'
+                }, 
 
-    def split_steps(self):
+            if field not in self.special_fields:
+                
+                                
+            else:
+                totalfields.append(y)
+
+
+    def make_steps(self):
         """
         This is how a parsed fieldset looks like:
-        
+        self.fields = 
         [
             [
                 {'desc': 
@@ -262,21 +172,15 @@ class PowerFormWizard(SQLFORM):
             
         ]
         
-        For copy paste purposes, here is the one liner:
-        [[{'desc': u'this is the main title of the submission', 'type': u'string', 'name': u'title', 'label': u'title'}, {'desc': u'Describe your submission in this box', 'type': u'text', 'name': u'desc', 'label': u'Description'}, 'grouplist'], ['material', {'desc': u'This is a text field', 'type': u'string', 'name': u'extratext', 'label': u'Text'}], [{'desc': u'Enter a date realted to your submission', 'type': u'date', 'name': u'date', 'label': u'Date'}, 'disclaimer', 'captcha']]
         """
 
         totalfields = []
         tovalidatefields = []
-
+        step_number = 1
         #totalfields = self.fields[:]
-        for x in self.fields[:]:
-            for y in x:
-                if y not in self.special_fields:
-                    tovalidatefields.append(y['name'])
-                    totalfields.append(y['name'])
-                else:
-                    totalfields.append(y)
+        for step in self.fields[:]:
+            wizard_steps = DIV(self.__make_fields(step), _id="step-"+step_number)
+            step_number += 1
 
         splitted_steps = []
 
@@ -324,7 +228,7 @@ class PowerFormWizard(SQLFORM):
                     'back': self.options.get('back',''),                               # JS Callback before the backward action.
                     'backLabel': self.options.get('backLabel',str(self.T('< Back'))),  # Change the back button label.
                     'block': self.options.get('block', True),                          # **Block the next step if the current is invalid
-                    'description': self.options.get('description',False),              # Choose if the description of the titles will be showed
+                    'description': self.options.get('description',False),              # Choose if the description of the titles willbeshowed
                     'errorImage': self.options.get('errorImage',True),                 # ** If an error, shows an image at teh step title
                     'finish': self.options.get('finish', ''),                          # JS Callback before finish
                     'finishButton': self.options.get('finishButton', True),            # Include or not the button submit at the end
