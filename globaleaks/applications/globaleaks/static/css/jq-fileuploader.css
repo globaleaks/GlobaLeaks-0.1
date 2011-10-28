@@ -1,0 +1,17 @@
+#fileupload {
+    display: none;
+}
+
+div.flash {background-color: #888;}
+
+#group_list {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.group_tags {
+  font-weight: normal;
+  font-style: italic;
+  padding-left: 20px;
+}
+

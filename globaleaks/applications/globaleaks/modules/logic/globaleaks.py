@@ -192,14 +192,19 @@ class Globaleaks(object):
         """
         return self._db(self._db.target.id==target_id).select().first()
 
-    def create_tulip(self, leak_id, target):
+    def create_tulip(self, leak_id, target_id, hardcoded_url=None):
         """
-        Creates a tulip for the target and inserts it into the db
+        Creates a tulip for the target, and inserts it into the db
+        (when target is 0, is the whitleblower and hardcoded_url is set by the caller)
         """
+        if hardcoded_url and target_id:
+            logger.error("Invalid usage of create_tulip: url and target specifyed")
+            return NoneType
+            
         tulip = self._db.tulip.insert(
-            url=randomizer.generate_tulip_url(),
+            url= hardcoded_url if hardcoded_url else randomizer.generate_tulip_url(),
             leak_id=leak_id,
-            target_id=target.id, #FIXME get target_id_properly
+            target_id=target_id, #FIXME get target_id_properly
             allowed_accesses=0, # inf
             accesses_counter=0,
             allowed_downloads=5,
@@ -207,45 +212,6 @@ class Globaleaks(object):
             expiry_time=0)
         self._db.commit()
         return tulip
-
-    def create_leak(self, id_, target_set, number=None):
-        #FIXME insert new tags into DB first
-        #Create leak and insert into DB
-        leak_id = id_ #self._db.leak.insert(title=title, desc=desc,
-                  #                     submission_timestamp=time.time(),
-                  #                     leaker_id=0, spooled=False)
-        # get only selected targets
-        #targets = self.get_targets(target_set)
-
-        #for t in targets:
-        #Create a tulip for each target and insert into DB
-        #for target_url, allowed_downloads in targets.iteritems():
-            #self._db.tulip.insert(
-            #    url=randomizer.generate_tulip_url(),
-            #    leak_id=leak_id,
-            #    target_id=t.id, #FIXME get target_id_properly
-            #    allowed_accesses=0, # inf
-            #    accesses_counter=0,
-            #    allowed_downloads=5,
-            #    downloads_counter=0,
-            #    expiry_time=0)
-        #    self.create_tulip(leak_id, t) -- maybe now need to be used create_tulip ?
-        #    and self.create_tulip(leak_id, 0) ? has been forgotten or throw away ?
-        #    create_tulip at the moment is never called!
-
-        # tulip for the whistleblower
-        self._db.tulip.insert(
-                url=number,
-                leak_id=leak_id,
-                target_id=0, # whistleblower is always 0
-                allowed_accesses=0, # inf
-                accesses_counter=0,
-                allowed_downloads=5,
-                downloads_counter=0,
-                expiry_time=0)
-
-        self._db.commit()
-        return leak_id
 
     def get_leaks(self):
         pass

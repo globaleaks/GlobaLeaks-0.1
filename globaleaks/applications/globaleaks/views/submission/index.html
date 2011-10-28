@@ -1,60 +1,8 @@
 {{extend 'layout.html'}}
-<!-- script type="text/javascript" src="/globaleaks/static/js/fileupload/fileuploader.js"></script-->
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" id="theme">
 
+<link rel="stylesheet" href="/globaleaks/static/css/jquery-ui.css" id="theme">
 <link rel="stylesheet" href="/globaleaks/static/css/jquery.fileupload-ui.css">
-<style>
-/*
-.qq-uploader { position:relative; width: 100%;}
-
-.qq-upload-button {
-    display:block;
-    width: 105px; padding: 7px 0; text-align:center;
-    background:#880000; border-bottom:1px solid #ddd;color:#fff;
-}
-.qq-upload-button-hover {background:#cc0000;}
-.qq-upload-button-focus {outline:1px dotted black;}
-
-.qq-upload-drop-area {
-    position:absolute; top:0; left:0; width:100%; height:100%; min-height: 70px; z-index:2;
-    background:#FF9797; text-align:center;
-}
-.qq-upload-drop-area span {
-    display:block; position:absolute; top: 50%; width:100%; margin-top:-8px; font-size:16px;
-}
-.qq-upload-drop-area-active {background:#FF7171;}
-
-.qq-upload-list {margin:15px 35px; padding:0; list-style:disc;}
-.qq-upload-list li { margin:0; padding:0; line-height:15px; font-size:12px;}
-.qq-upload-file, .qq-upload-spinner, .qq-upload-size, .qq-upload-cancel, .qq-upload-failed-text {
-    margin-right: 7px;
-}
-
-.qq-upload-file {}
-.qq-upload-spinner {display:inline-block; background: url("loading.gif"); width:15px; height:15px; vertical-align:text-bottom;}
-.qq-upload-size,.qq-upload-cancel {font-size:11px;}
-
-.qq-upload-failed-text {display:none;}
-.qq-upload-fail .qq-upload-failed-text {display:inline;}
-*/
-
-#fileupload {
-    display: none;
-}
-
-div.flash {background-color: #888;}
-
-#group_list {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
-.group_tags {
-  font-weight: normal;
-  font-style: italic;
-  padding-left: 20px;
-}
-</style>
+<link rel="stylesheet" href="/globaleaks/static/css/jq-fileupload.css">
 
 <script type="text/javascript">
   // custom css expression for a case-insensitive contains()
@@ -106,113 +54,6 @@ div.flash {background-color: #888;}
 
         	{{=form}}
 
-<script type="text/javascript">
-//
-// function sendInfo(id, jsonId)
-// {
-    // var linkUsed = document.getElementById("link_"+id);
-    // linkUsed.innerHTML ='info already sent';
-//
-    // // XXX I don't know which kind of security analysis are performed by web2py, therefore maybe
-    // // other encoding ways are better
-    // details_text = escape(document.getElementById("desc_"+id).innerHTML);
-    // desc_title = escape(document.getElementById("title_"+id).value);
-//
-    // $.ajax({
-        // type: 'POST',
-        // url: '/globaleaks/submission/sendinfo',
-        // data: {'info_id' : jsonId, 'title_mat' : desc_title, 'details' : details_text }
-    // });
-// }
-//
-// function addInfoRequest(id, fileName, responseJSON)
-// {
-    // /* remember, before was used the code: */
-    // // qqElement_added = $('.qq-upload-list li');
-    // // qqElement_added.append("text_string");
-//
-    // var father = document.getElementById('file-uploader');
-    // var li_new = document.createElement("li");
-    // li_new.className = 'qq-upload-size';
-//
-    // li_new.innerHTML = '<label>Short description of ' + fileName + '</label><br>'+
-                       // '<input type="text" id="title_'+id+'" name="title_mat" value="add file short title"><br>'+
-                       // '<label>Description</label><br>'+
-                       // '<textarea id="desc_'+id+'" name="desc_mat">add the complete explanation of the submitted data</textarea>'+
-                       // '<br><span id="link_'+id+'">' + fileName + ': <a href="javascript:void(0)" onClick="javascript:sendInfo(' +
-                       // id + ', ' + responseJSON.fileid + ');">send info</a></span><br><br>';
-//
-    // console.log(li_new.innerHTML);
-    // father.appendChild(li_new);
-// }
-//
-// function createUploader(){
-    // var uploader = new qq.FileUploader({
-        // element: document.getElementById('file-uploader'),
-        // action: '/globaleaks/submission/upload',
-//
-        // onComplete: function(id, fileName, responseJSON){
-            // addInfoRequest(id, fileName, responseJSON);
-            // $("a.qq-upload-delete").click(function(e) {
-                // console.log(this);
-                // $(this).parent().hide();
-                // $.ajax({
-                    // type: 'POST',
-                    // url: '/globaleaks/submission/upload',
-                    // data: {'delete' : responseJSON.fileid}
-                // });
-                // return false;
-            // });
-//
-            // $("#submit").show();
-            // $("#uploading").hide();
-        // },
-        // onProgress: function(id, fileName, loaded, total){
-//
-            // $('a.qq-upload-delete').hide();
-            // $("#submit").hide();
-            // $("#uploading").show();
-        // },
-        // onCancel: function(id, fileName){
-            // $("#submit").show();
-            // $("#uploading").hide();
-        // },
-//
-        // onSubmit: function(id, fileName){
-//
-        // },
-        // debug: true
-    // });
-// }
-//
-// function DeleteFile(fileid) {
-    // $.ajax({
-        // type: 'POST',
-        // url: '/globaleaks/submission/upload',
-        // data: {'delete' : fileid}
-    // });
-    // return false;
-// }
-//
-// //window.onload = createUploader;
-// $(document).ready(function() {
-    // $('#fileupload').show();
-    // $('#file-uploader-nonjs').hide();
-//
-    // $("a.stored_file_delete").click(function(e) {
-        // $(this).parent().hide();
-        // $.ajax({
-            // type: 'POST',
-            // url: '/globaleaks/submission/upload',
-            // data: {'delete' : $(this).attr("id")}
-        // });
-        // return false;
-    // });
-//
-//
-// });
-</script>
-
 <script id="template-upload" type="text/x-jquery-tmpl">
 	{{=jQuery_templates[0]}}
 </script>
@@ -220,12 +61,10 @@ div.flash {background-color: #888;}
 	{{=jQuery_templates[1]}}
 </script>
 
-<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script> -->
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery-ui.min.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.tmpl.min.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.iframe-transport.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.fileupload.js"></script>
-<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
 
 <script>
@@ -293,55 +132,8 @@ div.flash {background-color: #888;}
 
     <a class="button whistleblower" href="/tulip/{{=tulip_url}}">Submission status</a>
 
-<!--
-    <p class="intro">
-    You should now impersonate the Target by checking you email and clicking on the TULIP (link). You may be required to wait up to 1 minute and be sure to check also your spam email folder.
-    </p>
-    <p class="tulip">
-        <img src="{{=URL('static', 'images/icon-target.png')}}" alt="" />
-    </p>
--->
     <p>
         You are also able to use your Whistleblower receipt from the first page.
     </p>
-
-<script>
-
-/* $(document).ready(function() {
-  var uploader = new qq.FileUploader({
-        // pass the dom node (ex. $(selector)[0] for jQuery users)
-        element: document.getElementById('file-uploader'),
-        // path to server-side upload script
-        action: '/globaleaks/submission/upload',
-        sizeLimit: 15000000,
-        minSizeLimit: 0,
-        allowedExtensions: ['xls','jpg', 'jpeg', 'pdf', 'txt','doc','htm','html','xml','xmls', 'txt','ppt','png', 'gif'],
-        // set to true to output server response to console
-        debug: true,
-
-        // events
-        // you can return false to abort submit
-        onSubmit: function(id, fileName){},
-        onProgress: function(id, fileName, loaded, total){},
-        onComplete: function(id, fileName, responseJSON){},
-        onCancel: function(id, fileName){},
-
-        messages: {
-            // error messages, see qq.FileUploaderBasic for content
-            typeError: "{file} {{=T('has invalid extension.')}} {{=T('Only')}} {extensions} {{=T('are allowed.')}}",
-            sizeError: "{file} {{=T('is too large, maximum file size is')}} {sizeLimit}.",
-            minSizeError: "{file} {{=T('is too small, minimum file size is')}} {minSizeLimit}.",
-            emptyError: "{file} {{=T('is empty, please select files again without it.')}}",
-            onLeave: "{{=T('The files are being uploaded, if you leave now the upload will be cancelled.')}}"
-        },
-        showMessage: function(message){ alert(message); }
-    });
-    });
-*/
-
-</script>
-
 {{pass}}
-
 </body>
-

@@ -15,10 +15,6 @@
     <!-- http://dev.w3.org/html5/markup/meta.name.html -->
     <meta name="application-name" content="{{=request.application}}" />
 
-    <!-- Speaking of Google, don't forget to set your site up:
-     http://google.com/webmasters -->
-    <meta name="google-site-verification" content="" />
-
     <!--  Mobile Viewport Fix
       j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag
       device-width: Occupy full width of the screen in its current orientation
@@ -141,26 +137,6 @@
       <div style="clear: both;"></div><!-- Clear the divs -->
       {{end}}
 
-    </div><!-- footer -->
-
-    <!--[if lt IE 7 ]>
-    <script src="{{=URL('static','js/dd_belatedpng.js')}}"></script>
-    <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
-    <![endif]-->
-
-    <!-- asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet
-     change the UA-XXXXX-X to be your site's ID -->
-    <!--
-       <script>
-         var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
-         (function(d, t) {
-         var g = d.createElement(t),
-         s = d.getElementsByTagName(t)[0];
-         g.async = true;
-         g.src = '//www.google-analytics.com/ga.js';
-         s.parentNode.insertBefore(g, s);
-         })(document, 'script');
-       </script>
-       -->
+    </div>
   </body>
 </html>

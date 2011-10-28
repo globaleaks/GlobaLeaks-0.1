@@ -56,8 +56,6 @@ def api():
         else:
             leak_id = result.id
 
-        gl.create_leak(leak_id, group_ids, wb_number[1])
-
         # If a session has not been created yet, create one.
         if not session.wb_id:
             session.wb_id = randomizer.generate_wb_id()
@@ -73,9 +71,14 @@ def api():
         leak = Leak(leak_id)
         leak.add_material(leak_id, None, None, file=pfile)
 
+        # generation of tulips: the first, in GlobaLeaks object, aim to create
+        # the whistleblower tulip
+        gl.create_tulip(leak_id, 0, wb_number[1]) 
+        # this loop, create the tulip for the receivers
         for group_id in group_ids:
             leak.notify_targetgroup(group_id)
 
+        # format the pretty number for being saved like a phone number
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
                         " " + wb_number[0][6:]
         session.dirname = None
@@ -275,6 +278,8 @@ def index():
         filesul = UL(_id="stored_files")
         # XXX Is this being sanitized?
         for f in session.files:
+            print "debug: session ID recovered %s " % f.fileid
+            # in file uploaded c'e' già il modo di visualizzare nella casella i file già caricati della sessione corrente
             filesul.append(LI(SPAN(f.filename),
                               A("delete",
                                 _href="",
@@ -301,13 +306,6 @@ def index():
         for var in request.vars:
             if var.startswith("target_") and var.split("_")[-1].isdigit():
                 group_ids.append(int(var.split("_")[-1]))
-
-        # XXX Refactor this into something that makes sense
-        #
-        # Create the leak with the GlobaLeaks factory
-        # (the data has actually already been added to db leak,
-        #  this just creates the tulips)
-        leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
 
         # XXX Since files are processed via AJAX, maybe this is unecessary?
         #     if we want to keep it to allow legacy file upload, then the
@@ -348,21 +346,7 @@ def index():
             if var.startswith("target_") and var.split("_")[-1].isdigit():
                 group_ids.append(var.split("_")[-1])
 
-        # XXX Refactor this into something that makes sense
-        #
-        # Create the leak with the GlobaLeaks factory
-        # (the data has actually already been added to db leak,
-        #  this just creates the tulips)
-        leak_id = gl.create_leak(form.vars.id, group_ids, wb_number[1])
-
-        # XXX probably a better way to do this
-        # Create a record in submission db associated with leak_id
-        # used to keep track of sessions
-        if not db(db.submission.session==session.wb_id).select():
-            db.submission.insert(session=session.wb_id,
-                                 leak_id=leak_id,
-                                 dirname=session.dirname)
-
+        # XXX is that needed?
         # The metadata associated with the file is stored inside
         # the session variable this should be safe to use this way.
         if not session.files:
@@ -371,12 +355,33 @@ def index():
         # FIXME FIXME FIXME
         pfile = pickle.dumps(session.files)
 
+        # leak_id has been used in the previous code as this value, I'm keeping to don't
+        # change the following lines
+        leak_id = form.vars.id
+
+        # XXX probably a better way to do this
+        # Create a record in submission db associated with leak_id
+        # used to keep track of sessions
+        if not db(db.submission.session==session.wb_id).select():
+            print "debug: I'm here!"
+            db.submission.insert(session=session.wb_id,
+                                 leak_id=leak_id,
+                                 dirname=session.dirname)
+
         # Instantiate the Leak object
         leak = Leak(leak_id)
         # Create the material entry for the submitted data
         leak.add_material(leak_id, None, "localfs", file=pfile)
 
-        # XXX is that needed?
+        # Create the leak with the GlobaLeaks factory
+        # (the data has actually already been added to db leak,
+        #  this just creates the tulips), the first is the whistleblower tulip
+        gl.create_tulip(form.vars.id, 0, wb_number[1]) 
+
+        # follow the tulips for every receiver inside a basket
+        for group_id in group_ids:
+            leak.notify_targetgroup(group_id)
+
         """
         # Go through all of the previously generated TULIPs
         for tulip in leak.tulips:
@@ -393,8 +398,6 @@ def index():
                                address=target.url,
                                tulip=tulip.url)
         """
-        for group_id in group_ids:
-            leak.notify_targetgroup(group_id)
 
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
