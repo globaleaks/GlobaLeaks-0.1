@@ -58,8 +58,9 @@ class UploadHandler:
 #										urllib.urlencode(file.name)
 
 			file.delete_url = self.__options['script_url'] + \
-							"?file=" + file.name.replace(' ','%20')
-			file.delete_type = 'DELETE'
+							"?deletefile=" + file.name.replace(' ','%20')
+
+			file.delete_type = 'GET'
 
 			return response.json([dict(**file)])
 
@@ -167,8 +168,9 @@ class UploadHandler:
 				file.size = file_size
 				
 			file.delete_url = self.__options['script_url'] + \
-						"?file=" + file.name.replace(" ", "%20")
-			file.delete_type = 'DELETE'
+						"?deletefile=" + file.name.replace(" ", "%20")						
+
+			file.delete_type = 'GET'
 			
 		else:
 			file.error = error
@@ -234,9 +236,12 @@ class UploadHandler:
 		
 		return dict(error=True)
 
-		def delete(self):
-			file_name = os.path.basename(request.vars.file) if request.vars.file else None
-			file_path = os.path.join(self.__options['upload_dir'],file_name)
-			success = os.path.isfile(file_path) and file_name[0] != "." and os.remove(file_path)
-			return success
+	def delete(self):
+		file_name = os.path.basename(request.vars.deletefile) if request.vars.deletefile else None
+		file_path = os.path.join(request.folder,'material',self.get_file_dir(),file_name)
+		success = os.path.isfile(file_path) and file_name[0] != "." and os.remove(file_path)
+		if success:
+			return {'result': 'success'}
+		else:
+			return {'result': 'fail'}
 

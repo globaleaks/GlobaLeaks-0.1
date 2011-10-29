@@ -17,5 +17,3 @@ settings.database = ConfigFile(cfgfile, 'database')
 #######
 # XXX: SHIT HAPPENS
 ######
-
-
