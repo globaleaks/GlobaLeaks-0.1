@@ -37,6 +37,7 @@ settings.private.email_login = settings.globals.email_login
 settings.private.login_method = settings.globals.login_method
 settings.private.login_config = ''
 settings.private.plugins = []
+settings.private.hiddenservice = settings.globals.hiddenservice
 
 # AWS configuration
 settings.private.aws_key = '<AWS-KEY>'
@@ -61,3 +62,4 @@ auth.messages.reset_password = 'Click on the link http://' + request.env.http_ho
 
 settings.auth.table_user.email.label=T("Username")
 
+tor_hs = local_import('anonymity').TorHiddenService(settings)

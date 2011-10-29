@@ -24,6 +24,28 @@ def obtain_secret(input_secret):
         return input_secret
 
 @auth.requires_login()
+def hiddenservice():
+    """
+    Controller for page that let the admin to configure privacy settings
+    """
+    if request.vars.edit:
+        if request.vars.edit == "start" :
+                tor_hs.start()
+        elif request.vars.edit == "stop":
+                tor_hs.stop()
+
+    if tor_hs.name != None:
+        return dict(hiddenservicename=tor_hs.name)
+    else:
+        return dict()
+
+def obtain_secret(input_secret):
+    if not input_secret:
+        return randomizer.generate_target_passphrase()
+    else:
+        return input_secret
+
+@auth.requires_login()
 def targets():
     """
     Controller for page that lets the admin to create new targets

@@ -2,6 +2,12 @@
 from gluon.tools import MIMEMultipart, MIMEText, MIMEBase, Encoders
 import smtplib
 
+from socksipy import socks
+
+socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, 'localhost', 9050)
+
+socks.wrapmodule(smtplib)
+
 class MultiPart_Mail(object):
 
     def __init__(self, s):

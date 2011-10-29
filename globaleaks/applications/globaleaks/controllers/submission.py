@@ -161,7 +161,7 @@ def index():
     wb_number = randomizer.generate_tulip_receipt()
 
     # Perform a check to see if the client is using Tor
-    anonymity = Anonymity.Tor(request.client, request.env)
+    anonymity = Anonymity.TorAccessCheck(request.client, request.env)
 
     # If a session has not been created yet, create one.
     if not session.wb_id:
