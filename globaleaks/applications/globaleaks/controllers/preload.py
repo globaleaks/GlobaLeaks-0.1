@@ -1,8 +1,6 @@
 import os, gzip
 import gluon.contenttype
 
-from slimit import minify
-
 def js():
     files = ['/js/jquery-1.6.4.min.js',
              '/js/modernizr-1.7.min.js',
@@ -89,4 +87,5 @@ def css():
     fh.close()
 
     return response.stream(open(output_file, 'rb'))
+
 
