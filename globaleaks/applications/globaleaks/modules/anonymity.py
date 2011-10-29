@@ -24,7 +24,7 @@ class TorHiddenService:
     def __init__(self, s):
         self.settings = s
         self.name = None
-        if self.settings.private.hiddenservice.lower() == "true":
+        if self.settings.private.hiddenservice == True:
             self.start()
 
     def check(self):
