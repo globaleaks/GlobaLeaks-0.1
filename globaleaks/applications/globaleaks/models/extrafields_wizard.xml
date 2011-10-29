@@ -23,6 +23,24 @@
             <description>This is a text field</description>
             <type>string</type>
         </field>
+           <field>
+            <name>extratext2</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field>
+        <field>
+            <name>extratext3</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field>
+        <field>
+            <name>extratext4</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field>
     </step>
 
     <step number="3">

@@ -218,24 +218,8 @@ def index():
                                 _class="w2p_fc"),
                                 _id="file-uploader-nonjs")
 
-    # Creating a list of targetgroups
-    groups_data = gl.get_targetgroups()
-    grouplist = UL(_id="group_list")
-    for group_id in groups_data:
-        group = groups_data[group_id]['data']
-        grouplist.insert(-1, LI(INPUT(_type="checkbox", _value="on",
-                                      _name="target_%d" % group_id),
-                                SPAN(T(group["name"])),
-                                SPAN(T(group["tags"]),
-                                     _class="group_tags")))
-    targetgroups = TR('Targets', DIV(DIV(_id="group_filter"),
-                                     DIV(grouplist)))
-
     # Use the web2py captcha setting to generate a Captcha
-    captcha = TR('Are you human?', auth.settings.captcha)
-
-    disclaimer_text = TR('Accept Disclaimer', settings.globals.disclaimer)
-    disclaimer = TR("", INPUT(_name='agree', value=True, _type='checkbox'))
+    # captcha = TR('Are you human?', auth.settings.captcha)
 
     # The default fields and labels
     form_fields = ['title', 'desc']
@@ -250,64 +234,18 @@ def index():
         form_fields.append(str(i['name']))
         form_labels[str(i['name'])] = i['desc']
 
-    the_steps = [
-            [
-                {'desc': 
-                u'this is the main title of the submission', 
-                'type': u'string', 
-                'name': u'title', 
-                'label': u'title'
-                }, 
-                
-                {'desc': 
-                    u'Describe your submission in this box', 
-                'type': u'text', 
-                'name': u'desc', 
-                'label': u'Description'
-                }, 
-                
-                'grouplist'
-            ], 
-            
-            [
-                'material', 
-                
-                {'desc': u'This is a text field', 'type': u'string', 'name': u'extratext', 'label': u'Text'}
-            ], 
-            
-            [
-                #{'desc': u'Enter a date realted to your submission', 'type': u'date', 'name': u'date', 'label': u'Date'}, 
-                
-                'disclaimer', 
-                
-                'captcha'
-            ]
-            
-    ]
+    
 
+    if settings.extrafields.wizard:
+        the_steps = settings.extrafields.gen_wizard()
+    
+        form = FormShaman(db.leak,
+                steps=the_steps)
+    else:
+        form = SQLFORM(db.leak,
+                       fields=form_fields,
+                       labels=form_labels)
 
-    # Create the actual form
-    #form = SQLFORM(db.leak,
-    #        fields=form_fields,
-    #        labels=form_labels)
-    form = FormShaman(db.leak,
-            steps=the_steps)
-
-
-    mysteps = [
-               dict(title='Step 1', legend='Fist step',
-                    fields=['title', 'desc']),
-               dict(title='Step 1', legend='Fist step', fields=form_extras),
-               ]
-
-    #form = FormWizard.PowerFormWizard(
-    #           db.leak,
-    #           steps=mysteps
-    #       )
-
-    # Add the extra settings that are not included in the DB
-    #form[0].insert(-1, material_njs)
-    #form[0].insert(-1, jQueryFileUpload)
 
     # Check to see if some files have been loaded from a previous session
     if session.files:
@@ -320,13 +258,7 @@ def index():
                                 _class="stored_file_delete",
                                 _id=f.fileid)))
 
-        form[0].insert(-1, TR('Stored files', filesul))
-
-    #form[0].insert(-1, targetgroups)
-
-    #form[0].insert(-1, captcha)
-    #form[0].insert(-1, disclaimer_text)
-    #form[0].insert(-1, disclaimer)
+        #form[0].insert(-1, TR('Stored files', filesul))
 
     # Make the submission not spooled and set the timestamp
     form.vars.spooled = False

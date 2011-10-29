@@ -78,7 +78,8 @@ class ExtraField:
                 wizard.append(self.parse_step(nstep))
             else:
                 wizard.append(self.parse_step(steps[i]))
-        print wizard        
+                        
+        return wizard      
 
     def gen_db(self):
         if self.fields:
@@ -92,7 +93,7 @@ class ExtraField:
                     #output.append((str(i['name']), str(i['type'])))
             return output
 
-extrafile = os.path.join(os.path.dirname(__file__), 'extrafields.xml')
+extrafile = os.path.join(os.path.dirname(__file__), 'extrafields_wizard.xml')
 extrafields = ExtraField(extrafile)
 settings.extrafields = extrafields
 
