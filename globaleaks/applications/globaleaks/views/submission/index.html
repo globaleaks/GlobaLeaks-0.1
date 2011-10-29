@@ -76,8 +76,8 @@
     $('#fileupload').fileupload({
     	url: "/globaleaks/submission/fileupload",
     	autoUpload: true,
-    	maxChunkSize: 1000000,
-    	multipart: false,
+    	//maxChunkSize: 1000000,
+    	//multipart: false,
     	add: function (e, data) {
         	var that = this;
         	$.getJSON('/globaleaks/submission/fileupload', {file: data.files[0].name}, function (file) {
