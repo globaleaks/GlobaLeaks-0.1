@@ -1,4 +1,4 @@
-import os
+import os, gzip
 import gluon.contenttype
 
 from slimit import minify
@@ -21,23 +21,28 @@ def js():
              ]
     
     output_file = os.path.join(request.folder, 'static') + "/main_js_file.js"
+    compressed_file = os.path.join(request.folder, 'static') + "/main_js_file.js.gz"
 
+    response.headers['Content-Encoding'] = 'gzip'
     response.headers['Content-Type'] = gluon.contenttype.contenttype('.js')
-    
-    if os.path.exists(output_file):
-        return response.stream(open(output_file, 'rb'))
 
-    fh = open(output_file, 'w')
+    if os.path.exists(output_file):
+        return response.stream(open(compressed_file, 'rb'))
+
+    fh = open(output_file, 'wb')
+    fhg = gzip.open(compressed_file, 'wb')
+    
     to_minify = ""
     
     for file in files:
         path = os.path.join(request.folder, 'static') + str(file)
         for line in open(path).readlines():
             fh.write(line)
+            fhg.write(line)
             #to_minify += line
             
     #fh.write(minify(to_minify, mangle=False))
-            
+    fhg.close()     
     fh.close()
     
     return response.stream(open(output_file, 'rb'))
@@ -57,19 +62,24 @@ def css():
              ]
     
     output_file = os.path.join(request.folder, 'static') + "/main_css_file.css"
+    compressed_file = os.path.join(request.folder, 'static') + "/main_css_file.css.gz"
 
+    #response.headers['Content-Encoding'] = 'gzip'
     response.headers['Content-Type'] = gluon.contenttype.contenttype('.css')
     
     if os.path.exists(output_file):
         return response.stream(open(output_file, 'rb'))
     
-    fh = open(output_file, 'w')
+    fh = open(output_file, 'wb')
+    #fhg = gzip.open(compressed_file, 'wb')
 
     for file in files:
         path = os.path.join(request.folder, 'static') + str(file)
         for line in open(path).readlines():
             fh.write(line)
+            #fhb.write(line)
 
+    #fhg.close()     
     fh.close()
 
     return response.stream(open(output_file, 'rb'))
