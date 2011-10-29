@@ -60,5 +60,3 @@ class ConfigFile(Storage):
         Commit changes in config file.
         """
         self._cfgparser.write(open(self._cfgfile, 'w'))
-
-
