@@ -8,8 +8,8 @@ import time
 
 from TorCtl import TorCtl
 
-class TorHiddenServiceProc(threading.Thread): 
-    def __init__(self): 
+class TorHiddenServiceProc(threading.Thread):
+    def __init__(self):
         threading.Thread.__init__(self)
         self.proc = None
 
@@ -24,7 +24,7 @@ class TorHiddenService:
     def __init__(self, s):
         self.settings = s
         self.name = None
-        if self.settings.private.hiddenservice.lower() == "true":
+        if self.settings.private.hiddenservice == True:
             self.start()
 
     def check(self):
@@ -75,7 +75,7 @@ class TorHiddenService:
             self.settings.private.hiddenservice = True
 
             return True
-        
+
     def stop(self):
         if not self.check():
             return
@@ -92,7 +92,7 @@ class TorAccessCheck:
     def __init__(self, ip, headers):
             self.result = {}
             self.check(ip, headers)
-        
+
     def check_tor2web(self, headers):
         """
         This is used to parse tor2web headers.
@@ -102,7 +102,7 @@ class TorAccessCheck:
         encryption = None
         trust = None
         withtor = None
-        
+
         try:
             parsed = headers.http_x_tor2web.split('-')
         except:
@@ -116,10 +116,10 @@ class TorAccessCheck:
                         tor = False
                 except:
                     tor = False
-                    
+
                 encryption = False
                 trust = False
-            
+
             elif parsed[0] == "encrypted":
                 encryption=True
                 if parsed[1] == "trusted":
@@ -128,7 +128,7 @@ class TorAccessCheck:
                     trust = False
                 else:
                     trust = None
-                    
+
                 if parsed[2] == "tor":
                     withtor = True
                 elif parsed[2] == "notor":
@@ -136,22 +136,22 @@ class TorAccessCheck:
         except:
             # XXX add error handling here.
             pass
-                
+
         return dict(encryption=encryption, \
                     trust=trust, tor=withtor)
-                        
-    
+
+
     def check_tor(self, ip):
         if str(ip) == "127.0.0.1":
             return True
         else:
             return False
-    
+
     def check(self, ip, headers):
         self.result['tor2web'] = self.check_tor2web(headers)
-        
+
         if not self.result['tor2web']:
             self.result['tor'] = self.check_tor(ip)
         else:
             self.result['tor'] = self.result['tor2web']['tor']
-         
+
