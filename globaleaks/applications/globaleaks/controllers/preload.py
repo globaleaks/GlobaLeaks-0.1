@@ -15,7 +15,9 @@ def js():
              '/FormShaman/js/jquery.smartWizard.js',
              '/js/fileupload/jquery.iframe-transport.js',
              '/js/fileupload/jquery.fileupload.js',
-             '/js/fileupload/jquery.fileupload-ui.js'
+             '/js/fileupload/jquery.fileupload-ui.js',
+             '/js/fileupload/jquery.tmpl.min.js'
+
              ]
     
     output_file = os.path.join(request.folder, 'static') + "/main_js_file.js"
@@ -23,8 +25,8 @@ def js():
 
     response.headers['Content-Encoding'] = 'gzip'
     response.headers['Content-Type'] = gluon.contenttype.contenttype('.js')
-    response.headers['Cache-Control'] =  "max-age=86400, private"
-    response.headers['Pragma'] = "cache"
+#    response.headers['Cache-Control'] =  "max-age=86400, private"
+#    response.headers['Pragma'] = "cache"
 
     if os.path.exists(output_file):
         return response.stream(open(compressed_file, 'rb'))
@@ -45,7 +47,7 @@ def js():
     fhg.close()     
     fh.close()
     
-    return response.stream(open(output_file, 'rb'))
+    return response.stream(open(compressed_file, 'rb'))
         #for line in open(path).readlines():
         #    output += line
     #response.stream(output)
@@ -87,5 +89,3 @@ def css():
     fh.close()
 
     return response.stream(open(output_file, 'rb'))
-
-
