@@ -25,8 +25,8 @@ def js():
 
     response.headers['Content-Encoding'] = 'gzip'
     response.headers['Content-Type'] = gluon.contenttype.contenttype('.js')
-#    response.headers['Cache-Control'] =  "max-age=86400, private"
-#    response.headers['Pragma'] = "cache"
+    response.headers['Cache-Control'] =  "max-age=86400, private"
+    response.headers['Pragma'] = "cache"
 
     if os.path.exists(output_file):
         return response.stream(open(compressed_file, 'rb'))
