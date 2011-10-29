@@ -1,26 +1,8 @@
 {{extend 'layout.html'}}
-<!-- script type="text/javascript" src="/globaleaks/static/js/fileupload/fileuploader.js"></script-->
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" id="theme">
 
+<link rel="stylesheet" href="/globaleaks/static/css/jquery-ui.css" id="theme">
 <link rel="stylesheet" href="/globaleaks/static/css/jquery.fileupload-ui.css">
-<style>
-#fileupload {
-    display: none;
-}
-
-div.flash {background-color: #888;}
-
-#group_list {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
-.group_tags {
-  font-weight: normal;
-  font-style: italic;
-  padding-left: 20px;
-}
-</style>
+<link rel="stylesheet" href="/globaleaks/static/css/jq-fileupload.css">
 
 <script type="text/javascript">
   // custom css expression for a case-insensitive contains()
@@ -79,13 +61,10 @@ div.flash {background-color: #888;}
 	{{=jQuery_templates[1]}}
 </script>
 
-
-<!-- script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script -->
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery-ui.min.js"></script>
+<script src="/globaleaks/static/js/fileupload/jquery.tmpl.min.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.iframe-transport.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.fileupload.js"></script>
-<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
 
 <script>
@@ -165,13 +144,5 @@ div.flash {background-color: #888;}
     <p>
         You are also able to use your Whistleblower receipt from the first page.
     </p>
-
-<script>
-
-
-</script>
-
 {{pass}}
-
 </body>
-
