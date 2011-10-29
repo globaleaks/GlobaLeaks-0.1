@@ -13,7 +13,9 @@ routes_in = (
              ('^/globalview(/)?', '/globaleaks/target/view'),
              ('^/receiver(/)?', '/globaleaks/target/receiver'),
              ('^/bouquet/(?P<target_id>[\w]+)', '/globaleaks/target/bouquet/\g<target_id>'),
-             ('^/bouquet', '/globaleaks/target/bouquet')
+             ('^/bouquet', '/globaleaks/target/bouquet'),
+             ('^/js', '/globaleaks/preload/js'),
+             ('^/css', '/globaleaks/preload/css')
             )
 
 

@@ -1,8 +1,8 @@
 {{extend 'layout.html'}}
 
-<link rel="stylesheet" href="/globaleaks/static/css/jquery-ui.css" id="theme">
+<!-- <link rel="stylesheet" href="/globaleaks/static/css/jquery-ui.css" id="theme">
 <link rel="stylesheet" href="/globaleaks/static/css/jquery.fileupload-ui.css">
-<link rel="stylesheet" href="/globaleaks/static/css/jq-fileupload.css">
+<link rel="stylesheet" href="/globaleaks/static/css/jq-fileupload.css"> -->
 
 <script type="text/javascript">
   // custom css expression for a case-insensitive contains()
@@ -61,12 +61,11 @@
 	{{=jQuery_templates[1]}}
 </script>
 
-<script src="/globaleaks/static/js/fileupload/jquery-ui.min.js"></script>
+<!-- <script src="/globaleaks/static/js/fileupload/jquery-ui.min.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.tmpl.min.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.iframe-transport.js"></script>
 <script src="/globaleaks/static/js/fileupload/jquery.fileupload.js"></script>
-<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script>
-
+<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script> -->
 <script>
 	$(function () {
     'use strict';
@@ -112,7 +111,7 @@
     });
     
     // Smart Wizard 	
-  		$('#wizard').smartWizard();
+  	$('#wizard').smartWizard();
       
       function onFinishCallback(){
         $('#wizard').smartWizard('showMessage','Finish Clicked');

@@ -106,7 +106,7 @@ class FormShaman(SQLFORM):
         except:
             raise RuntimeError, 'formstyle not supported'
 
-        response.files.append(URL('static','FormShaman',args=['css','smart_wizard.css']))
-        response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js'])) 
+        #response.files.append(URL('static','FormShaman',args=['css','smart_wizard.css']))
+        #response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js'])) 
 
         return table
