@@ -25,7 +25,6 @@ globaleaks/deposit/
 globaleaks/docs/build/
 globaleaks/applications/globaleaks/material/
 globaleaks/logs/
-globaleaks/site-packages/*
 globaleaks/applications/admin/languages/it-it.py
 globaleaks/applications/globaleaks/languages/it-it.py
 globaleaks/applications/globaleaks/uploads/*
