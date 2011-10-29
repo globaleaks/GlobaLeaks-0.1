@@ -1,6 +1,7 @@
 import os
 import gluon.contenttype
 
+from slimit import minify
 
 def js():
     files = ['/js/jquery.js',
@@ -27,11 +28,15 @@ def js():
         return response.stream(open(output_file, 'rb'))
 
     fh = open(output_file, 'w')
-
+    to_minify = ""
+    
     for file in files:
         path = os.path.join(request.folder, 'static') + str(file)
         for line in open(path).readlines():
             fh.write(line)
+            #to_minify += line
+            
+    #fh.write(minify(to_minify, mangle=False))
             
     fh.close()
     
