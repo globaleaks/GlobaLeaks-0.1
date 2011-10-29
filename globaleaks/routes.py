@@ -16,7 +16,7 @@ routes_in = (
              ('^/bouquet/(?P<target_id>[\w]+)', '/globaleaks/target/bouquet/\g<target_id>'),
              ('^/bouquet', '/globaleaks/target/bouquet'),
              ('^/js', '/globaleaks/preload/js'),
-             ('^/css', '/globaleaks/preload/css'),
+             ('^/css', '/globaleaks/preload/css')
             )
 
 
