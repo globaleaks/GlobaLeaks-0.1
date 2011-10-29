@@ -6,7 +6,7 @@ import socket
 import threading
 import time
 
-from TorCtl import TorCtl
+from pytorctl import TorCtl
 
 class TorHiddenServiceProc(threading.Thread):
     def __init__(self):
