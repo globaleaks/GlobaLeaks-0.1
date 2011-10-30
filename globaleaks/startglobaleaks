@@ -3,30 +3,30 @@
 ADDRESS="127.0.0.1"
 PORT="8000"
 PASSWORD="globaleaks"
-FOLDER=$(python -c "import globaleaks, os; print os.path.dirname(globaleaks.__file__)" 2> /dev/null)
-
+red="\e[1;31m"
 ARGD=0
+
 # When more args are provided: debug mode is enabled
 if [ $# -ne "$ARGD" ]
 then
-    red="\e[1;31m"
-    echo -e "${red}enabling log in directory [$1]: useful for development: DO NOT USE IN PRODUCTION"
-    reset
-    LOG_OPTION="-l $1"
-    # TODO - check if a name/directory where store log file could be set here
+    echo -e "${red}log is enabled by default httpserver.log and in globaleaks.conf [logging] section: DO NOT USE IN PRODUCTION"
+    tput sgr0
+    LOG_OPTION=""
 
     # optional environmental variable to enhance python debug
     export PYTHONTHREADDEBUG=1
     export PYTHONDUMPREFS=1
     export PYTHONMALLOCSTATS=1
 else
-    LOG_OPTION=""
-    if [ ! -z $FOLDER ]; then
-        cd $FOLDER
-    fi
-    # ln -sf /dev/null applications/globaleaks/errors
+    echo -e "${red}you're disabling logging of the webserver, to delete other logs, check the [logging] section in globaleaks.conf"
+    echo "to enable log, use [$0 -l]"
+    tput sgr0
+    LOG_OPTION="-l /dev/null"
 fi
 
-
+FOLDER=$(python -c "import globaleaks, os; print os.path.dirname(globaleaks.__file__)" 2> /dev/null)
+if [ ! -z $FOLDER ]; then
+    cd $FOLDER
+fi
 
 python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION
