@@ -1,12 +1,20 @@
+from __future__ import with_statement
+
 import re
-import os
+import os.path
 import signal
 import subprocess
 import socket
 import threading
 import time
+import logging
 
 from pytorctl import TorCtl
+
+from config import projroot
+
+torrc = os.path.join(projroot, 'globaleaks', 'tor', 'torrc')
+hiddenservice = os.path.join(projroot, 'globaleaks', 'tor', 'hiddenservice')
 
 class TorHiddenServiceProc(threading.Thread):
     def __init__(self):
@@ -14,22 +22,25 @@ class TorHiddenServiceProc(threading.Thread):
         self.proc = None
 
     def run(self):
-        self.proc = subprocess.Popen(["tor",
-                                     "-f", os.path.abspath(os.getcwd()) + "/tor/torrc",
-                                     "--HiddenServiceDir", os.path.abspath(os.getcwd()) + "/tor/hiddenservice/",
-                                     "--HiddenServicePort", "80 127.0.0.1:8000"],
-                                     shell = False, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+        try:
+            self.proc = subprocess.call(["tor", "-f", torrc,
+                                         "--HiddenServiceDir", hiddenservice,
+                                         "--HiddenServicePort", "80 127.0.0.1:8000"],
+                                         shell = False, stdout = subprocess.PIPE,
+                                         stderr = subprocess.PIPE)
+        except OSError:
+           logging.fatal('tor: command not found')
 
 class TorHiddenService:
     def __init__(self, s):
         self.settings = s
         self.name = None
-        if self.settings.private.hiddenservice == True:
+        if self.settings.private.hiddenservice:
             self.start()
 
     def check(self):
         conn = TorCtl.connect()
-        if conn != None:
+        if not conn:
             conn.close()
             return True
 
@@ -38,8 +49,8 @@ class TorHiddenService:
     def start(self):
         if not self.check():
 
-            if not os.path.exists(os.path.abspath(os.getcwd()) + "/tor/torrc"):
-                raise OSError("torrc doesn't exist (%s)" % torrc_path)
+            if not os.path.exists(torrc):
+                raise OSError("torrc doesn't exist (%s)" % torrc)
 
             torproc = TorHiddenServiceProc()
             torproc.run()
@@ -62,14 +73,14 @@ class TorHiddenService:
                 if bootstrap_line.search(init_line):
                     break;
 
+            hostnamefile = os.path.join(hiddenservice, 'hostname')
             while True:
-                if not os.path.exists(os.path.abspath(os.getcwd()) + "/tor/hiddenservice/hostname"):
+                if not os.path.exist(hostnamefile):
                     sleep(1)
                     continue
 
-                f = open(os.path.abspath(os.getcwd()) + "/tor/hiddenservice/hostname", 'r')
-                self.name = f.read().split('\n')[0]
-                f.close()
+                with open(hostnamefile, 'r') as f:
+                    self.name = f.readline().strip()
                 break
 
             self.settings.private.hiddenservice = True
