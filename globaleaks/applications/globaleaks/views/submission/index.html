@@ -115,14 +115,11 @@ $(document).ready(function(){
     });
     
     // Smart Wizard 	
-	$('#wizard').smartWizard();
-	console.log("tua cugina");
-
+	$('#wizard').smartWizard({transitionEffect:'slide',onFinish:onFinishCallback});
+	
 	function onFinishCallback(){
 		$('#wizard').smartWizard('showMessage','Finish Clicked');
 		$('form').submit();
-		return False;
-		//alert('Finish Clicked');
 	}     
 
 
