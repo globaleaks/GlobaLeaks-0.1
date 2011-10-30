@@ -7,11 +7,13 @@
 <input type="submit" name="send"/>
 </form>
 </div>
-<h1>Welcome to {{=settings.globals.title}}</h1>
+<h1>{{=settings.globals.welcome}}</h1>
+<div class="presentation">{{=settings.globals.title}}</div>
+<div class="description">{{=settings.globals.subtitle}}</div>
+<div class="presentation">{{=settings.globals.description}}</div>
+
 <div class="intro">
- <p>
-    {{=presentation_text}}
- </p>
+ <p> {{=presentation_text}} </p>
 </div>
 
 <div onclick="location.href='{{=URL('submission', 'index')}}'" class="submitbox box">

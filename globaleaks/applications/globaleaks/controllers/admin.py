@@ -388,9 +388,11 @@ def wizard():
 
     step3_form = FORM(TABLE(
         TR("Expiration Date", INPUT(_name="expire", _type="text",
-                                    _value=settings.tulip.expire)),
+                                    _value=settings.tulip.expire_days)),
         TR("Maximum Access", INPUT(_name="max_access", _type="int",
                                    _value=settings.tulip.max_access))
+        TR("Maximum Download", INPUT(_name="max_download", _type="int",
+                                   _value=settings.tulip.max_download))
         ))
 
     step4_form = FORM(TABLE(
@@ -402,7 +404,6 @@ def wizard():
                                 _value=settings.globals.html_keyword))
         ))
 
-    # XXX: server logging depends on client logging!
     step5_form = FORM(TABLE(
         TR("Logging client-side", INPUT(_name="client", _type="text",
                                         _value=settings.logging.client)),

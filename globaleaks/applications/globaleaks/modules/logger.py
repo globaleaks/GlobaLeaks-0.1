@@ -42,17 +42,21 @@ def start_logger(logsettings):
     """
     logger = logging.getLogger('')
     if logger.handlers:
-        hdlr = GLogger(logsettings.logfile)
+        if logsettings.logfile == "disabled":
+            logdest = os.devnull
+        else:
+            logdest = logsettings.logfile
+            
+        hdlr = GLogger(logdest)
+
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         hdlr.setFormatter(formatter)
         logger.addHandler(hdlr)
 
-
-
         level = levels.get(logsettings.level, None)
         if not level:
             level = levels['fatal']
-            logger.waring('Invalid level in config file.')
+            logger.waring('Invalid level in config file: set [fatal] as default')
 
         logger.setLevel(level)
 
