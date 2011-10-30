@@ -1,99 +1,8 @@
-from __future__ import with_statement
-
-from xml.dom.minidom import parse, parseString
-from pprint import pprint
-
-from gluon import SQLFORM, Field
-from gluon import *
-from gluon import BUTTON
-T = TR
-BUTTON = BUTTON
-
-
-class ExtraField:
-    def __init__(self, filename):
-        with open(filename) as xmlfile:
-            self.dom = parse(xmlfile)
-
-        self.wizard = bool(self.dom.getElementsByTagName('wizard'))
-        self.fields = [self.parse_field(x) for x in
-                       self.dom.getElementsByTagName('field')]
-
-
-    def parse_list(self, field):
-        return [x.childNodes[0].data for x in field.getElementsByTagName("el")]
-
-    def get_content(self, field, tag):
-        return field.getElementsByTagName(tag)[0].childNodes[0].data
-
-    def parse_field(self, field):
-        parsed = dict(name = self.get_content(field, "name"),
-                      label = self.get_content(field, "label"),
-                      desc  = self.get_content(field, "description"),
-                      type  = self.get_content(field, "type"))
-
-        if parsed['type'] == "list":
-            parsed['list'] = self.parse_list(field)
-
-        return parsed
-
-    def __getitem__(self, k):
-        return k.getAttributeNode("number").value
-
-    def get_step_n(self, steps, n):
-        for step in steps:
-            if self[step] == n:
-                return step
-        return None
-
-    def parse_step(self, step):
-        """
-        Return a list of steps parsing each step's node.
-        """
-        fields = ('field', 'material', 'grouplist',
-                  'captcha', 'disclaimer')
-        nodes = filter(lambda node: node.nodeName in fields, step.childNodes)
-        return [self.parse_field(node) if node.nodeName == 'field' else
-                node.nodeName
-                for node in nodes]
-
-
-    def gen_wizard(self):
-        steps = self.dom.getElementsByTagName("step")
-
-        wizard = []
-
-        for i in range(0, len(steps)):
-            nstep = self.get_step_n(steps, i+1)
-            if nstep:
-                wizard.append(self.parse_step(nstep))
-            else:
-                wizard.append(self.parse_step(steps[i]))
-
-        return wizard
-
-    def gen_db(self):
-        if self.fields:
-            output = []
-            for i in self.fields:
-                if i['type'] == "list":
-                    output.append(Field(str(i['name']),requires=IS_IN_SET(i['list'])))
-                    #output.append((str(i['name']), i['list']))
-                else:
-                    output.append(Field(str(i['name']), str(i['type'])))
-                    #output.append((str(i['name']), str(i['type'])))
-            return output
-
-
 class FormShaman(SQLFORM):
-    def __init__(self, gl, settings, *args, **kwargs):
-
-        # XXX: shit happens
-        self.gl = gl
-        self.settings = settings
+    def __init__(self, *args, **kwargs):
 
         # Creating a list of targetgroups
-        groups_data = self.gl.get_targetgroups()
+        groups_data = gl.get_targetgroups()
         grouplist = UL(_id="group_list")
         for group_id in groups_data:
             group = groups_data[group_id]['data']
@@ -133,12 +42,12 @@ class FormShaman(SQLFORM):
                                       _id='file-uploader-nonjs'),
                                 _class="w2p_fc"),
                                 _id="file-uploader-nonjs")
-
+    
         targetgroups = DIV('Targets', DIV(DIV(_id="group_filter"),
                                          DIV(grouplist)))
 
-
-        disclaimer = DIV(LABEL('Accept Disclaimer'), self.settings.globals.disclaimer,
+        
+        disclaimer = DIV(LABEL('Accept Disclaimer'),settings.globals.disclaimer, 
                          INPUT(_name='agree', value=True, _type='checkbox'))
 
 
@@ -148,7 +57,7 @@ class FormShaman(SQLFORM):
                        'material': DIV(jQueryFileUpload, material_njs),#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
                        'grouplist': ''
                        }
-
+        
         self.steps = kwargs.get('steps', None)
         if not self.steps:
             raise ValueError('FormShaman needs a steps argument')
@@ -198,6 +107,6 @@ class FormShaman(SQLFORM):
             raise RuntimeError, 'formstyle not supported'
 
         #response.files.append(URL('static','FormShaman',args=['css','smart_wizard.css']))
-        #response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js']))
+        #response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js'])) 
 
         return table

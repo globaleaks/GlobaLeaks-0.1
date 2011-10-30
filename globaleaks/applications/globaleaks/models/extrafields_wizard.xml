@@ -17,7 +17,7 @@
 
     <step number="2">
         <material></material>
-        <field>
+        <!--field>
             <name>extratext</name>
             <label>Text</label>
             <description>This is a text field</description>
@@ -40,16 +40,16 @@
             <label>Text</label>
             <description>This is a text field</description>
             <type>string</type>
-        </field>
+        </field-->
     </step>
 
     <step number="3">
-        <field>
+        <!-- field>
             <name>date</name>
             <label>Date</label>
             <description>Enter a date realted to your submission</description>
             <type>date</type>
-        </field>
+        </field -->
         <disclaimer></disclaimer>
         <captcha></captcha>
     </step>

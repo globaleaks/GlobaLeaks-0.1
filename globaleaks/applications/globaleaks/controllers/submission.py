@@ -12,7 +12,6 @@ import gluon.contrib.simplejson as json
 import shutil
 import base64
 
-FormShaman = local_import('wizarding').FormShaman
 #FormWizard = local_import('plugin_PowerFormWizard')
 
 mutils = local_import('material').utils()
@@ -234,21 +233,20 @@ def index():
 
     # Add to the fields to be displayed the ones inside of
     # the extrafields setting
-    for i in settings.extrafields.fields:
-        form_extras.append(str(i['name']))
-        form_fields.append(str(i['name']))
-        form_labels[str(i['name'])] = i['desc']
+#    for i in settings.extrafields.fields:
+#        form_extras.append(str(i['name']))
+#        form_fields.append(str(i['name']))
+#        form_labels[str(i['name'])] = i['desc']
 
     if settings.extrafields.wizard:
         the_steps = settings.extrafields.gen_wizard()
 
-        form = FormShaman(gl, settings, db.leak,
+        form = FormShaman(db.leak,
                           steps=the_steps)
     else:
         form = SQLFORM(db.leak,
                        fields=form_fields,
                        labels=form_labels)
-
 
     # Check to see if some files have been loaded from a previous session
     if session.files:
@@ -270,7 +268,7 @@ def index():
     form.vars.submission_timestamp = time.time()
 
     # Insert all the data into the db
-    if form.accepts(request.vars, session):
+    if form.accepts(request.vars):
         logger.debug("Submission %s", request.vars)
 
         group_ids = []  # Will contain all the groups selected by the WB
