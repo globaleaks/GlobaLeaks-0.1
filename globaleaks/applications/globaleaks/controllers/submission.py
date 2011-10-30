@@ -12,6 +12,7 @@ import gluon.contrib.simplejson as json
 import shutil
 import base64
 
+FormShaman = local_import('wizarding').FormShaman
 #FormWizard = local_import('plugin_PowerFormWizard')
 
 mutils = local_import('material').utils()
@@ -73,7 +74,7 @@ def api():
 
         # generation of tulips: the first, in GlobaLeaks object, aim to create
         # the whistleblower tulip
-        gl.create_tulip(leak_id, 0, wb_number[1]) 
+        gl.create_tulip(leak_id, 0, wb_number[1])
         # this loop, create the tulip for the receivers
         for group_id in group_ids:
             leak.notify_targetgroup(group_id)
@@ -236,13 +237,13 @@ def index():
     for i in settings.extrafields.fields:
         form_extras.append(str(i['name']))
         form_fields.append(str(i['name']))
-        form_labels[str(i['name'])] = i['desc']    
+        form_labels[str(i['name'])] = i['desc']
 
     if settings.extrafields.wizard:
         the_steps = settings.extrafields.gen_wizard()
-    
-        form = FormShaman(db.leak,
-                steps=the_steps)
+
+        form = FormShaman(gl, settings, db.leak,
+                          steps=the_steps)
     else:
         form = SQLFORM(db.leak,
                        fields=form_fields,
@@ -345,7 +346,7 @@ def index():
         # Create the leak with the GlobaLeaks factory
         # (the data has actually already been added to db leak,
         #  this just creates the tulips), the first is the whistleblower tulip
-        gl.create_tulip(form.vars.id, 0, wb_number[1]) 
+        gl.create_tulip(form.vars.id, 0, wb_number[1])
 
         # follow the tulips for every receiver inside a basket
         for group_id in group_ids:

@@ -1,92 +1,6 @@
-###############################################
-# Parse the extra fields.
-###############################################
-from __future__ import with_statement
-from xml.dom.minidom import parse, parseString
-from pprint import pprint
-
-class ExtraField:
-    def __init__(self, filename):
-        with open(filename) as xmlfile:
-            self.dom = parse(xmlfile)
-
-        self.wizard = bool(self.dom.getElementsByTagName('wizard'))
-        self.fields = [self.parse_field(x) for x in
-                       self.dom.getElementsByTagName('field')]
-
-    def get_content(self, field, tag):
-        return field.getElementsByTagName(tag)[0].childNodes[0].data
-
-    def parse_list(self, field):
-        return [x.childNodes[0].data for x in field.getElementsByTagName("el")]
-
-    def parse_field(self, field):
-        parsed = dict(name = self.get_content(field, "name"),
-                      label = self.get_content(field, "label"),
-                      desc  = self.get_content(field, "description"),
-                      type  = self.get_content(field, "type"))
-
-        if parsed['type'] == "list":
-            parsed['list'] = self.parse_list(field)
-
-        return parsed
-
-    def __getitem__(self, k):
-        return k.getAttributeNode("number").value
-
-    def get_step_n(self, steps, n):
-        for step in steps:
-            if self[step] == n:
-                return step
-        return None
-
-    def parse_step(self, step):
-        """
-        Return a list of steps parsing each step's node.
-        """
-        fields = ('field', 'material', 'grouplist',
-                  'captcha', 'disclaimer')
-        nodes = filter(lambda node: node.nodeName in fields, step.childNodes)
-        return [self.parse_field(node) if node.nodeName == 'field' else
-                node.nodeName
-                for node in nodes]
-
-
-    def gen_wizard(self):
-        steps = self.dom.getElementsByTagName("step")
-
-        wizard = []
-
-        for i in range(0, len(steps)):
-            nstep = self.get_step_n(steps, i+1)
-            if nstep:
-                wizard.append(self.parse_step(nstep))
-            else:
-                wizard.append(self.parse_step(steps[i]))
-
-        return wizard
-
-    def gen_db(self):
-        if self.fields:
-            output = []
-            for i in self.fields:
-                if i['type'] == "list":
-                    output.append(Field(str(i['name']),requires=IS_IN_SET(i['list'])))
-                    #output.append((str(i['name']), i['list']))
-                else:
-                    output.append(Field(str(i['name']), str(i['type'])))
-                    #output.append((str(i['name']), str(i['type'])))
-            return output
-
-extrafile = os.path.join(os.path.dirname(__file__), 'extrafields_wizard.xml')
-extrafields = ExtraField(extrafile)
-settings.extrafields = extrafields
-
-db_extrafields = extrafields.gen_db()
-
-################################################
-# Define the main globaleaks database structure
-################################################
+"""
+Define the main globaleaks database structure.
+"""
 
 db = DAL(settings.database.uri)
 
@@ -127,6 +41,13 @@ db.define_table('targetgroup',
 # XXX
 # Merge with submission, all references of the term "leak"
 # should be removed and replaced with submission
+ExtraField = local_import('wizarding').ExtraField
+
+extrafile = os.path.join(os.path.dirname(__file__), 'extrafields_wizard.xml')
+extrafields = ExtraField(extrafile)
+settings.extrafields = extrafields
+db_extrafields = extrafields.gen_db()
+
 db.define_table('leak',
     Field('title'),
     Field('desc', 'text'),
