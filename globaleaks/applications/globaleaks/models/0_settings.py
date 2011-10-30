@@ -19,7 +19,7 @@ class ThreadSafe(dict):
          self['lock'].release()
          return value
 
-x=cache.ram('elefante_in_sala_server',lambda:ThreadSafe(),ThreadSafe.forever)
+#x=cache.ram('elefante_in_sala_server',lambda:ThreadSafe(),ThreadSafe.forever)
 
 
 ################################################################

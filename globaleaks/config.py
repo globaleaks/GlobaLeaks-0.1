@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 from gluon.storage import Storage
 
 import ConfigParser
@@ -37,7 +39,7 @@ class ConfigFile(Storage):
             if value.isdigit():
                 return int(value)
             elif value.lower() in ('true', 'false'):
-                return bool(value.lower() == 'true')
+                return value.lower() == 'true'
             else:
                 return value
         except ConfigParser.NoOptionError:
@@ -59,4 +61,5 @@ class ConfigFile(Storage):
         """
         Commit changes in config file.
         """
-        self._cfgparser.write(open(self._cfgfile, 'w'))
+        with open(self._cfgfile, 'w') as cfgfile:
+            self._cfgparser.write(cfgfile)

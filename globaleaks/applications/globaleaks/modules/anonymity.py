@@ -35,7 +35,8 @@ class TorHiddenService:
     def __init__(self, s):
         self.settings = s
         self.name = None
-        if self.settings.private.hiddenservice:
+        if self.settings.globals.hiddenservice:
+            print "porcoddio!"
             self.start()
 
     def check(self):
@@ -83,7 +84,8 @@ class TorHiddenService:
                     self.name = f.readline().strip()
                 break
 
-            self.settings.private.hiddenservice = True
+            self.settings.globals.hiddenservice = "True"
+            self.settings.globals.commit()
 
             return True
 
@@ -97,7 +99,8 @@ class TorHiddenService:
             conn.close()
 
         self.name = None
-        self.settings.private.hiddenservice = False
+        self.settings.globals.hiddenservice = "False"
+        self.settings.globals.commit()
 
 class TorAccessCheck:
     def __init__(self, ip, headers):
