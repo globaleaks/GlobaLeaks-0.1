@@ -22,7 +22,7 @@
   margin: 0;
   padding:0;
   border: 0px solid #CCC;
-  overflow:hidden;
+  overflow:visible;
   clear:both;
   min-height:300px;
 }
