@@ -40,7 +40,7 @@ class TorHiddenService:
 
     def check(self):
         conn = TorCtl.connect()
-        if not conn:
+        if conn != None:
             conn.close()
             return True
 
