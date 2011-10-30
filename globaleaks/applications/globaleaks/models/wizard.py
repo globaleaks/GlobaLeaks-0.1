@@ -57,7 +57,7 @@ class FormShaman(SQLFORM):
                        'disclaimer' : disclaimer_fb,
                        'captcha' : '' ,#auth.settings.captcha,
                        'material': DIV(jQueryFileUpload, material_njs),#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
-                       'grouplist': ''
+                       'grouplist': grouplist
                        }
         
         self.steps = kwargs.get('steps', None)

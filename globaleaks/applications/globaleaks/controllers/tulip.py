@@ -4,7 +4,6 @@ This controller module contains every controller for accessing the tulip
 from a target
 """
 
-
 def index():
     import hashlib
 
@@ -83,6 +82,8 @@ def status():
         target_url = ''
         delete_capability = False
     else:
+        session.admin = False
+        session.target = tulip_url
         whistleblower = False
         target_url = "target/" + tulip.url
         delete_capability = (gl.get_target(int(tulip.get_target()))).delete_cap

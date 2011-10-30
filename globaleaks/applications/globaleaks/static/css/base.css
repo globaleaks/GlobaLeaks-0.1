@@ -52,7 +52,7 @@ table {
 /* Template */
 body {
     background: #f3f3f3;
-    // url('/globaleaks/static/images/background.png');
+/*    url('/globaleaks/static/images/background.png');*/ 
     font-family: Arial, sans-serif;
     color: #444;
 }
@@ -336,6 +336,10 @@ border-radius:5px;
     margin: 0 auto;
     padding: 40px;
     display: block;
+}
+
+#content  .submitbox {
+	height: 60px;
 }
 
 /*
