@@ -1,10 +1,8 @@
 import os, gzip
 import gluon.contenttype
 
-from slimit import minify
-
 def js():
-    files = ['/js/jquery.js',
+    files = ['/js/jquery-1.6.4.min.js',
              '/js/modernizr-1.7.min.js',
              '/js/superfish.js',
              '/js/cufon.js',
@@ -17,7 +15,9 @@ def js():
              '/FormShaman/js/jquery.smartWizard.js',
              '/js/fileupload/jquery.iframe-transport.js',
              '/js/fileupload/jquery.fileupload.js',
-             '/js/fileupload/jquery.fileupload-ui.js'
+             '/js/fileupload/jquery.fileupload-ui.js',
+             '/js/fileupload/jquery.tmpl.min.js'
+
              ]
     
     output_file = os.path.join(request.folder, 'static') + "/main_js_file.js"
@@ -25,6 +25,8 @@ def js():
 
     response.headers['Content-Encoding'] = 'gzip'
     response.headers['Content-Type'] = gluon.contenttype.contenttype('.js')
+    response.headers['Cache-Control'] =  "max-age=86400, private"
+    response.headers['Pragma'] = "cache"
 
     if os.path.exists(output_file):
         return response.stream(open(compressed_file, 'rb'))
@@ -45,7 +47,7 @@ def js():
     fhg.close()     
     fh.close()
     
-    return response.stream(open(output_file, 'rb'))
+    return response.stream(open(compressed_file, 'rb'))
         #for line in open(path).readlines():
         #    output += line
     #response.stream(output)
@@ -66,6 +68,10 @@ def css():
 
     #response.headers['Content-Encoding'] = 'gzip'
     response.headers['Content-Type'] = gluon.contenttype.contenttype('.css')
+    response.headers['Cache-Control'] =  "max-age=86400, private"
+    response.headers['Pragma'] = "cache"
+
+    #time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime())
     
     if os.path.exists(output_file):
         return response.stream(open(output_file, 'rb'))
@@ -83,4 +89,3 @@ def css():
     fh.close()
 
     return response.stream(open(output_file, 'rb'))
-
