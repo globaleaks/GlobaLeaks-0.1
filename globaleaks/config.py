@@ -61,5 +61,5 @@ class ConfigFile(Storage):
         """
         Commit changes in config file.
         """
-        with open(self._cfgfile 'w') as cfgfile:
+        with open(self._cfgfile, 'w') as cfgfile:
             self._cfgparser.write(cfgfile)
