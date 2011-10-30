@@ -44,7 +44,7 @@ class UploadHandler:
 			f = open(file_path, 'w')
 			f.write('')
 			f.close()
-		
+
 		if os.path.isfile(file_path) and file_name[0] != '.':
 			file = Storage()
 			file.name = file_name
@@ -79,12 +79,12 @@ class UploadHandler:
 	def __has_error(self, uploaded_file, file, error):
 		if error:
 			return error
-		
+
 		if file.name.split['.'][-1:][0] not in \
 				self.__options['accepted_file_types'] and \
 				self.__options['accepted_file_types'] != "ALL":
 			return 'acceptFileTypes'
-		
+
 		if self.__options['max_file_size'] and \
 			(file_size > self.__options['max_file_size'] or \
 				file.size > self.__options['max_file_size']):
@@ -98,12 +98,12 @@ class UploadHandler:
 			int(self.__options['max_number_of_files']) <= \
 				len(self.__get_file_objects):
 			return 'maxNumberOfFiles'
-		
+
 		return None
 
 	def __handle_file_upload(self, uploaded_file, name, size, type, error):
 		file = Storage()
-
+		
 		file.name = os.path.basename(name).strip('.\x20\x00..')
 		#file.name = strip_path_and_sanitize(name)
 		file.size = int(size)
@@ -118,10 +118,10 @@ class UploadHandler:
 			# print "filepath: %s " % file_path
 			append_file = not self.__options['discard_aborted_uploads'] and os.path.isfile(file_path) and file.size > os.path.getsize(file_path)
 			# print "append: %s file.size: %s getsize: %s" % (append_file, file.size, os.path.getsize(file_path))
-			
+
 			# print "file position: %s" % (uploaded_file.tell())
-			
-			if uploaded_file and not file.size < os.path.getsize(file_path):
+
+			if uploaded_file:
 			# multipart/formdata uploads (POST method uploads)
 				if append_file:
 					dst_file = open(file_path, 'ab')
@@ -152,7 +152,7 @@ class UploadHandler:
 
 			if file_size == file.size or not request.env.http_x_file_name:
 				file.url = self.__options['upload_url'] + file.name.replace(" ", "%20")
-			
+
 #				for version, options in self.__options['image_versions']:
 #					if os.path.isfile(self.__options['upload_dir'] + file_name):
 #						file[version + '_url'] = self.__options['upload_url'] + \
@@ -161,17 +161,17 @@ class UploadHandler:
 			elif self.__options['discard_aborted_uploads']:
 				os.remove(file_path)
 				file.error = 'abort'
-				
+
 			if request.env.http_x_file_size:
 				file.size = int(request.env.http_x_file_size)
 			else:
 				file.size = file_size
-				
+
 			file.delete_url = self.__options['script_url'] + \
-						"?deletefile=" + file.name.replace(" ", "%20")						
+						"?deletefile=" + file.name.replace(" ", "%20")
 
 			file.delete_type = 'GET'
-			
+
 		else:
 			file.error = error
 
@@ -233,7 +233,7 @@ class UploadHandler:
 										upload['error']
 										)
 			return info
-		
+
 		return dict(error=True)
 
 	def delete(self):
