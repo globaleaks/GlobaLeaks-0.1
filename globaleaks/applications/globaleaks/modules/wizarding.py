@@ -137,13 +137,15 @@ class FormShaman(SQLFORM):
         targetgroups = DIV('Targets', DIV(DIV(_id="group_filter"),
                                          DIV(grouplist)))
 
+        with open(settings.globals.disclaimer_file) as filestream:
+            disclaimer_text = filestream.read()
+            # sadly, HTML must not be passed to avoid XXSs
 
-        disclaimer = DIV(LABEL('Accept Disclaimer'), self.settings.globals.disclaimer,
+        disclaimer_fb = DIV(LABEL('Accept Disclaimer: '), disclaimer_text,
                          INPUT(_name='agree', value=True, _type='checkbox'))
 
-
         self.special_fields = {
-                       'disclaimer' : disclaimer,#settings.globals.disclaimer_html,
+                       'disclaimer' : disclaimer_fb,
                        'captcha' : '' ,#auth.settings.captcha,
                        'material': DIV(jQueryFileUpload, material_njs),#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
                        'grouplist': ''

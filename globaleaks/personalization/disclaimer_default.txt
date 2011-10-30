@@ -1,0 +1,2 @@
+This is the default disclaimer file, wirtten in "personalization/default_disclaimer.txt", when you read this lines, maybe you want go to globaleaks.conf and import a new series of lines, printed when your whistleblower want blow the whistle.
+

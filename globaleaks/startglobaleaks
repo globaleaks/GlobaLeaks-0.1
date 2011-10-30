@@ -24,7 +24,7 @@ else
     if [ ! -z $FOLDER ]; then
         cd $FOLDER
     fi
-    ln -sf /dev/null applications/globaleaks/errors
+    # ln -sf /dev/null applications/globaleaks/errors
 fi
 
 
