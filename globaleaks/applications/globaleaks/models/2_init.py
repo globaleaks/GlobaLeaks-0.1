@@ -62,4 +62,4 @@ auth.messages.reset_password = 'Click on the link http://' + request.env.http_ho
 
 settings.auth.table_user.email.label=T("Username")
 
-tor_hs = local_import('anonymity').TorHiddenService(settings)
+tor = local_import('anonymity').Tor(settings)
