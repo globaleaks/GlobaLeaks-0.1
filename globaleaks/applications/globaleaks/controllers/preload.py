@@ -12,6 +12,7 @@ def js():
              #'/js/main.js',
              '/js/fancybox/jquery.fancybox-1.3.4.pack.js',
              '/js/fileupload/jquery-ui.min.js',
+             '/js/jquery.inlineedit.js',
              '/FormShaman/js/jquery.smartWizard.js',
              '/js/fileupload/jquery.iframe-transport.js',
              '/js/fileupload/jquery.fileupload.js',

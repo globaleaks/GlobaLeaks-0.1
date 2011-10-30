@@ -9,12 +9,14 @@ from shutil import copyfile
 import hashlib
 from config import projroot, cfgfile, copyform
 
+session.admin = True
 
 @auth.requires_login()
 def index():
     """
     Controller for admin index page
     """
+    session.admin = True
     return dict(message="hello from admin.py")
 
 def obtain_secret(input_secret):

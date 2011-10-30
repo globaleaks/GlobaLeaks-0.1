@@ -103,7 +103,8 @@ def fileupload():
         session.files = []
 
 
-    def GET(file=None, deletefile=None):
+    def GET(file=None, deletefile=None, uploads=None):
+        
         if deletefile:
             return json.dumps(FileUpload.delete())
 
@@ -148,9 +149,10 @@ def fileupload():
 
         #print "The size now: %s" % upload[0]['size']
 
-        if upload[0]['size'] == os.path.getsize(src_file):
+        # XXX this is necessary only for the resume support
+        #if upload[0]['size'] == os.path.getsize(src_file):
             #print "THEY MATCH!!!!!.... %s != %s" % (upload[0]['size'], os.path.getsize(src_file))
-            os.rename(src_file, os.path.join(dst_folder, upload[0]['name']))
+        os.rename(src_file, os.path.join(dst_folder, upload[0]['name']))
 
         return json.dumps(upload)
 

@@ -18,7 +18,7 @@ class UploadHandler:
 		self.__options = {
 					'script_url' : request.env.path_info,
 					'upload_dir': request.folder + 'uploads', # Maybe this
-					'upload_url': request.env.path_info + '/uploads/', # .. and this should removed?
+					'upload_url': '', # .. and this should removed?
 					'param_name': 'files[]',
 					'max_file_size': None,
 					'min_file_size': 1,
@@ -50,8 +50,9 @@ class UploadHandler:
 			file.name = file_name
 			file.size = os.path.getsize(file_path)
 
-			file.url = self.__options['upload_url'] + \
-					 file.name.replace(' ', '%20')
+			file.url = "#"
+			#file.url = self.__options['upload_url'] + \
+			#		 file.name.replace(' ', '%20')
 #			for version, options in self.__options['image_versions']:
 #				if os.path.isfile(self.__options['upload_dir'] + file_name):
 #					file[version + '_url'] = options['upload_url'] + \
@@ -151,8 +152,9 @@ class UploadHandler:
 			file_size = os.path.getsize(file_path)
 
 			if file_size == file.size or not request.env.http_x_file_name:
-				file.url = self.__options['upload_url'] + file.name.replace(" ", "%20")
-
+				#file.url = self.__options['upload_url'] + file.name.replace(" ", "%20")
+				file.url = "#"
+				
 #				for version, options in self.__options['image_versions']:
 #					if os.path.isfile(self.__options['upload_dir'] + file_name):
 #						file[version + '_url'] = self.__options['upload_url'] + \
