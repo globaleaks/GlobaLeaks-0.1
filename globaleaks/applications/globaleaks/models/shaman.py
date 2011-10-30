@@ -42,12 +42,12 @@ class FormShaman(SQLFORM):
                                       _id='file-uploader-nonjs'),
                                 _class="w2p_fc"),
                                 _id="file-uploader-nonjs")
-    
+
         targetgroups = DIV('Targets', DIV(DIV(_id="group_filter"),
                                          DIV(grouplist)))
 
-        
-        disclaimer = DIV(LABEL('Accept Disclaimer'),settings.globals.disclaimer, 
+
+        disclaimer = DIV(LABEL('Accept Disclaimer'),settings.globals.disclaimer,
                          INPUT(_name='agree', value=True, _type='checkbox'))
 
 
@@ -57,7 +57,7 @@ class FormShaman(SQLFORM):
                        'material': DIV(jQueryFileUpload, material_njs),#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
                        'grouplist': ''
                        }
-        
+
         self.steps = kwargs.get('steps', None)
         if not self.steps:
             raise ValueError('FormShaman needs a steps argument')
@@ -107,6 +107,6 @@ class FormShaman(SQLFORM):
             raise RuntimeError, 'formstyle not supported'
 
         #response.files.append(URL('static','FormShaman',args=['css','smart_wizard.css']))
-        #response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js'])) 
+        #response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js']))
 
         return table

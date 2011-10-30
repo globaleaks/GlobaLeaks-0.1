@@ -1,71 +1,56 @@
 ###############################################
 # Parse the extra fields.
 ###############################################
-
-#FormWizard = local_import('plugin_PowerFormWizard')
+from __future__ import with_statement
+from xml.dom.minidom import parse, parseString
+from pprint import pprint
 
 class ExtraField:
     def __init__(self, filename):
-        from xml.dom.minidom import parse, parseString
-        from pprint import pprint
+        with open(filename) as xmlfile:
+            self.dom = parse(xmlfile)
 
-        file = open(filename)
-        dom = parse(file)
-        self.dom = dom
-        self.wizard = False
-
-        self.fields = []
-
-        if dom.getElementsByTagName("wizard"):
-            self.wizard = True
-
-        for i in dom.getElementsByTagName("field"):
-            self.fields.append(self.parse_field(i))
+        self.wizard = bool(self.dom.getElementsByTagName('wizard'))
+        self.fields = [self.parse_field(x) for x in
+                       self.dom.getElementsByTagName('field')]
 
     def get_content(self, field, tag):
         return field.getElementsByTagName(tag)[0].childNodes[0].data
 
     def parse_list(self, field):
-        list = []
-        for el in field.getElementsByTagName("el"):
-            list.append(el.childNodes[0].data)
-        return list
+        return [x.childNodes[0].data for x in field.getElementsByTagName("el")]
 
     def parse_field(self, field):
-        parsed = {}
-        parsed['name'] = self.get_content(field, "name")
-        parsed['label'] = self.get_content(field, "label")
-        parsed['desc']  = self.get_content(field, "description")
-        parsed['type']  = self.get_content(field, "type")
+        parsed = dict(name = self.get_content(field, "name"),
+                      label = self.get_content(field, "label"),
+                      desc  = self.get_content(field, "description"),
+                      type  = self.get_content(field, "type"))
+
         if parsed['type'] == "list":
             parsed['list'] = self.parse_list(field)
+
         return parsed
 
-    def get_step(self, el):
-        return el.getAttributeNode("number").value
+    def __getitem__(self, k):
+        return k.getAttributeNode("number").value
 
     def get_step_n(self, steps, n):
         for step in steps:
-            if self.get_step(step) == n:
+            if self[step] == n:
                 return step
         return None
 
     def parse_step(self, step):
-        steps = []
+        """
+        Return a list of steps parsing each step's node.
+        """
+        fields = ('field', 'material', 'grouplist',
+                  'captcha', 'disclaimer')
+        nodes = filter(lambda node: node.nodeName in fields, step.childNodes)
+        return [self.parse_field(node) if node.nodeName == 'field' else
+                node.nodeName
+                for node in nodes]
 
-        for node in step.childNodes:
-            if node.nodeName == "field":
-                steps.append(self.parse_field(node))
-            elif node.nodeName == "material":
-                steps.append("material")
-            elif node.nodeName == "grouplist":
-                steps.append("grouplist")
-            elif node.nodeName == "disclaimer":
-                steps.append("disclaimer")
-            elif node.nodeName == "captcha":
-                steps.append("captcha")
-
-        return steps
 
     def gen_wizard(self):
         steps = self.dom.getElementsByTagName("step")
@@ -78,8 +63,8 @@ class ExtraField:
                 wizard.append(self.parse_step(nstep))
             else:
                 wizard.append(self.parse_step(steps[i]))
-                        
-        return wizard      
+
+        return wizard
 
     def gen_db(self):
         if self.fields:
@@ -119,7 +104,7 @@ db.define_table('target',
     Field('status'),
     Field('delete_cap'),    # delete capability: the capability of a receiver could be managed with a
                             # bitmask, like contact_type in the future need to be. during the development
-                            # other capability might be request, could be useful provide here a flexible 
+                            # other capability might be request, could be useful provide here a flexible
                             # interface
     Field('last_sent_tulip'),
     Field('last_access'),
