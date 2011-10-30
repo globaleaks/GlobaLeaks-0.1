@@ -3,7 +3,7 @@ from gluon.storage import Storage
 import ConfigParser
 import os.path
 
-# XXX: find a better place for gleaks.cfg ;  $HOME if installed
+# XXX: find a better place for gleaks.conf ;  $HOME if installed
 projroot = os.path.abspath(__file__).rsplit('GlobaLeaks', 1)[0] + 'GlobaLeaks'
 cfgfile = os.path.join(projroot, 'globaleaks', 'globaleaks.conf')
 
@@ -37,7 +37,7 @@ class ConfigFile(Storage):
             if value.isdigit():
                 return int(value)
             elif value.lower() in ('true', 'false'):
-                return bool(value)
+                return bool(value.lower() == 'true')
             else:
                 return value
         except ConfigParser.NoOptionError:
