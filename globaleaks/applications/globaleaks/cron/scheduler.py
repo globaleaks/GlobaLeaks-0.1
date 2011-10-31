@@ -21,8 +21,8 @@ compressor = local_import('compress_material').Zip()
 logger.info('### Starting GlobaLeaks at: %s ###',  time.ctime())
 
 # Create first node administrator
+#FIXME Remove for non demo usage
 if db.auth_user:
-    # XXX Remove for non demo usage
     if not db(db.auth_user.email=="node@globaleaks.org").select().first():
         db.auth_user.insert(
             first_name="Globaleaks node administrator",

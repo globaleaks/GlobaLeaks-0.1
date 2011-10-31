@@ -1,6 +1,5 @@
 from gluon.storage import Storage
 from gluon.tools import Mail, Auth
-from gluon.tools import Recaptcha
 from gluon.tools import Crud, Service, PluginManager, prettydate
 
 crud = Crud(db)             # for CRUD helpers using auth
@@ -39,9 +38,10 @@ settings.mail.__dict__['commit'] = db.commit
 settings.auth.__dict__['commit'] = db.commit
 
 # reCAPTCHA support
-auth.settings.captcha = Recaptcha(request,
-        '6LdZ9sgSAAAAAAg621OrrkKkrCjbr3Zu4LFCZlY1',
-        '6LdZ9sgSAAAAAAJCZqqo2qLYa2wPzaZorEmc-qdJ')
+#from gluon.tools import Recaptcha
+#auth.settings.captcha = Recaptcha(request,
+#        '6LdZ9sgSAAAAAAg621OrrkKkrCjbr3Zu4LFCZlY1',
+#        '6LdZ9sgSAAAAAAJCZqqo2qLYa2wPzaZorEmc-qdJ')
 
 # Set up the logger to be shared with all
 logger = local_import('logger').start_logger(settings.logging)
