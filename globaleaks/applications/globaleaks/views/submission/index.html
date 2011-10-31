@@ -48,7 +48,9 @@
     <div class="description">It's required that almost one receiver group has been configured from the administrative panel, in order to accept whistleblowing submission.<br><br>
     You need to create one or more receivers, one or more groups, and drag and drop the receiver inside the approriate section inside <a href="/groups">the appropiate page</a>.
     </div>
-{{else:}} <!-- this was: {if form:} -->
+{{pass}}
+
+{{if not error and not leak_id and form:}}
     <h1>Whistleblower<span> | Submission interface</span></h1>
     <!-- TODO: use this data to create privacy box -->
     <!-- {=BEAUTIFY(anonymity)} -->

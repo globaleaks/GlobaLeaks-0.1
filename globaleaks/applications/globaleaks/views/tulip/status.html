@@ -148,10 +148,12 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     </form>
     <br>
 
+    {{if not whistleblower:}}
     <p class="intro">
       <b><a href="/globaleaks/tulip/forward/{{=tulip_url}}">
         Forward to another targetgroup
       </a></b></p>
+    {{pass}}
 
     <h2>Tulip accesses statistics</h2>
     <table class="targetlist">

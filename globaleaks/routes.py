@@ -18,7 +18,3 @@ routes_in = (
              ('^/js', '/globaleaks/preload/js'),
              ('^/css', '/globaleaks/preload/css')
             )
-
-#routes_onerror = (
-#            ('')
-#        )

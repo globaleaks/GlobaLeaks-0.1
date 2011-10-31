@@ -7,6 +7,7 @@ class FormShaman(SQLFORM):
         # this is the only error trapped by FormShaman.__init__
         if not groups_data:
             return None
+        print groups_data
     
         grouplist = UL(_id="group_list")
         for group_id in groups_data:

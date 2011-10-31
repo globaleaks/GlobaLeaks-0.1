@@ -104,7 +104,7 @@ class Globaleaks(object):
 
     def get_targetgroups(self):
         """
-        Returns a dictionary that has the targetgroup ids as keys and
+        Returns a dictionary that has the targetgroup IDs as keys and
         another dictionary as value.
         This second dictionary has field "data" with group data and
         field "members" which is a list of targets that belong to that
