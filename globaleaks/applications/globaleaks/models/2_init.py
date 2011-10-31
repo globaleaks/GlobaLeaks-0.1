@@ -41,15 +41,19 @@ auth.settings.captcha = Recaptcha(request,
 # Set up the logger to be shared with all
 logger = local_import('logger').start_logger(settings.logging)
 
+
 # AWS configuration
 settings.private.aws_key = '<AWS-KEY>'
 settings.private.aws_secret_key = '<AWS-SECRET-KEY>'
 settings.private.hostname = '127.0.0.1'
 settings.private.port     = '8000'
+settings.private.mail_use_tls = True
+
 
 settings.mail.server = 'box218.bluehost.com:25'                    # your SMTP server
 settings.mail.sender = 'GlobaLeaks Demo <demonotification@globaleaks.org>'              # your email
 settings.mail.login = 'demonotification@globaleaks.org:antaniglobaleaks'                                       # your credentials or None
+settings.mail.ssl = False
 
 # settings.auth
 settings.auth.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'    # before define_tables()

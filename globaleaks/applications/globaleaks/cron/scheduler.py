@@ -11,10 +11,10 @@ import stat
 import datetime
 # from boto.ses.connection import SESConnection
 
-MimeMail = local_import('mailer').MultiPart_Mail(settings)
 MessageContent = local_import('mailer').MessageContent()
 logger = local_import('logger').start_logger(settings.logging)
 compressor = local_import('compress_material').Zip()
+MimeMail = local_import('mailer').MultiPart_Mail(settings)
 
 # conn = SESConnection(settings.aws_key, settings.aws_secret_key)
 
@@ -63,21 +63,23 @@ for m in mails:
     #     bcc_addresses=None, format='text', reply_addresses=None, \
     #     return_path=None)
 
-    to = m.target + "<" + m.address + ">"
+    to = m.target + " <" + m.address + ">"
     subject = "[GlobaLeaks] A TULIP from node %s for %s - %s" % (
               settings.globals.sitename, m.target, str(m.tulip[-8:]))
     logger.info("Sending to %s\n", m.target)
 
-    if MimeMail.send(to=to, subject=subject,
+    if MimeMail.send(to=m.address, subject=subject,
                      message_text=message_txt,
                      message_html=message_html):
-        
+    
+        logger.info("email sent.")
         db(db.mail.id==m.id).delete()
-
+    else:
+        logger.info("error in sending mail.")
+    
     # XXX Uncomment in real world environment
     # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
     #    m.target,message=message_html)
-    db(db.mail.id==m.id).delete()
 
 from gluon.utils import md5_hash
 from gluon.restricted import RestrictedError
@@ -108,11 +110,11 @@ for file in os.listdir(path):
     logger.info(type(error.traceback))
     logger.info("Sending email...")
 
-    mail.send(to="hellais@gmail.com", 
-              subject='new web2py ticket', 
+    mail.send(to="hellais@gmail.com",
+              subject='new web2py ticket',
               message=error.traceback)
     logger.info("... email sent.")
-    
+
     os.unlink(filename)
 
 

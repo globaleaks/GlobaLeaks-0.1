@@ -1,16 +1,17 @@
 #import modules to work with MIME messages
 from gluon.tools import MIMEMultipart, MIMEText, MIMEBase, Encoders
+from gluon import *
+from gluon.utils import logger
 import smtplib
 import os
 
 from socksipy import socks
 
-socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, 'localhost', 9050)
+# socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, 'localhost', 9050)
 
-#socks.wrapmodule(smtplib)
+# socks.wrapmodule(smtplib)
 
 class MultiPart_Mail(object):
-
     def __init__(self, s):
         self.settings = s
     def buildMIME(self,
@@ -100,8 +101,7 @@ class MultiPart_Mail(object):
         ):
         """
         Sends an email. Returns True on success, False on failure.
-        """
-
+        """        
         if not isinstance(to, list):
             to = [to]
 
@@ -114,17 +114,17 @@ class MultiPart_Mail(object):
                                subject=subject, body=message_text, html=message_html, attachments=attachments, cc = cc,
                                bcc = bcc, reply_to = reply_to)
             else:
+
                 msg = self.buildMIME(sender = self.settings.private.email_sender,
                     recipients = to, subject = subject,
                     message_text = message_text, message_html = message_html,
                     attachments = attachments,
                     cc = cc, bcc = bcc, reply_to = reply_to)
                 #print 'message'+msg.as_string()
-
                 #Build MIME body
-                (host, port) = self.settings.private.email_server.split(':')
-                
-                if self.setting.private.email_ssl:
+                (host, port) = self.settings.mail.server.split(':')
+
+                if self.settings.mail.ssl:                    
                     try:
                         server = smtplib.SMTP_SSL(host, port)
                     except:
@@ -133,57 +133,56 @@ class MultiPart_Mail(object):
                 else:
                     server = smtplib.SMTP(host, port)
 
-                if self.settings.private.email_login:
+                if self.settings.mail.login:
                     try:
                         server.ehlo_or_helo_if_needed()
                     except SMTPHeloError:
-                        logger.error("SMTP Helo Error in HELO")
-                                        
-                    if self.settings.use_tls:
+                        logger.info("SMTP Helo Error in HELO")
+
+                    if self.settings.mail.use_tls:
                         try:
                             server.starttls()
                         except SMTPHeloError:
-                            logger.error("SMTP Helo Error in STARTTLS")
+                            logger.info("SMTP Helo Error in STARTTLS")
                         except SMTPException:
-                            logger.error("Server does not support TLS")
-                        
+                            logger.info("Server does not support TLS")
+
                         except RuntimeError:
-                            logger.error("Python version does not support TLS (<= 2.6?)")
-                        
+                            logger.info("Python version does not support TLS (<= 2.6?)")
+
                     try:
                         server.ehlo_or_helo_if_needed()
                     except SMTPHeloError:
-                        logger.error("SMTP Helo Error in HELO")
-                    
-                    (username, password) = self.settings.private.email_login.split(':')
+                        logger.info("SMTP Helo Error in HELO")
+
+                    (username, password) = self.settings.mail.login.split(':')
                     try:
                         server.login(username, password)
-                
                     except SMTPHeloError:
-                        logger.error("SMTP Helo Error in LOGIN")
-                        
+                        logger.info("SMTP Helo Error in LOGIN")
+
                     except SMTPAuthenticationError:
-                        logger.error("Invalid username/password combination")
-                        
+                        logger.info("Invalid username/password combination")
+
                     except SMTPException:
-                        logger.error("SMTP error in login")
-          
+                        logger.info("SMTP error in login")
+
                 try:
                     server.sendmail(self.settings.private.email_sender, to, msg.as_string())
-                    
+                    server.quit()
+
                 except SMTPRecipientsRefused:
-                    logger.error("All recipients were refused. Nobody got the mail.")
+                    logger.info("All recipients were refused. Nobody got the mail.")
 
                 except SMTPHeloError:
-                    logger.error("The server didn't reply properly to the HELO greeting.")
-                    
+                    logger.info("The server didn't reply properly to the HELO greeting.")
+
                 except SMTPSenderRefused:
-                    logger.error("The server didn't accept the from_addr.")
-                    
+                    logger.info("The server didn't accept the from_addr.")
+
                 except SMTPDataError:
-                    logger.error("The server replied with an unexpected error code (other than a refusal of a recipient).")
-                    
-                server.quit()
+                    logger.info("The server replied with an unexpected error code (other than a refusal of a recipient).")
+                                        
         except Exception, e:
             return False
         return True
@@ -191,13 +190,13 @@ class MultiPart_Mail(object):
 class MessageContent():
     # XXX maybe refact this..
     def txt(self, context):
-        f = open(os.join(os.getcwd(), 'applications/globaleaks/models', 'email_txt.tmpl'))
+        f = open(os.path.join(os.getcwd(), 'applications/globaleaks/models', 'email_txt.tmpl'))
         return f.read().strip() % context
 
 
 
     def html(self, context):
-        f = open(os.join(os.getcwd(), 'applications/globaleaks/models', 'email_html.tmpl'))
+        f = open(os.path.join(os.getcwd(), 'applications/globaleaks/models', 'email_html.tmpl'))
         return f.read().strip() % context
 
 
