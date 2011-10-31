@@ -18,8 +18,8 @@ def upload_tmpl():
         {{/if}}
         <td class="cancel"><button>Cancel</button></td>
     </tr>
-
     """
+
 def download_tmpl():
     return """<tr class="template-download{{if error}} ui-state-error{{/if}}">
         {{if error}}

@@ -54,6 +54,7 @@ class ExtraField:
         self.dom = dom
         self.wizard = False
 
+        self.step_desc = []
         self.fields = []
 
         if dom.getElementsByTagName("wizard"):
@@ -104,6 +105,8 @@ class ExtraField:
                 steps.append("disclaimer")
             elif node.nodeName == "captcha":
                 steps.append("captcha")
+            elif node.nodeName == "p":
+                self.step_desc.append(node.childNodes[0].data)
 
         return steps
 
@@ -118,8 +121,8 @@ class ExtraField:
                 wizard.append(self.parse_step(nstep))
             else:
                 wizard.append(self.parse_step(steps[i]))
-                        
-        return wizard      
+
+        return wizard
 
     def gen_db(self):
         if self.fields:

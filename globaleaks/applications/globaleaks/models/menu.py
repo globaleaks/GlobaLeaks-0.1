@@ -25,7 +25,7 @@ response.menu_target = [
 response.menu_admin = [
     (T('Targets'),'/targets'==URL(), '/targets'),
     (T('Groups'),'/groups'==URL(),'/groups'),
-    (T('Bouquet'),'/bouquet'==URL(), '/bouquet'),
+    (T('Globalview'),'/globalview'==URL(), '/globalview'),
     (T('Config'),'/config'==URL(), '/config'),
     (T('Stats'),'/stats'==URL(), '/stats'),
 ]
