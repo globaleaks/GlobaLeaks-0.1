@@ -210,7 +210,9 @@ class Target(object):
     def set_id(self):
         print "Error: id is read only"
         pass
+
     id = property(get_id, set_id)
+
 class TargetList(object):
     def __init__(self, g=None):
         if g:
