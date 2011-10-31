@@ -4,8 +4,11 @@ This is used to spool tulips send them to targets and
 perform operations related to the health and wellbeing of
 a GlobaLeaks node
 """
-
+import sys
+import os
 import time
+import stat
+import datetime
 # from boto.ses.connection import SESConnection
 
 MimeMail = local_import('mailer').MultiPart_Mail(settings)
@@ -71,8 +74,44 @@ for m in mails:
         db(db.mail.id==m.id).delete()
 
     # XXX Uncomment in real world environment
-    mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
-        m.target,message=message_html)
+    # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
+    #    m.target,message=message_html)
     db(db.mail.id==m.id).delete()
+
+from gluon.utils import md5_hash
+from gluon.restricted import RestrictedError
+from gluon.tools import Mail
+
+path = os.path.join(os.getcwd(), 'applications/globaleaks/errors/')
+
+hashes = {}
+
+### CONFIGURE HERE
+ALLOW_DUPLICATES = True
+### END CONFIGURATION
+
+logger.info("DIR: %s" % os.listdir(path))
+for file in os.listdir(path):
+    filename = os.path.join(path, file)
+
+    if not ALLOW_DUPLICATES:
+        file_data = open(filename, 'r').read()
+        key = md5_hash(file_data)
+
+        if key in hashes:
+            continue
+
+        hashes[key] = 1
+
+    error = RestrictedError()
+    error.load(request, request.application, filename)
+    logger.info("err_traceback: %s", error.traceback)
+
+    mail.send(to="hellais@gmail.com", 
+              subject='new web2py ticket', 
+              message=error.traceback)
+    
+    os.unlink(filename)
+
 
 db.commit()
