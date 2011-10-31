@@ -11,7 +11,6 @@ import stat
 import datetime
 # from boto.ses.connection import SESConnection
 
-MessageContent = local_import('mailer').MessageContent()
 MimeMail = local_import('mailer').MultiPart_Mail(settings)
 logger = local_import('logger').start_logger(settings.logging)
 compressor = local_import('compress_material').Zip()
@@ -53,8 +52,8 @@ for m in mails:
                     tulip_url=m.tulip,
                     site=settings.private.hostname)
 
-    message_txt = MessageContent.txt(context)
-    message_html = MessageContent.html(context)
+    message_txt = MimeMail.make_txt(context)
+    message_html = MimeMail.make_html(context)
     print message_html
 
     # XXX Use for AWS

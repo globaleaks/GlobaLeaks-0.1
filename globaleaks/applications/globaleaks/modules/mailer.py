@@ -187,16 +187,14 @@ class MultiPart_Mail(object):
             return False
         return True
 
-class MessageContent():
-    # XXX maybe refact this..
-    def txt(self, context):
-        f = open(os.path.join(os.getcwd(), 'applications/globaleaks/models', 'email_txt.tmpl'))
+    def make_txt(self, context):
+        f = open(os.path.join(os.getcwd(), self.settings.globals.email_txt_template))
         return f.read().strip() % context
 
 
 
-    def html(self, context):
-        f = open(os.path.join(os.getcwd(), 'applications/globaleaks/models', 'email_html.tmpl'))
+    def make_html(self, context):
+        f = open(os.path.join(os.getcwd(), self.settings.globals.email_html_template))
         return f.read().strip() % context
                                                         
                                                         
