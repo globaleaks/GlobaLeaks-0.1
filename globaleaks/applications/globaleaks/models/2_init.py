@@ -47,7 +47,7 @@ settings.private.port     = '8000'
 
 settings.mail.server = 'box218.bluehost.com:25'                    # your SMTP server
 settings.mail.sender = 'GlobaLeaks Demo <demonotification@globaleaks.org>'              # your email
-settings.mail.login = ''                                       # your credentials or None
+settings.mail.login = 'demonotification@globaleaks.org:antaniglobaleaks'                                       # your credentials or None
 
 # settings.auth
 settings.auth.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'    # before define_tables()

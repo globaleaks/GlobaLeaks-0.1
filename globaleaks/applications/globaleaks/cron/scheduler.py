@@ -72,7 +72,7 @@ for m in mails:
 
     # XXX Uncomment in real world environment
     mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
-        m.target,message=message)
+        m.target,message=message_html)
     db(db.mail.id==m.id).delete()
 
 db.commit()

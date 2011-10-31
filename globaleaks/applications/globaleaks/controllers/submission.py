@@ -104,7 +104,7 @@ def fileupload():
 
 
     def GET(file=None, deletefile=None, uploads=None):
-        
+
         if deletefile:
             return json.dumps(FileUpload.delete())
 

@@ -277,7 +277,6 @@ def target_delete():
 
 @auth.requires_login()
 def config():
-    response.flash = ("Welcome to the Globaleaks new wizard application")
 
     mail_form = FORM(TABLE(
             TR("server", INPUT(_name="server", _type="text")),
@@ -390,7 +389,7 @@ def wizard():
         TR("Expiration Date", INPUT(_name="expire", _type="text",
                                     _value=settings.tulip.expire_days)),
         TR("Maximum Access", INPUT(_name="max_access", _type="int",
-                                   _value=settings.tulip.max_access))
+                                   _value=settings.tulip.max_access)),
         TR("Maximum Download", INPUT(_name="max_download", _type="int",
                                    _value=settings.tulip.max_download))
         ))
