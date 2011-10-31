@@ -56,8 +56,8 @@ def record_vote(vote_feedback, tulip):
         #response.flash = ("Thanks for your contribution: actual Tulip "
         #                 "pertinence rate: "), tulip.get_pertinentness()
     else:
-        #response.flash = ("Invalid vote provided thru HTTP header "
-        #                  "manipulation: do you wanna work with us?")
+        response.flash = ("Invalid vote provided thru HTTP header "
+                          "manipulation: do you wanna work with us?")
 
 
 def status():
