@@ -71,6 +71,7 @@ for m in mails:
     if MimeMail.send(to=to, subject=subject,
                      message_text=message_txt,
                      message_html=message_html):
+        
         db(db.mail.id==m.id).delete()
 
     # XXX Uncomment in real world environment
@@ -90,7 +91,6 @@ hashes = {}
 ALLOW_DUPLICATES = True
 ### END CONFIGURATION
 
-logger.info("DIR: %s" % os.listdir(path))
 for file in os.listdir(path):
     filename = os.path.join(path, file)
 
@@ -105,11 +105,13 @@ for file in os.listdir(path):
 
     error = RestrictedError()
     error.load(request, request.application, filename)
-    logger.info("err_traceback: %s", error.traceback)
+    logger.info(type(error.traceback))
+    logger.info("Sending email...")
 
     mail.send(to="hellais@gmail.com", 
               subject='new web2py ticket', 
               message=error.traceback)
+    logger.info("... email sent.")
     
     os.unlink(filename)
 

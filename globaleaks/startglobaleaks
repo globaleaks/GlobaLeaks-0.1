@@ -3,14 +3,14 @@
 ADDRESS="127.0.0.1"
 PORT="8000"
 PASSWORD="globaleaks"
-red="\e[1;31m"
+red="\033[1;31m"
 ARGD=0
 
+echo -e "\033[34mWelcome\033[0m \033[1;33mto\033[0m \033[47m\033[34mGloba\033[0m\033[47m\033[30mL\033[0m\033[47m\033[34meaks\033[0m\033[0m"
 # When more args are provided: debug mode is enabled
 if [ $# -ne "$ARGD" ]
 then
-    echo -e "${red}log is enabled by default httpserver.log and in globaleaks.conf [logging] section: DO NOT USE IN PRODUCTION"
-    tput sgr0
+    echo -e "${red}log is enabled by default httpserver.log and in globaleaks.conf [logging] section: DO NOT USE IN PRODUCTION\033[0m"
     LOG_OPTION=""
 
     # optional environmental variable to enhance python debug

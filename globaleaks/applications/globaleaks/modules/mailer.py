@@ -1,17 +1,18 @@
 #import modules to work with MIME messages
 from gluon.tools import MIMEMultipart, MIMEText, MIMEBase, Encoders
 import smtplib
+import os
 
 from socksipy import socks
 
 socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, 'localhost', 9050)
 
-socks.wrapmodule(smtplib)
+#socks.wrapmodule(smtplib)
 
 class MultiPart_Mail(object):
 
     def __init__(self, s):
-       self.settings = s
+        self.settings = s
     def buildMIME(self,
         sender,
         recipients,
@@ -122,123 +123,82 @@ class MultiPart_Mail(object):
 
                 #Build MIME body
                 (host, port) = self.settings.private.email_server.split(':')
-                server = smtplib.SMTP(host, port)
+                
+                if self.setting.private.email_ssl:
+                    try:
+                        server = smtplib.SMTP_SSL(host, port)
+                    except:
+                        # ERROR python <= 2.6
+                        pass
+                else:
+                    server = smtplib.SMTP(host, port)
+
                 if self.settings.private.email_login:
-                    server.ehlo()
+                    try:
+                        server.ehlo_or_helo_if_needed()
+                    except SMTPHeloError:
+                        logger.error("SMTP Helo Error in HELO")
+                                        
                     if self.settings.use_tls:
-                        server.starttls()
-                    server.ehlo()
+                        try:
+                            server.starttls()
+                        except SMTPHeloError:
+                            logger.error("SMTP Helo Error in STARTTLS")
+                        except SMTPException:
+                            logger.error("Server does not support TLS")
+                        
+                        except RuntimeError:
+                            logger.error("Python version does not support TLS (<= 2.6?)")
+                        
+                    try:
+                        server.ehlo_or_helo_if_needed()
+                    except SMTPHeloError:
+                        logger.error("SMTP Helo Error in HELO")
+                    
                     (username, password) = self.settings.private.email_login.split(':')
-                    server.login(username, password)
-                server.sendmail(self.settings.private.email_sender, to, msg.as_string())
+                    try:
+                        server.login(username, password)
+                
+                    except SMTPHeloError:
+                        logger.error("SMTP Helo Error in LOGIN")
+                        
+                    except SMTPAuthenticationError:
+                        logger.error("Invalid username/password combination")
+                        
+                    except SMTPException:
+                        logger.error("SMTP error in login")
+          
+                try:
+                    server.sendmail(self.settings.private.email_sender, to, msg.as_string())
+                    
+                except SMTPRecipientsRefused:
+                    logger.error("All recipients were refused. Nobody got the mail.")
+
+                except SMTPHeloError:
+                    logger.error("The server didn't reply properly to the HELO greeting.")
+                    
+                except SMTPSenderRefused:
+                    logger.error("The server didn't accept the from_addr.")
+                    
+                except SMTPDataError:
+                    logger.error("The server replied with an unexpected error code (other than a refusal of a recipient).")
+                    
                 server.quit()
         except Exception, e:
             return False
         return True
 
 class MessageContent():
+    # XXX maybe refact this..
     def txt(self, context):
-        return """Esteemed %(name)s,
-
-This is an E-Mail message to notify you that someone has selected you as a valuable recipient of WhistleBlowing material in the form of a Globaleaks TULIP. This message has been created by the GlobaLeaks Node %(sitename)s.
-
-This TULIP has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this TULIP should be considered of high importance.
-
-You can download the material from the following URL:
-
-http://%(site)s/tulip/%(tulip_url)s
-
-Please do not forward or share this e-mail: each TULIP has a limited number of downloads and access before being destroyed forever, nobody (even the node administrator) can recover and expired or dead TULIP.
-
---------------------------------------------------
-GENERAL INFO
---------------------------------------------------
-
-1. What is Globaleaks?
-
-GlobaLeaks is the first Open Source Whistleblowing Framework. It empowers anyone to easily setup and maintain their own Whistleblowing platform. It is also a collection of what are the best practices for people receiveiving and submitting material. GlobaLeaks works in all environments: media, activism, corporations, public agencies.
-
-2. Is GlobaLeaks sending me this Mail?
-
-No, this mail has been sent to you by the Node called %(sitename)s. They are running the GlobaLeaks Platform, but are not directly tied to the GlobaLeaks organization. GlobaLeaks (http://www.globaleaks.org) will never be directly affiliated with any real world WhistleBlowing sites, GlobaLeaks will only provide software and technical support.
-
-3. Why am I receiving this?
-
-You're receiving this communication because an anonymous whistleblower has chosen you as a trustworthy contact for releasing confidential and/or important information that could be of utmost importance.
-
-4. How can I stop receiving future TULIPs?
-
-You can permanently unsibscrive from this GLobaLeaks Node by clicking on the following leak:
-http://%(site)s/target/subscribe/%(tulip_url)s
-
-If in any future you want to be re-enlisted you can add yourself again using this link:
-http://%(site)s/target/unsubscribe/%(tulip_url)s
-
-
-For any other inquire please refer to %(sitename)s to the GlobaLeaks website at http://globaleaks.org
-
-Take Care,
-A Random GlobaLeaks Node""" % context
+        f = open(os.join(os.getcwd(), 'applications/globaleaks/models', 'email_txt.tmpl'))
+        return f.read().strip() % context
 
 
 
     def html(self, context):
-        return """<!html>
-<html><head><title>You have received a TULIP from %(sitename)s - %(name)s</title>
-</head>
-<body>
-
-<p>Esteemed %(name)s,</p>
-
-<p>This is an E-Mail message to notify you that someone has selected you as a valuable recipient of WhistleBlowing material in the form of a Globaleaks TULIP. This message has been created by the GlobaLeaks Node %(sitename)s.</p>
-
-<p>This TULIP has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this TULIP should be considered of high importance.</p>
-
-<p>You can download the material from the following URL:</p>
-
-<p><a href="http://%(site)s/tulip/%(tulip_url)s">http://%(site)s/tulip/%(tulip_url)s</a></p>
-
-<p>Please do not forward or share this e-mail: each TULIP has a limited number of downloads and access before being destroyed forever, nobody (even the node administrator) can recover and expired or dead TULIP.</p>
-
-<h2>GENERAL INFO</h2>
-
-<ol>
-<li><h3>What is Globaleaks?</h3>
-
-<p>GlobaLeaks is the first Open Source Whistleblowing Framework. It empowers anyone to easily setup and maintain their own Whistleblowing platform. It is also a collection of what are the best practices for people receiveiving and submitting material. GlobaLeaks works in all environments: media, activism, corporations, public agencies.</p>
-</li>
-
-<li><h3>Is GlobaLeaks sending me this Mail?</h3>
-
-<p>No, this mail has been sent to you by the Node called %(sitename)s. They are running the GlobaLeaks Platform, but are not directly tied to the GlobaLeaks organization. GlobaLeaks (http://www.globaleaks.org) will never be directly affiliated with any real world WhistleBlowing sites, GlobaLeaks will only provide software and technical support.</p>
-</li>
-
-<li><h3>Why am I receiving this?</h3>
-
-<p>You're receiving this communication because an anonymous whistleblower has chosen you as a trustworthy contact for releasing confidential and/or important information that could be of utmost importance.</p>
-</li>
-
-<li><h3>How can I stop receiving future TULIPs?</h3>
-<p>
-You can permanently unsubscribe from this GLobaLeaks Node by clicking on the following leak:
-<a href="http://%(site)s/target/unsubscribe/%(tulip_url)s">http://%(site)s/target/unsubscribe/%(tulip_url)s</a>
-</p>
-<p>
-If in any future you want to be re-enlisted you can add yourself again using this link:
-<a href="http://%(site)s/target/subscribe/%(tulip_url)s">http://%(site)s/target/subscribe/%(tulip_url)s</a>
-</p>
-</li>
-</ol>
-
-<p>
-For any other inquire please refer to %(sitename)s to the GlobaLeaks website at http://globaleaks.org
-</p>
-
-<p>Take Care,<br/>
-A Random GlobaLeaks Node</p>
-
-
-""" % context
+        f = open(os.join(os.getcwd(), 'applications/globaleaks/models', 'email_html.tmpl'))
+        return f.read().strip() % context
 
 
 
