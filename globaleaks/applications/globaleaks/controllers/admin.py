@@ -390,7 +390,7 @@ def wizard():
         TR("Expiration Date", INPUT(_name="expire", _type="text",
                                     _value=settings.tulip.expire_days)),
         TR("Maximum Access", INPUT(_name="max_access", _type="int",
-                                   _value=settings.tulip.max_access))
+                                   _value=settings.tulip.max_access)),
         TR("Maximum Download", INPUT(_name="max_download", _type="int",
                                    _value=settings.tulip.max_download))
         ))
