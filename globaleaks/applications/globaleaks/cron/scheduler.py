@@ -21,8 +21,8 @@ MimeMail = local_import('mailer').MultiPart_Mail(settings)
 logger.info('### Starting GlobaLeaks at: %s ###',  time.ctime())
 
 # Create first node administrator
+#FIXME Remove for non demo usage
 if db.auth_user:
-    # XXX Remove for non demo usage
     if not db(db.auth_user.email=="node@globaleaks.org").select().first():
         db.auth_user.insert(
             first_name="Globaleaks node administrator",
@@ -55,6 +55,7 @@ for m in mails:
 
     message_txt = MessageContent.txt(context)
     message_html = MessageContent.html(context)
+    print message_html
 
     # XXX Use for AWS
     # conn.send_email(source='node@globaleaks.org', \

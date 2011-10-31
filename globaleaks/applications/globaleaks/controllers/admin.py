@@ -96,7 +96,8 @@ def targetgroups():
     It creates two forms, one for creating a new target and one for
     creating a new group.
     """
-    form_content_group = (Field('Name', requires=IS_NOT_EMPTY()),
+    form_content_group = (Field('Name', requires=[IS_NOT_EMPTY(),
+                                IS_NOT_IN_DB(db, db.targetgroup.name)]),
                           Field('Description'),
                           Field('Tags'),
                          )
