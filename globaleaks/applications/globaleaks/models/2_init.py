@@ -21,7 +21,8 @@ settings.private.hiddenservice = settings.globals.hiddenservice
 
 # mail and auth are filled after the first settings.tulip initialization, 
 # because used inside Globaleaks object
-gl = local_import('logic.globaleaks').Globaleaks(db, settings)
+# gl = local_import('logic.globaleaks').Globaleaks(db, settings)
+gl = Globaleaks()
 
 mail = Mail(db)
 auth = Auth(db)

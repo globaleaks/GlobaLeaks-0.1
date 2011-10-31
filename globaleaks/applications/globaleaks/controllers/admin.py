@@ -83,7 +83,7 @@ def targets():
         passphrase = obtain_secret(req.passphrase)
 
         gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                         hashlib.sha256(passphrase).hexdigest() , "subscribed")
+                         hashlib.sha256(passphrase[0]).hexdigest(), "subscribed")
         targets_list = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets_list)
 
@@ -122,7 +122,7 @@ def targetgroups():
         req = request.vars
         passphrase = obtain_secret(req.passphrase)
         gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                         hashlib.sha256(passphrase).hexdigest(), "subscribed")
+                         hashlib.sha256(passphrase[0]).hexdigest(), "subscribed")
 
     all_targets = gl.get_targets(None)
     targetgroups_list = gl.get_targetgroups()
@@ -438,3 +438,6 @@ def wizard():
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,
                 step4=step4_form, step5=step5_form, step6=step6_form)
+
+
+
