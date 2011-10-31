@@ -83,7 +83,7 @@ def targets():
         passphrase = obtain_secret(req.passphrase)
 
         gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                         hashlib.sha256(passphrase).hexdigest() , "subscribed")
+                         hashlib.sha256(passphrase[0]).hexdigest(), "subscribed")
         targets_list = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets_list)
 
@@ -96,7 +96,8 @@ def targetgroups():
     It creates two forms, one for creating a new target and one for
     creating a new group.
     """
-    form_content_group = (Field('Name', requires=IS_NOT_EMPTY()),
+    form_content_group = (Field('Name', requires=[IS_NOT_EMPTY(),
+                                IS_NOT_IN_DB(db, db.targetgroup.name)]),
                           Field('Description'),
                           Field('Tags'),
                          )
@@ -122,7 +123,7 @@ def targetgroups():
         req = request.vars
         passphrase = obtain_secret(req.passphrase)
         gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                         hashlib.sha256(passphrase).hexdigest(), "subscribed")
+                         hashlib.sha256(passphrase[0]).hexdigest(), "subscribed")
 
     all_targets = gl.get_targets(None)
     targetgroups_list = gl.get_targetgroups()
@@ -228,7 +229,6 @@ def target_add():
     Receives parameters "target" and "group" from POST.
     Adds taget to group.
     """
-    print "target add!!"
     try:
         target_id = request.post_vars["target"]
         group_id = request.post_vars["group"]
@@ -236,8 +236,6 @@ def target_add():
         pass
 
     result = gl.add_to_targetgroup(target_id, group_id)
-
-    print "RESULT %s " % result
 
     if result:
         return response.json({'success': 'true'})
@@ -438,3 +436,6 @@ def wizard():
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,
                 step4=step4_form, step5=step5_form, step6=step6_form)
+
+
+

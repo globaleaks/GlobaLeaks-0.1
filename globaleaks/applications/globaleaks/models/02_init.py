@@ -1,6 +1,11 @@
 from gluon.storage import Storage
 from gluon.tools import Mail, Auth
 from gluon.tools import Recaptcha
+from gluon.tools import Crud, Service, PluginManager, prettydate
+
+crud = Crud(db)             # for CRUD helpers using auth
+service = Service()         # for json, xml, jsonrpc, xmlrpc, amfrpc
+plugins = PluginManager()   # for configuring plugins
 
 # bind everything to settings
 settings.private = Storage()
@@ -21,7 +26,8 @@ settings.private.hiddenservice = settings.globals.hiddenservice
 
 # mail and auth are filled after the first settings.tulip initialization, 
 # because used inside Globaleaks object
-gl = local_import('logic.globaleaks').Globaleaks(db, settings)
+# gl = local_import('logic.globaleaks').Globaleaks(db, settings)
+gl = Globaleaks()
 
 mail = Mail(db)
 auth = Auth(db)
@@ -62,5 +68,7 @@ settings.auth.reset_password_requires_verification = True
 auth.messages.reset_password = 'Click on the link http://' + request.env.http_host + URL('default','user',args=['reset_password']) + '/%(key)s to reset your password'
 
 settings.auth.table_user.email.label=T("Username")
+
+randomizer = local_import('randomizer')
 
 tor = local_import('anonymity').Tor(settings)
