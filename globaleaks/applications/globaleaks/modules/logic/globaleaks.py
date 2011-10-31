@@ -7,8 +7,11 @@ class Globaleaks(object):
     Class that contains useful CRUD methods
     """
 
-    def __init__(self, db):
+    def __init__(self, db, s):
         self._db = db
+        # I'm sorry about this, but seem that in the logic of 2_init.py
+        # seem that 'settings' is not usable here
+        self.global_settings = s
 
     def create_targetgroup(self, name, desc, tags, targets=None):
         """
@@ -204,12 +207,12 @@ class Globaleaks(object):
         tulip = self._db.tulip.insert(
             url= hardcoded_url if hardcoded_url else randomizer.generate_tulip_url(),
             leak_id=leak_id,
-            target_id=target_id, #FIXME get target_id_properly
-            allowed_accesses=0, # inf
+            target_id=target_id,
+            allowed_accesses=self.global_settings.tulip.max_access,
             accesses_counter=0,
-            allowed_downloads=5,
+            allowed_downloads=0 if not target_id else self.global_settings.tulip.max_download,
             downloads_counter=0,
-            expiry_time=0)
+            expiry_time=self.global_settings.tulip.expire_days)
         self._db.commit()
         return tulip
 

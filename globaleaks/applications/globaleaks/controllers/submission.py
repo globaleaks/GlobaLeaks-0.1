@@ -243,8 +243,12 @@ def index():
     if settings.extrafields.wizard:
         the_steps = settings.extrafields.gen_wizard()
 
-        form = FormShaman(db.leak,
-                          steps=the_steps)
+        form = FormShaman(db.leak, steps=the_steps)
+        # this is the only error handled at the moment, the fact that __init__
+        # could return only None, maybe an issue when more errors might be managed
+        if not hasattr(form, 'vars'):
+            return dict(error='No receiver groups has been configured in this node')
+
     else:
         form = SQLFORM(db.leak,
                        fields=form_fields,
@@ -290,6 +294,7 @@ def index():
                     f.filename = request.vars.material.filename
 
                     tmp_file = db.material.file.store(request.body, filename)
+                    logger.info("the tmp_file is [%s] with filename [%s]", tmp_file, filename )
 
                     f.ext = mutils.file_type(filename.split(".")[-1])
 
@@ -367,7 +372,7 @@ def index():
                 db.mail.insert(target=target.name,
                                address=target.url,
                                tulip=tulip.url)
-            """
+        """
 
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
@@ -378,13 +383,14 @@ def index():
         session.wb_id = None
         session.files = None
 
-        return dict(leak_id=leak_id, leaker_tulip=pretty_number,
+        return dict(leak_id=leak_id, leaker_tulip=pretty_number, error=None,
                     form=None, tulip_url=wb_number[1], jQuery_templates=None)
 
     elif form.errors:
         response.flash = 'form has errors'
 
     return dict(form=form,
+                error=None,
                 leak_id=None,
                 tulip=None,
                 tulips=None,

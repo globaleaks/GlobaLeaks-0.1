@@ -1,7 +1,7 @@
 {{extend 'layout.html'}}
 
 <div id="receiptbox">
-<h2>Whistleblower Tulip Receipt</h2>
+<h2>TULIP Receipt</h2>
 <form action="" method="POST">
 <input type="text" name="Receipt" style="width: 150px"/>
 <input type="submit" name="send"/>
@@ -16,7 +16,7 @@
  <p> {{=presentation_text}} </p>
 </div>
 
-<div onclick="location.href='{{=URL('submission', 'index')}}'" class="submitbox box">
-    <a href="/submit">Submit material &raquo;</a>
+<div class="submitbox box">
+    <a href="/submit" onclick="location.href='{{=URL('submission', 'index')}}'">Submit material &raquo;</a>
 </div>
 <div class="clear"></div>

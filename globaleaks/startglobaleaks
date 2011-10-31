@@ -29,4 +29,9 @@ if [ ! -z $FOLDER ]; then
     cd $FOLDER
 fi
 
+if [ -d "applications/globaleaks/static" ]; then
+    echo "cleaning of previously preloaded javascript and css..."
+    rm -f applications/globaleaks/static/main_*
+fi
+
 python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION

@@ -31,6 +31,16 @@ footer, header, hgroup, menu, nav, section {
 body {
     line-height: 1;
 }
+
+.pagetitle {
+    background: #f3f3f3;
+    color: #555;
+    text-decoration: none;
+    text-align: center;
+    font-size: 30px;
+    font-family: Helvetica;
+}
+
 ol, ul {
     list-style: none;
 }
@@ -339,19 +349,8 @@ border-radius:5px;
 }
 
 #content  .submitbox {
-	height: 60px;
+	height: 10px;
 }
-
-/*
-#content .box {
-    background: #444;
-    width: 340px;
-    height: 320px;
-    margin: 20px 0;
-    float: left;
-    padding: 40px;
-}
-*/
 
 #content .box.box-hover {
     background: #555;
@@ -377,9 +376,12 @@ border-radius:5px;
     color: #fff;
     text-decoration: none;
     text-transform: uppercase;
+    text-align: center;
+    vertical-align: middle;
     font-weight: bold;
-    float: right;
-    margin-top: 32px;
+    /* float: right; */
+    /* margin-top: 32px; */
+    margin: 0px 40px 0px 40px; /* grow those 40px cause the shrink of the blux sub box */
     background: #0a70b4;
     padding: 10px;
     border-radius:5px;

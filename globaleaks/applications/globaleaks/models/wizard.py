@@ -3,6 +3,11 @@ class FormShaman(SQLFORM):
 
         # Creating a list of targetgroups
         groups_data = gl.get_targetgroups()
+
+        # this is the only error trapped by FormShaman.__init__
+        if not groups_data:
+            return None
+    
         grouplist = UL(_id="group_list")
         for group_id in groups_data:
             group = groups_data[group_id]['data']
