@@ -52,6 +52,7 @@ for m in mails:
 
     message_txt = MessageContent.txt(context)
     message_html = MessageContent.html(context)
+    print message_html
 
     # XXX Use for AWS
     # conn.send_email(source='node@globaleaks.org', \

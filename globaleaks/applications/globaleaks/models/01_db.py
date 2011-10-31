@@ -139,7 +139,6 @@ settings.extrafields = extrafields
 
 db_extrafields = extrafields.gen_db()
 
-
 db.define_table('leak',
     Field('title'),
     Field('desc', 'text'),
