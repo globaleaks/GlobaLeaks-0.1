@@ -5,7 +5,7 @@ background-color: green;
 }
 </style>
 {{if not list:}}
-<h1>Node Admin <span>| Add Target</span></h1>
+<h1><span>| Add Target</span></h1>
 <p class="intro">
     The Node Administrator is the person who is actually running the GlobaLeaks node. He is aware of the context he wishes to impact and will therefore
     be able to properly construct a target list. The target list will be composed of valuable people that are willing to analyze the information
@@ -25,7 +25,7 @@ background-color: green;
 <li>Description: {{=request.vars.Description}}</li>
 <li>Email: {{=request.vars.email}}</li>
 </ul -->
-<h1>1. Node Admin <span>| Current Target list</span></h1>
+<h1><span>Target list</span></h1>
 <form><input type="hidden" id="edit" name="edit" /></form>
 <table class="targetlist">
 <thead>
@@ -33,7 +33,7 @@ background-color: green;
     <th>Type</th>
     <th>Contact</th>
     <th>Description</th>
-    <th>remove cap</th>
+    <th>Delete Permission</th>
     <th>Delete</th>
 </thead>
 <tbody>
