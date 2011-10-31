@@ -198,8 +198,5 @@ class MessageContent():
     def html(self, context):
         f = open(os.path.join(os.getcwd(), 'applications/globaleaks/models', 'email_html.tmpl'))
         return f.read().strip() % context
-
-
-
-
-
+                                                        
+                                                        
