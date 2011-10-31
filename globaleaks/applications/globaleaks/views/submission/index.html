@@ -1,9 +1,5 @@
 {{extend 'layout.html'}}
 
-<!-- <link rel="stylesheet" href="/globaleaks/static/css/jquery-ui.css" id="theme">
-<link rel="stylesheet" href="/globaleaks/static/css/jquery.fileupload-ui.css">
-<link rel="stylesheet" href="/globaleaks/static/css/jq-fileupload.css"> -->
-
 <script type="text/javascript">
   // custom css expression for a case-insensitive contains()
   jQuery.expr[':'].Contains = function(a,i,m){
@@ -47,30 +43,32 @@
   });
 </script>
 
-{{if form:}}
+{{if error:}}
+    <div class="pagetitle">Incomplete configuration!</div>
+    <div class="description">It's required that almost one receiver group has been configured from the administrative panel, in order to accept whistleblowing submission.<br><br>
+    You need to create one or more receivers, one or more groups, and drag and drop the receiver inside the approriate section inside <a href="/groups">the appropiate page</a>.
+    </div>
+{{else:}} <!-- this was: {if form:} -->
     <h1>Whistleblower<span> | Submission interface</span></h1>
     <!-- TODO: use this data to create privacy box -->
-    <!-- 
-    {{=BEAUTIFY(anonymity)}}
-    -->
+    <!-- {=BEAUTIFY(anonymity)} -->
 
-    <p class="intro">You are the Whistleblower and this is the Submission interface from which you can send material to be received as a TULIP by the Targets. Once you have successfully submitted the form you will be given a Reciept allowing you to check back on the status of the TULIP, view statistics (access/downloads counters), send and receive comments and upload new material. The Target group responsible for analyzing and recieving the material may be selected by the Whistleblower (NOT IMPLEMENTED for details see the <a href="https://blueprints.launchpad.net/globaleaks/+spec/submission-targets-configurable">blueprint</a>)</p>
+    {{=form}}
 
-        	{{=form}}
+{{pass}}
 
+{{if not error and form:}}
 <script id="template-upload" type="text/x-jquery-tmpl">
 	{{=jQuery_templates[0]}}
 </script>
+
 <script id="template-download" type="text/x-jquery-tmpl">
 	{{=jQuery_templates[1]}}
 </script>
+{{pass}}
 
-<!-- <script src="/globaleaks/static/js/fileupload/jquery-ui.min.js"></script>
-<script src="/globaleaks/static/js/fileupload/jquery.tmpl.min.js"></script>
-<script src="/globaleaks/static/js/fileupload/jquery.iframe-transport.js"></script>
-<script src="/globaleaks/static/js/fileupload/jquery.fileupload.js"></script>
-<script src="/globaleaks/static/js/fileupload/jquery.fileupload-ui.js"></script> -->
-<script>
+<script type="text/javascript">
+
 $(document).ready(function(){
     'use strict';
     $('#fileupload').show();
@@ -80,16 +78,20 @@ $(document).ready(function(){
     $('#fileupload').fileupload({
     	url: "/globaleaks/submission/fileupload",
     	autoUpload: true,
-    	//maxChunkSize: 1000000,
-    	//multipart: false,
-    	/* add: function (e, data) {
-        	var that = this;
-        	$.getJSON('/globaleaks/submission/fileupload', {file: data.files[0].name}, function (file) {
-            	data.uploadedBytes = file && file.size;
-            	$.blueimpUI.fileupload.prototype
-                	.options.add.call(that, e, data);
-        }); 
-   		} */
+        /* 
+         * not working - would likely be fixed to support upload resume
+        maxChunkSize: 1000000,
+        multipart: false,
+        add: function (e, data) {
+               var that = this;
+               $.getJSON('/globaleaks/submission/fileupload', {file: data.files[0].name}, function (file) {
+                   data.uploadedBytes = file && file.size;
+                   $.blueimpUI.fileupload.prototype.options.add.call(that, e, data);
+                }); 
+              } 
+          */
+
+        // those spaces used to avoid TWO GRAPH IN SEQUENCE
 
    	});
 
@@ -120,17 +122,17 @@ $(document).ready(function(){
 	function onFinishCallback(){
 		$('#wizard').smartWizard('showMessage','Finish Clicked');
 		$('form').submit();
-	}     
+	}
 
+    /* this space is required to avoid TWO CLOSED GRAPH in sequence */
 
 });
 
-
 </script>
-
 {{pass}}
 
-{{if leak_id:}}
+
+{{if not error and leak_id:}}
     <h1>Whistleblower <span>| Tulip</span></h1>
     <p class="intro">This is a number you should write down to keep track of your submission</p>
 

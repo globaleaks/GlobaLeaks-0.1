@@ -90,16 +90,19 @@
     </div><!-- header  -->
 
     <div id="statusbar"><!-- statusbar is menu zone -->
-      {{block statusbar}} <!-- this is default statusbar -->
-      {{#------ superfish menu ------}}
-      {{=MENU(response.menu,_class='sf-menu')}}
+      {{if session.target and not session.admin:}}
+      	{{=MENU(response.menu_target,_class="sf-menu")}}
+      {{pass}}
+      
+      {{if session.admin:}}
+      	{{=MENU(response.menu_admin,_class="sf-menu")}}
+      {{pass}}
       <script type="text/javascript">
         jQuery(document).ready(function(){
         //jQuery('ul.sf-menu').superfish();
         });
       </script>
       <div style="clear: both;"></div><!-- Clear the divs -->
-      {{end}}
     </div><!-- statusbar -->
 
     <div id="page"> <!-- Here my central body -->
@@ -136,10 +139,10 @@
     <div id="footer">
       {{block footer}} <!-- this is default footer -->
 
-      2011 | <a href="http://www.globaleaks.org/">Globaleaks</a>
-      | <a href="https://github.com/globaleaks/GlobaLeaks/">GitHub Project</a>
+      November 2011 release | <a href="http://www.globaleaks.org/">GlobaLeaks</a> project
+      | <a href="https://github.com/globaleaks/GlobaLeaks/">code repository</a>
       | <a href="http://globaleaks.org/docs/FAQ.html">FAQ</a>
-      | This is a prototype, please do not use in production
+      | this is a beta version, stay update!
       <div style="clear: both;"></div><!-- Clear the divs -->
       {{end}}
 

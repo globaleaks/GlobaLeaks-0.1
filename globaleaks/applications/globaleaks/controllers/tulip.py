@@ -4,7 +4,6 @@ This controller module contains every controller for accessing the tulip
 from a target
 """
 
-
 def index():
     import hashlib
 
@@ -48,15 +47,14 @@ def record_comment(comment_feedback, tulip):
         db.tulip[tulip.id].update_record(feedbacks_provided=new_count)
     else:
         db.tulip[tulip.id].update_record(feedbacks_provided=1)
-    response.flash = "recorded comment"
 
 
 def record_vote(vote_feedback, tulip):
     int_vote = int(vote_feedback)
     if int_vote <= 1 and int_vote >= (-1) and tulip.target != "0":
         tulip.set_vote(int_vote)
-        response.flash = ("Thanks for your contribution: actual Tulip "
-                         "pertinence rate: "), tulip.get_pertinentness()
+        #response.flash = ("Thanks for your contribution: actual Tulip "
+        #                 "pertinence rate: "), tulip.get_pertinentness()
     else:
         response.flash = ("Invalid vote provided thru HTTP header "
                           "manipulation: do you wanna work with us?")
@@ -77,20 +75,22 @@ def status():
         return dict(err=True, delete=None)
 
     leak = tulip.get_leak()
-    
+
     if tulip.target == "0":
         whistleblower = True
         target_url = ''
         delete_capability = False
     else:
+        session.admin = False
+        session.target = tulip_url
         whistleblower = False
         target_url = "target/" + tulip.url
         delete_capability = (gl.get_target(int(tulip.get_target()))).delete_cap
-        
+
     # check if the tulip has been requested to be deleted
     if request.vars and request.vars.delete and delete_capability:
         deleted_tulips = tulip.delete_bros()
-        # TODO delete_bros clean tulip table only. masterial & leak need to be 
+        # TODO delete_bros clean tulip table only. masterial & leak need to be
         # cleaned too
         return dict(err=False, delete=deleted_tulips)
 

@@ -1,24 +1,22 @@
 {{extend 'layout.html'}}
 
 <div id="receiptbox">
-<h2>Whistleblower Tulip Receipt</h2>
+<h2>TULIP Receipt</h2>
 <form action="" method="POST">
 <input type="text" name="Receipt" style="width: 150px"/>
 <input type="submit" name="send"/>
 </form>
 </div>
-<h1>Welcome to {{=settings.globals.title}}</h1>
+<h1>{{=settings.globals.welcome}}</h1>
+<div class="presentation">{{=settings.globals.title}}</div>
+<div class="description">{{=settings.globals.subtitle}}</div>
+<div class="presentation">{{=settings.globals.description}}</div>
+
 <div class="intro">
- <p>
-    {{=presentation_text}}
- </p>
+ <p> {{=presentation_text}} </p>
 </div>
 
-<div onclick="location.href='{{=URL('submission', 'index')}}'" class="submitbox box">
-    <h2><span></span><br />Submission interface</h2>
-    <p style="text-align:center">
-        <img src="{{=URL('static', 'images/icon-whistleblower.png')}}" alt="" />
-    </p>
-    <a href="/submit">Submit material &raquo;</a>
+<div class="submitbox box">
+    <a href="/submit" onclick="location.href='{{=URL('submission', 'index')}}'">Submit material &raquo;</a>
 </div>
 <div class="clear"></div>

@@ -9,12 +9,14 @@ from shutil import copyfile
 import hashlib
 from config import projroot, cfgfile, copyform
 
+session.admin = True
 
 @auth.requires_login()
 def index():
     """
     Controller for admin index page
     """
+    session.admin = True
     return dict(message="hello from admin.py")
 
 def obtain_secret(input_secret):
@@ -81,7 +83,7 @@ def targets():
         passphrase = obtain_secret(req.passphrase)
 
         gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                         hashlib.sha256(passphrase).hexdigest() , "subscribed")
+                         hashlib.sha256(passphrase[0]).hexdigest(), "subscribed")
         targets_list = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets_list)
 
@@ -120,7 +122,7 @@ def targetgroups():
         req = request.vars
         passphrase = obtain_secret(req.passphrase)
         gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                         hashlib.sha256(passphrase).hexdigest(), "subscribed")
+                         hashlib.sha256(passphrase[0]).hexdigest(), "subscribed")
 
     all_targets = gl.get_targets(None)
     targetgroups_list = gl.get_targetgroups()
@@ -226,7 +228,6 @@ def target_add():
     Receives parameters "target" and "group" from POST.
     Adds taget to group.
     """
-    print "target add!!"
     try:
         target_id = request.post_vars["target"]
         group_id = request.post_vars["group"]
@@ -234,8 +235,6 @@ def target_add():
         pass
 
     result = gl.add_to_targetgroup(target_id, group_id)
-
-    print "RESULT %s " % result
 
     if result:
         return response.json({'success': 'true'})
@@ -275,7 +274,6 @@ def target_delete():
 
 @auth.requires_login()
 def config():
-    response.flash = ("Welcome to the Globaleaks new wizard application")
 
     mail_form = FORM(TABLE(
             TR("server", INPUT(_name="server", _type="text")),
@@ -386,9 +384,11 @@ def wizard():
 
     step3_form = FORM(TABLE(
         TR("Expiration Date", INPUT(_name="expire", _type="text",
-                                    _value=settings.tulip.expire)),
+                                    _value=settings.tulip.expire_days)),
         TR("Maximum Access", INPUT(_name="max_access", _type="int",
-                                   _value=settings.tulip.max_access))
+                                   _value=settings.tulip.max_access)),
+        TR("Maximum Download", INPUT(_name="max_download", _type="int",
+                                   _value=settings.tulip.max_download))
         ))
 
     step4_form = FORM(TABLE(
@@ -400,7 +400,6 @@ def wizard():
                                 _value=settings.globals.html_keyword))
         ))
 
-    # XXX: server logging depends on client logging!
     step5_form = FORM(TABLE(
         TR("Logging client-side", INPUT(_name="client", _type="text",
                                         _value=settings.logging.client)),
@@ -436,3 +435,6 @@ def wizard():
     return dict(import_form=import_form,
                 step1=step1_form, step2=step2_form, step3=step3_form,
                 step4=step4_form, step5=step5_form, step6=step6_form)
+
+
+

@@ -5,6 +5,9 @@ Controller for the index
 from __future__ import with_statement
 import logging
 
+session.admin = False
+session.taget = False
+
 ### required - do not delete
 def user():
     """
