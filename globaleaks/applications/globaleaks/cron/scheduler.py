@@ -11,10 +11,9 @@ import stat
 import datetime
 # from boto.ses.connection import SESConnection
 
-MessageContent = local_import('mailer').MessageContent()
+MimeMail = local_import('mailer').MultiPart_Mail(settings)
 logger = local_import('logger').start_logger(settings.logging)
 compressor = local_import('compress_material').Zip()
-MimeMail = local_import('mailer').MultiPart_Mail(settings)
 
 # conn = SESConnection(settings.aws_key, settings.aws_secret_key)
 
@@ -53,8 +52,8 @@ for m in mails:
                     tulip_url=m.tulip,
                     site=settings.private.hostname)
 
-    message_txt = MessageContent.txt(context)
-    message_html = MessageContent.html(context)
+    message_txt = MimeMail.make_txt(context)
+    message_html = MimeMail.make_html(context)
     print message_html
 
     # XXX Use for AWS
@@ -93,7 +92,6 @@ hashes = {}
 ### CONFIGURE HERE
 ALLOW_DUPLICATES = True
 ### END CONFIGURATION
-
 for file in os.listdir(path):
     filename = os.path.join(path, file)
 
@@ -108,15 +106,26 @@ for file in os.listdir(path):
 
     error = RestrictedError()
     error.load(request, request.application, filename)
-    logger.info(type(error.traceback))
+    logger.info("REQUEST-APP: %s" % dir(request))
+    
     logger.info("Sending email...")
 
-    mail.send(to="hellais@gmail.com",
-              subject='new web2py ticket',
-              message=error.traceback)
-    logger.info("... email sent.")
+    message = '<b>There has been an error on a node.</b><br>'
+    message += '<h1>This is the trackback:</h1><br><pre>%s</pre><br><br><br>' % error.traceback
+    message += "<h1>this is the environment:</h1><br>"
+    message += "<h2>RESPONSE: </h2><br> %s<br><br>" % error.snapshot['response']
+    message += "<h2>LOCALS: </h2><br> %s<br><br>" % error.snapshot['locals']
+    message += "<h2>REQUEST: </h2><br> %s<br><br>" % error.snapshot['request']
+    message += "<h2>SESSION:</h2><br>  %s<br><br>" % error.snapshot['session']
 
-    os.unlink(filename)
+    
+    if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
+                     message_text=message,
+                     message_html=message):
+
+        logger.info("... email sent.")
+
+        os.unlink(filename)
 
 
 db.commit()
