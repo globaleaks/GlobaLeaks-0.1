@@ -63,7 +63,7 @@ def css():
              '/css/jquery.fileupload-ui.css',
              '/css/jquery-ui.css'
              ]
-    
+
     output_file = os.path.join(request.folder, 'static') + "/main_css_file.css"
     compressed_file = os.path.join(request.folder, 'static') + "/main_css_file.css.gz"
 
