@@ -277,7 +277,6 @@ def target_delete():
 
 @auth.requires_login()
 def config():
-    response.flash = ("Welcome to the Globaleaks new wizard application")
 
     mail_form = FORM(TABLE(
             TR("server", INPUT(_name="server", _type="text")),

@@ -71,8 +71,8 @@ for m in mails:
         db(db.mail.id==m.id).delete()
 
     # XXX Uncomment in real world environment
-    # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
-    #    m.target,message=message)
+    mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
+        m.target,message=message_html)
     db(db.mail.id==m.id).delete()
 
 db.commit()

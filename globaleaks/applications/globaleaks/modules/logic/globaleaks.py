@@ -119,7 +119,7 @@ class Globaleaks(object):
             if result[row.id]["data"]['targets']:
                 members = result[row.id]["data"]['targets']
                 for member in json.loads(members):
-                    member_data  =self._db(self._db.target.id==int(member)
+                    member_data = self._db(self._db.target.id==int(member)
                                           ).select().first()
                     result[row.id]["members"].append(dict(member_data))
             else:
