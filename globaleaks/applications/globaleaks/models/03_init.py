@@ -43,6 +43,21 @@ settings.auth.__dict__['commit'] = db.commit
 #        '6LdZ9sgSAAAAAAg621OrrkKkrCjbr3Zu4LFCZlY1',
 #        '6LdZ9sgSAAAAAAJCZqqo2qLYa2wPzaZorEmc-qdJ')
 
+
+# Disable remember me on admin login
+auth.settings.remember_me_form = False
+
+# Disable sensitive auth actions (list from http://web2py.com/book/default/chapter/08)
+auth.settings.actions_disabled.append('register') #disable register
+auth.settings.actions_disabled.append('verify_email') #disable register
+auth.settings.actions_disabled.append('retrieve_username') #disable register
+auth.settings.actions_disabled.append('reset_password') #disable register
+auth.settings.actions_disabled.append('request_reset_password') #disable register
+auth.settings.actions_disabled.append('impersonate') #disable register
+auth.settings.actions_disabled.append('groups') #disable register
+auth.settings.actions_disabled.append('') #disable register
+
+
 # Set up the logger to be shared with all
 logger = local_import('logger').start_logger(settings.logging)
 
