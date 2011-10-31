@@ -43,6 +43,10 @@ settings.auth.__dict__['commit'] = db.commit
 #        '6LdZ9sgSAAAAAAg621OrrkKkrCjbr3Zu4LFCZlY1',
 #        '6LdZ9sgSAAAAAAJCZqqo2qLYa2wPzaZorEmc-qdJ')
 
+
+# Disable remember me on admin login
+auth.settings.remember_me_form = False
+
 # Set up the logger to be shared with all
 logger = local_import('logger').start_logger(settings.logging)
 
