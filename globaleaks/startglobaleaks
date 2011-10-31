@@ -19,13 +19,37 @@ c1="\033[47m\033[34m"
 c2="\033[0m"
 c3="\033[47m\033[30m"
 
-echo -en "${c1}   _____ _       _          ";echo -en "${c2}${c3} _";echo -e "${c2}${c1}                 _            ${c2}";
-echo -en "${c1}  / ____| |     | |         ";echo -en "${c2}${c3}| |";echo -e "${c2}${c1}               | |           ${c2}"
-echo -en "${c1} | |  __| | ___ | |__   __ _";echo -en "${c2}${c3}| |";echo -e "${c2}${c1}      ___  __ _| | _____     ${c2}";
-echo -en "${c1} | | |_ | |/ _ \| '_ \ / _\` ";echo -en "${c2}${c3}| |";echo -e "${c2}${c1}     / _ \/ _\` | |/ / __|    ${c2}"
-echo -en "${c1} | |__| | | (_) | |_) | (_| ";echo -en "${c2}${c3}| |____|";echo -e "${c2}${c1}  __/ (_| |   <\__ \    ${c2}";
-echo -en "${c1}  \_____|_|\___/|_.__/ \__,_";echo -en "${c2}${c3}|______|";echo -e "${c2}${c1}\___|\__,_|_|\_\___/    ${c2}"
-echo -en "${c1}                                                            ${c2}"
+echo -e "${c1}MMMMMMMMM.\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$Z.DNNNNNNNNNNNNNNN .NNNNNNNNNNNNNNNZ.NNNNNNNNNNNNNNNN M${c2}"
+echo -e "${c1}MMMMMMMM Z\$ZZZZZZZZZZZZZ\$..NNNNNNNNNNNNNNN7.NNNNNNNNNNNNNNNN.NNNNNNNNNNNNNNNNM.M${c2}"
+echo -e "${c1}MMMMMMM.,Z\$ZZZZZZZZZZZZZ=.NNNNNNNNNNNNNNNM.NNNNNNNNNNNNNNNN.DNNNNNNNNNNNNNNNNM.M${c2}"
+echo -e "${c1}MMMMMM+.ZZZZZZZZZZZZZZZZ.MNNNNNNNNNNNNNNM.NNNNNNNNNNNNNNNN ,NNNNNNNNNNNNNNNNNM.M${c2}"
+echo -e "${c1}MMMMMN.\$ZZZZZZZZZZZZZZ\$.NNNNNNNNNNNNNNNN.:NNNNNNNNNNNNNNM=.NNNNNNNNNNNNNNNNNNM.M${c2}"
+echo -e "${c1}MMMMM.Z\$ZZZZZ\$ZZZZZZZ\$.ZNNNNNNNNNNNNNNN..NNNNNNNNNNNNNNN\$.NNNNNNNNNNNNNNNNNNNM.M${c2}"
+echo -e "${c1}MMMM.IZZZZZ~.+ZZZZZZ\$..MNNNNM..NNNNNNN8.NNNNNN..NNNNNNNN.MNNNNN..MNNNNNNNNNNNM.M${c2}"
+echo -e "${c1}MMM..ZZZZZZZZZZZZZZ\$I.NNNNNNNNNNNNNNNN.NNNNNNNNNNNNNNNM.8NNNNNNNNNNNNNNNNNNNNM.M${c2}"
+echo -e "${c1}MMO.ZZZZZZZZZZZZZZZZ.MNNNNNNNNNNNNNNN.DNNNNNNNNNNNNNNN.=NNNNNNNNNNNNNNNNNNNNNM M${c2}"
+echo -e "${c1}MM.ZZZZZZZZZZZZZZZZ.NNNNNNNNNNNNNNNN.~NNNNNNNNNNNNNNN~.NNNNNNNNNNNNNNNNNNNNNNM.M${c2}"
+echo -e "${c1}M.\$\$\$\$Z\$ZZZZZZZZZ\$.,NNNNNNNNNNNNNNN= NNNNNNNNNNNNNNN8.NNNNNNNNNNNNNNNNNNNNNNNM M${c2}"
+echo -e "${c1}   .. Z\$ZZZZZZZZZ......,NNNNNNNNNN\$......NNNNNNNNNNM......NNNNNNNNNNNNNNNNNNNM M${c2}"
+echo -e "${c1}MMMMM ZZZZZZZZZZZZZZZ\$..NNNNNNNNNNNNNNN: +NNNNNNNNNNNNNN8.:MNNNNNNNNNNNNNNNNNM M${c2}"
+echo -e "${c1}MMMM.?ZZZZZZZZZZZ\$\$=.?   :.MNNNNNNNN8.~. .\$.INNNNNNNNN.,   ..:MNNNNNNNNNNNNNNM M${c2}"
+echo -e "${c1}MMMM.\$Z\$ZZZZZZZZZZZ       ..NNNNNNNN  . .   .MNNNNNNN.        ?NNNNNNNNNNNNNNM M${c2}"
+echo -e "${c1}MMM . .Z\$ZZZZZZ\$Z7.        .NNNNNNM.         MNNNNNN.         ?NNNNNNNNNNNNNNM M${c2}"
+echo -e "${c1}MMM . ..ZZZZZZZZ\$      .   .M:NNNN.         .N7?NNN:          ?N:MNNNNNNNNNNNM M${c2}"
+echo -e "${c1}MM:.. ..7ZZZZZZZ\$             .MNN.         ..  MNN:    .     =. =NNNNNNNNNNNM M${c2}"
+echo -e "${c1}MM... ..\$ZZZZZZZ\$             7NNN.   . .     ..NNN:            .NNNNNNNNNNNNM M${c2}"
+echo -e "${c1}M8.::~ZZZZZZZZZZ\$           ..MNNN.           .NNNN:            ONNNNNNNNNNNNM M${c2}"
+echo -e "${c1}M.\$ZZZZZZZZZZZZZ\$ . .     . .NNNNN.   . .     .NNNN:            NNNNNNNNNNNNNM M${c2}"
+echo -e "${c1}M.ZZZZZZZZZZZZZZ\$ . .       .NNNNN.         ..NNNNN:          .NNNNNNNNNNNNNNM M${c2}"
+
+
+echo -en "${c1}               _____ _       _          ";echo -en "${c2}${c3} _";echo -e "${c2}${c1}                 _                    ${c2}";
+echo -en "${c1}              / ____| |     | |         ";echo -en "${c2}${c3}| |";echo -e "${c2}${c1}               | |                   ${c2}"
+echo -en "${c1}             | |  __| | ___ | |__   __ _";echo -en "${c2}${c3}| |";echo -e "${c2}${c1}      ___  __ _| | _____             ${c2}";
+echo -en "${c1}             | | |_ | |/ _ \| '_ \ / _\` ";echo -en "${c2}${c3}| |";echo -e "${c2}${c1}     / _ \/ _\` | |/ / __|            ${c2}"
+echo -en "${c1}             | |__| | | (_) | |_) | (_| ";echo -en "${c2}${c3}| |____|";echo -e "${c2}${c1}  __/ (_| |   <\__ \            ${c2}";
+echo -en "${c1}              \_____|_|\___/|_.__/ \__,_";echo -en "${c2}${c3}|______|";echo -e "${c2}${c1}\___|\__,_|_|\_\___/            ${c2}"
+echo -en "${c1}                                                                                ${c2}"
 echo -e "\n\n"
 
 echo -e "\033[34mWelcome\033[0m \033[1;33mto\033[0m ${c1}Globa\033[0m\033[47m\033[30mL\033[0m\033[47m\033[34meaks\033[0m\033[0m"
