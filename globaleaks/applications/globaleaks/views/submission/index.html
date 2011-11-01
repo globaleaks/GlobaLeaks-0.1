@@ -54,7 +54,6 @@
     <h1><span> Submission interface</span></h1>
     <!-- TODO: use this data to create privacy box -->
     <!-- {=BEAUTIFY(anonymity)} -->
-
     {{=form}}
 
 {{pass}}
@@ -96,6 +95,37 @@ $(document).ready(function(){
         // those spaces used to avoid TWO GRAPH IN SEQUENCE
 
    	});
+   	
+    $('#fileupload').bind('fileuploadprogressall', function (e, data) {
+    	console.log("aaaaa");
+    	
+    	if (window.speedarray) {    	
+    		var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
+    		window.average = (window.average + speed)/2;
+    		var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
+    		console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
+    		$("#speedbox").children("span").replaceWith(
+    			"<span>" + Math.round(window.average) + " KB/s (ETA: " + Math.round(eta*100)/100 + " mins)</span>"
+    		);
+    		window.speedarray = [Date.now(), data.loaded];
+    		
+    	} else {
+    		window.speedarray = [Date.now(), data.loaded];
+    		window.average = window.speedarray[1];
+    	}
+    	
+    	$('.buttonFinish').addClass('buttonDisabled');
+    	var new_height = $('#fileupload').parents('.content').innerHeight();
+    	$('.stepContainer').css('height', new_height);
+    	
+    });
+
+    $('#fileupload').bind('fileuploaddone', function (e, data) {
+    	$('.buttonFinish').removeClass('buttonDisabled');
+	    var new_height = $('#fileupload').parents('.content').innerHeight();
+    	$('.stepContainer').css('height', new_height);
+
+    });
 
     // Load existing files:
     $.getJSON($('#fileupload form').prop('action'), function (files) {
@@ -119,7 +149,12 @@ $(document).ready(function(){
     });
     
     // Smart Wizard 	
-	$('#wizard').smartWizard({transitionEffect:'slide',onFinish:onFinishCallback});
+	$('#wizard').smartWizard({
+		transitionEffect: 'slide',
+        enableAllSteps: true, 
+		enableFinishButton: true,
+		onFinish: onFinishCallback
+	});
 	
 	function onFinishCallback(){
 		$('#wizard').smartWizard('showMessage','Finish Clicked');

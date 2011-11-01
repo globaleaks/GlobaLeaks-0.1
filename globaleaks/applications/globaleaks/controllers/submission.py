@@ -180,29 +180,21 @@ def index():
     # that the world is in technicolor and not in black and white.
     # Look up, the sun is shining, thanks to jQuery.
     #jQueryFileUpload = TR(T('Material'),
-    jQueryFileUpload = DIV(
-                           DIV(LABEL("Material:"),
-                                _class="w2p_fl"),
-                           DIV(DIV(LABEL(SPAN(T("Add Files")),
-                                         INPUT(_type="file",
-                                               _name="files[]"),
-                                               _class="fileinput-button"),
-                                   BUTTON(T("Start upload"),
-                                            _type="submit",
-                                            _class="start"),
-                                   BUTTON(T("Cancel upload"),
-                                            _type="reset",
-                                            _class="cancel"),
-                                   BUTTON(T("Delete Files"),
-                                            _type="button",
-                                            _class="delete"),
-                                   _class="fileupload-buttonbar"),
-                                   DIV(TABLE(_class="files"),
-                                       DIV(_class="fileupload-progressbar"),
-                                       _class="fileupload-content"),
-                                   _id="fileupload", _class="w2p_fl"),
-                            DIV(_class="w2p_fc"),
-                                _id="material__row")
+    # THIS HAS BEEN MOVED TO FORM SHAMAN
+#    jQueryFileUpload = DIV(
+#                           DIV(LABEL("Material:"),
+#                                _class="w2p_fl"),
+#                           DIV(DIV(LABEL(SPAN(T("Add Files")),
+#                                         INPUT(_type="file",
+#                                               _name="files[]"),
+#                                               _class="fileinput-button"),
+#                                   _class="fileupload-buttonbar"),
+#                                   DIV(TABLE(_class="files"),
+#                                       DIV(_class="fileupload-progressbar"),
+#                                       _class="fileupload-content"),
+#                                   _id="fileupload", _class="w2p_fl"),
+#                            DIV(_class="w2p_fc"),
+#                                _id="material__row")
 
     # This is necessary because otherwise web2py will go crazy when
     # it sees {{ }}
