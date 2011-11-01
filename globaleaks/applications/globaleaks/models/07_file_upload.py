@@ -24,7 +24,7 @@ class UploadHandler:
 					'min_file_size': 1,
 					'accept_file_types': 'ALL',
 					'max_number_of_files': None,
-					'discard_aborted_uploads': False,
+					'discard_aborted_uploads': True,
 					'chunksize': None,
 					'image_versions': {
 									'thumbnail': {
