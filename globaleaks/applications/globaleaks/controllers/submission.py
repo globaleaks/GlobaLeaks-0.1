@@ -107,15 +107,21 @@ def fileupload():
 
         if deletefile:
             return json.dumps(FileUpload.delete())
-
-        upload = json.loads(FileUpload.get())
-
-        filedir = FileUpload.get_file_dir()
-
-        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
-        dst_folder = os.path.join(request.folder, 'material', filedir)
-
-        return json.dumps(upload)
+        elif file:
+            upload = json.loads(FileUpload.get())
+        
+            filedir = FileUpload.get_file_dir()
+        
+            src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
+            dst_folder = os.path.join(request.folder, 'material', filedir)
+        
+            return json.dumps(upload)
+        elif uploads:
+            return "not implemented"
+        
+        else:
+            return "not implemented"
+            
 
     def POST(**vars):
         upload = FileUpload.post()
