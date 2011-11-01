@@ -103,7 +103,7 @@ $(document).ready(function(){
     		var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
     		window.average = (window.average + speed)/2;
     		var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
-    		console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
+    		// console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
     		
     		if ((Date.now() - window.last_update) > 1000) { 
 	    		$("#speedbox").children("span").replaceWith(
@@ -130,7 +130,9 @@ $(document).ready(function(){
     	$('.buttonFinish').removeClass('buttonDisabled');
 	    var new_height = $('#fileupload').parents('.content').innerHeight();
     	$('.stepContainer').css('height', new_height);
-
+		$("#speedbox").children("span").replaceWith(
+			"<span></span>"
+		);
     });
 
     // Load existing files:
