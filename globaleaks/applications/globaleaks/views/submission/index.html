@@ -104,14 +104,20 @@ $(document).ready(function(){
     		window.average = (window.average + speed)/2;
     		var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
     		console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
-    		$("#speedbox").children("span").replaceWith(
-    			"<span>" + Math.round(window.average) + " KB/s (ETA: " + Math.round(eta*100)/100 + " mins)</span>"
-    		);
+    		
+    		if ((Date.now() - window.last_update) > 3000) { 
+	    		$("#speedbox").children("span").replaceWith(
+	    			"<span>" + Math.round(window.average) + " KB/s (ETA: " + Math.round(eta*100)/100 + " mins)</span>"
+	    		);
+		 		window.last_update = Date.now();
+    		}
+    		
     		window.speedarray = [Date.now(), data.loaded];
     		
     	} else {
     		window.speedarray = [Date.now(), data.loaded];
     		window.average = window.speedarray[1];
+    		window.last_update = 0;
     	}
     	
     	$('.buttonFinish').addClass('buttonDisabled');
