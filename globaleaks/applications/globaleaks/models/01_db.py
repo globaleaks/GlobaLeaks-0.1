@@ -143,8 +143,8 @@ settings.extrafields = extrafields
 db_extrafields = extrafields.gen_db()
 
 db.define_table('leak',
-    Field('title'),
-    Field('desc', 'text'),
+    Field('title', requires=IS_NOT_EMPTY()),
+    Field('desc', 'text', requires=IS_NOT_EMPTY()),
     Field('submission_timestamp'),
     Field('leaker_id', db.target),
     Field('whistleblower_access'),
