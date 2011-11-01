@@ -54,7 +54,7 @@ class FormShaman(SQLFORM):
             # sadly, HTML must not be passed to avoid XXSs
 
         disclaimer_fb = DIV(LABEL('Accept Disclaimer: '), disclaimer_text,
-                         INPUT(_name='agree', value=True, _type='checkbox', requires=IS_EQUAL_TO("on",
+                         INPUT(_name='agree', value=False, _type='checkbox',_id="disclaimer", requires=IS_EQUAL_TO("on",
                                                                                                  error_message='must accept disclaimer')))
 
         self.special_fields = {

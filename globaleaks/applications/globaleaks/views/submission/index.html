@@ -69,6 +69,17 @@
 {{pass}}
 
 <script type="text/javascript">
+function checkDisclaimer() {
+		if ($('#disclaimer')[0].checked == true){
+		$('.buttonFinish').removeClass('buttonDisabled');
+		return true;
+	}
+		if ($('#disclaimer')[0].checked == false){
+		$('.buttonFinish').addClass('buttonDisabled');
+		return true;
+		}
+	}
+
 
 $(document).ready(function(){
     'use strict';
@@ -97,9 +108,8 @@ $(document).ready(function(){
    	});
    	
     $('#fileupload').bind('fileuploadprogressall', function (e, data) {
-    	console.log("aaaaa");
-    	
-    	if (window.speedarray) {    	
+    	if (window.speedarray) {
+    		    	
     		var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
     		window.average = (window.average + speed)/2;
     		var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
@@ -111,7 +121,6 @@ $(document).ready(function(){
 	    		);
 		 		window.last_update = Date.now();
     		}
-    		
     		window.speedarray = [Date.now(), data.loaded];
     		
     	} else {
@@ -128,6 +137,8 @@ $(document).ready(function(){
 
     $('#fileupload').bind('fileuploaddone', function (e, data) {
     	$('.buttonFinish').removeClass('buttonDisabled');
+  	    checkDisclaimer();
+
 	    var new_height = $('#fileupload').parents('.content').innerHeight();
     	$('.stepContainer').css('height', new_height);
 		$("#speedbox").children("span").replaceWith(
@@ -160,14 +171,21 @@ $(document).ready(function(){
 	$('#wizard').smartWizard({
 		transitionEffect: 'slide',
         enableAllSteps: true, 
-		enableFinishButton: true,
+		enableFinishButton: false,
+		onShowStep: checkDisclaimer,
 		onFinish: onFinishCallback
+	});
+
+    checkDisclaimer();
+	$('#disclaimer').change(function (){
+		checkDisclaimer();
 	});
 	
 	function onFinishCallback(){
 		$('#wizard').smartWizard('showMessage','Finish Clicked');
 		$('form').submit();
 	}
+	
 
     /* this space is required to avoid TWO CLOSED GRAPH in sequence */
 
