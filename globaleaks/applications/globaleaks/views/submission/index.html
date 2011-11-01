@@ -135,15 +135,17 @@ $(document).ready(function(){
     	
     });
 
+    $('#fileupload').bind('fileuploadstop', function (e, data) {
+		$("#speedbox").children("span").replaceWith("<span></span>");
+    });
+
     $('#fileupload').bind('fileuploaddone', function (e, data) {
     	$('.buttonFinish').removeClass('buttonDisabled');
   	    checkDisclaimer();
 
 	    var new_height = $('#fileupload').parents('.content').innerHeight();
     	$('.stepContainer').css('height', new_height);
-		$("#speedbox").children("span").replaceWith(
-			"<span></span>"
-		);
+		$("#speedbox").children("span").replaceWith("<span></span>");
     });
 
     // Load existing files:
