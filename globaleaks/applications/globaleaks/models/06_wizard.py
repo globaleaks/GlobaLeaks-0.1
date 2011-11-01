@@ -7,16 +7,21 @@ class FormShaman(SQLFORM):
         # this is the only error trapped by FormShaman.__init__
         if not groups_data:
             return None
-    
-        grouplist = UL(_id="group_list")
-        for group_id in groups_data:
-            group = groups_data[group_id]['data']
-            grouplist.insert(-1, LI(INPUT(_type="checkbox", _value="on",
-                                          _name="target_%d" % group_id),
-                                    SPAN(T(group["name"])),
-                                    SPAN(T(group["tags"]),
-                                         _class="group_tags")))
 
+        if len(groups_data) > 1:
+            grouplist = UL(_id="group_list")
+            for group_id in groups_data:
+                group = groups_data[group_id]['data']
+                grouplist.insert(-1, LI(INPUT(_type="checkbox", _value="on",
+                                              _name="target_%d" % group_id),
+                                        SPAN(T(group["name"])),
+                                        SPAN(T(group["tags"]),
+                                             _class="group_tags")))
+            grouplist = DIV(LABEL("Select Group:"),grouplist,_class="groups")
+            
+        else:
+            grouplist = ""
+        
         jQueryFileUpload = DIV(
                            DIV(LABEL("Material:"),
                                 _class="w2p_fl"),

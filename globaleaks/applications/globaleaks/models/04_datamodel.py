@@ -118,7 +118,6 @@ class Leak(object):
     #TODO: implement get/set targets
     def get_targets(self):
         pass
-
     def set_targets(self, targets):
         pass
     targets = property(get_targets, set_targets)
@@ -178,6 +177,7 @@ class Leak(object):
         been notified yet. Then adds that group to the notified_groups
         list
         """
+        
         notified_groups = self.get_notified_targetgroups()
         notified_targets = [x.id for x in gl.get_targets(notified_groups)]
         to_notify = [x.id for x in gl.get_targets([group_id])]
@@ -196,6 +196,7 @@ class Leak(object):
                                tulip=tulip_url)
         notified_groups += [group_id]
         notified_groups = list(set(notified_groups))  # deletes duplicates
+        
         db.leak[self._id].update_record(
             notified_groups=json.dumps(notified_groups))
         db.commit()

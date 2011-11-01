@@ -276,10 +276,7 @@ def index():
         logger.debug("Submission %s", request.vars)
 
         group_ids = []  # Will contain all the groups selected by the WB
-        for var in request.vars:
-            if var.startswith("target_") and var.split("_")[-1].isdigit():
-                group_ids.append(int(var.split("_")[-1]))
-
+        
         # XXX Since files are processed via AJAX, maybe this is unecessary?
         #     if we want to keep it to allow legacy file upload, then the
         #     file count should only be one.
@@ -355,6 +352,10 @@ def index():
         for group_id in group_ids:
             leak.notify_targetgroup(group_id)
 
+        if len(group_ids) < 1:
+            group_id = db().select(db.targetgroup.ALL).first().id
+            leak.notify_targetgroup(group_id)
+            
         """
         # Go through all of the previously generated TULIPs
         for tulip in leak.tulips:
