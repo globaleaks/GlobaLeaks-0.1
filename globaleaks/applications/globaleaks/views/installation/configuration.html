@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+<h2 class="entry">GlobaLeaks first setup</h2>
+
+<div class="intro">
+The <b>Groups</b>That are the context your node is capable to handle; added by <a href="/groups">Groups interface</a>.<br>
+{{if false or groups:}}
+
+{{else:}}
+No <a href="/groups">groups are present</a>, otherwise you are running a test node: you are using this software in the WRONG WAY!
+<!-- yep, text need to be reviewed -->
+{{pass}}
+</div>
