@@ -2,4 +2,3 @@
 #
 # remind - need to be checked - we are not really run as root ?
 *      *  *  *  *  root *applications/globaleaks/cron/scheduler.py
-#0      */2  *  *  *  root *applications/globaleaks/cron/target_list_clean.py

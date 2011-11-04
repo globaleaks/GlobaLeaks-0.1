@@ -1,12 +1,25 @@
 {{extend 'layout.html'}}
-<h2 class="entry">GlobaLeaks first setup</h2>
 
+<h1>GlobaLeaks first setup</h1>
+<br>
+
+<span class="pagetitle">mandatory configuration</span>
+<p>These informations are required to conclude this step</p>
 <div class="intro">
-The <b>Groups</b>That are the context your node is capable to handle; added by <a href="/groups">Groups interface</a>.<br>
-{{if false or groups:}}
+{{=mandatory}}
+<b>Once you've filled those information, you need to restart GlobaLeaks</b>
+</div>
 
-{{else:}}
-No <a href="/groups">groups are present</a>, otherwise you are running a test node: you are using this software in the WRONG WAY!
-<!-- yep, text need to be reviewed -->
-{{pass}}
+<span class="pagetitle">required configuration</span>
+<p>These informations are required to run correctly a node, but could be modified in a second time editing globaleaks.conf</p>
+<div class="intro">
+{{=required}}
+</form>
+</div>
+
+<span class="pagetitle">optional configuration</span>
+<p>These informations are optional, a node could works fine with the following defaults</p>
+<div class="intro">
+{{=optional}}
+</form>
 </div>

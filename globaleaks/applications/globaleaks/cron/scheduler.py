@@ -19,18 +19,6 @@ compressor = local_import('compress_material').Zip()
 
 logger.info('### Starting GlobaLeaks at: %s ###',  time.ctime())
 
-# Create first node administrator
-#FIXME Remove for non demo usage
-if db.auth_user:
-    if not db(db.auth_user.email=="node@globaleaks.org").select().first():
-        db.auth_user.insert(
-            first_name="Globaleaks node administrator",
-            last_name="Globaleaks",
-            email="node@globaleaks.org",
-            password=db.auth_user.password.validate("testing")[0])
-        logger.info("First launch of GlobaLeaks, creating node administrator!")
-        db.commit()
-
 unspooled = db(db.leak.spooled!=True).select()
 logger.info("New material: %s : ", unspooled)
 
@@ -42,9 +30,6 @@ for submission in unspooled:
 
 mails = db(db.mail).select()
 logger.info(str(mails)+"\n")
-
-#if not mails:
-#    logger.info(time.ctime()+": NO MAILS TO SEND!\n")
 
 for m in mails:
     context = dict(name=m.target,
@@ -122,10 +107,7 @@ for file in os.listdir(path):
     if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
                      message_text=message,
                      message_html=message):
-
         logger.info("... email sent.")
-
         os.unlink(filename)
-
 
 db.commit()
