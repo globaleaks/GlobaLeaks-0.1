@@ -113,11 +113,22 @@ for file in os.listdir(path):
     message = '<b>There has been an error on a node.</b><br>'
     message += '<h1>This is the trackback:</h1><br><pre>%s</pre><br><br><br>' % error.traceback
     message += "<h1>this is the environment:</h1><br>"
-    message += "<h2>RESPONSE: </h2><br> %s<br><br>" % error.snapshot['response']
-    message += "<h2>LOCALS: </h2><br> %s<br><br>" % error.snapshot['locals']
-    message += "<h2>REQUEST: </h2><br> %s<br><br>" % error.snapshot['request']
-    message += "<h2>SESSION:</h2><br>  %s<br><br>" % error.snapshot['session']
-
+    try:
+        message += "<h2>RESPONSE: </h2><br> %s<br><br>" % error.snapshot['response']
+    except KeyError:
+        pass
+    try:
+        message += "<h2>LOCALS: </h2><br> %s<br><br>" % error.snapshot['locals']
+    except KeyError:
+        pass
+    try:
+        message += "<h2>REQUEST: </h2><br> %s<br><br>" % error.snapshot['request']
+    except KeyError:
+        pass
+    try:
+        message += "<h2>SESSION:</h2><br>  %s<br><br>" % error.snapshot['session']
+    except KeyError:
+        pass
 
     if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
                      message_text=message,

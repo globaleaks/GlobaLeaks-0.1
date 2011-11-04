@@ -1,6 +1,15 @@
 {{extend 'layout.html'}}
 
+<style>
+.content label {
+    display: block;
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+</style>
+
 <script type="text/javascript">
+
   // custom css expression for a case-insensitive contains()
   jQuery.expr[':'].Contains = function(a,i,m){
       return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
@@ -90,7 +99,7 @@ $(document).ready(function(){
     $('#fileupload').fileupload({
     	url: "/globaleaks/submission/fileupload",
     	autoUpload: true,
-        /* 
+        /*
          * not working - would likely be fixed to support upload resume
         maxChunkSize: 1000000,
         multipart: false,
@@ -99,40 +108,40 @@ $(document).ready(function(){
                $.getJSON('/globaleaks/submission/fileupload', {file: data.files[0].name}, function (file) {
                    data.uploadedBytes = file && file.size;
                    $.blueimpUI.fileupload.prototype.options.add.call(that, e, data);
-                }); 
-              } 
+                });
+              }
           */
 
         // those spaces used to avoid TWO GRAPH IN SEQUENCE
 
    	});
-   	
+
     $('#fileupload').bind('fileuploadprogressall', function (e, data) {
     	if (window.speedarray) {
-    		    	
+
     		var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
     		window.average = (window.average + speed)/2;
     		var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
     		// console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
-    		
-    		if ((Date.now() - window.last_update) > 1000) { 
+
+    		if ((Date.now() - window.last_update) > 1000) {
 	    		$("#speedbox").children("span").replaceWith(
 	    			"<span>" + Math.round(window.average) + " KB/s (ETA: " + Math.round(eta*100)/100 + " mins)</span>"
 	    		);
 		 		window.last_update = Date.now();
     		}
     		window.speedarray = [Date.now(), data.loaded];
-    		
+
     	} else {
     		window.speedarray = [Date.now(), data.loaded];
     		window.average = window.speedarray[1];
     		window.last_update = Date.now() + 2000;
     	}
-    	
+
     	$('.buttonFinish').addClass('buttonDisabled');
     	var new_height = $('#fileupload').parents('.content').innerHeight();
     	$('.stepContainer').css('height', new_height);
-    	
+
     });
 
     $('#fileupload').bind('fileuploadstop', function (e, data) {
@@ -168,11 +177,11 @@ $(document).ready(function(){
             .prop('src', this.href)
             .appendTo('body');
     });
-    
-    // Smart Wizard 	
+
+    // Smart Wizard
 	$('#wizard').smartWizard({
 		transitionEffect: 'slide',
-        enableAllSteps: true, 
+        enableAllSteps: true,
 		enableFinishButton: false,
 		onShowStep: checkDisclaimer,
 		onFinish: onFinishCallback
@@ -182,14 +191,33 @@ $(document).ready(function(){
 	$('#disclaimer').change(function (){
 		checkDisclaimer();
 	});
-	
+
 	function onFinishCallback(){
 		$('#wizard').smartWizard('showMessage','Finish Clicked');
 		$('form').submit();
 	}
-	
 
-    /* this space is required to avoid TWO CLOSED GRAPH in sequence */
+  // Load existing files:
+  var files = [];
+  {{ for f in existing_files:}}
+    files.push({name: "{{=f.filename}}",
+                size: "{{=f.size}}"});
+  {{pass}}
+  var fu = $('#fileupload').data('fileupload');
+  fu._adjustMaxNumberOfFiles(-files.length);
+  fu._renderDownload(files)
+      .appendTo($('#fileupload .files'))
+      .fadeIn(function () {
+        // Fix for IE7 and lower:
+        $(this).show();
+        });
+  $(".template-download").each(function(k, v) {
+    var name = $(v).find(".name").find("a").text();
+    var button = $(v).find(".delete").find("button");
+    button.attr("data-type", "GET");
+    button.attr("data-url", "/globaleaks/submission/fileupload?deletefile="+name);
+  });
+  /* this space is required to avoid TWO CLOSED GRAPH in sequence */
 
 });
 

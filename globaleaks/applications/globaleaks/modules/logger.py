@@ -1,6 +1,6 @@
 """ This module handles logging on globaleaks."""
 
-import logging
+import logging, os
 
 
 class GLogger(logging.FileHandler):
@@ -42,11 +42,11 @@ def start_logger(logsettings):
     """
     logger = logging.getLogger('')
     if logger.handlers:
-        if logsettings.logfile == "disabled":
+        if not logsettings.logfile or logsettings.logfile == "disabled":
             logdest = os.devnull
         else:
             logdest = logsettings.logfile
-            
+
         hdlr = GLogger(logdest)
 
         formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')

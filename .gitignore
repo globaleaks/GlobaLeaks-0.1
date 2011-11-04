@@ -29,3 +29,4 @@ globaleaks/applications/admin/languages/it-it.py
 globaleaks/applications/globaleaks/languages/it-it.py
 globaleaks/applications/globaleaks/uploads/*
 !globaleaks/applications/globaleaks/uploads/.gitignore
+globaleaks/globaleaks.conf
