@@ -14,12 +14,12 @@
 
 (function ($) {
     'use strict';
-    
+
     // The UI version extends the basic fileupload widget and adds
     // a complete user interface based on the given upload/download
     // templates.
     $.widget('blueimpUI.fileupload', $.blueimp.fileupload, {
-        
+
         options: {
             // By default, files added to the widget are uploaded as soon
             // as the user clicks on the start buttons. To enable automatic
@@ -55,7 +55,7 @@
             // The expected data type of the upload response, sets the dataType
             // option of the $.ajax upload requests:
             dataType: 'json',
-            
+
             // The add callback is invoked as soon as files are added to the fileupload
             // widget (via file input selection, drag & drop or add API call).
             // See the basic file upload widget for more information:
@@ -241,7 +241,7 @@
                     (typeof webkitURL !== undef && webkitURL);
             return urlAPI ? urlAPI.createObjectURL(file) : false;
         },
-        
+
         _revokeObjectURL: function (url) {
             var undef = 'undefined',
                 urlAPI = (typeof window.revokeObjectURL !== undef && window) ||
@@ -323,7 +323,7 @@
 
         _formatFileSize: function (file) {
             if (typeof file.size !== 'number') {
-                return '';
+                return file.size;
             }
             if (file.size >= 1000000000) {
                 return (file.size / 1000000000).toFixed(2) + ' GB';
@@ -447,7 +447,7 @@
                 })
             );
         },
-        
+
         _renderDownload: function (files) {
             var tmpl = this._renderDownloadTemplate(files);
             if (!(tmpl instanceof $)) {
@@ -461,7 +461,7 @@
             tmpl.find('a').each(this._enableDragToDesktop);
             return tmpl;
         },
-        
+
         _startHandler: function (e) {
             e.preventDefault();
             var tmpl = $(this).closest('.template-upload'),
@@ -471,7 +471,7 @@
                 $(this).fadeOut();
             }
         },
-        
+
         _cancelHandler: function (e) {
             e.preventDefault();
             var tmpl = $(this).closest('.template-upload'),
@@ -483,7 +483,7 @@
                 data.jqXHR.abort();
             }
         },
-        
+
         _deleteHandler: function (e) {
             e.preventDefault();
             var button = $(this);
@@ -494,7 +494,7 @@
                 dataType: e.data.fileupload.options.dataType
             });
         },
-        
+
         _initEventHandlers: function () {
             $.blueimp.fileupload.prototype._initEventHandlers.call(this);
             var filesList = this.element.find('.files'),
@@ -518,7 +518,7 @@
                     this._deleteHandler
                 );
         },
-        
+
         _destroyEventHandlers: function () {
             var filesList = this.element.find('.files');
             filesList.find('.start button')
@@ -560,7 +560,7 @@
                     filesList.find('.delete button').click();
                 });
         },
-        
+
         _destroyFileUploadButtonBar: function () {
             this.element.find('.fileupload-buttonbar')
                 .removeClass('ui-widget-header ui-corner-top');
@@ -622,7 +622,7 @@
             this.element.find('.fileupload-progressbar')
                 .hide().progressbar();
         },
-        
+
         destroy: function () {
             this.element.find('.fileupload-progressbar')
                 .progressbar('destroy');
@@ -632,14 +632,14 @@
             this.element.removeClass('ui-widget');
             $.blueimp.fileupload.prototype.destroy.call(this);
         },
-        
+
         enable: function () {
             $.blueimp.fileupload.prototype.enable.call(this);
             this.element.find(':ui-button').not('.fileinput-button')
                 .button('enable');
             this._enableFileInputButton();
         },
-        
+
         disable: function () {
             this.element.find(':ui-button').not('.fileinput-button')
                 .button('disable');
