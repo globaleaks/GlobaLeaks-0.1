@@ -130,7 +130,6 @@ for file in os.listdir(path):
     except KeyError:
         pass
 
-
     if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
                      message_text=message,
                      message_html=message):
