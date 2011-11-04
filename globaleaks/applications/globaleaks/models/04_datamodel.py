@@ -154,10 +154,10 @@ class Leak(object):
         Material.create_new(leak_id, url, type, file)
 
     def get_extra(self):
-        extra = {}
+        extra = []
         for row in db(db.leak.id==self._id).select():
             for i in settings.extrafields.fields:
-                extra[i['name']] = row[i['name']]
+                extra.append((i['label'], row[i['name']], i['type']))
         return extra
 
     def get_notified_targetgroups(self):

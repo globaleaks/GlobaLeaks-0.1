@@ -106,22 +106,23 @@ def fileupload():
     def GET(file=None, deletefile=None, uploads=None):
 
         if deletefile:
+            session.files = [f for f in session.files if f.filename != deletefile]
             return json.dumps(FileUpload.delete())
         elif file:
             upload = json.loads(FileUpload.get())
-        
+
             filedir = FileUpload.get_file_dir()
-        
+
             src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
             dst_folder = os.path.join(request.folder, 'material', filedir)
-        
+
             return json.dumps(upload)
         elif uploads:
             return "not implemented"
-        
+
         else:
             return "not implemented"
-            
+
 
     def POST(**vars):
         upload = FileUpload.post()
@@ -138,7 +139,7 @@ def fileupload():
 
         filedata.fileid = upload[0]['id']
 
-        # Store filename and extention
+        # Store filename and extension
         filedata.filename = upload[0]['name']
 
         filedata.ext = mutils.file_type(upload[0]['name'].split(".")[-1])
@@ -253,19 +254,11 @@ def index():
                        labels=form_labels)
 
     # Check to see if some files have been loaded from a previous session
+    existing_files = []
     if session.files:
-        filesul = UL(_id="stored_files")
-        # XXX Is this being sanitized?
         for f in session.files:
-            # print "debug: session ID recovered %s " % f.fileid
-            # in file uploaded c'e' già il modo di visualizzare nella casella i file già caricati della sessione corrente
-            filesul.append(LI(SPAN(f.filename),
-                              A("delete",
-                                _href="",
-                                _class="stored_file_delete",
-                                _id=f.fileid)))
-
-        #form[0].insert(-1, TR('Stored files', filesul))
+            existing_files.append(f)
+    print existing_files
 
     # Make the submission not spooled and set the timestamp
     form.vars.spooled = False
@@ -276,7 +269,7 @@ def index():
         logger.debug("Submission %s", request.vars)
 
         group_ids = []  # Will contain all the groups selected by the WB
-        
+
         # XXX Since files are processed via AJAX, maybe this is unecessary?
         #     if we want to keep it to allow legacy file upload, then the
         #     file count should only be one.
@@ -289,7 +282,8 @@ def index():
                     f.filename = request.vars.material.filename
 
                     tmp_file = db.material.file.store(request.body, filename)
-                    logger.info("the tmp_file is [%s] with filename [%s]", tmp_file, filename )
+                    logger.info("the tmp_file is [%s] with filename [%s]",
+                                tmp_file, filename)
 
                     f.ext = mutils.file_type(filename.split(".")[-1])
 
@@ -317,17 +311,15 @@ def index():
             if var.startswith("target_") and var.split("_")[-1].isdigit():
                 group_ids.append(var.split("_")[-1])
 
-        # XXX is that needed?
         # The metadata associated with the file is stored inside
         # the session variable this should be safe to use this way.
         if not session.files:
             session.files = []
         # XXX verify that this is safe
-        # FIXME FIXME FIXME
         pfile = pickle.dumps(session.files)
 
-        # leak_id has been used in the previous code as this value, I'm keeping to don't
-        # change the following lines
+        # leak_id has been used in the previous code as this value,
+        # I'm keeping to don't change the following lines
         leak_id = form.vars.id
 
         # XXX probably a better way to do this
@@ -355,23 +347,6 @@ def index():
         if len(group_ids) < 1:
             group_id = db().select(db.targetgroup.ALL).first().id
             leak.notify_targetgroup(group_id)
-            
-        """
-        # Go through all of the previously generated TULIPs
-        for tulip in leak.tulips:
-            target = gl.get_target(tulip.target)
-
-            # Ignore WB tulips
-            if tulip.target == "0":
-                continue
-
-            if target.status is "subscribed":
-                # add subscribed targets to the mail db
-                # when the cron job passes they will receieve a mail
-                db.mail.insert(target=target.name,
-                               address=target.url,
-                               tulip=tulip.url)
-        """
 
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
@@ -383,7 +358,8 @@ def index():
         session.files = None
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number, error=None,
-                    form=None, tulip_url=wb_number[1], jQuery_templates=None)
+                    form=None, tulip_url=wb_number[1], jQuery_templates=None,
+                    existing_files=existing_files)
 
     elif form.errors:
         response.flash = 'form has errors'
@@ -395,7 +371,8 @@ def index():
                 tulips=None,
                 anonymity=anonymity.result,
                 jQuery_templates=(XML(upload_template),
-                                  XML(download_template)))
+                                  XML(download_template)),
+                existing_files=existing_files)
 
 
 #@service.json

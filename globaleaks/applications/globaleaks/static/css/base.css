@@ -28,6 +28,7 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
+
 body {
     line-height: 1;
 }
@@ -62,7 +63,7 @@ table {
 /* Template */
 body {
     background: #f3f3f3;
-/*    url('/globaleaks/static/images/background.png');*/ 
+/*    url('/globaleaks/static/images/background.png');*/
     font-family: Arial, sans-serif;
     color: #444;
 }

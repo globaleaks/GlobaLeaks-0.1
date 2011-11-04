@@ -43,7 +43,7 @@ class ConfigFile(Storage):
             else:
                 return value
         except ConfigParser.NoOptionError:
-            raise NameError(name)
+            return ''  # if option doesn't exists return an empty string
 
     def __setattr__(self, name, value):
         # keep an open port with private attributes
