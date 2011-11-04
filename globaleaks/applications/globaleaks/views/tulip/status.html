@@ -1,4 +1,49 @@
 {{extend 'layout.html'}}
+<style type="text/css">
+	#comment-board {
+		float: right;
+		width: 300px;
+		
+	}
+
+	#tulip-access {
+		
+		float: left;
+		width: 300px;
+	}
+	
+	.entry {
+		background-color: white;
+		width: 800px;
+	}
+	
+	.material {
+		
+		position: relative;
+
+	}
+	#content table.targetlist {
+		
+		width: 200px;
+	}
+		
+	#content a#add_material {
+		top: 0px;
+		right: 0px;
+		width: 100px;
+		position: absolute;
+		padding: 5px 10px;
+		background-color: green;
+	}
+	
+	#content .material-entry {
+		background-color: #5A5655;
+		padding: 30px 20px 5px 40px;
+		width: 600px;
+		margin-bottom: 20px;
+	}
+	
+</style>
 
 {{if err or delete:}}
     {{if err:}}
@@ -25,7 +70,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 {{pass}}
 <div class="entry">
 
-    <h2 class="title">{{=leak_title}}</h2>
+    <h2 class="title">TULIP</h2>
 
     {{if not whistleblower:}}
     <div class="downloads-left{{if not download_available: }} full{{pass}}">
@@ -38,7 +83,10 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     <div class="clear"></div>
 
     <p class="info">
-        {{if whistleblower:}} This is your previously submitted material, only you had the property to add new data
+        {{if whistleblower:}} 
+        
+        <!-- This is your previously submitted material, only you had the property to add new data -->
+        
         {{else:}} This is the material submitted by the whistleblower for your revision. You are invited to:
          <ul>
              <li>Do not spread this link, is intended be for your eyes only</li>
@@ -48,13 +96,16 @@ If you are not interested in receive Tulips, or want change the segnalation prop
          {{pass}}
     </p>
 
-    {{if leak_desc:}}
+    {{if 0: #leak_desc:}}
         <h2>Material description</h2>
         <p class="description">{{=leak_desc}}</p>
     {{pass}}
 
-    {{if leak_extra:}}
-        {{=BEAUTIFY(leak_extra)}}
+	{{for name, content, type in leak_extra: }}
+			<div class="material_{{=type}}">
+				<h2>{{=name}}</h2>
+				<p>{{=content}}</p>
+			</div>
     {{pass}}
 
     {{if leak_tags:}}
@@ -64,27 +115,32 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 
     <div class="material">
         <h3>Material</h3>
-        <ul>
-            {{for file in files:}}
-                <li class="{{=file.ext}}">{{=file.filename}} ({{=file.size}})</li>
-            {{pass}}
-        </ul>
-        {{if download_available and not whistleblower and download_available != -1: }}
-            {{url = tulip_url}}
-            <h3>Download</h3>
-            <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="zip">ZIP</a>
-            <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">Encrypted ZIP</a>
-            <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
-        {{pass}}
-        {{if download_available == -1:}}
-            <h3>Material has not been spooled yet... check back later</h3>
-        {{pass}}
+        <a href="#" class="button" id="add_material">Add</a>
+        <div class="material-entry">
+	        <ul>
+	            {{for file in files:}}
+	                <li class="{{=file.ext}}">{{=file.filename}} ({{=file.size}})</li>
+	            {{pass}}
+	        </ul>
+	        {{if download_available and not whistleblower and download_available != -1: }}
+	            {{url = tulip_url}}
+	            <h3>Download</h3>
+	            <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="zip">ZIP</a>
+	            <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">Encrypted ZIP</a>
+	            <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
+	        {{pass}}
+	        {{if download_available == -1:}}
+	            <h3>Material has not been spooled yet... check back later</h3>
+	        {{pass}}
+        </div>
         <div class="clear"></div>
 
     </div>
 
-    <h2>Feedbacks and Pertinentness (overall vote: {{=pertinentness}})</h2>
+    <!-- h2>Feedbacks and Pertinentness (overall vote: {{=pertinentness}})</h2 -->
 
+
+	<div id="comment-board">
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
             <p class="right_title">This is from the Whistleblower</p>
@@ -99,16 +155,17 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             {{pass}}
         {{pass}}
     {{pass}}
+    {{if not feedbacks:}}
+    	<p>No comments</p>
+    {{pass}}
 
     <form name="receiver_input" method="POST" action="">
         {{if not whistleblower: }}
-            <p>If you have questions for the Whistleblower, you are invited to write them in this box. This message can be viewed from anyone with a Tulip pointing to this material.</p>
+            <!-- p>If you have questions for the Whistleblower, you are invited to write them in this box. This message can be viewed from anyone with a Tulip pointing to this material.</p -->
         {{else:}}
-            <p>A receiver could express doubt, ask for clarifications and request help in understanding your submitted material. You are invited to answer those questions with the area below.</p>
-        {{pass}}
-        <textarea rows="10" name="Comment" cols="40"></textarea>
-        <p>If you have downloaded the Material and evaluated the pertinence of the submitted data, you are invited to express a vote. This could help other receivers to avoid wasting time from misleading submissions. When you express a vote, it would be nice to motivate it with an appropriate feedback.</p>
-        <br>
+<!--             <p>A receiver could express doubt, ask for clarifications and request help in understanding your submitted material. You are invited to answer those questions with the area below.</p> -->        {{pass}}
+        <input type="text" name="Comment">
+<!--         <p>If you have downloaded the Material and evaluated the pertinence of the submitted data, you are invited to express a vote. This could help other receivers to avoid wasting time from misleading submissions. When you express a vote, it would be nice to motivate it with an appropriate feedback.</p> -->        <br>
         {{if not whistleblower:}}
             {{if not previous_vote:}}
                 <table cellpadding="5" cellspacing="5" border="0" width="100%">
@@ -146,15 +203,10 @@ If you are not interested in receive Tulips, or want change the segnalation prop
          {{pass}}
         <input type="submit" name="send" value="Send your feedback">
     </form>
-    <br>
+	</div>
 
-    {{if not whistleblower:}}
-    <p class="intro">
-      <b><a href="/globaleaks/tulip/forward/{{=tulip_url}}">
-        Forward to another targetgroup
-      </a></b></p>
-    {{pass}}
 
+	<div id="tulip-access">
     <h2>Tulip accesses statistics</h2>
     <table class="targetlist">
         <thead>
@@ -190,6 +242,14 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             {{pass}}
         </tbody>
     </table>
+
+    {{if not whistleblower:}}
+    <p class="intro">
+      <b><a href="/globaleaks/tulip/forward/{{=tulip_url}}">
+        Forward to another targetgroup
+      </a></b></p>
+    {{pass}}
+	</div>
     
     {{if target_del_cap:}}
     <div class="description">You have the right to delete this submitted material. This effect delete also all the related Tulips for the other receiver.</div>

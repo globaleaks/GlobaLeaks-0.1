@@ -71,12 +71,12 @@ for m in mails:
     if MimeMail.send(to=m.address, subject=subject,
                      message_text=message_txt,
                      message_html=message_html):
-    
+
         logger.info("email sent.")
         db(db.mail.id==m.id).delete()
     else:
         logger.info("error in sending mail.")
-    
+
     # XXX Uncomment in real world environment
     # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
     #    m.target,message=message_html)
@@ -107,7 +107,7 @@ for file in os.listdir(path):
     error = RestrictedError()
     error.load(request, request.application, filename)
     logger.info("REQUEST-APP: %s" % dir(request))
-    
+
     logger.info("Sending email...")
 
     message = '<b>There has been an error on a node.</b><br>'
@@ -118,7 +118,7 @@ for file in os.listdir(path):
     message += "<h2>REQUEST: </h2><br> %s<br><br>" % error.snapshot['request']
     message += "<h2>SESSION:</h2><br>  %s<br><br>" % error.snapshot['session']
 
-    
+
     if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
                      message_text=message,
                      message_html=message):
