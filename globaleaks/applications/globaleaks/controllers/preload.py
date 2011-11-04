@@ -20,7 +20,7 @@ def js():
              '/js/fileupload/jquery.tmpl.min.js'
 
              ]
-    
+
     output_file = os.path.join(request.folder, 'static') + "/main_js_file.js"
     compressed_file = os.path.join(request.folder, 'static') + "/main_js_file.js.gz"
 
@@ -34,20 +34,20 @@ def js():
 
     fh = open(output_file, 'wb')
     fhg = gzip.open(compressed_file, 'wb')
-    
+
     to_minify = ""
-    
+
     for file in files:
         path = os.path.join(request.folder, 'static') + str(file)
         for line in open(path).readlines():
             fh.write(line)
             fhg.write(line)
             #to_minify += line
-            
+
     #fh.write(minify(to_minify, mangle=False))
-    fhg.close()     
+    fhg.close()
     fh.close()
-    
+
     return response.stream(open(compressed_file, 'rb'))
         #for line in open(path).readlines():
         #    output += line
@@ -73,10 +73,10 @@ def css():
     response.headers['Pragma'] = "cache"
 
     #time.strftime('%a, %d %b %Y %H:%M:%S GMT', time.gmtime())
-    
+
     if os.path.exists(output_file):
         return response.stream(open(output_file, 'rb'))
-    
+
     fh = open(output_file, 'wb')
     #fhg = gzip.open(compressed_file, 'wb')
 
@@ -86,7 +86,7 @@ def css():
             fh.write(line)
             #fhb.write(line)
 
-    #fhg.close()     
+    #fhg.close()
     fh.close()
 
     return response.stream(open(output_file, 'rb'))

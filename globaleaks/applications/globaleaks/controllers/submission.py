@@ -258,7 +258,6 @@ def index():
     if session.files:
         for f in session.files:
             existing_files.append(f)
-    print existing_files
 
     # Make the submission not spooled and set the timestamp
     form.vars.spooled = False

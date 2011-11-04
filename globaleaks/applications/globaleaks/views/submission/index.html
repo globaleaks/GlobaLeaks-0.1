@@ -69,25 +69,25 @@
 
 {{if not error and form:}}
 <script id="template-upload" type="text/x-jquery-tmpl">
-	{{=jQuery_templates[0]}}
+    {{=jQuery_templates[0]}}
 </script>
 
 <script id="template-download" type="text/x-jquery-tmpl">
-	{{=jQuery_templates[1]}}
+    {{=jQuery_templates[1]}}
 </script>
 {{pass}}
 
 <script type="text/javascript">
 function checkDisclaimer() {
-		if ($('#disclaimer')[0].checked == true){
-		$('.buttonFinish').removeClass('buttonDisabled');
-		return true;
-	}
-		if ($('#disclaimer')[0].checked == false){
-		$('.buttonFinish').addClass('buttonDisabled');
-		return true;
-		}
-	}
+        if ($('#disclaimer')[0].checked == true){
+        $('.buttonFinish').removeClass('buttonDisabled');
+        return true;
+    }
+        if ($('#disclaimer')[0].checked == false){
+        $('.buttonFinish').addClass('buttonDisabled');
+        return true;
+        }
+    }
 
 
 $(document).ready(function(){
@@ -97,8 +97,8 @@ $(document).ready(function(){
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
-    	url: "/globaleaks/submission/fileupload",
-    	autoUpload: true,
+        url: "/globaleaks/submission/fileupload",
+        autoUpload: true,
         /*
          * not working - would likely be fixed to support upload resume
         maxChunkSize: 1000000,
@@ -114,47 +114,47 @@ $(document).ready(function(){
 
         // those spaces used to avoid TWO GRAPH IN SEQUENCE
 
-   	});
+    });
 
     $('#fileupload').bind('fileuploadprogressall', function (e, data) {
-    	if (window.speedarray) {
+        if (window.speedarray) {
 
-    		var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
-    		window.average = (window.average + speed)/2;
-    		var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
-    		// console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
+            var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
+            window.average = (window.average + speed)/2;
+            var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
+            // console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
 
-    		if ((Date.now() - window.last_update) > 1000) {
-	    		$("#speedbox").children("span").replaceWith(
-	    			"<span>" + Math.round(window.average) + " KB/s (ETA: " + Math.round(eta*100)/100 + " mins)</span>"
-	    		);
-		 		window.last_update = Date.now();
-    		}
-    		window.speedarray = [Date.now(), data.loaded];
+            if ((Date.now() - window.last_update) > 1000) {
+                $("#speedbox").children("span").replaceWith(
+                    "<span>" + Math.round(window.average) + " KB/s (ETA: " + Math.round(eta*100)/100 + " mins)</span>"
+                );
+                window.last_update = Date.now();
+            }
+            window.speedarray = [Date.now(), data.loaded];
 
-    	} else {
-    		window.speedarray = [Date.now(), data.loaded];
-    		window.average = window.speedarray[1];
-    		window.last_update = Date.now() + 2000;
-    	}
+        } else {
+            window.speedarray = [Date.now(), data.loaded];
+            window.average = window.speedarray[1];
+            window.last_update = Date.now() + 2000;
+        }
 
-    	$('.buttonFinish').addClass('buttonDisabled');
-    	var new_height = $('#fileupload').parents('.content').innerHeight();
-    	$('.stepContainer').css('height', new_height);
+        $('.buttonFinish').addClass('buttonDisabled');
+        var new_height = $('#fileupload').parents('.content').innerHeight();
+        $('.stepContainer').css('height', new_height);
 
     });
 
     $('#fileupload').bind('fileuploadstop', function (e, data) {
-		$("#speedbox").children("span").replaceWith("<span></span>");
+        $("#speedbox").children("span").replaceWith("<span></span>");
     });
 
     $('#fileupload').bind('fileuploaddone', function (e, data) {
-    	$('.buttonFinish').removeClass('buttonDisabled');
-  	    checkDisclaimer();
+        $('.buttonFinish').removeClass('buttonDisabled');
+        checkDisclaimer();
 
-	    var new_height = $('#fileupload').parents('.content').innerHeight();
-    	$('.stepContainer').css('height', new_height);
-		$("#speedbox").children("span").replaceWith("<span></span>");
+        var new_height = $('#fileupload').parents('.content').innerHeight();
+        $('.stepContainer').css('height', new_height);
+        $("#speedbox").children("span").replaceWith("<span></span>");
     });
 
     // Load existing files:
@@ -179,23 +179,23 @@ $(document).ready(function(){
     });
 
     // Smart Wizard
-	$('#wizard').smartWizard({
-		transitionEffect: 'slide',
+    $('#wizard').smartWizard({
+        transitionEffect: 'slide',
         enableAllSteps: true,
-		enableFinishButton: false,
-		onShowStep: checkDisclaimer,
-		onFinish: onFinishCallback
-	});
+        enableFinishButton: false,
+        onShowStep: checkDisclaimer,
+        onFinish: onFinishCallback
+    });
 
     checkDisclaimer();
-	$('#disclaimer').change(function (){
-		checkDisclaimer();
-	});
+    $('#disclaimer').change(function (){
+        checkDisclaimer();
+    });
 
-	function onFinishCallback(){
-		$('#wizard').smartWizard('showMessage','Finish Clicked');
-		$('form').submit();
-	}
+    function onFinishCallback(){
+        $('#wizard').smartWizard('showMessage','Finish Clicked');
+        $('form').submit();
+    }
 
   // Load existing files:
   var files = [];
