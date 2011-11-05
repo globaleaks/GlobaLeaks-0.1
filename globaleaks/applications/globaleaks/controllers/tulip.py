@@ -4,9 +4,9 @@ This controller module contains every controller for accessing the tulip
 from a target
 """
 
+import gluon.contrib.simplejson as json
 import os
 import shutil
-import pickle
 
 mutils = local_import('material').utils()
 
@@ -121,7 +121,7 @@ def fileupload():
                                          filedata.filename))
 
             tulip.leak.add_material(tulip.leak.id, prog, None,
-                                    file=pickle.dumps(session.add_files))
+                                    file=json.dumps(session.add_files))
             session.add_files = None
             # Leak needs to be spooled again
             db(db.leak.id == tulip.leak.id).update(spooled=True)
@@ -258,7 +258,7 @@ def status():
     jQueryHelper = local_import('jquery_helper')
     upload_template = jQueryHelper.upload_tmpl()
     download_template = jQueryHelper.download_tmpl()
-    submission_mats = [(m.url, pickle.loads(m.file)) for m in leak.material]
+    submission_mats = [(m.url, json.loads(m.file)) for m in leak.material]
     print submission_mats
     return dict(err=None,delete=None,
             access_available=access_available,

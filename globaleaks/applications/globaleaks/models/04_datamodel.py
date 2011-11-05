@@ -1,4 +1,3 @@
-import pickle
 from gluon.contrib import simplejson as json
 
 class Material(object):
@@ -36,7 +35,7 @@ class Material(object):
 
     def get_files(self):
         files = db.material[self.id].file
-        return pickle.loads(files)
+        return json.loads(files)
 
     def set_files(self, id):
         print "Error: url is read only"

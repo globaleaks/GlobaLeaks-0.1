@@ -5,7 +5,15 @@ to edits its settings. (E.g.: Unsubscribe from a GL node)
 """
 def record_mandatory(vars):
     import os
-
+    print vars
+    if db.auth_user:
+        db.auth_user.insert(
+            first_name="GlobaLeaks",
+            last_name="Node",
+            email="node@globaleaks.org",
+            password=db.auth_user.password.validate(vars.administrative_password)[0])
+        logger.info("First launch of GlobaLeaks, creating node administrator!")
+        db.commit()
     install_ok_name = 'installstorage/.installed'
 
     with open(os.path.join(os.getcwd(), install_ok_name), 'w') as fp:
@@ -26,8 +34,7 @@ def configuration():
 
     # mandatory: admin login/password and node name
     mandatory_input = (
-                    Field('administrative_username', requires=IS_NOT_EMPTY()),
-                    Field('administrative_password', requires=IS_NOT_EMPTY()), 
+                    Field('administrative_password', requires=IS_NOT_EMPTY()),
                     Field('globaleaks_name', requires=IS_NOT_EMPTY()),
                    )
 
@@ -39,7 +46,7 @@ def configuration():
     # required
     required_input = (
                     Field('headline', requires=IS_NOT_EMPTY()),
-                    Field('tulip_expire_days', requires=IS_NOT_EMPTY()), 
+                    Field('tulip_expire_days', requires=IS_NOT_EMPTY()),
                     Field('tulip_max_download', requires=IS_NOT_EMPTY()),
                     Field('html_meta_keywords', requires=IS_NOT_EMPTY()),
                    )
@@ -59,13 +66,3 @@ def configuration():
 
     return dict(mandatory=mandatory_form, required=required_form, optional=optional_form)
 
-
-#if db.auth_user:
-#    if not db(db.auth_user.email=="node@globaleaks.org").select().first():
-#        db.auth_user.insert(
-#            first_name="Globaleaks node administrator",
-#            last_name="Globaleaks",
-#            email="node@globaleaks.org",
-#            password=db.auth_user.password.validate("testing")[0])
-#        logger.info("First launch of GlobaLeaks, creating node administrator!")
-#        db.commit()

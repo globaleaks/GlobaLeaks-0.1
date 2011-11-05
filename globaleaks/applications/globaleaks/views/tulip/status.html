@@ -48,8 +48,21 @@
         padding: 30px 20px 5px 40px;
         width: 600px;
         margin-bottom: 20px;
+        position: relative;
     }
 
+    .download-box {
+
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+
+    }
+
+    .download-box h3 {
+        font-size: 15px;
+
+    }
 </style>
 
 {{if err or delete:}}
@@ -134,9 +147,9 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         <p class="description">{{=leak_desc}}</p>
     {{pass}}
 
-    {{for name, content, type in leak_extra: }}
-            <div class="material_{{=type}}">
-                <h2>{{=name}}</h2>
+    {{for field_name, content, type in leak_extra: }}
+            <div class="material_submission material_{{=type}}">
+                <h2>{{=field_name}}</h2>
                 <p>{{=content}}</p>
             </div>
     {{pass}}
@@ -155,16 +168,19 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         <div class="material-entry">
             <ul>
                 {{for file in files:}}
-                    <li class="{{=file.ext}}">{{=file.filename}} ({{=file.size}})</li>
+                    <li class="{{=file['ext']}}">{{=file['filename']}} ({{=file['size']}})</li>
                 {{pass}}
             </ul>
             {{if download_available and not whistleblower and download_available != -1: }}
                 {{url = tulip_url+"/"+number if number else tulip_url}}
-                <h3>Download</h3>
-                <a href="/globaleaks/tulip/download/{{=url}}" class="zip">ZIP</a>
-                <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">Encrypted ZIP</a>
-                <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
+                <div class="download-box">
+                    <h3>Download</h3>
+                    <a href="/globaleaks/tulip/download/{{=url}}" class="zip">ZIP</a>
+                    <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">Encrypted ZIP</a>
+                    <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
+                </div>
             {{pass}}
+
             {{if download_available == -1:}}
                 <h3>Material has not been spooled yet... check back later</h3>
             {{pass}}
@@ -195,15 +211,21 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     <div id="comment-board">
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
-            <p class="right_title">This is from the Whistleblower</p>
-            <p class="right_intro">{{=feedback.comment}}</p>
+            <div class="comment" id="wb_comment">
+            <h2 class="name">Whistleblower</h2>
+            <p class="comment">{{=feedback.comment}}</p>
+            </div>
         {{else:}}
             {{if feedback.commenter_id == int(name):}}
-                <p class="left_title">This is your feedback</p>
-                <p class="left_intro">{{=feedback.comment}}</p>
+                <div class="comment" id="your_comment">
+                <h2 class="name">You</h2>
+                <p class="comment">{{=feedback.comment}}</p>
+                </div>
             {{else:}}
-                <p class="common_title">Receiver id #{{=feedback.commenter_id}}</p>
-                <p class="common_intro">{{=feedback.comment}}</p>
+                <div class="comment" id="other_comment">
+                    <h2 class="name">ID #{{=feedback.commenter_id}}</h2>
+                    <p class="comment">{{=feedback.comment}}</p>
+                </div>
             {{pass}}
         {{pass}}
     {{pass}}
@@ -216,11 +238,11 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             <!-- p>If you have questions for the Whistleblower, you are invited to write them in this box. This message can be viewed from anyone with a Tulip pointing to this material.</p -->
         {{else:}}
 <!--             <p>A receiver could express doubt, ask for clarifications and request help in understanding your submitted material. You are invited to answer those questions with the area below.</p> -->        {{pass}}
-        <input type="text" name="Comment">
+        <input type="text" id="comment" name="Comment">
 <!--         <p>If you have downloaded the Material and evaluated the pertinence of the submitted data, you are invited to express a vote. This could help other receivers to avoid wasting time from misleading submissions. When you express a vote, it would be nice to motivate it with an appropriate feedback.</p> -->        <br>
         {{if not whistleblower:}}
             {{if not previous_vote:}}
-                <table cellpadding="5" cellspacing="5" border="0" width="100%">
+<!--                 <table cellpadding="5" cellspacing="5" border="0" width="100%">
                     <tr>
                         <td><p class="voteImgText">IS pertinient</p></td>
                         <td><p class="voteImgText">is NOT pertinent</p></td>
@@ -243,6 +265,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                     </tr>
                 </table>
                 <input type="hidden" name="Vote" id="expressed_vote">
+                -->
              {{else:}}
                  your previous vote was:<b>
                  {{if previous_vote == "-1":}}
@@ -259,12 +282,12 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 
 
     <div id="tulip-access">
-    <h2>Tulip accesses statistics</h2>
+    <h2>Tulip access statistics</h2>
     <table class="targetlist">
         <thead>
-            <th class="downloads">Id #</th>
-            <th class="downloads">pertinence vote</th>
-            <th class="downloads">text feedbacks</th>
+            <th class="downloads">ID</th>
+<!--             <th class="downloads">pertinence vote</th> -->
+            <th class="downloads">Comments</th>
             <th class="downloads">Views</th>
             <th class="downloads">Downloads</th>
         </thead>
@@ -279,23 +302,23 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 {{pass}}
              {{if peer.target_id != "0":}}
                  <td class="name">{{=i}}</td>
-                 <td class="downloads">{{=peer.express_vote}}</td>
+<!--                  <td class="downloads">{{=peer.express_vote}}</td> -->
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
                  <td class="downloads">{{=peer.downloads_counter}}/{{=tulip_allowed_download}}</td>
              {{else:}}
                  <td class="name">Whistleblower</td>
-                 <td class="downloads">not permitted</td>
+<!--                  <td class="downloads">not permitted</td> -->
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
-                 <td class="downloads">not permitted</td>
+                 <td class="downloads">-</td>
              {{pass}}
             </tr>
             {{pass}}
         </tbody>
     </table>
 
-    {{if not whistleblower:}}
+    {{if 0: #not whistleblower:}}
     <p class="intro">
       <b><a href="/globaleaks/tulip/forward/{{=tulip_url}}">
         Forward to another targetgroup
@@ -406,6 +429,54 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             var new_height = $('#fileupload').parents('.content').innerHeight();
             $('.stepContainer').css('height', new_height);
             $("#speedbox").children("span").replaceWith("<span></span>");
+        });
+
+        $('#comment').keypress(function(e) {
+            var comment = $('#comment');
+            if(comment.val().length > 10) {
+                console.log(e);
+                var pos = comment.val().length;
+
+                comment.replaceWith('<textarea name="Comment" id="comment" rows="4">' + comment.val() + '</textarea>');
+
+                comment = $("#comment").get(0);
+
+                if (comment.setSelectionRange) {
+                    console.log("USING 1");
+                    console.log($(this));
+                  comment.setSelectionRange(pos, pos);
+                  comment.focus();
+
+                } else if (comment.createTextRange) {
+                  var range = comment.createTextRange();
+                  range.collapse(true);
+                  range.moveEnd('character', pos);
+                  range.moveStart('character', pos);
+                  range.select();
+                  comment.focus();
+                }
+            }
+
+//
+                // new function($) {
+  // $.fn.setCursorPosition = function(pos) {
+    // if ($(this).get(0).setSelectionRange) {
+      // $(this).get(0).setSelectionRange(pos, pos);
+    // } else if ($(this).get(0).createTextRange) {
+      // var range = $(this).get(0).createTextRange();
+      // range.collapse(true);
+      // range.moveEnd('character', pos);
+      // range.moveStart('character', pos);
+      // range.select();
+    // }
+  // }
+// }(jQuery);
+//
+//
+//
+// FieldRange.select();
+//
+                // $('#comment').setCursorPosition($("#comment").val().length);
         });
     });
     </script>

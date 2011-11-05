@@ -1,10 +1,10 @@
 #!/bin/sh
 
-yellow="\e[1;33m"
-blue="\e[1;34m"
-violet="\e[1;35m"
-red="\e[1;31m"
-green="\e[1;32m"
+yellow="\033[1;33m"
+blue="\033[1;34m"
+violet="\033[1;35m"
+red="\033[1;31m"
+green="\033[1;32m"
 
 INSTORG="installstorage"
 
@@ -24,7 +24,7 @@ help() {
 
 clean() {
     echo "${yellow}checking directory..."
-    if [ -d $INSTORG ]; then 
+    if [ -d $INSTORG ]; then
         echo "   ${green}$PWD: ${yello}ok"
     else
         echo "   ${red}$PWD: run this script without a prefix path"; fancy_quit

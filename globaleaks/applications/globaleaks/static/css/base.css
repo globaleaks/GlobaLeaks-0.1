@@ -255,55 +255,52 @@ border-radius:5px;
 }
 
 /* right_intro, common_intro and left_intro are used in feedbacks visualization */
-.common_intro {
-    line-height: 15px;
-    text-align: right;
-    text-color: #0bb202;
-    margin-bottom: 15px;
-    background: #ededed;
-    padding: 15px;
+
+.comment {
+    position: relative;
+    margin-bottom: 50px;
 }
 
-.right_intro {
-    line-height: 15px;
-    text-align: right;
-    text-color: #14de14;
-    margin-bottom: 15px;
-    background: #edbded;
-    padding: 15px;
+#other_comment.comment h2 {
+    position: absolute;
+    left: 4px;
+    bottom: -30px;
 }
 
-.left_intro {
-    line-height: 15px;
-    text-color: #14ae14;
-    text-align: left;
-    margin-bottom: 15px;
-    background: #adadad;
-    padding: 15px;
+#other_comment.comment p {
+    padding: 10px 10px 10px 30px;
+    border-radius: 50px 10px 10px 10px;
+    background-color: #CCC;
+    margin-bottom: 20px;
 }
 
-.description {
-    line-height: 15px;
-    text-color: #039e44;
-    text-align: left;
-    margin-bottom: 15px;
-    background: #dddddd;
-    padding: 15px;
+
+#your_comment.comment h2 {
+    position: absolute;
+    left: 4px;
+    bottom: -30px;
 }
 
-.left_title {
-    text-color: #adadad;
+#your_comment.comment p {
+    padding: 10px 10px 10px 30px;
+    border-radius: 50px 10px 10px 10px;
+    background-color: #F8ECC2;
+    margin-bottom: 20px;
 }
 
-.right_title {
-    text-align: right;
-    font-weight: bold;
-    color: #04100d;
+#wb_comment.comment h2 {
+    position: absolute;
+    right: 4px;
+    bottom: -30px;
 }
 
-.common_title {
-    text-color: #ededed;
+#wb_comment.comment p {
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px 50px 10px 10px;
+    background-color: #FA5858;
+    margin-bottom: 20px;
 }
+
 
 .voteImg {
     width: 90px;
@@ -451,35 +448,34 @@ border-radius:5px;
 }
 
 #content table.targetlist th {
-    //background: #005ea3;
-    background: #444;
+    background: #005ea3;
+    //background: #444;
     color: #fff;
-    border: 1px solid #fff;
-    border-bottom: 2px solid #fff;
     font-weight: bold;
     padding: 5px;
     text-align: left;
 }
 
+#content table.targetlist tr {
+    padding-bottom: 20px;
+}
+
 #content table.targetlist td {
-    border: 1px solid #fff;
-    border-bottom: 2px solid #fff;
     padding: 5px;
     background: #ededed;
     text-align: left;
+    margin-bottom: 20px;
+    
 }
 
 #content table.targetlist tr.odd td {
     background: #f5f5f5;
-    border-left: 1px solid #aaaaaa;
-    border-top: 1px solid #999999;
-    border-bottom: 1px solid #333333;
-    border-right: 1px solid #000000;
 }
 
 #content .delete {
     text-align: center;
 }
+
 
 #content .delete button {
     background: #e60000;
@@ -560,11 +556,16 @@ border-radius:5px;
 }
 
 .material a.zip {
+    font-size: 10px;
     background: #0a70b4 url('/globaleaks/static/images/icon-download-zip.png') no-repeat 5px center;
 }
 
 .material a.crypt {
-    background: #0a70b4 url('/globaleaks/static/images/icon-download-crypt.png') no-repeat 5px center;
+    font-size: 10px;
+    //background: #0a70b4 url('/globaleaks/static/images/icon-download-crypt.png') no-repeat 5px center;
+    background: #CCCCCC url('/globaleaks/static/images/icon-download-crypt.png') no-repeat 5px center;
+    cursor: text;
+
 }
 
 .downloads-left {
@@ -594,6 +595,25 @@ border-radius:5px;
     background: #444;
     color: #fff;
     margin: 20px 0;
+}
+
+.entry .material_submission  {
+-moz-border-radius: 5px;
+border-radius: 5px;
+
+}
+.entry .material_submission h2 {
+    margin-top: 20px;
+}
+
+.entry .material_submission p {
+    background-color: #CCCCCC;
+    padding: 10px 10px;
+}
+
+
+.entry .material_string {
+    width: 200px;
 }
 
 #footer {

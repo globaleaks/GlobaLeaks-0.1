@@ -5,7 +5,6 @@ This controller module contains every controller for leak submission.
 
 import os
 import random
-import pickle
 import time
 from gluon.tools import Service
 import gluon.contrib.simplejson as json
@@ -66,7 +65,7 @@ def api():
                                  dirname=session.dirname)
         if not session.files:
             session.files = []
-        pfile = pickle.dumps(session.files)
+        pfile = json.dumpsumps(session.files)
 
         leak = Leak(leak_id)
         leak.add_material(leak_id, None, None, file=pfile)
@@ -81,7 +80,7 @@ def api():
         # format the pretty number for being saved like a phone number
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
                         " " + wb_number[0][6:]
-                        
+
         session.dirname = None
         session.wb_id = None
         session.files = None
@@ -246,7 +245,7 @@ def index():
         # this is the only error handled at the moment, the fact that __init__
         # could return only None, maybe an issue when more errors might be managed
         if not hasattr(form, 'vars'):
-            return dict(error='No receiver groups has been configured in this node')
+            return dict(error='No receiver groups has been configured in this node', existing_files=[])
 
     else:
         form = SQLFORM(db.leak,
@@ -315,7 +314,7 @@ def index():
         if not session.files:
             session.files = []
         # XXX verify that this is safe
-        pfile = pickle.dumps(session.files)
+        pfile = json.dumps(session.files)
 
         # leak_id has been used in the previous code as this value,
         # I'm keeping to don't change the following lines
@@ -350,12 +349,13 @@ def index():
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
                         " " + wb_number[0][6:]
-                        
+
         session.wb_number = pretty_number
         # Clean up all sessions
         session.dirname = None
         session.wb_id = None
         session.files = None
+        print "Existing Files: %s" % existing_files
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number, error=None,
                     form=None, tulip_url=wb_number[1], jQuery_templates=None,
