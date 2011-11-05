@@ -15,30 +15,38 @@ import urllib
 import shutil
 import time
 
+randomizer = local_import("randomizer")
+
 class UploadHandler:
     def __init__(self, options=None):
+        if not session.upload_dir:
+            session.upload_dir = randomizer.generate_dirname()
         self.__options = {
-                    'script_url' : request.env.path_info,
-                    'upload_dir': request.folder + 'uploads', # Maybe this
-                    'upload_url': '', # .. and this should removed?
-                    'param_name': 'files[]',
-                    'max_file_size': None,
-                    'min_file_size': 1,
-                    'accept_file_types': 'ALL',
-                    'max_number_of_files': None,
-                    'discard_aborted_uploads': True,
-                    'chunksize': None,
-                    'image_versions': {
-                                    'thumbnail': {
-                                                'upload_dir': request.folder + '/thumbnails/',
-                                                'upload_uri': request.env.path_info + '/thumbnails/',
-                                                'max_width': 80,
-                                                'max_height': 80
-                                                }
-                                    }
-                    }
+            'script_url' : request.env.path_info,
+            'upload_dir': os.path.join(request.folder, 'uploads',
+                                       session.upload_dir),
+            'upload_url': '',  # .. and this should removed?
+            'param_name': 'files[]',
+            'max_file_size': None,
+            'min_file_size': 1,
+            'accept_file_types': 'ALL',
+            'max_number_of_files': None,
+            'discard_aborted_uploads': True,
+            'chunksize': None,
+            'image_versions': {
+                'thumbnail': {
+                    'upload_dir': request.folder + '/thumbnails/',
+                    'upload_uri': request.env.path_info + '/thumbnails/',
+                    'max_width': 80,
+                    'max_height': 80
+                }
+            }
+        }
         if options:
             self.__options = options
+        else:
+            if not os.path.exists(self.__options["upload_dir"]):
+                os.makedirs(self.__options["upload_dir"])
 
     def __get_file_object(self, file_name):
         file_path = os.path.join(self.__options['upload_dir'], file_name)
@@ -256,14 +264,20 @@ class UploadHandler:
         return dict(error=True)
 
     def delete(self, uploads=None):
-        file_name = os.path.basename(request.vars.deletefile) if request.vars.deletefile else None
+        file_name = os.path.basename(request.vars.deletefile) \
+                    if request.vars.deletefile else None
         if not uploads:
-            file_path = os.path.join(request.folder,'material',self.get_file_dir(),file_name)
+            file_path = os.path.join(request.folder, 'material',
+                                     self.get_file_dir(), file_name)
         else:
-            file_path = os.path.join(request.folder,'uploads',file_name)
-        success = os.path.isfile(file_path) and file_name[0] != "." and os.remove(file_path)
+            file_path = os.path.join(request.folder, 'uploads',
+                                     session.upload_dir, file_name)
+        success = False
+        if os.path.isfile(file_path) and file_name[0] != ".":
+            os.remove(file_path)
+            success = True
         if success:
-            return {'result': 'success'}
+            return {'success': 'true'}
         else:
-            return {'result': 'fail'}
+            return {'success': 'false'}
 

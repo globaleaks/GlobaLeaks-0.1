@@ -101,7 +101,6 @@ def fileupload():
     if not session.files:
         session.files = []
 
-
     def GET(file=None, deletefile=None, uploads=None):
 
         if deletefile:
@@ -112,7 +111,8 @@ def fileupload():
 
             filedir = FileUpload.get_file_dir()
 
-            src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
+            src_file = os.path.join(request.folder, 'uploads',
+                                    session.upload_dir, upload[0]['name'])
             dst_folder = os.path.join(request.folder, 'material', filedir)
 
             return json.dumps(upload)
@@ -121,7 +121,6 @@ def fileupload():
 
         else:
             return "not implemented"
-
 
     def POST(**vars):
         upload = FileUpload.post()
@@ -147,7 +146,8 @@ def fileupload():
 
         filedir = FileUpload.get_file_dir()
 
-        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
+        src_file = os.path.join(request.folder, 'uploads', session.upload_dir,
+                                upload[0]['name'])
         dst_folder = os.path.join(request.folder, 'material', filedir)
 
         if not os.path.isdir(dst_folder):
@@ -287,6 +287,7 @@ def index():
 
                     tmp_fpath = os.path(os.path.join(request.folder,
                                                      'uploads',
+                                                     session.upload_dir,
                                                      tmp_file + filename))
 
                     f.size = os.path.getsize(tmp_fpath)
@@ -299,6 +300,7 @@ def index():
                         os.mkdir(dst_folder)
                     os.rename(os.path.join(request.folder,
                                            'uploads',
+                                           session.upload_dir,
                                            tmp_file),
                               dst_folder + filename)
                 # XXX define exception for this except
