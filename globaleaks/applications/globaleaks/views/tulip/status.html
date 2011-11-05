@@ -196,7 +196,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             {{pass}}
         </div>
         {{pass}}
-
+        {{if not whistleblower:}}
         <div class="material-entry">
             <div class="complete-box">
                 <h3>Complete Download</h3>
@@ -205,7 +205,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
             </div>
         </div>
-
+        {{else:}}
         <div class="material-entry" id="fileupload">
             <form action="" method="POST" enctype="multipart/form-data">
                 <div class="fileupload-buttonbar">
@@ -221,6 +221,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             </div>
             <a href="javascript:void(0)" class="button" id="add_material_done">Done</a>
         </div>
+        {{pass}}
         <div class="clear"></div>
 
     </div>
