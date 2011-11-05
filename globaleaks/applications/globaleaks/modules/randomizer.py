@@ -26,10 +26,10 @@ def generate_human_dirname(request, leak, old_dirname):
     # Name like Data-$Title-$ID-$progressivo-.zip
     prog = 1
     title = __sanitize_title(leak.title)
-    dirname = "Data-%s-%s-%d" % (title, old_dirname[:4], str(prog))
+    dirname = "Data-%s-%s-%s" % (title, old_dirname[:4], str(prog))
     while os.path.exists(os.path.join(request.folder, 'material', dirname)):
         prog += 1
-        dirname = "Data-%s-%s-%d" % (title, old_dirname[:4], str(prog))
+        dirname = "Data-%s-%s-%s" % (title, old_dirname[:4], str(prog))
     return dirname
 
 def is_human_dirname(dirname):

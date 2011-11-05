@@ -334,7 +334,7 @@ class Tulip(object):
     target = property(get_target, set_target)
 
     def is_wb(self):
-        return int(self.get_target) == 0
+        return int(self.target) == 0
 
     def get_allowed_accesses(self):
         return db.tulip[self.id].allowed_accesses

@@ -88,6 +88,8 @@ def fileupload():
             return json.dumps({"success": "false"})
 
         if deletefile:
+            session.add_files = [f for f in session.add_files \
+                                 if f.filename != deletefile]
             return json.dumps(FileUpload.delete(uploads=True))
         elif file:
             upload = json.loads(FileUpload.get())
@@ -116,16 +118,21 @@ def fileupload():
             for filedata in session.add_files:
                 src_file = os.path.join(request.folder, 'uploads',
                                         filedata.filename)
-                shutil.move(src_file,
-                            os.path.join(dst_folder.decode("utf-8"),
-                                         filedata.filename))
+                try:
+                    shutil.move(src_file,
+                                os.path.join(dst_folder.decode("utf-8"),
+                                             filedata.filename))
+                except OSError:
+                    pass
 
             tulip.leak.add_material(tulip.leak.id, prog, None,
                                     file=json.dumps(session.add_files))
+            add_files = [(f.ext, f.filename, f.size)
+                         for f in session.add_files]
             session.add_files = None
             # Leak needs to be spooled again
-            db(db.leak.id == tulip.leak.id).update(spooled=True)
-            return json.dumps({"success": "true"})
+            db(db.leak.id == tulip.leak.id).update(spooled=False)
+            return json.dumps({"success": "true", "data": add_files})
         elif uploads:
             return "not implemented"
         else:
@@ -138,7 +145,7 @@ def fileupload():
             return json.dumps({"success": "false"})
         if not tulip.is_wb():
             return json.dumps({"success": "false"})
-
+        print tulip_url
         upload = FileUpload.post(tulip.leak.id)
 
         upload = json.loads(upload)
@@ -259,7 +266,6 @@ def status():
     upload_template = jQueryHelper.upload_tmpl()
     download_template = jQueryHelper.download_tmpl()
     submission_mats = [(m.url, json.loads(m.file)) for m in leak.material]
-    print submission_mats
     return dict(err=None,delete=None,
             access_available=access_available,
             download_available=download_available,
@@ -306,7 +312,6 @@ def download_increment(tulip):
 
 def download():
     import os
-    print request.args
     try:
         tulip_url = request.args[0]
     except IndexError:
@@ -325,7 +330,7 @@ def download():
     filename = db(db.submission.leak_id==leak.id).select().first().dirname
     try:
         filename = "%s-%s" % (filename, request.args[1])
-    except KeyError:
+    except IndexError:
         pass
     response.headers['Content-Type'] = "application/octet"
     response.headers['Content-Disposition'] = 'attachment; filename="' + \

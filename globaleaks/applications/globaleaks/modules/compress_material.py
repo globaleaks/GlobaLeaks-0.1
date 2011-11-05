@@ -7,7 +7,7 @@ class Zip:
     Class that creates the material archive.
     """
     def create_zip(self, db, submission, request, logger, passwd=None,
-                   mat_dir=None):
+                   mat_dir=None, no_subdirs=None):
         """
         Function to create an unencrypted zipfile
         """
@@ -27,17 +27,33 @@ class Zip:
                 splitted = os.path.split(mat_dir)
                 if splitted[-1].isdigit():
                     filedir = "%s-%s" % (splitted[-2], splitted[-1])
-                save_file = filedir
+                if no_subdirs:
+                    save_file = filedir + "-0"
+                    # get only files, no subdirectories
+                    files = [f for f in os.listdir(mat_dir)
+                             if not os.path.isdir(os.path.join(mat_dir, f))]
+                else:
+                    save_file = filedir
+                    files = os.listdir(mat_dir)
                 # XXX: issue #51
                 if passwd and os.path.exists(mat_dir):
                     cmd = 'zip -e -P%(passwd) %(zipfile).zip %(files)' % dict(
-                           passwd = passwd, zipfile=filedir,
-                           files = ' '.join(os.listdir(mat_dir)))
+                           passwd=passwd, zipfile=filedir,
+                           files=" ".join(files))
                     subprocess.check_call(cmd.split())
                 elif not passwd and os.path.exists(mat_dir):
                     zipf = zipfile.ZipFile(save_file+'.zip', 'w')
-                    for f in os.listdir(mat_dir):
-                        zipf.write(os.path.join(mat_dir, f), f)
+                    for f in files:
+                        path = os.path.join(mat_dir, f)
+                        zipf.write(path, f)
+                        subdirs = os.walk(path)
+                        for subdir in subdirs:
+                            inner_subdir = os.path.split(subdir[0])[-1]
+                            if not inner_subdir.isdigit():
+                                inner_subdir = ""
+                            for subfile in subdir[2]:
+                                zipf.write(os.path.join(subdir[0], subfile),
+                                           os.path.join(inner_subdir,subfile))
                 else:
                     logger.error('create_zip: invalid path')
             except RuntimeError as err:

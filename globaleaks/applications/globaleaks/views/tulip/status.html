@@ -52,7 +52,13 @@
     }
 
     .download-box {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
 
+    }
+
+    .download-box {
         position: absolute;
         bottom: 10px;
         right: 10px;
@@ -61,8 +67,12 @@
 
     .download-box h3 {
         font-size: 15px;
-
     }
+
+    .complete-box h3 {
+        font-size: 20px;
+    }
+
 </style>
 
 {{if err or delete:}}
@@ -172,7 +182,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 {{pass}}
             </ul>
             {{if download_available and not whistleblower and download_available != -1: }}
-                {{url = tulip_url+"/"+number if number else tulip_url}}
+                {{url = tulip_url+"/"+number if number else tulip_url+"/0"}}
                 <div class="download-box">
                     <h3>Download</h3>
                     <a href="/globaleaks/tulip/download/{{=url}}" class="zip">ZIP</a>
@@ -186,6 +196,16 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             {{pass}}
         </div>
         {{pass}}
+
+        <div class="material-entry">
+            <div class="complete-box">
+                <h3>Complete Download</h3>
+                <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="zip">ZIP</a>
+                <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">Encrypted ZIP</a>
+                <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
+            </div>
+        </div>
+
         <div class="material-entry" id="fileupload">
             <form action="" method="POST" enctype="multipart/form-data">
                 <div class="fileupload-buttonbar">
@@ -370,9 +390,28 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         $('#fileupload').hide();
         $("#add_material").click(function() { $('#fileupload').show(); });
         $("#add_material_done").click(function() {
-            $.getJSON('/globaleaks/tulip/fileupload/'+tulip[tulip.length-1]+"/?commit=1");
+            $.getJSON('/globaleaks/tulip/fileupload/'+tulip[tulip.length-1]+"/?commit=1",
+                      function(data) {
+                          if (data.success == "true") {
+                              $("#fileupload").remove(".files");
+                              $('#fileupload').hide();
+                          }
+                          else {
+                              alert("Upload failed! :(");
+                          }
+                          var new_div = $("<div/>").addClass("material-entry");
+                          var new_ul = $("<ul/>");
+                          for (var i=0;i<data.data.length;i++) {
+                              var new_li = $("<li/>").addClass(data.data[i][0]);
+                              new_li.text(data.data[i][1]+" "+data.data[i][2]);
+                              new_li.appendTo(new_ul);
+                          }
+                          new_ul.appendTo(new_div);
+                          new_div.hide();
+                          new_div.insertAfter($(".material-entry:last"));
+                          new_div.fadeIn("fast");
+            });
         });
-
         // Initialize the jQuery File Upload widget:
         $('#fileupload').fileupload({
             url: "/globaleaks/tulip/fileupload/"+tulip[tulip.length-1],

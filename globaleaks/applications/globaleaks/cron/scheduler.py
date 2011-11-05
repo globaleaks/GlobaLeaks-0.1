@@ -35,6 +35,7 @@ for leak_to_spool in unspooled:
         db(db.submission.id == submission.id).update(dirname=human_dirname)
     human_path = os.path.join(request.folder, "material", submission.dirname)
     compressor.create_zip(db, leak_to_spool, request, logger)
+    compressor.create_zip(db, leak_to_spool, request, logger, no_subdirs=True)
     first = True
     for directory in os.walk(human_path):
         if not first:
