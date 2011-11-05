@@ -85,7 +85,7 @@ def fileupload():
             db(db.leak.id == tulip.leak.id).update(spooled=True)
             return json.dumps(FileUpload.delete())
         elif file:
-            upload = json.loads(FileUpload.get()
+            upload = json.loads(FileUpload.get())
 
             filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
 
