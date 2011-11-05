@@ -255,9 +255,12 @@ class UploadHandler:
 
         return dict(error=True)
 
-    def delete(self):
+    def delete(self, uploads=None):
         file_name = os.path.basename(request.vars.deletefile) if request.vars.deletefile else None
-        file_path = os.path.join(request.folder,'material',self.get_file_dir(),file_name)
+        if not uploads:
+            file_path = os.path.join(request.folder,'material',self.get_file_dir(),file_name)
+        else:
+            file_path = os.path.join(request.folder,'uploads',file_name)
         success = os.path.isfile(file_path) and file_name[0] != "." and os.remove(file_path)
         if success:
             return {'result': 'success'}

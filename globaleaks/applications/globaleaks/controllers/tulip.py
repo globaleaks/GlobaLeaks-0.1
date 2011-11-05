@@ -5,6 +5,8 @@ from a target
 """
 
 import os
+import shutil
+import pickle
 
 mutils = local_import('material').utils()
 
@@ -73,17 +75,20 @@ def fileupload():
     """
     response.view = 'generic.json'
 
-    def GET(file=None, deletefile=None, uploads=None):
+    if not session.add_files:
+        session.add_files = []
+
+    def GET(tulip_url, file=None, deletefile=None, uploads=None, commit=None):
         try:
             tulip_url = request.args[0]
             tulip = Tulip(url=tulip_url)
         except:
             return json.dumps({"success": "false"})
+        if not tulip.is_wb():
+            return json.dumps({"success": "false"})
 
         if deletefile:
-            # Leak needs to be spooled again
-            db(db.leak.id == tulip.leak.id).update(spooled=True)
-            return json.dumps(FileUpload.delete())
+            return json.dumps(FileUpload.delete(uploads=True))
         elif file:
             upload = json.loads(FileUpload.get())
 
@@ -94,17 +99,44 @@ def fileupload():
             dst_folder = os.path.join(request.folder, 'material', filedir)
 
             return json.dumps(upload)
+        elif commit:
+            if not session.add_files:
+                return json.dumps({"success": "false"})
+            filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
+            # finding right progressive number
+            prog = 1
+            dst_folder = os.path.join(request.folder, 'material',
+                                      filedir, str(prog))
+            while os.path.exists(dst_folder):
+                prog += 1
+                dst_folder = os.path.join(request.folder, 'material',
+                                          filedir, str(prog))
+            os.makedirs(dst_folder)
+
+            for filedata in session.add_files:
+                src_file = os.path.join(request.folder, 'uploads',
+                                        filedata.filename)
+                shutil.move(src_file,
+                            os.path.join(dst_folder.decode("utf-8"),
+                                         filedata.filename))
+
+            tulip.leak.add_material(tulip.leak.id, prog, None,
+                                    file=pickle.dumps(session.add_files))
+            session.add_files = None
+            # Leak needs to be spooled again
+            db(db.leak.id == tulip.leak.id).update(spooled=True)
+            return json.dumps({"success": "true"})
         elif uploads:
             return "not implemented"
         else:
-            return "not implemented"
-        return json.dumps({"success": "false"})
+            return json.dumps({"success": "false"})
 
     def POST(tulip_url, **vars):
         try:
             tulip = Tulip(url=tulip_url)
         except:
-            print tulip_url, "NOT FOUND"
+            return json.dumps({"success": "false"})
+        if not tulip.is_wb():
             return json.dumps({"success": "false"})
 
         upload = FileUpload.post(tulip.leak.id)
@@ -126,18 +158,7 @@ def fileupload():
 
         filedata.ext = mutils.file_type(upload[0]['name'].split(".")[-1])
 
-        filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
-
-        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
-        dst_folder = os.path.join(request.folder, 'material', filedir)
-
-        if not os.path.isdir(dst_folder):
-            os.makedirs(dst_folder)
-
-        os.rename(src_file, os.path.join(dst_folder, upload[0]['name']))
-
-        # Leak needs to be spooled again
-        db(db.leak.id == tulip.leak.id).update(spooled=True)
+        session.add_files.append(filedata)
 
         return json.dumps(upload)
 
@@ -237,7 +258,8 @@ def status():
     jQueryHelper = local_import('jquery_helper')
     upload_template = jQueryHelper.upload_tmpl()
     download_template = jQueryHelper.download_tmpl()
-
+    submission_mats = [(m.url, pickle.loads(m.file)) for m in leak.material]
+    print submission_mats
     return dict(err=None,delete=None,
             access_available=access_available,
             download_available=download_available,
@@ -262,7 +284,7 @@ def status():
             target_del_cap=delete_capability,
             target_url=target_url,
             targets=gl.get_targets("ANY"),
-            files=pickle.loads(leak.material.file),
+            submission_materials=submission_mats,
             jQuery_templates=(XML(upload_template),
                               XML(download_template))
             )
@@ -273,7 +295,7 @@ def download_increment(tulip):
     if (int(tulip.downloads_counter) > int(tulip.allowed_downloads)):
         return False
 
-    if t.downloads_counter:
+    if tulip.downloads_counter:
         new_count = int(tulip.downloads_counter) + 1
         db.tulip[tulip.target].update_record(downloads_counter=new_count)
     else:
@@ -284,7 +306,7 @@ def download_increment(tulip):
 
 def download():
     import os
-
+    print request.args
     try:
         tulip_url = request.args[0]
     except IndexError:
@@ -300,13 +322,17 @@ def download():
 
     leak = t.get_leak()
 
+    filename = db(db.submission.leak_id==leak.id).select().first().dirname
+    try:
+        filename = "%s-%s" % (filename, request.args[1])
+    except KeyError:
+        pass
     response.headers['Content-Type'] = "application/octet"
     response.headers['Content-Disposition'] = 'attachment; filename="' + \
-                                              tulip_url + '.zip"'
+                                              filename + '.zip"'
 
     download_file = os.path.join(request.folder, 'material/',
-                           db(db.submission.leak_id==leak.id).select().first(
-                           ).dirname + '.zip')
+                                 filename + '.zip')
 
     # XXX to make proper handlers to manage the fetch of dirname
     return response.stream(open(download_file, 'rb'))

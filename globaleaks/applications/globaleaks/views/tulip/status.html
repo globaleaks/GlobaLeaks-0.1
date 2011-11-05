@@ -36,6 +36,13 @@
         background-color: green;
     }
 
+    #content a#add_material_done {
+        width: 100px;
+        position: absolute;
+        padding: 5px 10px;
+        background-color: green;
+    }
+
     #content .material-entry {
         background-color: #5A5655;
         padding: 30px 20px 5px 40px;
@@ -141,7 +148,10 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 
     <div class="material">
         <h3>Material</h3>
-        <a href="javascript:void(0);" class="button" id="add_material">Add</a>
+        {{if whistleblower:}}
+            <a href="javascript:void(0);" class="button" id="add_material">Add</a>
+        {{pass}}
+        {{for number, files in submission_materials:}}
         <div class="material-entry">
             <ul>
                 {{for file in files:}}
@@ -149,18 +159,19 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 {{pass}}
             </ul>
             {{if download_available and not whistleblower and download_available != -1: }}
-                {{url = tulip_url}}
+                {{url = tulip_url+"/"+number if number else tulip_url}}
                 <h3>Download</h3>
-                <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="zip">ZIP</a>
-                <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">Encrypted ZIP</a>
-                <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
+                <a href="/globaleaks/tulip/download/{{=url}}" class="zip">ZIP</a>
+                <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">Encrypted ZIP</a>
+                <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
             {{pass}}
             {{if download_available == -1:}}
                 <h3>Material has not been spooled yet... check back later</h3>
             {{pass}}
         </div>
+        {{pass}}
         <div class="material-entry" id="fileupload">
-            <form action="upload.php" method="POST" enctype="multipart/form-data">
+            <form action="" method="POST" enctype="multipart/form-data">
                 <div class="fileupload-buttonbar">
                     <label class="fileinput-button">
                         <span>Add files...</span>
@@ -172,6 +183,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 <table class="files"></table>
                 <div class="fileupload-progressbar"></div>
             </div>
+            <a href="javascript:void(0)" class="button" id="add_material_done">Done</a>
         </div>
         <div class="clear"></div>
 
@@ -330,13 +342,17 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             cleanPertinence();
         }
 
+        var tulip = window.location.href.split("/");
+
         $('#fileupload').hide();
         $("#add_material").click(function() { $('#fileupload').show(); });
+        $("#add_material_done").click(function() {
+            $.getJSON('/globaleaks/tulip/fileupload/'+tulip[tulip.length-1]+"/?commit=1");
+        });
 
         // Initialize the jQuery File Upload widget:
-        var tulip = window.location.href.split("/");
         $('#fileupload').fileupload({
-            url: "/globaleaks/tulip/fileupload/" + tulip[tulip.length-1],
+            url: "/globaleaks/tulip/fileupload/"+tulip[tulip.length-1],
             autoUpload: true,
             /*
              * not working - would likely be fixed to support upload resume
