@@ -81,7 +81,7 @@ def api():
         # format the pretty number for being saved like a phone number
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
                         " " + wb_number[0][6:]
-
+                        
         session.dirname = None
         session.wb_id = None
         session.files = None
@@ -351,7 +351,8 @@ def index():
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
                         " " + wb_number[0][6:]
-
+                        
+        session.wb_number = pretty_number
         # Clean up all sessions
         session.dirname = None
         session.wb_id = None

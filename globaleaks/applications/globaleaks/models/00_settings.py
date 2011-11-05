@@ -28,3 +28,7 @@ class ThreadSafe(dict):
 settings = Storage()
 settings.globals = ConfigFile(cfgfile, 'global')
 settings.database = ConfigFile(cfgfile, 'database')
+
+response.headers.pop('X-Powered-By')
+response.headers['Server'] = settings.globals.servername
+
