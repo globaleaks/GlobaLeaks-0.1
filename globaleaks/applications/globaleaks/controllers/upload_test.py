@@ -1,10 +1,10 @@
 import gluon.contrib.simplejson as json
 import os
+import shutil
 
 def index():
     return {}
 
 def post():
-    with open(os.devnull, "w") as null:
-        null.write("".join(request.body.readlines()))
+    shutil.copyfileobj(request.body, open("/dev/null", "wb"))
     return json.dumps({})
