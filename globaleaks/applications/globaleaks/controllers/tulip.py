@@ -4,6 +4,10 @@ This controller module contains every controller for accessing the tulip
 from a target
 """
 
+import os
+
+mutils = local_import('material').utils()
+
 def index():
     import hashlib
 
@@ -59,6 +63,85 @@ def record_vote(vote_feedback, tulip):
         response.flash = ("Invalid vote provided thru HTTP header "
                           "manipulation: do you wanna work with us?")
 
+
+FileUpload = UploadHandler()
+
+@request.restful()
+def fileupload():
+    """
+    Controller for file uploading for leak updating
+    """
+    response.view = 'generic.json'
+
+    def GET(file=None, deletefile=None, uploads=None):
+        try:
+            tulip_url = request.args[0]
+            tulip = Tulip(url=tulip_url)
+        except:
+            return json.dumps({"success": "false"})
+
+        if deletefile:
+            # Leak needs to be spooled again
+            db(db.leak.id == tulip.leak.id).update(spooled=True)
+            return json.dumps(FileUpload.delete())
+        elif file:
+            upload = json.loads(FileUpload.get()
+
+            filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
+
+            src_file = os.path.join(request.folder, 'uploads',
+                                    upload[0]['name'])
+            dst_folder = os.path.join(request.folder, 'material', filedir)
+
+            return json.dumps(upload)
+        elif uploads:
+            return "not implemented"
+        else:
+            return "not implemented"
+        return json.dumps({"success": "false"})
+
+    def POST(tulip_url, **vars):
+        try:
+            tulip = Tulip(url=tulip_url)
+        except:
+            print tulip_url, "NOT FOUND"
+            return json.dumps({"success": "false"})
+
+        upload = FileUpload.post(tulip.leak.id)
+
+        upload = json.loads(upload)
+
+        filedata = Storage()
+
+        # Store the number of bytes of the uploaded file
+        filedata.bytes = upload[0]['size']
+
+        # Store the file size in human readable format
+        filedata.size = mutils.human_size(filedata.bytes)
+
+        filedata.fileid = upload[0]['id']
+
+        # Store filename and extension
+        filedata.filename = upload[0]['name']
+
+        filedata.ext = mutils.file_type(upload[0]['name'].split(".")[-1])
+
+        filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
+
+        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
+        dst_folder = os.path.join(request.folder, 'material', filedir)
+
+        if not os.path.isdir(dst_folder):
+            os.makedirs(dst_folder)
+
+        os.rename(src_file, os.path.join(dst_folder, upload[0]['name']))
+
+        # Leak needs to be spooled again
+        db(db.leak.id == tulip.leak.id).update(spooled=True)
+
+        return json.dumps(upload)
+
+    return locals()
 
 def status():
     """
@@ -151,6 +234,10 @@ def status():
         if single_comment.leak_id == leak.get_id():
             feedbacks.append(single_comment)
 
+    jQueryHelper = local_import('jquery_helper')
+    upload_template = jQueryHelper.upload_tmpl()
+    download_template = jQueryHelper.download_tmpl()
+
     return dict(err=None,delete=None,
             access_available=access_available,
             download_available=download_available,
@@ -175,7 +262,10 @@ def status():
             target_del_cap=delete_capability,
             target_url=target_url,
             targets=gl.get_targets("ANY"),
-            files=pickle.loads(leak.material.file))
+            files=pickle.loads(leak.material.file),
+            jQuery_templates=(XML(upload_template),
+                              XML(download_template))
+            )
 
 
 def download_increment(tulip):

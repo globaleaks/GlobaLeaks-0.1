@@ -104,12 +104,14 @@ class UploadHandler:
 
         return None
 
-    def __handle_file_upload(self, uploaded_file, name, size, type, error):
+    def __handle_file_upload(self, uploaded_file, name, size, type, error,
+                             leak_id=None):
         file = Storage()
-
+        print os.path.join(request.folder, 'material', self.get_file_dir(), name)
         # checking name duplicates and in case change filename
         if os.path.exists(os.path.join(request.folder, 'material',
-                                       self.get_file_dir(), name)):
+                                       self.get_file_dir(leak_id or None),
+                                       name)):
             name = "%s%s.%s" % ("".join(name.split(".")[:-1]),
                                 int(time.time()),
                                 name.split(".")[-1])
@@ -190,20 +192,25 @@ class UploadHandler:
 
         return response.json([dict(**file)])
 
-    def get_file_dir(self):
-        filedir = db(db.submission.session ==
-                     session.wb_id).select().first()
+    def get_file_dir(self, leak_id=None):
+        if leak_id is None:
+            filedir = db(db.submission.session ==
+                         session.wb_id).select().first()
 
-        if not filedir:
-            if not session.dirname:
-                filedir = randomizer.generate_dirname()
-                session.dirname = filedir
+            if not filedir:
+                if not session.dirname:
+                    filedir = randomizer.generate_dirname()
+                    session.dirname = filedir
+                else:
+                    filedir = session.dirname
             else:
-                filedir = session.dirname
-        else:
-            filedir = str(filedir.dirname)
+                filedir = str(filedir.dirname)
 
-        return filedir
+            return filedir
+        else:
+            filedir = db(db.submission.leak_id == leak_id).select().first()
+            filedir = str(filedir.dirname)
+            return filedir
 
     def get(self):
         if request.vars.file:
@@ -215,7 +222,7 @@ class UploadHandler:
             info = self.__get_file_objects()
         return info
 
-    def post(self):
+    def post(self, leak_id=None):
         upload = Storage()
         upload['error'] = False
 
@@ -225,7 +232,8 @@ class UploadHandler:
                                         request.env.http_x_file_name,
                                         request.env.http_x_file_size,
                                         request.env.http_x_file_type,
-                                        upload['error']
+                                        upload['error'],
+                                        leak_id=leak_id
                                         )
             return info
         elif request.vars:
@@ -243,7 +251,8 @@ class UploadHandler:
                                         upload['name'],
                                         upload['size'],
                                         upload['type'],
-                                        upload['error']
+                                        upload['error'],
+                                        leak_id=leak_id
                                         )
             return info
 
