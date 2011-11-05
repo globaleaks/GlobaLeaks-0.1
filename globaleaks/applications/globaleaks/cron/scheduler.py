@@ -120,6 +120,7 @@ if settings.globals.debug_notification:
                          message_text=message,
                          message_html=message):
             logger.info("... email sent.")
-            os.unlink(filename)
+            if settings.globals.debug_deletetickets:
+                os.unlink(filename)
 
     db.commit()
