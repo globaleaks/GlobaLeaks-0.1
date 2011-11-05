@@ -68,9 +68,9 @@
                 if ( $.cookie('privacystatus') ){
                     console.log("hehe");
                     if ($.cookie('privacystatus') == "True") {
-                        anonymous(True);
+                        anonymous(true);
                     } else {
-                        anonymous(False);
+                        anonymous(false);
                     }
                 } else {
                     $.getJSON('{{=settings.globals.privacycheckurl}}', function(data) {
