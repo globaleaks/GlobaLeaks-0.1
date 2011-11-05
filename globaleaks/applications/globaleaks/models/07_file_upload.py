@@ -107,7 +107,6 @@ class UploadHandler:
     def __handle_file_upload(self, uploaded_file, name, size, type, error,
                              leak_id=None):
         file = Storage()
-        print os.path.join(request.folder, 'material', self.get_file_dir(), name)
         # checking name duplicates and in case change filename
         if os.path.exists(os.path.join(request.folder, 'material',
                                        self.get_file_dir(leak_id or None),
@@ -115,8 +114,6 @@ class UploadHandler:
             name = "%s%s.%s" % ("".join(name.split(".")[:-1]),
                                 int(time.time()),
                                 name.split(".")[-1])
-        print name
-
 
         file.name = os.path.basename(name).strip('.\x20\x00..')
         #file.name = strip_path_and_sanitize(name)
