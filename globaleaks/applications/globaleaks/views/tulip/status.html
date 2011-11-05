@@ -41,8 +41,21 @@
         padding: 30px 20px 5px 40px;
         width: 600px;
         margin-bottom: 20px;
+        position: relative;
     }
 
+    .download-box {
+        
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        
+    }
+    
+    .download-box h3 {
+        font-size: 15px;
+        
+    }
 </style>
 
 {{if err or delete:}}
@@ -128,7 +141,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     {{pass}}
 
     {{for field_name, content, type in leak_extra: }}
-            <div class="material_{{=type}}">
+            <div class="material_submission material_{{=type}}">
                 <h2>{{=field_name}}</h2>
                 <p>{{=content}}</p>
             </div>
@@ -150,11 +163,12 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             </ul>
             {{if download_available and not whistleblower and download_available != -1: }}
                 {{url = tulip_url}}
+                <div class="download-box">
                 <h3>Download</h3>
                 <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="zip">ZIP</a>
-                <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">Encrypted ZIP</a>
-                <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
-            {{pass}}
+                <a href="#{{#URL('globaleaks','tulip','download', args=url)}}" class="crypt buttonDisabled">AES ZIP</a>
+                <a href="#{{#URL('globaleaks','tulip','download', args=url)}}" class="crypt buttonDisabled">PGP ZIP</a>                </div>
+                {{pass}}
             
             {{if download_available == -1:}}
                 <h3>Material has not been spooled yet... check back later</h3>
@@ -184,14 +198,14 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     <div id="comment-board">
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
-            <p class="right_title">This is from the Whistleblower</p>
+            <p class="right_title">Whistleblower</p>
             <p class="right_intro">{{=feedback.comment}}</p>
         {{else:}}
             {{if feedback.commenter_id == int(name):}}
-                <p class="left_title">This is your feedback</p>
+                <p class="left_title">You</p>
                 <p class="left_intro">{{=feedback.comment}}</p>
             {{else:}}
-                <p class="common_title">Receiver id #{{=feedback.commenter_id}}</p>
+                <p class="common_title">ID #{{=feedback.commenter_id}}</p>
                 <p class="common_intro">{{=feedback.comment}}</p>
             {{pass}}
         {{pass}}
@@ -232,7 +246,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                     </tr>
                 </table> 
                 <input type="hidden" name="Vote" id="expressed_vote">
-                -->                
+                -->
              {{else:}}
                  your previous vote was:<b>
                  {{if previous_vote == "-1":}}
@@ -252,9 +266,9 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     <h2>Tulip access statistics</h2>
     <table class="targetlist">
         <thead>
-            <th class="downloads">Id #</th>
+            <th class="downloads">ID</th>
 <!--             <th class="downloads">pertinence vote</th> -->
-            <th class="downloads">text feedbacks</th>
+            <th class="downloads">Comments</th>
             <th class="downloads">Views</th>
             <th class="downloads">Downloads</th>
         </thead>
@@ -278,14 +292,14 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 <!--                  <td class="downloads">not permitted</td> -->
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
-                 <td class="downloads">not permitted</td>
+                 <td class="downloads">-</td>
              {{pass}}
             </tr>
             {{pass}}
         </tbody>
     </table>
 
-    {{if not whistleblower:}}
+    {{if 0: #not whistleblower:}}
     <p class="intro">
       <b><a href="/globaleaks/tulip/forward/{{=tulip_url}}">
         Forward to another targetgroup
