@@ -452,7 +452,7 @@ border-radius:5px;
     //background: #444;
     color: #fff;
     font-weight: bold;
-    padding: 5px;
+    padding: 15px;
     text-align: left;
 }
 
@@ -461,7 +461,7 @@ border-radius:5px;
 }
 
 #content table.targetlist td {
-    padding: 5px;
+    padding: 15px;
     background: #ededed;
     text-align: left;
     margin-bottom: 20px;
