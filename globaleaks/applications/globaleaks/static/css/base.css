@@ -255,55 +255,52 @@ border-radius:5px;
 }
 
 /* right_intro, common_intro and left_intro are used in feedbacks visualization */
-.common_intro {
-    line-height: 15px;
-    text-align: right;
-    text-color: #0bb202;
-    margin-bottom: 15px;
-    background: #ededed;
-    padding: 15px;
+
+.comment {
+    position: relative;
+    margin-bottom: 50px;
 }
 
-.right_intro {
-    line-height: 15px;
-    text-align: right;
-    text-color: #14de14;
-    margin-bottom: 15px;
-    background: #edbded;
-    padding: 15px;
+#other_comment.comment h2 {
+    position: absolute;
+    left: 4px;
+    bottom: -30px;
 }
 
-.left_intro {
-    line-height: 15px;
-    text-color: #14ae14;
-    text-align: left;
-    margin-bottom: 15px;
-    background: #adadad;
-    padding: 15px;
+#other_comment.comment p {
+    padding: 10px 10px 10px 30px;
+    border-radius: 50px 10px 10px 10px;
+    background-color: #CCC;
+    margin-bottom: 20px;
 }
 
-.description {
-    line-height: 15px;
-    text-color: #039e44;
-    text-align: left;
-    margin-bottom: 15px;
-    background: #dddddd;
-    padding: 15px;
+
+#your_comment.comment h2 {
+    position: absolute;
+    left: 4px;
+    bottom: -30px;
 }
 
-.left_title {
-    text-color: #adadad;
+#your_comment.comment p {
+    padding: 10px 10px 10px 30px;
+    border-radius: 50px 10px 10px 10px;
+    background-color: #F8ECC2;
+    margin-bottom: 20px;
 }
 
-.right_title {
-    text-align: right;
-    font-weight: bold;
-    color: #04100d;
+#wb_comment.comment h2 {
+    position: absolute;
+    right: 4px;
+    bottom: -30px;
 }
 
-.common_title {
-    text-color: #ededed;
+#wb_comment.comment p {
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px 50px 10px 10px;
+    background-color: #FA5858;
+    margin-bottom: 20px;
 }
+
 
 .voteImg {
     width: 90px;
@@ -614,11 +611,10 @@ border-radius: 5px;
     padding: 10px 10px;
 }
 
+
 .entry .material_string {
     width: 200px;
-    
 }
-
 
 #footer {
     width: 960px;

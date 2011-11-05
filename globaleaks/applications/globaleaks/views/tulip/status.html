@@ -198,15 +198,21 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     <div id="comment-board">
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
-            <p class="right_title">Whistleblower</p>
-            <p class="right_intro">{{=feedback.comment}}</p>
+            <div class="comment" id="wb_comment">
+            <h2 class="name">Whistleblower</h2>
+            <p class="comment">{{=feedback.comment}}</p>
+            </div>
         {{else:}}
             {{if feedback.commenter_id == int(name):}}
-                <p class="left_title">You</p>
-                <p class="left_intro">{{=feedback.comment}}</p>
+                <div class="comment" id="your_comment">
+                <h2 class="name">You</h2>
+                <p class="comment">{{=feedback.comment}}</p>
+                </div>
             {{else:}}
-                <p class="common_title">ID #{{=feedback.commenter_id}}</p>
-                <p class="common_intro">{{=feedback.comment}}</p>
+                <div class="comment" id="other_comment">
+                    <h2 class="name">ID #{{=feedback.commenter_id}}</h2>
+                    <p class="comment">{{=feedback.comment}}</p>
+                </div>
             {{pass}}
         {{pass}}
     {{pass}}
