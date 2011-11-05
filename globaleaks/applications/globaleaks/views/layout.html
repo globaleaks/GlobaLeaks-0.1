@@ -54,13 +54,38 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $("#PrivacyBox").ready(function() {
+                function redirect_to(value) {
+                    $("#PrivacyBox").append(
+                        '<div id="redirect">Redirecting to Hidden Serivice in ' + 
+                            '<span id="timeout">5' +
+                            '</span> seconds</div>'
+                        );
+                    var Counter = 0;
+                    (function timerfunction() {
+                      setTimeout(function() {
+                        if (Counter++ < 5) {
+                            $("#timeout").replaceWith('<span id="timeout">' + (5 - Counter) + '</span>');
+                          timerfunction();
+                        } else {
+                            location.href = "http://" + value;
+                        }
+                      }, 1000);
+                    })();
+                }
+                
                 function anonymous(value) {
                     var box = $('#PrivacyBox');
                     if (value) {
-                        box.children("#image").addClass("anonymous");
+                        //box.children("#image").addClass("anonymous");
+                        box.children("#image").replaceWith('<img src="/globaleaks/static/images/anonymous.png"/>');
                         box.children("#status").replaceWith('<p id="status">Anonymous</p>');
+                        if (window.location.hostname != "{{=settings.globals.hshostname}}") {
+                            redirect_to("{{=settings.globals.hshostname}}");
+                        }
                     } else {
-                        box.children("#image").addClass("notanonymous");
+                        //box.children("#image").addClass("notanonymous");
+                        box.children("#image").replaceWith('<img src="/globaleaks/static/images/notanonymous.png"/>');
+
                         box.children("#status").replaceWith('<p id="status">Not Anonymous</p>');
                     }
                 }
