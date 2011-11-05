@@ -96,48 +96,50 @@ hashes = {}
 ### CONFIGURE HERE
 ALLOW_DUPLICATES = True
 ### END CONFIGURATION
-for file in os.listdir(path):
-    filename = os.path.join(path, file)
+if settings.globals.debug_notification:
+    for file in os.listdir(path):
+        filename = os.path.join(path, file)
 
-    if not ALLOW_DUPLICATES:
-        file_data = open(filename, 'r').read()
-        key = md5_hash(file_data)
+        if not ALLOW_DUPLICATES:
+            file_data = open(filename, 'r').read()
+            key = md5_hash(file_data)
 
-        if key in hashes:
-            continue
+            if key in hashes:
+                continue
 
-        hashes[key] = 1
+            hashes[key] = 1
 
-    error = RestrictedError()
-    error.load(request, request.application, filename)
-    logger.info("REQUEST-APP: %s" % dir(request))
+        error = RestrictedError()
+        error.load(request, request.application, filename)
+        logger.info("REQUEST-APP: %s" % dir(request))
 
-    logger.info("Sending email...")
+        logger.info("Sending email...")
 
-    message = '<b>There has been an error on a node.</b><br>'
-    message += '<h1>This is the trackback:</h1><br><pre>%s</pre><br><br><br>' % error.traceback
-    message += "<h1>this is the environment:</h1><br>"
-    try:
-        message += "<h2>RESPONSE: </h2><br> %s<br><br>" % error.snapshot['response']
-    except KeyError:
-        pass
-    try:
-        message += "<h2>LOCALS: </h2><br> %s<br><br>" % error.snapshot['locals']
-    except KeyError:
-        pass
-    try:
-        message += "<h2>REQUEST: </h2><br> %s<br><br>" % error.snapshot['request']
-    except KeyError:
-        pass
-    try:
-        message += "<h2>SESSION:</h2><br>  %s<br><br>" % error.snapshot['session']
-    except KeyError:
-        pass
+        message = '<b>There has been an error on a node.</b><br>'
+        message += '<h1>This is the trackback:</h1><br><pre>%s</pre><br><br><br>' % error.traceback
+        message += "<h1>this is the environment:</h1><br>"
+        try:
+            message += "<h2>RESPONSE: </h2><br> %s<br><br>" % error.snapshot['response']
+        except KeyError:
+            pass
+        try:
+            message += "<h2>LOCALS: </h2><br> %s<br><br>" % error.snapshot['locals']
+        except KeyError:
+            pass
+        try:
+            message += "<h2>REQUEST: </h2><br> %s<br><br>" % error.snapshot['request']
+        except KeyError:
+            pass
+        try:
+            message += "<h2>SESSION:</h2><br>  %s<br><br>" % error.snapshot['session']
+        except KeyError:
+            pass
 
-    if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
-                     message_text=message,
-                     message_html=message):
-        logger.info("... email sent.")
-        os.unlink(filename)
+        if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
+                         message_text=message,
+                         message_html=message):
+            logger.info("... email sent.")
+            if settings.globals.debug_deletetickets:
+                os.unlink(filename)
 
-db.commit()
+    db.commit()
