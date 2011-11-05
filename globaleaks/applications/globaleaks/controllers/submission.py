@@ -246,7 +246,7 @@ def index():
         # this is the only error handled at the moment, the fact that __init__
         # could return only None, maybe an issue when more errors might be managed
         if not hasattr(form, 'vars'):
-            return dict(error='No receiver groups has been configured in this node')
+            return dict(error='No receiver groups has been configured in this node', existing_files=[])
 
     else:
         form = SQLFORM(db.leak,
@@ -356,6 +356,7 @@ def index():
         session.dirname = None
         session.wb_id = None
         session.files = None
+        print "Existing Files: %s" % existing_files
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number, error=None,
                     form=None, tulip_url=wb_number[1], jQuery_templates=None,
