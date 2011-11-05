@@ -49,7 +49,43 @@
     {{#include 'web2py_ajax.html'}}
 
 	<script type="text/javascript" src="/globaleaks/preload/js/all.js"></script>
-
+    <script type="text/javascript" src="/globaleaks/static/js/jquery.cookie.js"></script>
+	
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#PrivacyBox").ready(function() {
+                function anonymous(value) {
+                    var box = $('#PrivacyBox');
+                    if (value) {
+                        box.children("#image").addClass("anonymous");
+                        box.children("#status").replaceWith('<p id="status">Anonymous</p>');
+                    } else {
+                        box.children("#image").addClass("notanonymous");
+                        box.children("#status").replaceWith('<p id="status">Not Anonymous</p>');
+                    }
+                }
+                console.log($.cookie('privacystatus'));
+                if ( $.cookie('privacystatus') ){
+                    console.log("hehe");
+                    if ($.cookie('privacystatus') == "True") {
+                        anonymous(True);
+                    } else {
+                        anonymous(False);
+                    }
+                } else {
+                    $.getJSON('{{=settings.globals.privacycheckurl}}', function(data) {
+                        if (data.Tor) {
+                            anonymous(data.Tor);
+                            $.cookie('privacystatus', 'True', { expires: 1, path: '/' });
+                        } else {
+                            anonymous(data.Tor);
+                            $.cookie('privacystatus', 'False', { expires: 1, path: '/' });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
     {{
     #using sidebars need to know what sidebar you want to use
     #prior of using it, because of static width size of content, you can use
@@ -85,7 +121,13 @@
     <div id="header"> <!-- header and login nav -->
       {{block header}} <!-- this is default header -->
       <a href="/"><img src="{{=URL('static','images/globaleaks.png')}}" /></a>
+      <div id="PrivacyBox">
+        <div id="image"></div>
+        <p id="status"></p>
+      </div>
+
       <div style="clear: both;"></div><!-- Clear the divs -->
+      
       {{end}}
     </div><!-- header  -->
 
