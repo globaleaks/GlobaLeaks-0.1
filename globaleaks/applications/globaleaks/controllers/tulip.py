@@ -97,7 +97,7 @@ def fileupload():
             filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
 
             src_file = os.path.join(request.folder, 'uploads',
-                                    upload[0]['name'])
+                                    session.upload_dir, upload[0]['name'])
             dst_folder = os.path.join(request.folder, 'material', filedir)
 
             return json.dumps(upload)
@@ -117,7 +117,7 @@ def fileupload():
 
             for filedata in session.add_files:
                 src_file = os.path.join(request.folder, 'uploads',
-                                        filedata.filename)
+                                        session.upload_dir, filedata.filename)
                 try:
                     shutil.move(src_file,
                                 os.path.join(dst_folder.decode("utf-8"),
