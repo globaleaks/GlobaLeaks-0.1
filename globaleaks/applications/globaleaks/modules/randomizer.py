@@ -15,7 +15,26 @@ def generate_wb_id():
     #      should i be converting the random number string to bytes?
     return hashlib.sha256(os.urandom(1024)).hexdigest()
 
+def __sanitize_title(title):
+    import unicodedata
+    title = unicode(title, "utf-8")
+    title = "".join([c for c in title if unicodedata.category(c)[0] == "L"])
+    return title
+
 # Maybe these three should be merged into one
+def generate_human_dirname(request, leak, old_dirname):
+    # Name like Data-$Title-$ID-$progressivo-.zip
+    prog = 1
+    title = __sanitize_title(leak.title)
+    dirname = "Data-%s-%s-%s" % (title, old_dirname[:4], str(prog))
+    while os.path.exists(os.path.join(request.folder, 'material', dirname)):
+        prog += 1
+        dirname = "Data-%s-%s-%s" % (title, old_dirname[:4], str(prog))
+    return dirname
+
+def is_human_dirname(dirname):
+    return dirname.startswith("Data-")
+
 def generate_dirname():
     return hashlib.sha256(os.urandom(1024)).hexdigest()
 

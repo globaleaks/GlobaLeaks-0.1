@@ -6,6 +6,7 @@ from a target
 
 import gluon.contrib.simplejson as json
 import os
+import shutil
 
 mutils = local_import('material').utils()
 
@@ -74,17 +75,22 @@ def fileupload():
     """
     response.view = 'generic.json'
 
-    def GET(file=None, deletefile=None, uploads=None):
+    if not session.add_files:
+        session.add_files = []
+
+    def GET(tulip_url, file=None, deletefile=None, uploads=None, commit=None):
         try:
             tulip_url = request.args[0]
             tulip = Tulip(url=tulip_url)
         except:
             return json.dumps({"success": "false"})
+        if not tulip.is_wb():
+            return json.dumps({"success": "false"})
 
         if deletefile:
-            # Leak needs to be spooled again
-            db(db.leak.id == tulip.leak.id).update(spooled=True)
-            return json.dumps(FileUpload.delete())
+            session.add_files = [f for f in session.add_files \
+                                 if f.filename != deletefile]
+            return json.dumps(FileUpload.delete(uploads=True))
         elif file:
             upload = json.loads(FileUpload.get())
 
@@ -95,19 +101,51 @@ def fileupload():
             dst_folder = os.path.join(request.folder, 'material', filedir)
 
             return json.dumps(upload)
+        elif commit:
+            if not session.add_files:
+                return json.dumps({"success": "false"})
+            filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
+            # finding right progressive number
+            prog = 1
+            dst_folder = os.path.join(request.folder, 'material',
+                                      filedir, str(prog))
+            while os.path.exists(dst_folder):
+                prog += 1
+                dst_folder = os.path.join(request.folder, 'material',
+                                          filedir, str(prog))
+            os.makedirs(dst_folder)
+
+            for filedata in session.add_files:
+                src_file = os.path.join(request.folder, 'uploads',
+                                        filedata.filename)
+                try:
+                    shutil.move(src_file,
+                                os.path.join(dst_folder.decode("utf-8"),
+                                             filedata.filename))
+                except OSError:
+                    pass
+
+            tulip.leak.add_material(tulip.leak.id, prog, None,
+                                    file=json.dumps(session.add_files))
+            add_files = [(f.ext, f.filename, f.size)
+                         for f in session.add_files]
+            session.add_files = None
+            # Leak needs to be spooled again
+            db(db.leak.id == tulip.leak.id).update(spooled=False)
+            return json.dumps({"success": "true", "data": add_files})
         elif uploads:
             return "not implemented"
         else:
-            return "not implemented"
-        return json.dumps({"success": "false"})
+            return json.dumps({"success": "false"})
 
     def POST(tulip_url, **vars):
         try:
             tulip = Tulip(url=tulip_url)
         except:
-            print tulip_url, "NOT FOUND"
             return json.dumps({"success": "false"})
-
+        if not tulip.is_wb():
+            return json.dumps({"success": "false"})
+        print tulip_url
         upload = FileUpload.post(tulip.leak.id)
 
         upload = json.loads(upload)
@@ -127,18 +165,7 @@ def fileupload():
 
         filedata.ext = mutils.file_type(upload[0]['name'].split(".")[-1])
 
-        filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
-
-        src_file = os.path.join(request.folder, 'uploads', upload[0]['name'])
-        dst_folder = os.path.join(request.folder, 'material', filedir)
-
-        if not os.path.isdir(dst_folder):
-            os.makedirs(dst_folder)
-
-        os.rename(src_file, os.path.join(dst_folder, upload[0]['name']))
-
-        # Leak needs to be spooled again
-        db(db.leak.id == tulip.leak.id).update(spooled=True)
+        session.add_files.append(filedata)
 
         return json.dumps(upload)
 
@@ -238,7 +265,7 @@ def status():
     jQueryHelper = local_import('jquery_helper')
     upload_template = jQueryHelper.upload_tmpl()
     download_template = jQueryHelper.download_tmpl()
-
+    submission_mats = [(m.url, json.loads(m.file)) for m in leak.material]
     return dict(err=None,delete=None,
             access_available=access_available,
             download_available=download_available,
@@ -263,7 +290,7 @@ def status():
             target_del_cap=delete_capability,
             target_url=target_url,
             targets=gl.get_targets("ANY"),
-            files=json.loads(leak.material.file),
+            submission_materials=submission_mats,
             jQuery_templates=(XML(upload_template),
                               XML(download_template))
             )
@@ -274,7 +301,7 @@ def download_increment(tulip):
     if (int(tulip.downloads_counter) > int(tulip.allowed_downloads)):
         return False
 
-    if t.downloads_counter:
+    if tulip.downloads_counter:
         new_count = int(tulip.downloads_counter) + 1
         db.tulip[tulip.target].update_record(downloads_counter=new_count)
     else:
@@ -285,7 +312,6 @@ def download_increment(tulip):
 
 def download():
     import os
-
     try:
         tulip_url = request.args[0]
     except IndexError:
@@ -301,13 +327,17 @@ def download():
 
     leak = t.get_leak()
 
+    filename = db(db.submission.leak_id==leak.id).select().first().dirname
+    try:
+        filename = "%s-%s" % (filename, request.args[1])
+    except IndexError:
+        pass
     response.headers['Content-Type'] = "application/octet"
     response.headers['Content-Disposition'] = 'attachment; filename="' + \
-                                              tulip_url + '.zip"'
+                                              filename + '.zip"'
 
     download_file = os.path.join(request.folder, 'material/',
-                           db(db.submission.leak_id==leak.id).select().first(
-                           ).dirname + '.zip')
+                                 filename + '.zip')
 
     # XXX to make proper handlers to manage the fetch of dirname
     return response.stream(open(download_file, 'rb'))

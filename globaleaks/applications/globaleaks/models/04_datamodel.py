@@ -1,4 +1,3 @@
-import pickle
 from gluon.contrib import simplejson as json
 
 class Material(object):
@@ -47,7 +46,7 @@ class Material(object):
     @staticmethod
     def create_new(leak_id, url, type, file):
         return db.material.insert(leak_id=leak_id,
-            url=None, type=None, file=file)
+            url=url, type=type, file=file)
 
 class Leak(object):
     def __init__(self, id):
@@ -100,7 +99,7 @@ class Leak(object):
 
     #TODO: implement get/set material
     def get_material(self):
-        return db(db.material.leak_id==self._id).select(db.material.ALL).first()
+        return db(db.material.leak_id==self._id).select(db.material.ALL)
 
     def set_material(self, material):
         pass
@@ -177,7 +176,7 @@ class Leak(object):
         been notified yet. Then adds that group to the notified_groups
         list
         """
-        
+
         notified_groups = self.get_notified_targetgroups()
         notified_targets = [x.id for x in gl.get_targets(notified_groups)]
         to_notify = [x.id for x in gl.get_targets([group_id])]
@@ -196,7 +195,7 @@ class Leak(object):
                                tulip=tulip_url)
         notified_groups += [group_id]
         notified_groups = list(set(notified_groups))  # deletes duplicates
-        
+
         db.leak[self._id].update_record(
             notified_groups=json.dumps(notified_groups))
         db.commit()
@@ -227,7 +226,6 @@ class TargetList(object):
                             group=t.Name)
         """
         db.targetgroup.insert(name=g.Name, desc=g.Description, tags=g.Tags)
-            
 
     def get_list(self):
         for group in db().select(db.targetgroup.ALL):
@@ -334,6 +332,9 @@ class Tulip(object):
         pass
 
     target = property(get_target, set_target)
+
+    def is_wb(self):
+        return int(self.target) == 0
 
     def get_allowed_accesses(self):
         return db.tulip[self.id].allowed_accesses

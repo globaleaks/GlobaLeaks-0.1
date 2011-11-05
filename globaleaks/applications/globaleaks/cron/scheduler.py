@@ -14,6 +14,7 @@ import datetime
 MimeMail = local_import('mailer').MultiPart_Mail(settings)
 logger = local_import('logger').start_logger(settings.logging)
 compressor = local_import('compress_material').Zip()
+randomizer = local_import('randomizer')
 
 # conn = SESConnection(settings.aws_key, settings.aws_secret_key)
 
@@ -22,10 +23,28 @@ logger.info('### Starting GlobaLeaks at: %s ###',  time.ctime())
 unspooled = db(db.leak.spooled!=True).select()
 logger.info("New material: %s : ", unspooled)
 
-for submission in unspooled:
-    compressor.create_zip(db, submission, request, logger)
-    db.leak[submission.id].update_record(spooled=True)
-    logger.info(submission)
+for leak_to_spool in unspooled:
+    leak = Leak(leak_to_spool.id)
+    submission = db(db.submission.leak_id==leak_to_spool.id).select().first()
+    if not randomizer.is_human_dirname(submission.dirname):
+        human_dirname = randomizer.generate_human_dirname(request,
+                                                          leak,
+                                                          submission.dirname)
+        os.rename(os.path.join(request.folder, "material", submission.dirname),
+                  os.path.join(request.folder, "material", human_dirname))
+        db(db.submission.id == submission.id).update(dirname=human_dirname)
+    human_path = os.path.join(request.folder, "material", submission.dirname)
+    compressor.create_zip(db, leak_to_spool, request, logger)
+    compressor.create_zip(db, leak_to_spool, request, logger, no_subdirs=True)
+    first = True
+    for directory in os.walk(human_path):
+        if not first:
+            mat_dir = directory[0]
+            compressor.create_zip(db, leak_to_spool, request, logger,
+                                  None, mat_dir)
+        first = False
+    db.leak[leak_to_spool.id].update_record(spooled=True)
+    logger.info(leak_to_spool)
     db.commit()
 
 mails = db(db.mail).select()
