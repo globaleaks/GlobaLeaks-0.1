@@ -127,9 +127,9 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         <p class="description">{{=leak_desc}}</p>
     {{pass}}
 
-    {{for name, content, type in leak_extra: }}
+    {{for field_name, content, type in leak_extra: }}
             <div class="material_{{=type}}">
-                <h2>{{=name}}</h2>
+                <h2>{{=field_name}}</h2>
                 <p>{{=content}}</p>
             </div>
     {{pass}}
@@ -205,7 +205,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             <!-- p>If you have questions for the Whistleblower, you are invited to write them in this box. This message can be viewed from anyone with a Tulip pointing to this material.</p -->
         {{else:}}
 <!--             <p>A receiver could express doubt, ask for clarifications and request help in understanding your submitted material. You are invited to answer those questions with the area below.</p> -->        {{pass}}
-        <input type="text" name="Comment">
+        <input type="text" id="comment" name="Comment">
 <!--         <p>If you have downloaded the Material and evaluated the pertinence of the submitted data, you are invited to express a vote. This could help other receivers to avoid wasting time from misleading submissions. When you express a vote, it would be nice to motivate it with an appropriate feedback.</p> -->        <br>
         {{if not whistleblower:}}
             {{if not previous_vote:}}
@@ -392,6 +392,54 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             var new_height = $('#fileupload').parents('.content').innerHeight();
             $('.stepContainer').css('height', new_height);
             $("#speedbox").children("span").replaceWith("<span></span>");
+        });
+        
+        $('#comment').keypress(function(e) {
+            var comment = $('#comment');
+            if(comment.val().length > 10) {
+                console.log(e);
+                var pos = comment.val().length;
+                
+                comment.replaceWith('<textarea name="Comment" id="comment" rows="4">' + comment.val() + '</textarea>');
+                
+                comment = $("#comment").get(0);
+
+                if (comment.setSelectionRange) {
+                    console.log("USING 1");
+                    console.log($(this));
+                  comment.setSelectionRange(pos, pos);
+                  comment.focus();
+
+                } else if (comment.createTextRange) {
+                  var range = comment.createTextRange();
+                  range.collapse(true);
+                  range.moveEnd('character', pos);
+                  range.moveStart('character', pos);
+                  range.select();
+                  comment.focus();
+                }
+            }
+                                
+//                 
+                // new function($) {
+  // $.fn.setCursorPosition = function(pos) {
+    // if ($(this).get(0).setSelectionRange) {
+      // $(this).get(0).setSelectionRange(pos, pos);
+    // } else if ($(this).get(0).createTextRange) {
+      // var range = $(this).get(0).createTextRange();
+      // range.collapse(true);
+      // range.moveEnd('character', pos);
+      // range.moveStart('character', pos);
+      // range.select();
+    // }
+  // }
+// }(jQuery);
+// 
+// 
+// 
+// FieldRange.select();
+// 
+                // $('#comment').setCursorPosition($("#comment").val().length);
         });
     });
     </script>
