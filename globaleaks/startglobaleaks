@@ -66,14 +66,24 @@ then
 else
     echo -e "${red}you're disabling logging of the webserver, to delete other logs, check the [logging] section in globaleaks.conf"
     echo "to enable log, use [$0 -l]"
-    tput sgr0
     LOG_OPTION="-l /dev/null"
 fi
+    tput sgr0
 
 FOLDER=$(python -c "import globaleaks, os; print os.path.dirname(globaleaks.__file__)" 2> /dev/null)
 if [ ! -z $FOLDER ]; then
+    echo "switching running directory to $FOLDER"
     cd $FOLDER
 fi
+
+if [ -f "installstorage/.installed" ]; then
+    echo -e "${c3}GlobaLeaks has been configured by the starting page: changing of routes.py"
+    python -c "import os; os.unlink('routes.py'); os.symlink('installstorage/post_install_routes.py', 'routes.py')"
+    rm -f "installstorage/.installed"
+else
+    echo -e "${c3}GlobaLeaks is running in - configuration mode -"
+fi
+tput sgr0
 
 if [ -d "applications/globaleaks/static" ]; then
     echo "cleaning of previously preloaded javascript and css..."

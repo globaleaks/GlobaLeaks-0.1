@@ -83,6 +83,7 @@ def bouquet():
     if len(receiver_row) > 1:
         return dict(err="temporary fault: collision detected, two target"
                         "with the same password")
+    # fixme: this bug depends by the actual bad auth type
 
     # addiction information could be present in the POST
     # here are treated the configuration option, and returned in the variable
