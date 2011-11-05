@@ -67,7 +67,7 @@
                             $("#timeout").replaceWith('<span id="timeout">' + (5 - Counter) + '</span>');
                           timerfunction();
                         } else {
-                            location.href = "http://" + value;
+                            location.href = "http://" + value + window.location.pathname;
                         }
                       }, 1000);
                     })();
