@@ -79,7 +79,7 @@
                         //box.children("#image").addClass("anonymous");
                         box.children("#image").replaceWith('<img src="/globaleaks/static/images/anonymous.png"/>');
                         box.children("#status").replaceWith('<p id="status">Anonymous</p>');
-                        if (window.location.hostname != "{{=settings.globals.hshostname}}") {
+                        if (window.location.hostname != "{{=settings.globals.hsurl}}") {
                             redirect_to("{{=settings.globals.hshostname}}");
                         }
                     } else {

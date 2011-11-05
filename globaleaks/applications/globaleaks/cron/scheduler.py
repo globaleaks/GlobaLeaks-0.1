@@ -54,7 +54,8 @@ for m in mails:
     context = dict(name=m.target,
                     sitename=settings.globals.sitename,
                     tulip_url=m.tulip,
-                    site=settings.private.hostname)
+                    site=settings.globals.baseurl,
+                    sitehs=settings.globals.hsurl)
 
     message_txt = MimeMail.make_txt(context)
     message_html = MimeMail.make_html(context)
