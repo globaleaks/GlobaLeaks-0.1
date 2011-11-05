@@ -4,6 +4,7 @@ This controller module contains every controller for accessing the tulip
 from a target
 """
 
+import gluon.contrib.simplejson as json
 import os
 
 mutils = local_import('material').utils()
@@ -262,7 +263,7 @@ def status():
             target_del_cap=delete_capability,
             target_url=target_url,
             targets=gl.get_targets("ANY"),
-            files=pickle.loads(leak.material.file),
+            files=json.loads(leak.material.file),
             jQuery_templates=(XML(upload_template),
                               XML(download_template))
             )

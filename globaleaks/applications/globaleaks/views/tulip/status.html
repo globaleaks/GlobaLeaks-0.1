@@ -145,7 +145,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         <div class="material-entry">
             <ul>
                 {{for file in files:}}
-                    <li class="{{=file.ext}}">{{=file.filename}} ({{=file.size}})</li>
+                    <li class="{{=file['ext']}}">{{=file['filename']}} ({{=file['size']}})</li>
                 {{pass}}
             </ul>
             {{if download_available and not whistleblower and download_available != -1: }}
@@ -155,6 +155,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">Encrypted ZIP</a>
                 <a href="{{=URL('globaleaks','tulip','download', args=url)}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
             {{pass}}
+            
             {{if download_available == -1:}}
                 <h3>Material has not been spooled yet... check back later</h3>
             {{pass}}
@@ -208,7 +209,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 <!--         <p>If you have downloaded the Material and evaluated the pertinence of the submitted data, you are invited to express a vote. This could help other receivers to avoid wasting time from misleading submissions. When you express a vote, it would be nice to motivate it with an appropriate feedback.</p> -->        <br>
         {{if not whistleblower:}}
             {{if not previous_vote:}}
-                <table cellpadding="5" cellspacing="5" border="0" width="100%">
+<!--                 <table cellpadding="5" cellspacing="5" border="0" width="100%">
                     <tr>
                         <td><p class="voteImgText">IS pertinient</p></td>
                         <td><p class="voteImgText">is NOT pertinent</p></td>
@@ -229,8 +230,9 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                             </span>
                         </td>
                     </tr>
-                </table>
+                </table> 
                 <input type="hidden" name="Vote" id="expressed_vote">
+                -->                
              {{else:}}
                  your previous vote was:<b>
                  {{if previous_vote == "-1":}}
@@ -247,11 +249,11 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 
 
     <div id="tulip-access">
-    <h2>Tulip accesses statistics</h2>
+    <h2>Tulip access statistics</h2>
     <table class="targetlist">
         <thead>
             <th class="downloads">Id #</th>
-            <th class="downloads">pertinence vote</th>
+<!--             <th class="downloads">pertinence vote</th> -->
             <th class="downloads">text feedbacks</th>
             <th class="downloads">Views</th>
             <th class="downloads">Downloads</th>
@@ -267,13 +269,13 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 {{pass}}
              {{if peer.target_id != "0":}}
                  <td class="name">{{=i}}</td>
-                 <td class="downloads">{{=peer.express_vote}}</td>
+<!--                  <td class="downloads">{{=peer.express_vote}}</td> -->
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
                  <td class="downloads">{{=peer.downloads_counter}}/{{=tulip_allowed_download}}</td>
              {{else:}}
                  <td class="name">Whistleblower</td>
-                 <td class="downloads">not permitted</td>
+<!--                  <td class="downloads">not permitted</td> -->
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
                  <td class="downloads">not permitted</td>

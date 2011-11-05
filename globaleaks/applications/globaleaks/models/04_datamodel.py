@@ -36,7 +36,7 @@ class Material(object):
 
     def get_files(self):
         files = db.material[self.id].file
-        return pickle.loads(files)
+        return json.loads(files)
 
     def set_files(self, id):
         print "Error: url is read only"

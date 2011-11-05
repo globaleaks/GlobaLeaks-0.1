@@ -66,7 +66,7 @@ def api():
                                  dirname=session.dirname)
         if not session.files:
             session.files = []
-        pfile = pickle.dumps(session.files)
+        pfile = json.dumpsumps(session.files)
 
         leak = Leak(leak_id)
         leak.add_material(leak_id, None, None, file=pfile)
@@ -315,7 +315,7 @@ def index():
         if not session.files:
             session.files = []
         # XXX verify that this is safe
-        pfile = pickle.dumps(session.files)
+        pfile = json.dumps(session.files)
 
         # leak_id has been used in the previous code as this value,
         # I'm keeping to don't change the following lines
