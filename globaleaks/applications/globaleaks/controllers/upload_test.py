@@ -7,8 +7,12 @@ import shutil
 def index():
     return {}
 
+
+
 def post():
     # shutil.copyfileobj(request.body, open("/dev/null", "wb"))
-    print request.env.content_length
-    copystream(request.body, open('/dev/null', "wb"), int(request.env.content_length))
-    return json.dumps({})
+    try:
+        a = request.body.read()
+        return json.dumps({"DIO": "ESISTE"})
+    except:
+        return json.dumps({"PORCODIO": "LADRO :P"})
