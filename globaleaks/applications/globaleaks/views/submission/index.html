@@ -117,25 +117,27 @@ $(document).ready(function(){
     });
 
     $('#fileupload').bind('fileuploadprogressall', function (e, data) {
-        if (window.speedarray) {
-
-            var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
-            window.average = (window.average + speed)/2;
-            var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
-            // console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
-
-            if ((Date.now() - window.last_update) > 1000) {
+        if ((Date.now() - window.last_update) > 1000) {
+            if(window.speedarray) {
+                var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
+                if (!window.average) {
+                    window.average = speed;
+                } else {
+                    window.average = (window.average + speed)/2;
+                }
+                var eta = ((data.total - data.loaded)/( window.average * 1000))/ 60;
+                // console.log("Speed: " + speed + "KB/s" + " ETA: " + eta + " minutes");
                 $("#speedbox").children("span").replaceWith(
                     "<span>" + Math.round(window.average) + " KB/s (ETA: " + Math.round(eta*100)/100 + " mins)</span>"
                 );
                 window.last_update = Date.now();
             }
             window.speedarray = [Date.now(), data.loaded];
-
+            window.last_update = Date.now();
         } else {
-            window.speedarray = [Date.now(), data.loaded];
-            window.average = window.speedarray[1];
-            window.last_update = Date.now() + 2000;
+            if (!window.last_update) {
+                window.last_update = Date.now();
+            }
         }
 
         $('.buttonFinish').addClass('buttonDisabled');

@@ -102,6 +102,7 @@ def fileupload():
 
             return json.dumps(upload)
         elif commit:
+            print "Session value: %s" % session.add_files
             if not session.add_files:
                 return json.dumps({"success": "false"})
             filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)
@@ -116,14 +117,19 @@ def fileupload():
             os.makedirs(dst_folder)
 
             for filedata in session.add_files:
-                src_file = os.path.join(request.folder, 'uploads',
-                                        session.upload_dir, filedata.filename)
-                try:
-                    shutil.move(src_file,
-                                os.path.join(dst_folder.decode("utf-8"),
-                                             filedata.filename))
-                except OSError:
-                    pass
+                if os.path.exists(os.path.join(request.folder, 
+                                               'uploads', session.upload_dir, 
+                                               filedata.filename)):
+                    src_file = os.path.join(request.folder, 'uploads',
+                                            session.upload_dir, filedata.filename)
+                    try:
+                        shutil.move(src_file,
+                                    os.path.join(dst_folder.decode("utf-8"),
+                                                 filedata.filename))
+                    except OSError:
+                        pass
+                else:
+                    session.add_files.remove(filedata)
 
             tulip.leak.add_material(tulip.leak.id, prog, None,
                                     file=json.dumps(session.add_files))
