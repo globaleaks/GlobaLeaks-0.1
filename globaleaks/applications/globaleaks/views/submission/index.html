@@ -148,6 +148,8 @@ $(document).ready(function(){
 
     $('#fileupload').bind('fileuploadstop', function (e, data) {
         $("#speedbox").children("span").replaceWith("<span></span>");
+        window.speedarray = null;
+        window.average = null;
     });
 
     $('#fileupload').bind('fileuploaddone', function (e, data) {
@@ -157,6 +159,9 @@ $(document).ready(function(){
         var new_height = $('#fileupload').parents('.content').innerHeight();
         $('.stepContainer').css('height', new_height);
         $("#speedbox").children("span").replaceWith("<span></span>");
+        window.speedarray = null;
+        window.average = null;
+
     });
 
     // Load existing files:
