@@ -71,6 +71,8 @@ def index():
     """
     import hashlib
 
+    configuration_required()
+
     tulip_url = None
 
     if request.vars:
@@ -96,7 +98,6 @@ def oops():
 
 def error():
     return {}
-
 
 def email_template():
     return {}

@@ -1,12 +1,10 @@
-def configuration_required:
+def configuration_required():
     """
     This function is called ahead of every controller function that
     require to run in a proper configured GlobaLeaks environment.
-    Is checked the presence of the administrative_password, unset in the 
-    default, as configuration trigger
+    Is checked the presence of the node_admin_configured, set as true
+    when the mandatory configuartion is provieded
     """
 
-    if not settings.global.admin_password:
-        response.flash = "The requested utility required a minimum configuration in your GlobaLeaks node"
+    if not settings['globals'].node_admin_configured:
         redirect('globaleaks/installation/configuration.html')
-    

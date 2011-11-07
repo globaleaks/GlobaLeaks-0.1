@@ -10,7 +10,7 @@ It empowers anyone to easily setup and maintain their own Whistleblowing platfor
                                 
 
 Installation
-------------------------------------------------------------------
+------------
 
 First of all you need to get a copy of web2py, you can install it by doing
 
@@ -19,9 +19,6 @@ First of all you need to get a copy of web2py, you can install it by doing
 then install Globaleaks
 
     pip install git+git://github.com/globaleaks/GlobaLeaks.git#egg=globaleaks
-
-under Linux, use the script:
-    globaleaks/globaleaks.debian.sh [init.d script]
 
 Under Windows|MacOSX|whatever, start the service with:
     globaleaks/startglobaleaks
@@ -32,6 +29,16 @@ then you will find running as a web service the following:
 *  node administrator targets configuratation http://127.0.0.1:8000/globaleaks/admin/
 *  debug only global view interface: http://127.0.0.1:8000/globalview
 *  web2py developer access: http://127.0.0.1:8000/admin password "globaleaks"
+
+Base configuration
+------------------
+
+inside
+    defaults/origin.globaleaks.conf
+there are the configuration file with all the required, optional and mandatory fields that an admin could change.
+When globaleaks is started, the request of a controller that require a proper configuration will redirect to the configuration page. The admin provide with the few mandatory information, and the file globaleaks.conf is saved.
+
+When the login is requested to access as node maintainer, the default login is in: node_admin_username = admin@globaleaks.local
 
 How to hack on it
 -----------------

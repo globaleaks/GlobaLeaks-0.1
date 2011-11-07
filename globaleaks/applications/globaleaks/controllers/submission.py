@@ -23,6 +23,9 @@ FileHelper = local_import('file_helper')
 #
 @request.restful()
 def api():
+
+    configuration_required()
+
     response.view = 'generic.json'
 
     def GET(*r):
@@ -98,6 +101,8 @@ FileUpload = UploadHandler()
 # Integrate the methods suggested in the REST interface specification
 @request.restful()
 def fileupload():
+    configuration_required()
+
     response.view = 'generic.json'
     if not session.files:
         session.files = []
@@ -154,8 +159,6 @@ def fileupload():
         if not os.path.isdir(dst_folder):
             os.makedirs(dst_folder)
 
-        #print "The size now: %s" % upload[0]['size']
-
         # XXX this is necessary only for the resume support
         #if upload[0]['size'] == os.path.getsize(src_file):
             #print "THEY MATCH!!!!!.... %s != %s" % (upload[0]['size'], os.path.getsize(src_file))
@@ -169,6 +172,8 @@ def index():
     """
     This is the main submission page.
     """
+    configuration_required()
+
     # Generate the number the WB will use to come back to
     # his submission
     wb_number = randomizer.generate_tulip_receipt()
@@ -180,28 +185,14 @@ def index():
     if not session.wb_id:
         session.wb_id = randomizer.generate_wb_id()
 
+    # -- follow a comment preserved since 'the age of the upload'
+    #
     # Tor Browser Bundle has JS enabled by default!
     # Hurray! I love you all!!
     # Yeah, even *you* the anti-JS taliban hater!
     # As someone put it, if you think JS is evil remember
     # that the world is in technicolor and not in black and white.
     # Look up, the sun is shining, thanks to jQuery.
-    #jQueryFileUpload = TR(T('Material'),
-    # THIS HAS BEEN MOVED TO FORM SHAMAN
-#    jQueryFileUpload = DIV(
-#                           DIV(LABEL("Material:"),
-#                                _class="w2p_fl"),
-#                           DIV(DIV(LABEL(SPAN(T("Add Files")),
-#                                         INPUT(_type="file",
-#                                               _name="files[]"),
-#                                               _class="fileinput-button"),
-#                                   _class="fileupload-buttonbar"),
-#                                   DIV(TABLE(_class="files"),
-#                                       DIV(_class="fileupload-progressbar"),
-#                                       _class="fileupload-content"),
-#                                   _id="fileupload", _class="w2p_fl"),
-#                            DIV(_class="w2p_fc"),
-#                                _id="material__row")
 
     # This is necessary because otherwise web2py will go crazy when
     # it sees {{ }}
@@ -376,186 +367,3 @@ def index():
                 jQuery_templates=(XML(upload_template),
                                   XML(download_template)),
                 existing_files=existing_files)
-
-
-#@service.json
-#def upload():
-#    """
-#    Used for storing the uploaded files. To be invoked
-#    only from AJAX or as a web service.
-#    """
-#
-#    # File upload in a slightly smarter way
-#    # http://www.web2py.com/book/default/chapter/06#Manual-Uploads
-#    if not session.files:
-#        session.files = []
-#
-#    if not session.fileresume:
-#        session.fileresume = {}
-#
-#    # Little hack to make the loop run once more
-#    request.vars.extra = "don't make me a target"
-#    for f in request.vars:
-#        if f == "files[]" or request.env.http_x_file_name:
-#            logger.info("POSTed a file")
-#
-#            if request.env.http_x_file_name:
-#                file = request.body
-#                filename = request.env.http_x_file_name
-#            else:
-#                file = request.vars["files[]"]
-#                filename = file.filename
-#
-#            filedata = Storage()
-#            # Generate a random file ID
-#            # XXX is this a good way of doing it?
-#            filedata.fileid = random.randint(0, 1000000000000000)
-#
-#            # Store filename and extention
-#            filedata.filename = filename
-#            filedata.ext = mutils.file_type(filename.split(".")[-1])
-#            # Store the file to a temporary location and get the path
-#            # tmp_file = db.material.file.store(file.file, filename)
-#
-#            if (filename in session.fileresume.values()):
-#                for x in session.fileresume.items():
-#                    if x[1] == filename:
-#                        filedata.fileid = x[0]
-#            else:
-#                session.fileresume[filedata.fileid] = filename
-#
-#            # Use a temporary path the
-#            tmp_fpath = os.path.join(request.folder,
-#                                     'uploads',
-#                                     str(filedata.fileid) + \
-#                                     base64.b16encode(filename).lower())
-#
-#            # Check if the file already exists
-#            try:
-#                open(tmp_fpath)
-#                # If it does append
-#                dest_file = open(tmp_fpath, "ab")
-#            # XXX specify exception
-#            except:
-#                # Otherwise create a new one
-#                dest_file = open(tmp_fpath, "w+b")
-#
-#            try:
-#                shutil.copyfileobj(file.file, dest_file)
-#            finally:
-#                dest_file.close()
-#
-#            #tmp_fpath = os.path.join(request.folder, 'uploads/') + \
-#            #                    tmp_file
-#
-#            # Store the number of bytes of the uploaded file
-#            filedata.bytes = os.path.getsize(tmp_fpath)
-#
-#            # Store the file size in human readable format
-#            filedata.size = mutils.human_size(filedata.bytes)
-#
-#            filedir = db(db.submission.session ==
-#                         session.wb_id).select().first()
-#
-#            if not filedir:
-#                if not session.dirname:
-#                    filedir = randomizer.generate_dirname()
-#                    session.dirname = filedir
-#                else:
-#                    filedir = session.dirname
-#            else:
-#                filedir = str(filedir.dirname)
-#
-#            dst_folder = os.path.join(request.folder, 'material',
-#                                      filedir)
-#
-#            if not os.path.isdir(dst_folder):
-#                os.makedirs(dst_folder)
-#            #os.rename(os.path.join(request.folder, 'uploads/') +
-#            #          tmp_file, dst_folder + filename)
-#
-#            dst_file = open(dst_folder + filename, "w+b")
-#            try:
-#                shutil.copyfileobj(file.file, dst_file)
-#            finally:
-#                dst_file.close()
-#
-#            # this TODO XXX db.material.async_id need to be updated with
-#            # filedata.fileid and used as research key in sendinfo,
-#            # to add details and title
-#            # XXX XXX XXX XXX
-#
-#            return response.json(
-#                [{"name": session.fileresume.pop(filedata.fileid),
-#                  "size": int(filedata.bytes),
-#                  "url": "",
-#                  "thumbnail_url": "",
-#                  "delete_url": "/globaleaks/submission/upload?delete=" + \
-#                                str(filedata.fileid),
-#                  "delete_type":"GET"}]
-#            )
-#        if f == "filebytes":
-#            logger.info("Requested filebytes")
-#            if (request.vars.filebytes in session.fileresume.values()):
-#                for x in session.fileresume.items():
-#                    if x[1] == request.vars.filebytes:
-#                        filedata.fileid = x[0]
-#                        filebytes = base64.b16encode(request.vars.filebytes
-#                                                    ).lower()
-#                        size = int(os.path.getsize(
-#                                       os.path.join(request.folder,
-#                                                    'uploads',
-#                                                    str(filedata.fileid) + \
-#                                                    filebytes)))
-#
-#                        return response.json(
-#                            [{"name": request.vars.filebytes,
-#                              "size": size,
-#                              "url": "",
-#                              "thumbnail_url": "",
-#                              "delete_url": \
-#                                  "/globaleaks/submission/upload?delete=" + \
-#                                  str(filedata.fileid),
-#                              "delete_type":"GET"}])
-#            else:
-#                return response.json(
-#                    [{"name": request.vars.filebytes,
-#                      "size": 0,
-#                      "url": "",
-#                      "thumbnail_url": "",
-#                      "delete_url": "/globaleaks/submission/upload",
-#                      "delete_type": "GET"}])
-#
-#        if f == "delete":
-#            logger.info("Requested delete")
-#            for file in session.files:
-#                files = []
-#                if str(file.fileid) == str(request.vars.delete):
-#                    dst_folder = os.path.join(request.folder,
-#                                              'material',
-#                                              session.dirname)
-#                    try:
-#                        os.remove(dst_folder + file.filename)
-#                    except OSError:
-#                        logger.error("File requested for deletion is "
-#                                     "already deleted.")
-#                else:
-#                    files.append(file)
-#                session.files = files
-#                return response.json({'success': 'true'})
-
-
-def sendinfo():
-    logger = local_import('logger').start_logger(settings.logging)
-
-    if not session.files:
-        session.files = []
-
-    for f in request.vars:
-        logger.info("field : %s", f)
-        if f == "info_id":
-            indexed_file_id = request.vars.info_id
-            logger.info("info-id: %s", indexed_file_id)
-    # odd ? /tmp/globaleaks.log return a very strange output
-
-    return response.json({'success': 'true'})
