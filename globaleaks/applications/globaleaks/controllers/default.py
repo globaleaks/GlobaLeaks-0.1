@@ -13,7 +13,46 @@ def user():
     """
     Controller for user login
     """
-    return dict(form=auth())
+    tulip = None
+    form = auth()
+    try:
+        if (request.vars['_next']):
+            print "contains next..."
+            next = request.vars['_next']
+            if type(next) is str:
+                path = next.split("/")
+            else:
+                path = next[0].split("/")
+            print next
+            if len(path) > 2:
+                print "path > 3"
+                if len(path) > 0 and path[2] == "tulip":
+                    print path[4]
+                    try:
+                        tulip = Tulip(url=path[4]).target
+                    except:
+                        tulip = "admin"
+                if not tulip:
+                    tulip = "admin"
+                for c in form.elements('input'):
+                    print c['_name']
+                    if c['_name'] == "username":
+                        print c
+                        c['_value'] = tulip
+                return dict(form=form)
+    except:
+        print "except"
+    
+    try:
+        for c in form.elements('input'):
+            print c['_name']
+            if c['_name'] == "username":
+                print c
+                c['_value'] = "admin"
+    except:
+        pass
+    return dict(form=form)
+
 
 
 def download():

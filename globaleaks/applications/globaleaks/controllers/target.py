@@ -43,7 +43,7 @@ def view():
                 tulips=tulip_avail)
     # nevah forget http://uiu.me/Nr9G.png
 
-
+@auth.requires(auth.has_membership('targets'))
 def receiver():
     """
     This view is like a tulip: reachable only by a personal secret,
@@ -62,6 +62,7 @@ def receiver():
     except KeyError:
         return dict(err=True)
 
+@auth.requires(auth.has_membership('targets'))
 def bouquet():
     """
     This page is indexed by an uniq identifier by the receiver, and shows
@@ -83,6 +84,7 @@ def bouquet():
     if len(receiver_row) > 1:
         return dict(err="temporary fault: collision detected, two target"
                         "with the same password")
+    
     # fixme: this bug depends by the actual bad auth type
 
     # addiction information could be present in the POST
@@ -130,7 +132,7 @@ def bouquet():
                 target=receiver_row[0],
                 answer=response_t)
 
-
+@auth.requires(auth.has_membership('targets'))
 def subscribe():
     if not request.args:
         subscribe_form = SQLFORM.factory(
@@ -174,7 +176,7 @@ def subscribe():
 
     return dict(message="this is logically impossible", subscribe=None)
 
-
+@auth.requires(auth.has_membership('targets'))
 def unsubscribe():
     if request.args:
         tulip_url = request.args[0]

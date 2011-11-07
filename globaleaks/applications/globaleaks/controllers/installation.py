@@ -10,7 +10,7 @@ def record_mandatory(vars):
         db.auth_user.insert(
             first_name="GlobaLeaks",
             last_name="Node",
-            email="node@globaleaks.org",
+            username="admin",
             password=db.auth_user.password.validate(vars.administrative_password)[0])
         logger.info("First launch of GlobaLeaks, creating node administrator!")
         db.commit()

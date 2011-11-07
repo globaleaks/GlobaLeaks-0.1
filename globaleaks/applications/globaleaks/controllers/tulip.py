@@ -177,6 +177,9 @@ def fileupload():
 
     return locals()
 
+@auth.requires(Tulip(url=request.args[0]).target == "0" or  
+               not (gl.get_target_hash(int(Tulip(url=request.args[0]).get_target())))
+               or auth.has_membership('targets'))
 def status():
     """
     The main TULIP status page
@@ -202,7 +205,10 @@ def status():
         session.target = tulip_url
         whistleblower = False
         target_url = "target/" + tulip.url
-        delete_capability = (gl.get_target(int(tulip.get_target()))).delete_cap
+        try:
+            delete_capability = (gl.get_target(int(tulip.get_target()))).delete_cap
+        except:
+            delete_capability = None
 
     # check if the tulip has been requested to be deleted
     if request.vars and request.vars.delete and delete_capability:

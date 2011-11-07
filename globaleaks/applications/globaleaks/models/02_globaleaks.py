@@ -113,14 +113,13 @@ class Globaleaks(object):
             result[row.id] = {}
             result[row.id]["data"] = dict(row)
             result[row.id]["members"] = []
-
-            if result[row.id]["data"]['targets']:
+            try:
                 members = result[row.id]["data"]['targets']
                 for member in json.loads(members):
                     member_data = self._db(self._db.target.id==int(member)
                                           ).select().first()
                     result[row.id]["members"].append(dict(member_data))
-            else:
+            except:
                 result[row.id]["members"] = []
         return result
 
@@ -192,6 +191,16 @@ class Globaleaks(object):
         Returns the target with the specified id
         """
         return self._db(self._db.target.id==target_id).select().first()
+
+    def get_target_hash(self, target_id):
+        """
+        Returns the target with the specified id
+        """
+        try:
+            return self._db(self._db.target.id==target_id).select().first().hashpass
+        except:
+            return False
+
 
     def create_tulip(self, leak_id, target_id, hardcoded_url=None):
         """

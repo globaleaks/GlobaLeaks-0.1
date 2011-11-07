@@ -28,4 +28,5 @@ response.menu_admin = [
     (T('Globalview'),'/globalview'==URL(), '/globalview'),
     (T('Config'),'/config'==URL(), '/config'),
     (T('Stats'),'/stats'==URL(), '/stats'),
+    (T('Logout'),'/globaleaks/default/user/logout'==URL(), '/globaleaks/default/user/logout'),
 ]

@@ -11,6 +11,7 @@ import gluon.contrib.simplejson as json
 import shutil
 import base64
 
+T.force("EN")
 #FormWizard = local_import('plugin_PowerFormWizard')
 
 mutils = local_import('material').utils()

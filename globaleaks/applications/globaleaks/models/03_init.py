@@ -54,9 +54,9 @@ auth.settings.actions_disabled.append('retrieve_username') #disable register
 auth.settings.actions_disabled.append('reset_password') #disable register
 auth.settings.actions_disabled.append('request_reset_password') #disable register
 auth.settings.actions_disabled.append('impersonate') #disable register
-auth.settings.actions_disabled.append('groups') #disable register
 auth.settings.actions_disabled.append('') #disable register
 
+auth.settings.create_user_groups = False
 
 # Set up the logger to be shared with all
 logger = local_import('logger').start_logger(settings.logging)
@@ -70,21 +70,41 @@ settings.private.port     = '8000'
 settings.private.mail_use_tls = True
 
 
-settings.mail.server = 'box218.bluehost.com:25'                    # your SMTP server
-settings.mail.sender = 'GlobaLeaks Demo <demonotification@globaleaks.org>'              # your email
-settings.mail.login = 'demonotification@globaleaks.org:antaniglobaleaks'                                       # your credentials or None
+settings.mail.server = 'box218.bluehost.com:25'
+settings.mail.sender = 'GlobaLeaks Demo <demonotification@globaleaks.org>'
+settings.mail.login = 'demonotification@globaleaks.org:antaniglobaleaks'
 settings.mail.ssl = False
 
 # settings.auth
 settings.auth.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'    # before define_tables()
-auth.define_tables()                                           # creates all needed tables
+
+auth.define_tables(username=True)
+
+
+if auth.id_group("admin"):
+    settings.private.admingroup = auth.id_group("admin")
+else:
+    auth.add_group('admin', 'Node admins')
+    
+if auth.id_group("targets"):
+    settings.private.admingroup = auth.id_group("targets")
+else:
+    auth.add_group('targets', 'Targets')
+    
+if auth.id_group("candelete"):
+    settings.private.admingroup = auth.id_group("candelete")
+else:
+    auth.add_group('candelete', 'candelete')
+
 settings.auth.mailer = mail                                    # for user email verification
 settings.auth.registration_requires_verification = False
 settings.auth.registration_requires_approval = False
-auth.messages.verify_email = 'Click on the link http://' + request.env.http_host + URL('default','user',args=['verify_email']) + '/%(key)s to verify your email'
+auth.messages.verify_email = 'Click on the link http://' + request.env.http_host + \
+        URL('default','user',args=['verify_email']) + '/%(key)s to verify your email'
 
 settings.auth.reset_password_requires_verification = True
-auth.messages.reset_password = 'Click on the link http://' + request.env.http_host + URL('default','user',args=['reset_password']) + '/%(key)s to reset your password'
+auth.messages.reset_password = 'Click on the link http://' + request.env.http_host + \
+        URL('default','user',args=['reset_password']) + '/%(key)s to reset your password'
 
 settings.auth.table_user.email.label=T("Username")
 

@@ -21,8 +21,11 @@ def index():
 
 def obtain_secret(input_secret):
     if not input_secret:
-        return randomizer.generate_target_passphrase()
+        ret = randomizer.generate_target_passphrase()[0]
+        print "RET: %s" % ret
+        return None
     else:
+        print "RET2: %s" % input_secret
         return input_secret
 
 @auth.requires_login()
@@ -41,12 +44,6 @@ def nodeprivacy():
             tor_hs.stop()
 
     return dict()
-
-def obtain_secret(input_secret):
-    if not input_secret:
-        return randomizer.generate_target_passphrase()
-    else:
-        return input_secret
 
 @auth.requires_login()
 def targets():
@@ -82,8 +79,24 @@ def targets():
 
         passphrase = obtain_secret(req.passphrase)
 
-        gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                         hashlib.sha256(passphrase[0]).hexdigest(), "subscribed")
+        if not passphrase:
+            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
+                             None, "subscribed")
+            passphrase = randomizer.generate_target_passphrase()[0]
+
+        else:
+            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
+                             hashlib.sha256(passphrase).hexdigest(), "subscribed")
+            
+        passphrase = randomizer.generate_target_passphrase()[0]
+        target = db.auth_user.insert(first_name=req.Name,
+                                     last_name="",
+                                     username=target_id,
+                                     email=req.contact,
+                                     password=db.auth_user.password.validate(passphrase)[0]
+                                     )
+        auth.add_membership(auth.id_group("targets"), target)
+        
         targets_list = gl.get_targets("ANY")
         return dict(form=form, list=True, targets=targets_list)
 
@@ -122,9 +135,25 @@ def targetgroups():
     if form_target.accepts(request.vars, session):
         req = request.vars
         passphrase = obtain_secret(req.passphrase)
-        gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                         hashlib.sha256(passphrase[0]).hexdigest(), "subscribed")
+        
+        if not passphrase:
+            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
+                             None, "subscribed")
+            passphrase = randomizer.generate_target_passphrase()[0]
 
+        else:
+            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
+                             hashlib.sha256(passphrase).hexdigest(), "subscribed")
+            
+
+        target = db.auth_user.insert(first_name=req.Name,
+                                     last_name="",
+                                     username=target_id,
+                                     email=req.contact,
+                                     password=db.auth_user.password.validate(passphrase)[0]
+                                     )
+        auth.add_membership(auth.id_group("targets"), target)
+        
     all_targets = gl.get_targets(None)
     targetgroups_list = gl.get_targetgroups()
 
@@ -236,7 +265,7 @@ def target_add():
         pass
 
     result = gl.add_to_targetgroup(target_id, group_id)
-
+    
     if result:
         return response.json({'success': 'true'})
 
