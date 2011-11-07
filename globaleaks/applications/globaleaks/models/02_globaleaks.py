@@ -126,7 +126,7 @@ class Globaleaks(object):
     # by default, a target is inserted with an email type only as contact_type,
     # in the personal page, the receiver should change that or the contact type
     # (eg: facebook, irc ?, encrypted mail setting up a gpg pubkey)
-    def create_target(self, name, category, desc, contact_mail, could_del, initial_hashpass, req_status):
+    def create_target(self, name, group_name, desc, contact_mail, could_del, initial_hashpass, req_status):
         """
         Creates a new target with the specified parameters.
         Returns the id of the new record.
@@ -135,6 +135,7 @@ class Globaleaks(object):
         |type| supported values: [plain*|pgp]
         |status|: [subscribed*|unsubscribed|selfproposed]
         |could_del|: true or false*, mean: could delete material
+        |group_name|: could be specified a single group name only
 
         * = default
         """
@@ -144,12 +145,24 @@ class Globaleaks(object):
             return 0
 
         target_id = self._db.target.insert(name=name,
-            # groups=pickle.dumps([category]) if category else "",
             desc=desc, contact_type="email",
             contact=contact_mail, type="plain", info="",
             status=req_status, delete_cap=could_del, tulip_counter=0,
             download_counter=0, hashpass=initial_hashpass)
         self._db.commit()
+
+        # extract the ID of the request group, if any, of found the default, if supported
+        requested_group = group_name if group_name else settings['globals'].default_group 
+        if requested_group:
+            group_id = self.get_group_id(requested_group)
+            group_row = self._db(self._db.targetgroup.id==group_id).select().first()
+            comrades = json.loads(group_row['targets'])
+            comrades.append(target_id)
+            self._db(self._db.targetgroup.id==group_id).update(targets=comrades.dump())
+        # REMIND:
+        # has not be called the other methods that works on db.targetgroup, because they
+        # need to be a little refactored/optimized
+
         return target_id
 
     def delete_target(self, target_id):

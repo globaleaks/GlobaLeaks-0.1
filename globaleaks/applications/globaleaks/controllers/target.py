@@ -8,7 +8,6 @@ def index():
     configuration_required()
     return dict(message="hello from target.py")
 
-
 @auth.requires_login()
 def view():
     configuration_required()

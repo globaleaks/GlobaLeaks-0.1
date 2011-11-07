@@ -25,7 +25,6 @@ db.define_table('target',
     Field('last_download'),
     Field('tulip_counter'),
     Field('download_counter'),
-    # Field('groups'), # not used except in globaleaks.py create_target ? remind to check
     format='%(name)s'
     )
 

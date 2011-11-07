@@ -7,4 +7,4 @@ def configuration_required():
     """
 
     if not settings['globals'].node_admin_configured:
-        redirect('globaleaks/installation/configuration.html')
+        redirect('/globaleaks/installation/configuration.html')
