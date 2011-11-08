@@ -24,7 +24,9 @@ def record_mandatory(vars):
 
     settings.globals.commit()
 
-    # this is a MANDATORY STEP, therefore here is added the default group
+    # this is a MANDATORY STEP, therefore HERE is added the default group
+    if settings['globals'].default_group:
+        gl.create_targetgroup(settings['globals'].default_group, "Default receiver group")
 
     print "mandatory saved"
 

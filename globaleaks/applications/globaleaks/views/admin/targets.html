@@ -5,27 +5,27 @@ background-color: green;
 }
 </style>
 {{if not list:}}
-<h1><span>Add Target</span></h1>
+<h1><span>Add a Receiver</span></h1>
 <p class="intro">
     The Node Administrator is the person who is actually running the GlobaLeaks node. He is aware of the context he wishes to impact and will therefore
-    be able to properly construct a target list. The target list will be composed of valuable people that are willing to analyze the information
-    that is sent to them. The target lists need to be as diversified as possible. The diversification of interests serves to incentivize targets into
-    properly analyzing the information submitted by the Whistleblower.</p>
+    be able to properly construct a receiver list. The receiver list will be composed of valuable people that are willing to analyze the information
+    that is sent to them. The receiver lists need to be as diversified as possible. The diversification of interests serves to incentivize receiver into
+    properly analyzing the information submitted by the Whistleblower. <a href="/globaleaks/admin/targets/display">View the receiver list</a>
+    </p>
+
+{{if default_group:}}
+    <p>In this node, every receiver is added at the default group, named "{{=default_group}}"</p><br>
+{{pass}}
     <input type="button" value="randomize input" onClick="randomizevalue()" />
 
 {{=form}}
-<!-- <a class="button targetlist" href="/globaleaks/admin/targets/display">View target list</a> -->
+
+
 {{pass}}
 
 {{if list:}}
 
-<!-- h1>Now go and test a leak out ;)</h1>
-<ul>
-<li>Name: {{=request.vars.Name}}</li>
-<li>Description: {{=request.vars.Description}}</li>
-<li>Email: {{=request.vars.email}}</li>
-</ul -->
-<h1><span>Target list</span></h1>
+<h1><span>Receiver list</span></h1>
 <form><input type="hidden" id="edit" name="edit" /></form>
 <table class="targetlist">
 <thead>
@@ -58,9 +58,11 @@ background-color: green;
 {{pass}}
 </table>
 
-<!-- <a class="button whistleblower" href="/submit">Be the Whistleblower</a> -->
+{{if default_group:}}
+    <p>In this node, every receiver is added at the default group, named "{{=default_group}}"</p>
+{{pass}}
 
-<a class="button addtarget" href="/globaleaks/admin/targets">Add target</a>
+<a class="button addtarget" href="/globaleaks/admin/targets">Add a receiver</a>
 
 <div class="clear"></div>
 
