@@ -237,7 +237,7 @@ def index():
         # this is the only error handled at the moment, the fact that __init__
         # could return only None, maybe an issue when more errors might be managed
         if not hasattr(form, 'vars'):
-            return dict(error='No receiver groups has been configured in this node', existing_files=[])
+            return dict(error='No receiver present in the default group', existing_files=[])
 
     else:
         form = SQLFORM(db.leak,
@@ -332,13 +332,14 @@ def index():
         #  this just creates the tulips), the first is the whistleblower tulip
         gl.create_tulip(form.vars.id, 0, wb_number[1])
 
-        # follow the tulips for every receiver inside a basket
+        # create the tulips for every receiver inside a basket
         for group_id in group_ids:
             leak.notify_targetgroup(group_id)
 
-        if len(group_ids) < 1:
-            group_id = db().select(db.targetgroup.ALL).first().id
-            leak.notify_targetgroup(group_id)
+        # -- test: is this code redundant with the previous two lines ?
+        #if len(group_ids):
+        #    group_id = db().select(db.targetgroup.ALL).first().id
+        #    leak.notify_targetgroup(group_id)
 
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \

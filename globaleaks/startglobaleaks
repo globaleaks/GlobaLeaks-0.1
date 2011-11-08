@@ -76,13 +76,6 @@ if [ ! -z $FOLDER ]; then
     cd $FOLDER
 fi
 
-#if [ -f "installstorage/.installed" ]; then
-#    echo -e "${c3}GlobaLeaks has been configured by the starting page: changing of routes.py"
-#    python -c "import os; os.unlink('routes.py'); os.symlink('installstorage/post_install_routes.py', 'routes.py')"
-#    rm -f "installstorage/.installed"
-#else
-#    echo -e "${c3}GlobaLeaks is running in - configuration mode -"
-#fi
 tput sgr0
 
 if [ -d "applications/globaleaks/static" ]; then

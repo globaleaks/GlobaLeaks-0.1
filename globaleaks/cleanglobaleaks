@@ -1,14 +1,14 @@
 #!/bin/sh
 
 info="[*] "
-success="[+] "
-error="[-] "
+success="    [+] "
+error="    [-] "
 
 help() {
     echo "This utility restore your directory to the not yet configured status of GlobaLeaks"
     echo "It's useful when:"
     echo "1]  you want delete all the data, and restore the node as freshly downloaded software (use option 'complete')."
-    echo "2]  you want to commit via git (use option 'commit')."
+    echo "2]  you want to commit the code without your local configuration (use option 'commit')."
     echo "3]  you want to clean your databases (use option 'database')."
     echo "${info}To start the cleaning: run $0 [complete|database|commit]"
     exit
@@ -42,10 +42,12 @@ clean_complete() {
     clean_database
     clean_commit
 
-    echo "${info}deleting the material, sessions, etc..."
-    rm -rf applications/globaleaks/sessions/*
+    echo "${info}deleting the material, sessions, uploads, errors"
     rm -rf applications/globaleaks/material/*
     rm -rf applications/globaleaks/uploads/*
+
+    rm -f applications/globaleaks/sessions/*
+    rm -f applications/globaleaks/errors/*
     echo "${success}done"
 }
 
