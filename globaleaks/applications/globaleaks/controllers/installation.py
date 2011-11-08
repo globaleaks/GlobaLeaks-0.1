@@ -28,14 +28,20 @@ def record_mandatory(vars):
     if settings['globals'].default_group:
         gl.create_targetgroup(settings['globals'].default_group, "Default receiver group", None)
 
-    print "mandatory saved"
+    print "mandatory settings: saved"
 
 def record_required(vars):
-    response.flash = ("Remind: those info are not yet saved")
-    print "required saved"
+    
+    settings['globals'].headline = vars.headline
+    settings['globals'].tulip_expire_days = vars.tulip_expire_days
+    settings['globals'].tulip_max_download = vars.tulip_max_download
+    settings['globals'].html_meta_keywords = vars.html_meta_keywords
+
+    settings.globals.commit()
+
+    print "required settings: saved"
 
 def record_optional(vars):
-    response.flash = ("Remind: those info are not yet saved")
     print "optional saved"
 
 def configuration():
@@ -54,10 +60,10 @@ def configuration():
     # check: something don't work with javascript checks apply to special char
     # Field('administrative_password', requires = [IS_NOT_EMPTY(), IS_STRONG(min=8, special=2, upper=2)] ),
 
-    mandatory_form = SQLFORM.factory(*mandatory_input, table_name="mandatory", keepvalues=True)
+    mandatory_form = SQLFORM.factory(*mandatory_input, table_name="mandatory")
     # check: why is not working keepvalues ?
 
-    if mandatory_form.accepts(request.vars, session):
+    if mandatory_form.accepts(request.vars, session, keepvalues=True):
         record_mandatory(request.vars)
 
     # required
@@ -67,9 +73,9 @@ def configuration():
                     Field('tulip_max_download', requires=IS_NOT_EMPTY()),
                     Field('html_meta_keywords', requires=IS_NOT_EMPTY()),
                    )
-    required_form = SQLFORM.factory(*required_input, table_name="required", keepvalues=True)
+    required_form = SQLFORM.factory(*required_input, table_name="required")
 
-    if required_form.accepts(request.vars, session):
+    if required_form.accepts(request.vars, session, keepvalues=True):
         record_required(request.vars)
 
     # optional

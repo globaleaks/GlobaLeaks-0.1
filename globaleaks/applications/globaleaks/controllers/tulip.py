@@ -155,7 +155,6 @@ def fileupload():
             return json.dumps({"success": "false"})
         if not tulip.is_wb():
             return json.dumps({"success": "false"})
-        print tulip_url
         upload = FileUpload.post(tulip.leak.id)
 
         upload = json.loads(upload)

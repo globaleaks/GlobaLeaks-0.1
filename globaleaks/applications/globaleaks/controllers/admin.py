@@ -22,10 +22,8 @@ def index():
 def obtain_secret(input_secret):
     if not input_secret:
         ret = randomizer.generate_target_passphrase()[0]
-        print "RET: %s" % ret
         return None
     else:
-        print "RET2: %s" % input_secret
         return input_secret
 
 @auth.requires_login()

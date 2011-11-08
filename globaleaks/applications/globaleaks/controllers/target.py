@@ -106,7 +106,6 @@ def bouquet():
 
     if password_info.accepts(request.vars, session):
         response_t += "password accepted "
-        print "password accepted"
 
     form_receiving = (  Field('new_server', requires=IS_NOT_EMPTY()),
                         Field('scp_enable_copy'),
@@ -117,7 +116,6 @@ def bouquet():
 
     if receiving_info.accepts(request.vars, session):
         response_t += "receiving update accepted "
-        print "receiving update accepted"
 
     # the contact-type required to be updated
     form_contact = (  Field('new_contact'), Field('new_email'), )
@@ -125,7 +123,6 @@ def bouquet():
 
     if contact_info.accepts(request.vars, session):
         response_t += "contact update accepted "
-        print "contact update accepted"
 
     # this require to be splitted because tulip are leak x target matrix
     bouquet_list = []
