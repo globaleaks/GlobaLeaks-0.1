@@ -53,6 +53,10 @@ clean_complete() {
     rm -rf applications/globaleaks/sessions/*
     rm -rf applications/globaleaks/material/*
     rm -rf applications/globaleaks/uploads/*
+
+    echo "${blue}deleting .pyc files..."
+    find . -type f -name '*.pyc' -delete
+
     echo "${green}   done"
 }
 
