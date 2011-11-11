@@ -33,7 +33,10 @@ def generate_human_dirname(request, leak, old_dirname):
     return dirname
 
 def is_human_dirname(dirname):
-    return dirname.startswith("Data-")
+    try:
+        return dirname.startswith("Data-")
+    except:
+        return None
 
 def generate_dirname():
     return hashlib.sha256(os.urandom(1024)).hexdigest()
