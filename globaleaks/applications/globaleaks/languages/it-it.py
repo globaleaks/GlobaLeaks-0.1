@@ -71,6 +71,7 @@
 'Receiver': 'Receiver',
 'Record ID': 'Record ID',
 'Register': 'Register',
+'Registration identifier': 'Registration identifier',
 'Registration key': 'Chiave di Registazione',
 'Remember me (for 30 days)': 'Remember me (for 30 days)',
 'Reset Password key': 'Resetta chiave Password ',

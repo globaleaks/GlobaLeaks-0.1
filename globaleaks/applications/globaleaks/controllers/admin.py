@@ -22,10 +22,8 @@ def index():
 def obtain_secret(input_secret):
     if not input_secret:
         ret = randomizer.generate_target_passphrase()[0]
-        print "RET: %s" % ret
         return None
     else:
-        print "RET2: %s" % input_secret
         return input_secret
 
 @auth.requires_login()
@@ -64,7 +62,7 @@ def targets():
                           requires=IS_LENGTH(minsize=5, maxsize=50)),
                     Field('contact', requires=[IS_EMAIL(),
                           IS_NOT_IN_DB(db, db.target.contact)]),
-                    Field('passphrase'), Field('coulddelete', 'boolean'), #extern the text in view
+                    Field('passphrase'), Field('could_delete', 'boolean'), #extern the text in view
                    )
 
     form = SQLFORM.factory(*form_content)
@@ -72,7 +70,7 @@ def targets():
     targets_list = gl.get_targets(None)
 
     if "display" in request.args and not request.vars:
-        return dict(form=None, list=True, targets=targets_list)
+        return dict(form=None, list=True, targets=targets_list, default_group = settings['globals'].default_group)
 
     if form.accepts(request.vars, session):
         req = request.vars
@@ -80,7 +78,7 @@ def targets():
         passphrase = obtain_secret(req.passphrase)
 
         if not passphrase:
-            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
+            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.could_delete,
                              None, "subscribed")
             passphrase = randomizer.generate_target_passphrase()[0]
 
@@ -98,9 +96,9 @@ def targets():
         auth.add_membership(auth.id_group("targets"), target)
         
         targets_list = gl.get_targets("ANY")
-        return dict(form=form, list=True, targets=targets_list)
+        return dict(form=form, list=True, targets=targets_list, default_group = settings['globals'].default_group)
 
-    return dict(form=form, list=False, targets=targets_list)
+    return dict(form=form, list=False, targets=targets_list, default_group = settings['globals'].default_group)
 
 @auth.requires_login()
 def targetgroups():

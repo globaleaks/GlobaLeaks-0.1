@@ -188,6 +188,8 @@ class Leak(object):
             if target not in previously_generated:
                 tulip_id = gl.create_tulip(self._id, target.id)
             tulip_url = db.tulip[tulip_id].url
+            # XXX
+            # BUG: if a target is not subscribed, neither require a tulip for him
             if target.status == "subscribed":
                 # Add mail to db, sending managed by scheduler
                 db.mail.insert(target=target.name,

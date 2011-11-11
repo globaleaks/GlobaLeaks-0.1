@@ -5,11 +5,12 @@ to edits its settings. (E.g.: Unsubscribe from a GL node)
 """
 
 def index():
+    configuration_required()
     return dict(message="hello from target.py")
-
 
 @auth.requires_login()
 def view():
+    configuration_required()
     collected_user = []
     target_list = db(db.target.status=="subscribed").select()
     for active_user in target_list:
@@ -51,6 +52,8 @@ def receiver():
     """
     import hashlib
 
+    configuration_required()
+
     if not request or not request.post_vars or \
        not request.post_vars["targetid"]:
         return dict(err=False)
@@ -69,6 +72,9 @@ def bouquet():
     all him accessible Tulips, its the page where she/he could change their
     preferences
     """
+
+    configuration_required()
+
     if request and request.args:
         target_url = request.args[0]
     else:
@@ -100,7 +106,6 @@ def bouquet():
 
     if password_info.accepts(request.vars, session):
         response_t += "password accepted "
-        print "password accepted"
 
     form_receiving = (  Field('new_server', requires=IS_NOT_EMPTY()),
                         Field('scp_enable_copy'),
@@ -111,7 +116,6 @@ def bouquet():
 
     if receiving_info.accepts(request.vars, session):
         response_t += "receiving update accepted "
-        print "receiving update accepted"
 
     # the contact-type required to be updated
     form_contact = (  Field('new_contact'), Field('new_email'), )
@@ -119,7 +123,6 @@ def bouquet():
 
     if contact_info.accepts(request.vars, session):
         response_t += "contact update accepted "
-        print "contact update accepted"
 
     # this require to be splitted because tulip are leak x target matrix
     bouquet_list = []
@@ -134,6 +137,9 @@ def bouquet():
 
 @auth.requires(auth.has_membership('targets'))
 def subscribe():
+
+    configuration_required()
+
     if not request.args:
         subscribe_form = SQLFORM.factory(
                             Field('Name', requires=IS_NOT_EMPTY()),
@@ -178,6 +184,9 @@ def subscribe():
 
 @auth.requires(auth.has_membership('targets'))
 def unsubscribe():
+
+    configuration_required()
+
     if request.args:
         tulip_url = request.args[0]
     else:

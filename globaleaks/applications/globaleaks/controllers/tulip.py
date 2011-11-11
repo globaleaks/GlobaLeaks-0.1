@@ -13,6 +13,8 @@ mutils = local_import('material').utils()
 def index():
     import hashlib
 
+    configuration_required()
+
     form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
 
     if form.accepts(request.vars, session):
@@ -73,6 +75,8 @@ def fileupload():
     """
     Controller for file uploading for leak updating
     """
+    configuration_required()
+
     response.view = 'generic.json'
 
     if not session.add_files:
@@ -151,7 +155,6 @@ def fileupload():
             return json.dumps({"success": "false"})
         if not tulip.is_wb():
             return json.dumps({"success": "false"})
-        print tulip_url
         upload = FileUpload.post(tulip.leak.id)
 
         upload = json.loads(upload)
@@ -184,6 +187,9 @@ def status():
     """
     The main TULIP status page
     """
+
+    configuration_required()
+
     try:
         tulip_url = request.args[0]
     except IndexError:
@@ -324,6 +330,9 @@ def download_increment(tulip):
 
 def download():
     import os
+
+    configuration_required()
+
     try:
         tulip_url = request.args[0]
     except IndexError:
@@ -360,6 +369,9 @@ def forward():
     Controller for the page that lets the target to forward the tulip to
     another group.
     """
+
+    configuration_required()
+
     try:
         tulip_url = request.args[0]
     except IndexError:

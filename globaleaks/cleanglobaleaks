@@ -1,0 +1,72 @@
+#!/bin/sh
+
+info="[*] "
+success="    [+] "
+error="    [-] "
+
+help() {
+    echo "This utility restore your directory to the not yet configured status of GlobaLeaks"
+    echo "It's useful when:"
+    echo "1]  you want delete all the data, and restore the node as freshly downloaded software (use option 'complete')."
+    echo "2]  you want to commit the code without your local configuration (use option 'commit')."
+    echo "3]  you want to clean your databases (use option 'database')."
+    echo "${info}To start the cleaning: run $0 [complete|database|commit]"
+    exit
+}
+
+path_fix() {
+    echo "${info} checking directory..."
+    if [ -d 'defaults' ]; then
+        echo "${success}$PWD: ok"
+    else
+        echo "${error}$PWD: run this script without a prefix path"; exit
+    fi
+}
+
+clean_database() {
+    echo "${info}removing databases..."
+    # python - "import os; os.removedirs('applications/globaleaks/databases')"
+    # don't work for i in glob.glob(): os.unlink, but is the portable way to follow
+    rm -f applications/globaleaks/databases/*
+    echo "${success}done"
+}
+
+clean_commit() {
+    echo "${info}restoring pre install files..."
+    cp -f defaults/original.globaleaks.conf globaleaks.conf
+    echo "${success}done"
+}
+
+clean_complete() {
+
+    clean_database
+    clean_commit
+
+    echo "${info}deleting the material, sessions, uploads, errors"
+    rm -rf applications/globaleaks/material/*
+    rm -rf applications/globaleaks/uploads/*
+
+    rm -f applications/globaleaks/sessions/*
+    rm -f applications/globaleaks/errors/*
+
+    echo "${info}deleting .pyc files..."
+    find . -type f -name '*.pyc' -delete
+
+    echo "${success}done"
+}
+
+if [ $# -lt 1 ]; then
+    help
+fi
+
+if [ $1 = "complete" ]; then
+    path_fix; clean_complete; exit
+fi
+if [ $1 = "database" ]; then
+    path_fix; clean_database; exit
+fi
+if [ $1 = "commit" ]; then
+    path_fix; clean_commit; exit
+fi
+
+help

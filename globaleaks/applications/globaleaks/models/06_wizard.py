@@ -4,8 +4,14 @@ class FormShaman(SQLFORM):
         # Creating a list of targetgroups
         groups_data = gl.get_targetgroups()
 
+        # unroll the effective receiver inside the groups list
+        # because could exist one or more group empty!
+        effective_notification = 0
+        for group_id in groups_data:
+            effective_notification += len(groups_data[group_id]['members'])
+
         # this is the only error trapped by FormShaman.__init__
-        if not groups_data:
+        if not groups_data or not effective_notification:
             return None
 
         if len(groups_data) > 1:

@@ -7,10 +7,7 @@ import shutil
 def index():
     return {}
 
-
-
 def post():
-    # shutil.copyfileobj(request.body, open("/dev/null", "wb"))
     try:
         a = request.body.read()
         return json.dumps({"DIO": "ESISTE"})
