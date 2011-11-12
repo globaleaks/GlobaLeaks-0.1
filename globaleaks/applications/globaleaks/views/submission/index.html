@@ -55,14 +55,12 @@
 {{if error:}}
     <div class="pagetitle">Incomplete configuration!</div>
     <div class="description">It's required that almost one receiver group has been configured from the administrative panel, in order to accept whistleblowing submission.<br><br>
-    You need to create one or more <b>receivers</b>. <a href="/groups">the appropiate page</a>.
+    If your are the <b>Node maintainer</b>, you need to create one or more <b>receivers</b>: go to <a href="/globaleaks/admin/targets/display">the appropiate page</a>.
     </div>
 {{pass}}
 
 {{if not error and not leak_id and form:}}
     <h1><span>{{=T("Submission interface")}}</span></h1>
-    <!-- TODO: use this data to create privacy box -->
-    <!-- {=BEAUTIFY(anonymity)} -->
     {{=form}}
 
 {{pass}}

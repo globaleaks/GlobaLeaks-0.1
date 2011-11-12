@@ -156,12 +156,17 @@ class Globaleaks(object):
         if requested_group:
             group_id = self.get_group_id(requested_group)
             group_row = self._db(self._db.targetgroup.id==group_id).select().first()
-            comrades = json.loads(group_row['targets'])
-            comrades.append(target_id)
-            self._db(self._db.targetgroup.id==group_id).update(targets=comrades.dump())
-        # REMIND:
-        # has not be called the other methods that works on db.targetgroup, because they
-        # need to be a little refactored/optimized
+
+            print "IL PORCODIO ", group_row['targets']
+
+            if group_row['targets']:
+                comrades = json.loads(group_row['targets'])
+                comrades.append(target_id)
+                self.update_targetgroup(group_id, targets=json.dumps(comrades))
+            else:
+                starting_json = '["' + str(target_id) + '"]'
+                print "IL DIO BALORO", starting_json
+                self.update_targetgroup(group_id, targets=starting_json)
 
         return target_id
 

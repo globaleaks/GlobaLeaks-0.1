@@ -1,6 +1,3 @@
-# from gluon.storage import Storage
-# configuration_done = Storage()
-
 default_application = 'globaleaks'
 default_controller  = 'default'
 default_function    = 'index'
@@ -21,3 +18,5 @@ routes_in = (
              ('^/js', '/globaleaks/preload/js'),
              ('^/css', '/globaleaks/preload/css')
             )
+
+

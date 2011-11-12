@@ -14,7 +14,7 @@ if [ $# -lt 1 ]; then
     exit
 fi
 
-DIRNAMES="./applications/globaleaks/*.py ./applications/globaleaks/controllers/*.py ./applications/globaleaks/cron/*.py ./applications/globaleaks/languages/*.py ./applications/globaleaks/models/*.py ./applications/globaleaks/modules/*.py ./applications/globaleaks/modules/logic/*.py ./applications/globaleaks/views/*.py"
+DIRNAMES="./applications/globaleaks/*.py ./applications/globaleaks/controllers/*.py ./applications/globaleaks/cron/*.py ./applications/globaleaks/languages/*.py ./applications/globaleaks/models/*.py ./applications/globaleaks/modules/*.py ./applications/globaleaks/views/*.py"
 
 
 if [ $# -lt 2 ]; then

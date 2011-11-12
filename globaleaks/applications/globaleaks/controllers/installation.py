@@ -5,7 +5,6 @@ to edits its settings. (E.g.: Unsubscribe from a GL node)
 """
 def record_mandatory(vars):
     import os
-    print vars
 
     # require a check
     db.auth_user.insert(
