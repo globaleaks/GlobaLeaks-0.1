@@ -77,9 +77,11 @@ def api():
         # generation of tulips: the first, in GlobaLeaks object, aim to create
         # the whistleblower tulip
         gl.create_tulip(leak_id, 0, wb_number[1])
+
         # this loop, create the tulip for the receivers
+        print "secondo caso: dio canazzo", group_ids
         for group_id in group_ids:
-            leak.notify_targetgroup(group_id)
+            leak.crate_tulip_by_group(group_id)
 
         # format the pretty number for being saved like a phone number
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \
@@ -329,17 +331,15 @@ def index():
 
         # Create the leak with the GlobaLeaks factory
         # (the data has actually already been added to db leak,
-        #  this just creates the tulips), the first is the whistleblower tulip
+        # this just creates the tulips), the first is the whistleblower tulip
         gl.create_tulip(form.vars.id, 0, wb_number[1])
 
         # create the tulips for every receiver inside a basket
-        for group_id in group_ids:
-            leak.notify_targetgroup(group_id)
 
-        # -- test: is this code redundant with the previous two lines ?
-        #if len(group_ids):
-        #    group_id = db().select(db.targetgroup.ALL).first().id
-        #    leak.notify_targetgroup(group_id)
+        # if len(group_ids):
+        # fixme: we're not considering the selecred group, but *all*
+        group_id = db().select(db.targetgroup.ALL).first().id
+        leak.create_tulip_by_group(group_id)
 
         # Make the WB number be *** *** *****
         pretty_number = wb_number[0][:3] + " " + wb_number[0][3:6] + \

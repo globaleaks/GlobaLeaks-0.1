@@ -170,7 +170,7 @@ class Leak(object):
         else:
             return json.loads(notified)
 
-    def notify_targetgroup(self, group_id):
+    def create_tulip_by_group(self, group_id):
         """
         Notifies the targets of the selected targetgroup that have not
         been notified yet. Then adds that group to the notified_groups
@@ -178,9 +178,15 @@ class Leak(object):
         """
 
         notified_groups = self.get_notified_targetgroups()
+        # questo è vuoto: verifica
+
         notified_targets = [x.id for x in gl.get_targets(notified_groups)]
+        # questo è vuoto: mah
+
         to_notify = [x.id for x in gl.get_targets([group_id])]
         to_notify = set(to_notify).difference(notified_targets)
+        # questo è popolato, ok
+
         for target_id in to_notify:
             target = gl.get_target(target_id)
             previously_generated = [tulip.target for tulip in self.tulips]
@@ -188,9 +194,8 @@ class Leak(object):
             if target not in previously_generated:
                 tulip_id = gl.create_tulip(self._id, target.id)
             tulip_url = db.tulip[tulip_id].url
-            # XXX
-            # BUG: if a target is not subscribed, neither require a tulip for him
-            if target.status == "subscribed":
+
+            if target.status is not "subscribed":
                 # Add mail to db, sending managed by scheduler
                 db.mail.insert(target=target.name,
                                address=target.contact,
