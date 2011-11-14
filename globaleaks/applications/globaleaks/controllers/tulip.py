@@ -202,8 +202,15 @@ def status():
 
     leak = tulip.get_leak()
 
+    whistleblower_text = ''
     if tulip.target == "0":
         whistleblower = True
+
+        with open(settings.globals.whistleblower_file) as filestream:
+            whistleblower_text = filestream.read()
+
+        print "porcodio! ", whistleblower_text
+ 
         target_url = ''
         delete_capability = False
     else:
@@ -288,6 +295,7 @@ def status():
             access_available=access_available,
             download_available=download_available,
             whistleblower=whistleblower,
+            whistleblower_text=whistleblower_text,
             tulip_url=tulip_url,
             leak_id=leak.id,
             leak_title=leak.title,
