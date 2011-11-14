@@ -275,7 +275,14 @@ class TargetList(object):
 class Tulip(object):
     def __init__(self, id=None, url=None):
         if url:
-            self._id = db(db.tulip.url==url).select().first().id
+            # check if the URL is correct or an invalid
+            tulip_row = db(db.tulip.url==url).select().first()
+            if tulip_row:
+                self._id = tulip_row.id
+            else:
+                # The object does not handle the error code inside the obj
+                print "Invalid url requested: ", url
+                self._id = -1
         else:
             self._id = id
 
@@ -292,20 +299,18 @@ class Tulip(object):
 
     vote = property(get_vote, set_vote)
 
-    # LOL! Vecnish hit's again..
-    # XXX rename this function to "get_pertinence"
-    def get_pertinentness(self):
-        pertinentness = 0
+    def get_pertinence(self):
+        pertinence = 0
         brotherTulips = db(db.tulip.leak_id == db.tulip[self.id].leak_id).select()
         for t in brotherTulips:
             if t.express_vote and t.target_id:
-                pertinentness += int(t.express_vote)
-        return pertinentness
+                pertinence += int(t.express_vote)
+        return pertinence
 
-    def set_pertinentness(self, value):
-        print "Error: pertinentness is a collaborative value"
+    def set_pertinence(self, value):
+        print "Error: pertinence is a collaborative value"
 
-    pertinentness = property(set_pertinentness, get_pertinentness)
+    pertinence = property(set_pertinence, get_pertinence)
 
     # delete_bros used to delete the tulip self and all the legit brothers
     def delete_bros(self):
@@ -332,7 +337,11 @@ class Tulip(object):
     url = property(get_url, set_url)
 
     def get_target(self):
-        return db.tulip[self.id].target_id
+        if self.id == -1:
+            print "requested target in invalid Tulip"
+            return -1
+        else:
+            return db.tulip[self.id].target_id
 
     def set_target(self, target):
         print "Error: target is read only"
@@ -389,7 +398,11 @@ class Tulip(object):
     feedbacks_provided = property(get_feedbacks_provided, set_feedbacks_provided)
 
     def get_leak(self):
-        return Leak(db.tulip[self.id].leak_id)
+        if self.id == -1:
+            print "requested leak_id in invalid Tulip"
+            return -1
+        else:
+            return Leak(db.tulip[self.id].leak_id)
 
     def set_leak(self):
         print "Error: leak is read only"

@@ -61,8 +61,6 @@ def record_vote(vote_feedback, tulip):
     int_vote = int(vote_feedback)
     if int_vote <= 1 and int_vote >= (-1) and tulip.target != "0":
         tulip.set_vote(int_vote)
-        #response.flash = ("Thanks for your contribution: actual Tulip "
-        #                 "pertinence rate: "), tulip.get_pertinentness()
     else:
         response.flash = ("Invalid vote provided thru HTTP header "
                           "manipulation: do you wanna work with us?")
@@ -202,6 +200,10 @@ def status():
 
     leak = tulip.get_leak()
 
+    # those are the error not handled by the try/except before
+    if tulip.id == -1:
+        return dict(err=True, delete=None)
+
     whistleblower_text = ''
     if tulip.target == "0":
         whistleblower = True
@@ -209,8 +211,6 @@ def status():
         with open(settings.globals.whistleblower_file) as filestream:
             whistleblower_text = filestream.read()
 
-        print "porcodio! ", whistleblower_text
- 
         target_url = ''
         delete_capability = False
     else:
@@ -310,7 +310,7 @@ def status():
             tulipUsage=tulip_usage,
             feedbacks=feedbacks,
             feedbacks_n=tulip.get_feedbacks_provided(),
-            pertinentness=tulip.get_pertinentness(),
+            pertinence=tulip.get_pertinence(),
             previous_vote=tulip.get_vote(),
             name=tulip.target,
             target_del_cap=delete_capability,

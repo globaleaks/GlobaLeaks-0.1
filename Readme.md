@@ -34,11 +34,15 @@ Base configuration
 ------------------
 
 inside
+
     defaults/origin.globaleaks.conf
+
 there are the configuration file with all the required, optional and mandatory fields that an admin could change.
 When globaleaks is started, the request of a controller that require a proper configuration will redirect to the configuration page. The admin provide with the few mandatory information, and the file globaleaks.conf is saved.
 
 When the login is requested to access as node maintainer, the default login is in: node_admin_username = admin@globaleaks.local
+
+The file globaleaks/globaleaks.conf contain your personal configuration: mail server, installation name, and usually don't be shared
 
 How to hack on it
 -----------------
