@@ -30,7 +30,7 @@ def record_mandatory(vars):
     print "mandatory settings: saved"
 
 def record_required(vars):
-    
+
     settings['globals'].headline = vars.headline
     settings['globals'].tulip_expire_days = vars.tulip_expire_days
     settings['globals'].tulip_max_download = vars.tulip_max_download
@@ -54,7 +54,7 @@ def configuration():
                     Field('email_sender', requires=IS_NOT_EMPTY()),
                     Field('globaleaks_name', requires=IS_NOT_EMPTY()),
                     Field('administrative_password', requires = [IS_NOT_EMPTY(), IS_STRONG(min=8)] ),
-                    Field('password_check', requires=IS_EQUAL_TO(request.vars.administrative_password, error_message="passwords do not match")),
+                    Field('confirm_password', requires=IS_EQUAL_TO(request.vars.administrative_password, error_message="passwords do not match")),
                    )
     # check: something don't work with javascript checks apply to special char
     # Field('administrative_password', requires = [IS_NOT_EMPTY(), IS_STRONG(min=8, special=2, upper=2)] ),

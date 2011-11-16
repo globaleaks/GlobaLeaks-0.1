@@ -24,13 +24,16 @@ def __sanitize_title(title):
 # Maybe these three should be merged into one
 def generate_human_dirname(request, leak, old_dirname):
     # Name like Data-$Title-$ID-$progressivo-.zip
-    prog = 1
-    title = __sanitize_title(leak.title)
-    dirname = "Data-%s-%s-%s" % (title, old_dirname[:4], str(prog))
-    while os.path.exists(os.path.join(request.folder, 'material', dirname)):
-        prog += 1
+    try:
+        prog = 1
+        title = __sanitize_title(leak.title)
         dirname = "Data-%s-%s-%s" % (title, old_dirname[:4], str(prog))
-    return dirname
+        while os.path.exists(os.path.join(request.folder, 'material', dirname)):
+            prog += 1
+            dirname = "Data-%s-%s-%s" % (title, old_dirname[:4], str(prog))
+        return dirname
+    except:
+        return None
 
 def is_human_dirname(dirname):
     try:
