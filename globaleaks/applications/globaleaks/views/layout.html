@@ -29,9 +29,9 @@
 
     <!-- For the less-enabled mobile browsers like Opera Mini -->
 <!--  	<link rel="stylesheet" media="handheld" href="{{=URL('static','css/handheld.css')}}">	 -->
-	
+
 	<link rel="stylesheet" href="/globaleaks/preload/css/all.css">
-	
+
 
     <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
 	<!--     <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script> -->
@@ -50,13 +50,13 @@
 
 	<script type="text/javascript" src="/globaleaks/preload/js/all.js"></script>
     <script type="text/javascript" src="/globaleaks/static/js/jquery.cookie.js"></script>
-	
+
     <script type="text/javascript">
         $(document).ready(function() {
             $("#PrivacyBox").ready(function() {
                 function redirect_to(value) {
                     $("#PrivacyBox").append(
-                        '<div id="redirect">Redirecting to Hidden Serivice in ' + 
+                        '<div id="redirect">Redirecting to Hidden Serivice in ' +
                             '<span id="timeout">5' +
                             '</span> seconds</div>'
                         );
@@ -72,7 +72,7 @@
                       }, 1000);
                     })();
                 }
-                
+
                 function anonymous(value) {
                     var box = $('#PrivacyBox');
                     if (value) {
@@ -80,7 +80,7 @@
                         box.children("#image").replaceWith('<img src="/globaleaks/static/images/anonymous.png"/>');
                         box.children("#status").replaceWith('<p id="status">Anonymous</p>');
                         if (window.location.hostname != "{{=settings.globals.hsurl}}") {
-                            redirect_to("{{=settings.globals.hshostname}}");
+                            redirect_to("{{=settings.globals.hsurl}}");
                         }
                     } else {
                         //box.children("#image").addClass("notanonymous");
@@ -152,7 +152,7 @@
       </div>
 
       <div style="clear: both;"></div><!-- Clear the divs -->
-      
+
       {{end}}
     </div><!-- header  -->
 
@@ -160,7 +160,7 @@
       {{if session.target and not session.admin:}}
       	{{=MENU(response.menu_target,_class="sf-menu")}}
       {{pass}}
-      
+
       {{if session.admin:}}
       	{{=MENU(response.menu_admin,_class="sf-menu")}}
       {{pass}}
