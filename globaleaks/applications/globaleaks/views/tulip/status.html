@@ -193,14 +193,12 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         {{pass}}
         {{if not whistleblower:}}
             {{if not download_available == -1:}}
-            <div class="material-entry">
                 <div class="complete-box">
                     <h3>Complete Download</h3>
                     <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="zip">ZIP</a>
                     <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">Encrypted ZIP</a>
                     <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
                 </div>
-            </div>
             {{pass}}
         {{else:}}
         <div class="material-entry" id="fileupload">

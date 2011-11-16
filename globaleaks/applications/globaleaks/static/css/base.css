@@ -465,7 +465,7 @@ border-radius:5px;
     background: #ededed;
     text-align: left;
     margin-bottom: 20px;
-    
+
 }
 
 #content table.targetlist tr.odd td {
@@ -524,6 +524,10 @@ border-radius:5px;
     font-size: 14px;
 }
 
+.material {
+    font-size: 15px;
+}
+
 .material ul {
     margin-bottom: 20px;
 }
@@ -566,6 +570,15 @@ border-radius:5px;
     background: #CCCCCC url('/globaleaks/static/images/icon-download-crypt.png') no-repeat 5px center;
     cursor: text;
 
+}
+
+.material-entry form {
+    font-size: 15px;
+}
+
+.material-entry .files {
+    width: 600px;
+    font-size: 15px;
 }
 
 .downloads-left {
