@@ -6,7 +6,7 @@ This TULIP has been sent to you by an anonymous whistleblower. She/He would like
 
 You can download the material from the following URLs:
 
-http://%(site)s/tulip/%(tulip_url)s
+https://%(site)s/tulip/%(tulip_url)s
 via Tor:
 http://%(sitehs)s/tulip/%(tulip_url)s
 
@@ -32,12 +32,12 @@ You're receiving this communication because an anonymous whistleblower has chose
 4. How can I stop receiving future TULIPs?
 
 You can permanently unsibscrive from this GLobaLeaks Node by clicking on the following links:
-http://%(site)s/target/subscribe/%(tulip_url)s
+https://%(site)s/target/subscribe/%(tulip_url)s
 via Tor:
 http://%(site)s/target/subscribe/%(tulip_url)s
 
 If in any future you want to be re-enlisted you can add yourself again using this links:
-http://%(site)s/target/unsubscribe/%(tulip_url)s
+https://%(site)s/target/unsubscribe/%(tulip_url)s
 via Tor:
 http://%(sitehs)s/target/unsubscribe/%(tulip_url)s
 
