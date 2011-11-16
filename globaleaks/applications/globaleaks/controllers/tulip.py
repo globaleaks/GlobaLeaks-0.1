@@ -16,11 +16,9 @@ def index():
     configuration_required()
 
     form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
-
     if form.accepts(request.vars, session):
         req = request.vars
 
-        # Make the tulip work well
         leak_number = req.Receipt.replace(' ', '')
         tulip_url = hashlib.sha256(leak_number).hexdigest()
         redirect("/tulip/" + tulip_url)
@@ -178,8 +176,10 @@ def fileupload():
 
     return locals()
 
-@auth.requires(Tulip(url=request.args[0]).target == "0" or  
-               not (gl.get_target_hash(int(Tulip(url=request.args[0]).get_target())))
+@auth.requires( ((request and request.args and request.args[0]) and 
+                (Tulip(url=request.args[0]).target == "0" or not 
+                 (gl.get_target_hash(int(Tulip(url=request.args[0]).get_target()))) 
+                ))
                or auth.has_membership('targets'))
 def status():
     """

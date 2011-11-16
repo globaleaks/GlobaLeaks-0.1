@@ -75,9 +75,12 @@ def index():
 
     tulip_url = None
 
+    # XXX
+    # not so easy switch in use 
+    # requires=[IS_NOT_EMPTY(), IS_IN_SET([0, 1, 2, 3, 4, 5, 6, 7, 8, 9 , 0, ' '])
+    # inside a form_receipt = SQLFORM.factory(Field('Receipt', requires))
     if request.vars:
         req = request.vars
-        # Make the tulip work well
         leak_number = req.Receipt.replace(' ', '')
         tulip_url = hashlib.sha256(leak_number).hexdigest()
         redirect("/tulip/" + tulip_url)
