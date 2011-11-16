@@ -53,7 +53,7 @@ def configuration():
                     Field('email_server', requires=IS_NOT_EMPTY()),
                     Field('email_sender', requires=IS_NOT_EMPTY()),
                     Field('globaleaks_name', requires=IS_NOT_EMPTY()),
-                    Field('administrative_password', requires = [IS_NOT_EMPTY(), IS_STRONG(min=8)] ),
+                    Field('administrative_password', requires = [IS_NOT_EMPTY(), IS_LENGTH(minsize=8)] ),
                     Field('confirm_password', requires=IS_EQUAL_TO(request.vars.administrative_password, error_message="passwords do not match")),
                    )
     # check: something don't work with javascript checks apply to special char
