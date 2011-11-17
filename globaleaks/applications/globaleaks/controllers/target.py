@@ -61,7 +61,7 @@ def receiver():
     try:
         passphrase = request.post_vars["targetid"]
         target_url = hashlib.sha256(passphrase).hexdigest()
-        redirect("/bouquet/" + target_url)
+        redirect("/globaleaks/target/bouquet/" + target_url)
     except KeyError:
         return dict(err=True)
 
@@ -90,7 +90,7 @@ def bouquet():
     if len(receiver_row) > 1:
         return dict(err="temporary fault: collision detected, two target"
                         "with the same password")
-    
+
     # fixme: this bug depends by the actual bad auth type
 
     # addiction information could be present in the POST

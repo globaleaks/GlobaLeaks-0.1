@@ -21,7 +21,7 @@ def index():
 
         leak_number = req.Receipt.replace(' ', '')
         tulip_url = hashlib.sha256(leak_number).hexdigest()
-        redirect("/tulip/" + tulip_url)
+        redirect("/globaleaks/tulip/status/" + tulip_url)
 
     redirect("/")
 
@@ -117,8 +117,8 @@ def fileupload():
             os.makedirs(dst_folder)
 
             for filedata in session.add_files:
-                if os.path.exists(os.path.join(request.folder, 
-                                               'uploads', session.upload_dir, 
+                if os.path.exists(os.path.join(request.folder,
+                                               'uploads', session.upload_dir,
                                                filedata.filename)):
                     src_file = os.path.join(request.folder, 'uploads',
                                             session.upload_dir, filedata.filename)
@@ -176,9 +176,9 @@ def fileupload():
 
     return locals()
 
-@auth.requires( ((request and request.args and request.args[0]) and 
-                (Tulip(url=request.args[0]).target == "0" or not 
-                 (gl.get_target_hash(int(Tulip(url=request.args[0]).get_target()))) 
+@auth.requires( ((request and request.args and request.args[0]) and
+                (Tulip(url=request.args[0]).target == "0" or not
+                 (gl.get_target_hash(int(Tulip(url=request.args[0]).get_target())))
                 ))
                or auth.has_membership('targets'))
 def status():
@@ -349,10 +349,10 @@ def download():
     try:
         t = Tulip(url=tulip_url)
     except:
-        redirect("/tulip/" + tulip_url)
+        redirect("/globaleaks/tulip/status/" + tulip_url)
 
     if not download_increment(t):
-        redirect("/tulip/" + tulip_url)
+        redirect("/globaleaks/tulip/status/" + tulip_url)
 
     leak = t.get_leak()
 

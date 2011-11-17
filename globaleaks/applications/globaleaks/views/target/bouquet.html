@@ -3,7 +3,7 @@
 {{if err:}}
     Error in calling Bouquet page: {{=err}}
     <br>
-    Please back to the <a href="/receiver/">receiver</a> page.
+    Please back to the <a href="/globaleaks/target/receiver/">receiver</a> page.
 {{else:}}
     <br>
     <h2>{{=target.name}}, this is your Bouquet:</h2>
@@ -12,12 +12,12 @@
         <tr class="even">
             <td class="name">URL</td>
             <td class="name">submission ID</td>
-            <td class="description">target id</td> 
+            <td class="description">target id</td>
             <td class="name">access done/allow</td>
             <td class="name">vote</td>
             <td class="name">download D/A</td>
             <td class="name">feedbacks #</td>
-        </tr> 
+        </tr>
         {{i=0}}
         {{for tulip in bouquet:}}
             {{i+=1}}
@@ -26,12 +26,12 @@
             {{else:}}
                 <tr class="even">
             {{pass}}
-            <td class="name"><a href="/tulip/{{=tulip.url}}">{{=tulip.url[:5]}}</a></td>
+            <td class="name"><a href="/globaleaks/tulip/status/{{=tulip.url}}">{{=tulip.url[:5]}}</a></td>
             <td class="name">{{=tulip.leak_id}}</td>
-            <td class="description">{{=tulip.target_id}}</td>    
-            <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>    
-            <td class="description">{{=tulip.express_vote}}</td>    
-            <td class="description">{{=tulip.downloads_counter}}/{{=tulip.allowed_downloads}}</td>    
+            <td class="description">{{=tulip.target_id}}</td>
+            <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>
+            <td class="description">{{=tulip.express_vote}}</td>
+            <td class="description">{{=tulip.downloads_counter}}/{{=tulip.allowed_downloads}}</td>
             <td class="description">{{=tulip.feedbacks_provided}}</td>
         {{pass}}
         </tr>
@@ -48,7 +48,7 @@
         <form action="" name="pass_update" method="POST">
         new passphrase: <input type="text" id="newPassId" name="new_passphrase" style="width: 350px" /><br><br>
         stop mailing this access link in every email <input type="checkbox" name="recovery" value="on" /><br>
-        this cause that you need, absolutely, to <b>remember permamently your password</b>. 
+        this cause that you need, absolutely, to <b>remember permamently your password</b>.
         <br>
         Copy your GPG public key:
         <textarea type="text" id="newGPG" name="new_gpg" style="width: 100%"></textarea>
@@ -65,7 +65,7 @@
         <input type="submit" value="change material receiving method" />
         </form>
     </div>
-    
+
     <li>change your contact method</li>
     <div class="description">
         <form action="" name="contact_update" method="POST">
