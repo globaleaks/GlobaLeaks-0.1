@@ -13,6 +13,7 @@ Installation
 ------------
 
 First you need to install pip
+
     easy_install pip
 
 You need to get a copy of web2py, you can install it by doing
