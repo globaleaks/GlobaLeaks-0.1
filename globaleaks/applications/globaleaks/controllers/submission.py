@@ -79,7 +79,6 @@ def api():
         gl.create_tulip(leak_id, 0, wb_number[1])
 
         # this loop, create the tulip for the receivers
-        print "secondo caso: dio canazzo", group_ids
         for group_id in group_ids:
             leak.crate_tulip_by_group(group_id)
 
