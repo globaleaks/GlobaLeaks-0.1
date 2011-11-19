@@ -139,4 +139,5 @@ if settings.globals.debug_notification:
             if settings.globals.debug_deletetickets:
                 os.unlink(filename)
 
+    # xxx: should be removed, and used as soon as it becomes necessary
     db.commit()
