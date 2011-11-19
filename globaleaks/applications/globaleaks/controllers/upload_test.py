@@ -10,6 +10,6 @@ def index():
 def post():
     try:
         a = request.body.read()
-        return json.dumps({"DIO": "ESISTE"})
+        return json.dumps({"A": "B"})
     except:
-        return json.dumps({"PORCODIO": "LADRO :P"})
+        return json.dumps({"C": "D"})
