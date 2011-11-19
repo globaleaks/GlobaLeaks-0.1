@@ -77,17 +77,17 @@
 
 {{if err or delete:}}
     {{if err:}}
-        <h2>invalid receipt: Tulip not found!</h2>
+        <h2>{{=T("invalid receipt: Tulip not found")}}!</h2>
     {{else:}}
-        <h2>Tulip removed and all relatives (#{{=delete}} tulips)</h2>
+        <h2>{{=T("Tulip removed and all relatives")}} (#{{=delete}} {{=T("tulips")}})</h2>
     {{pass}}
 
 {{else:}}
 
 {{if whistleblower: }}
-<div class="pagetitle">Your submission...</div>
+<div class="pagetitle">{{=T("Your submission")}}...</div>
 <p class="intro">
-    Welcome back Whistleblower: this TULIP interface is unique for you.
+    {{=T("Welcome back Whistleblower: this TULIP interface is unique for you.")}}
 </p>
 
 <script id="template-upload" type="text/x-jquery-tmpl">
@@ -100,7 +100,7 @@
 
 {{if session.wb_number:}}
 <div id="wb_receipt">
-    Save the following number or the Tulip link: otherwise you could not have other ways to come back here, and comment your submitted information.
+    {{=T("Save the following number or the Tulip link: otherwise you could not have other ways to come back here, and comment your submitted information.")}}
     <p class="tulip">
         {{=session.wb_number}}
     </p>
@@ -112,7 +112,7 @@
 {{session.wb_number = None}}
 {{pass}}
 {{else:}}
-<div class="pagetitle">You've received a Tulip...</div>
+<div class="pagetitle">{{=T("You've received a Tulip...")}}</div>
 <p class="intro">
 This Tulip has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this Tulip should be considered of high importance.<br>
 If you are not interested in receive Tulips, or want change the segnalation properties, could access to the <a href="{{=target_url}}">Personal Receiver page</a>, and consult your Bouquet.
@@ -138,17 +138,17 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 
         <!-- This is your previously submitted material, only you had the property to add new data -->
 
-        {{else:}} This is the material submitted by the whistleblower for your revision. You are invited to:
+        {{else:}} {{=T("This is the material submitted by the whistleblower for your revision. You are invited to")}}:
          <ul>
-             <li>Do not spread this link, is intended be for your eyes only</li>
-             <li>Analyze the received material, your contribution is useful to discern the truth</li>
-             <li>Ask useful details to the whistleblower thru the comment box</li>
+             <li>{{=T("Not spread this link. It is intended be for your eyes only")}}</li>
+             <li>{{=T("Analyze the received material, your work is fundamental in uncovering the truth")}}</li>
+             <li>{{=T("Ask useful details to the whistleblower thru the comment box")}}</li>
          </ul>
          {{pass}}
     </p>
 
     {{if 0: #leak_desc:}}
-        <h2>Material description</h2>
+        <h2>{{=T("Material description")}}</h2>
         <p class="description">{{=leak_desc}}</p>
     {{pass}}
 
@@ -160,14 +160,14 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     {{pass}}
 
     {{if leak_tags:}}
-        <p class="left_title">Tags:</p>
+        <p class="left_title">{{=T("Tags")}}:</p>
         <p class="description">{{=leak_tags}}</p>
     {{pass}}
 
     <div class="material">
-        <h3>Material</h3>
+        <h3>{{=T("Material")}}</h3>
         {{if whistleblower:}}
-            <a href="javascript:void(0);" class="button" id="add_material">Add</a>
+            <a href="javascript:void(0);" class="button" id="add_material">{{=T("Add")}}</a>
         {{pass}}
         {{for number, files in submission_materials:}}
         <div class="material-entry">
@@ -179,25 +179,25 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             {{if download_available and not whistleblower and download_available != -1: }}
                 {{url = tulip_url+"/"+number if number else tulip_url+"/0"}}
                 <div class="download-box">
-                    <h3>Download</h3>
-                    <a href="/globaleaks/tulip/download/{{=url}}" class="zip">ZIP</a>
-                    <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">Encrypted ZIP</a>
-                    <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
+                    <h3>{{=T("Download")}}</h3>
+                    <a href="/globaleaks/tulip/download/{{=url}}" class="zip">{{=T("ZIP")}}</a>
+                    <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">{{=T("Encrypted ZIP")}}</a>
+                    <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">{{=T("PGP Encrypted ZIP")}}</a>
                 </div>
             {{pass}}
 
             {{if download_available == -1:}}
-                <h3>Material has not been spooled yet... check back later</h3>
+                <h3>{{=T("Material has not been processed yet")}}... {{=T("check back later")}}</h3>
             {{pass}}
         </div>
         {{pass}}
         {{if not whistleblower:}}
             {{if not download_available == -1:}}
                 <div class="complete-box">
-                    <h3>Complete Download</h3>
-                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="zip">ZIP</a>
-                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">Encrypted ZIP</a>
-                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">PGP Encrypted ZIP</a>
+                    <h3>{{=T("Complete Download")}}</h3>
+                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="zip">{{=T("ZIP")}}</a>
+                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">{{=T("Encrypted ZIP")}}</a>
+                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">{{=T("PGP Encrypted ZIP")}}</a>
                 </div>
             {{pass}}
         {{else:}}
@@ -205,7 +205,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
             <form action="" method="POST" enctype="multipart/form-data">
                 <div class="fileupload-buttonbar">
                     <label class="fileinput-button">
-                        <span>Add files...</span>
+                        <span>{{=T("Add files")}}...</span>
                         <input type="file" name="files[]" multiple>
                     </label>
                 </div>
@@ -214,7 +214,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 <table class="files"></table>
                 <div class="fileupload-progressbar"></div>
             </div>
-            <a href="javascript:void(0)" class="button" id="add_material_done">Done</a>
+            <a href="javascript:void(0)" class="button" id="add_material_done">{{=T("Done")}}</a>
         </div>
         {{pass}}
         <div class="clear"></div>
@@ -228,7 +228,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
             <div class="comment" id="wb_comment">
-            <h2 class="name">Whistleblower</h2>
+            <h2 class="name">{{=T("Whistleblower")}}</h2>
             <p class="comment">{{=feedback.comment}}</p>
             </div>
         {{else:}}
@@ -246,7 +246,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
         {{pass}}
     {{pass}}
     {{if not feedbacks:}}
-        <p>No comments</p>
+        <p>{{=T("No comments")}}</p>
     {{pass}}
 
     <form name="receiver_input" method="POST" action="">
@@ -298,14 +298,14 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 
 
     <div id="tulip-access">
-    <h2>Tulip access statistics</h2>
+    <h2>{{=T("Tulip access statistics")}}</h2>
     <table class="targetlist">
         <thead>
-            <th class="downloads">ID</th>
+            <th class="downloads">{{=T("ID")}}</th>
 <!--             <th class="downloads">pertinence vote</th> -->
-            <th class="downloads">Comments</th>
-            <th class="downloads">Views</th>
-            <th class="downloads">Downloads</th>
+            <th class="downloads">{{=T("Comments")}}</th>
+            <th class="downloads">{{=T("Views")}}</th>
+            <th class="downloads">{{=T("Downloads")}}</th>
         </thead>
         <tbody>
             {{i=0}}
@@ -323,7 +323,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
                  <td class="downloads">{{=peer.downloads_counter}}/{{=tulip_allowed_download}}</td>
              {{else:}}
-                 <td class="name">Whistleblower</td>
+                 <td class="name">{{=T("Whistleblower")}}</td>
 <!--                  <td class="downloads">not permitted</td> -->
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
@@ -337,15 +337,15 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     {{if 0: #not whistleblower:}}
     <p class="intro">
       <b><a href="/globaleaks/tulip/forward/{{=tulip_url}}">
-        Forward to another targetgroup
+        {{=T("Forward to another targetgroup")}}
       </a></b></p>
     {{pass}}
     </div>
 
     {{if target_del_cap:}}
-    <div class="description">You have the right to delete this submitted material. This effect delete also all the related Tulips for the other receiver.</div>
+    <div class="description">{{=T("You have the right to delete this submitted material. This effect delete also all the related Tulips for the other receiver.")}}</div>
     <form name="delete_tulips" method="POST" action="">
-        I want delete this tulip and all the tulips derived from the same material: <input type="checkbox" name="delete" />
+        {{=T("I want delete this tulip and all the tulips derived from the same material")}}: <input type="checkbox" name="delete" />
         <br>
         <input type="submit" name="send" value="Yes I'm sure, I want delete all the tulips related" />
     </form>

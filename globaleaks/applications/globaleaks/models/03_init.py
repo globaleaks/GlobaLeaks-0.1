@@ -23,7 +23,14 @@ settings.private.login_config = ''
 settings.private.plugins = []
 settings.private.hiddenservice = settings.globals.hiddenservice
 
-# mail and auth are filled after the first settings.tulip initialization, 
+# Language settings
+T.set_current_languages('en', 'en-en')
+
+# force the default language if the config file specifies it
+if settings.globals.language:
+    T.force(settings.globals.language)
+
+# mail and auth are filled after the first settings.tulip initialization,
 # because used inside Globaleaks object
 # gl = local_import('logic.globaleaks').Globaleaks(db, settings)
 gl = Globaleaks()
@@ -85,12 +92,12 @@ if auth.id_group("admin"):
     settings.private.admingroup = auth.id_group("admin")
 else:
     auth.add_group('admin', 'Node admins')
-    
+
 if auth.id_group("targets"):
     settings.private.admingroup = auth.id_group("targets")
 else:
     auth.add_group('targets', 'Targets')
-    
+
 if auth.id_group("candelete"):
     settings.private.admingroup = auth.id_group("candelete")
 else:
