@@ -4,26 +4,24 @@ Controller for the index
 """
 from __future__ import with_statement
 import logging
+import os
 
 session.admin = False
 session.taget = False
 
-### required - do not delete
 def user():
     """
     Controller for user login
     """
     tulip = None
     form = auth()
-    try:
-        if (request.vars['_next']):
-            # print "contains next..."
-            next = request.vars['_next']
-            if type(next) is str:
-                path = next.split("/")
-            else:
-                path = next[0].split("/")
-            # print next
+    if '_next' in request.vars:
+        next = request.vars['_next']
+        # XXX: what the hell is this shit?
+        if not isinstance(next, str):
+            next = next[0]
+        else:
+            path = next.split(os.sep)
             if len(path) > 2:
                 # print "path > 3"
                 if len(path) > 0 and path[2] == "tulip":
@@ -35,24 +33,18 @@ def user():
                 if not tulip:
                     tulip = "admin"
                 for c in form.elements('input'):
-                    # print c['_name']
+                    print c['_name']
                     if c['_name'] == "username":
-                        # print c
+                        print c
                         c['_value'] = tulip
                 return dict(form=form)
-    except:
-        print "except"
-
     try:
         for c in form.elements('input'):
-            # print c['_name']
             if c['_name'] == "username":
-                # print c
                 c['_value'] = "admin"
     except:
         pass
     return dict(form=form)
-
 
 
 def download():
@@ -64,14 +56,12 @@ def call():
     return service()
 ### end requires
 
-
+@configuration_required
 def index():
     """
     Controller for GlobaLeaks index page
     """
     import hashlib
-
-    configuration_required()
 
     tulip_url = None
 

@@ -11,6 +11,12 @@ import stat
 import datetime
 # from boto.ses.connection import SESConnection
 
+from gluon.utils import md5_hash
+from gluon.restricted import RestrictedError
+from gluon.tools import Mail
+
+from config import projroot
+
 MimeMail = local_import('mailer').MultiPart_Mail(settings)
 logger = local_import('logger').start_logger(settings.logging)
 compressor = local_import('compress_material').Zip()
@@ -86,17 +92,16 @@ for m in mails:
     # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
     #    m.target,message=message_html)
 
-from gluon.utils import md5_hash
-from gluon.restricted import RestrictedError
-from gluon.tools import Mail
 
-path = os.path.join(os.getcwd(), 'applications/globaleaks/errors/')
+path = os.path.join(projroot, 'globaleaks',
+                    'applications', 'globaleaks', 'errors')
 
 hashes = {}
 
 ### CONFIGURE HERE
 ALLOW_DUPLICATES = True
 ### END CONFIGURATION
+
 if settings.globals.debug_notification:
     for file in os.listdir(path):
         filename = os.path.join(path, file)
@@ -121,17 +126,8 @@ if settings.globals.debug_notification:
         message += "<h1>this is the environment:</h1><br>"
         try:
             message += "<h2>RESPONSE: </h2><br> %s<br><br>" % error.snapshot['response']
-        except KeyError:
-            pass
-        try:
             message += "<h2>LOCALS: </h2><br> %s<br><br>" % error.snapshot['locals']
-        except KeyError:
-            pass
-        try:
             message += "<h2>REQUEST: </h2><br> %s<br><br>" % error.snapshot['request']
-        except KeyError:
-            pass
-        try:
             message += "<h2>SESSION:</h2><br>  %s<br><br>" % error.snapshot['session']
         except KeyError:
             pass
@@ -143,4 +139,5 @@ if settings.globals.debug_notification:
             if settings.globals.debug_deletetickets:
                 os.unlink(filename)
 
+    # xxx: should be removed, and used as soon as it becomes necessary
     db.commit()

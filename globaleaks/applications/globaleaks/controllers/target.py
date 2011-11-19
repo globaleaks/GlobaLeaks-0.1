@@ -4,13 +4,13 @@ This controller module contains every controller that the target can use
 to edits its settings. (E.g.: Unsubscribe from a GL node)
 """
 
+@configuration_required
 def index():
-    configuration_required()
     return dict(message="hello from target.py")
 
+@configuration_required
 @auth.requires_login()
 def view():
-    configuration_required()
     collected_user = []
     target_list = db(db.target.status=="subscribed").select()
     for active_user in target_list:
@@ -44,6 +44,7 @@ def view():
                 tulips=tulip_avail)
     # nevah forget http://uiu.me/Nr9G.png
 
+@configuration_required
 @auth.requires(auth.has_membership('targets'))
 def receiver():
     """
@@ -51,8 +52,6 @@ def receiver():
     stored in db.target.url
     """
     import hashlib
-
-    configuration_required()
 
     if not request or not request.post_vars or \
        not request.post_vars["targetid"]:
@@ -65,6 +64,7 @@ def receiver():
     except KeyError:
         return dict(err=True)
 
+@configuration_required
 @auth.requires(auth.has_membership('targets'))
 def bouquet():
     """
@@ -72,9 +72,6 @@ def bouquet():
     all him accessible Tulips, its the page where she/he could change their
     preferences
     """
-
-    configuration_required()
-
     if request and request.args:
         target_url = request.args[0]
     else:
@@ -135,11 +132,9 @@ def bouquet():
                 target=receiver_row[0],
                 answer=response_t)
 
+@configuration_required
 @auth.requires(auth.has_membership('targets'))
 def subscribe():
-
-    configuration_required()
-
     if not request.args:
         subscribe_form = SQLFORM.factory(
                             Field('Name', requires=IS_NOT_EMPTY()),
@@ -182,11 +177,9 @@ def subscribe():
 
     return dict(message="this is logically impossible", subscribe=None)
 
+@configuration_required
 @auth.requires(auth.has_membership('targets'))
 def unsubscribe():
-
-    configuration_required()
-
     if request.args:
         tulip_url = request.args[0]
     else:

@@ -1,4 +1,4 @@
-def configuration_required():
+def configuration_required(funct):
     """
     This function is called ahead of every controller function that
     require to run in a proper configured GlobaLeaks environment.
@@ -7,4 +7,6 @@ def configuration_required():
     """
 
     if not settings['globals'].node_admin_configured:
-        redirect('/globaleaks/installation/configuration.html')
+        return lambda: redirect('/globaleaks/installation/configuration.html')
+    else:
+        return funct
