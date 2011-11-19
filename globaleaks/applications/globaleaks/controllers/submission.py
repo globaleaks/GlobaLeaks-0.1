@@ -21,10 +21,9 @@ FileHelper = local_import('file_helper')
 
 # This should be merged with the following service
 #
+@configuration_required
 @request.restful()
 def api():
-
-    configuration_required()
 
     response.view = 'generic.json'
 
@@ -79,7 +78,6 @@ def api():
         gl.create_tulip(leak_id, 0, wb_number[1])
 
         # this loop, create the tulip for the receivers
-        print "secondo caso: dio canazzo", group_ids
         for group_id in group_ids:
             leak.crate_tulip_by_group(group_id)
 
@@ -101,10 +99,9 @@ FileUpload = UploadHandler()
 # XXX
 # This should be made into one web service
 # Integrate the methods suggested in the REST interface specification
+@configuration_required
 @request.restful()
 def fileupload():
-    configuration_required()
-
     response.view = 'generic.json'
     if not session.files:
         session.files = []
@@ -170,12 +167,11 @@ def fileupload():
 
     return locals()
 
+@configuration_required
 def index():
     """
     This is the main submission page.
     """
-    configuration_required()
-
     # Generate the number the WB will use to come back to
     # his submission
     wb_number = randomizer.generate_tulip_receipt()

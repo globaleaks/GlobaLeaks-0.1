@@ -64,14 +64,12 @@ def call():
     return service()
 ### end requires
 
-
+@configuration_required
 def index():
     """
     Controller for GlobaLeaks index page
     """
     import hashlib
-
-    configuration_required()
 
     tulip_url = None
 

@@ -10,10 +10,9 @@ import shutil
 
 mutils = local_import('material').utils()
 
+@configuration_required
 def index():
     import hashlib
-
-    configuration_required()
 
     form = SQLFORM.factory(Field('Receipt', requires=IS_NOT_EMPTY()))
     if form.accepts(request.vars, session):
@@ -66,13 +65,12 @@ def record_vote(vote_feedback, tulip):
 
 FileUpload = UploadHandler()
 
+@configuration_required
 @request.restful()
 def fileupload():
     """
     Controller for file uploading for leak updating
     """
-    configuration_required()
-
     response.view = 'generic.json'
 
     if not session.add_files:
@@ -176,6 +174,7 @@ def fileupload():
 
     return locals()
 
+@configuration_required
 @auth.requires( ((request and request.args and request.args[0]) and
                 (Tulip(url=request.args[0]).target == "0" or not
                  (gl.get_target_hash(int(Tulip(url=request.args[0]).get_target())))
@@ -185,9 +184,6 @@ def status():
     """
     The main TULIP status page
     """
-
-    configuration_required()
-
     try:
         tulip_url = request.args[0]
     except IndexError:
@@ -336,10 +332,9 @@ def download_increment(tulip):
     return True
 
 
+@configuration_required
 def download():
     import os
-
-    configuration_required()
 
     try:
         tulip_url = request.args[0]
@@ -372,14 +367,12 @@ def download():
     return response.stream(open(download_file, 'rb'))
 
 
+@configuration_required
 def forward():
     """
     Controller for the page that lets the target to forward the tulip to
     another group.
     """
-
-    configuration_required()
-
     try:
         tulip_url = request.args[0]
     except IndexError:
