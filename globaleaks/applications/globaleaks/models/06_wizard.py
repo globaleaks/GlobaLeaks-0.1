@@ -23,7 +23,7 @@ class FormShaman(SQLFORM):
                                         SPAN(T(group["name"])),
                                         SPAN(T(group["tags"]),
                                              _class="group_tags")))
-            grouplist = DIV(LABEL("Select Group:"),grouplist,_class="groups")
+            grouplist = DIV(LABEL(T("Select Group:")),grouplist,_class="groups")
             
         else:
             grouplist = ""
@@ -64,9 +64,9 @@ class FormShaman(SQLFORM):
             disclaimer_text = filestream.read()
             # sadly, HTML must not be passed to avoid XXSs
 
-        disclaimer_fb = DIV(LABEL('Accept Disclaimer: '), disclaimer_text,
+        disclaimer_fb = DIV(LABEL(T('Accept Disclaimer') + ': '), disclaimer_text,
                          INPUT(_name='agree', value=False, _type='checkbox',_id="disclaimer", requires=IS_EQUAL_TO("on",
-                                                                                                 error_message='must accept disclaimer')))
+                                                                                                 error_message=T('must accept disclaimer'))))
 
         self.special_fields = {
                        'disclaimer' : disclaimer_fb,
@@ -99,7 +99,7 @@ class FormShaman(SQLFORM):
             step_head.append(LI(
                                 A(
                                   LABEL(str(i),_class="stepNumber"),
-                                  SPAN("Step "+str(i),_class="stepDesc"),
+                                  SPAN(T("Step") + " " +str(i),_class="stepDesc"),
                                   _href="#step-"+str(i)),
                                 )
                              )
