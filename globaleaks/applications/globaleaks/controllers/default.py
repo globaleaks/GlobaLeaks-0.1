@@ -22,27 +22,25 @@ def user():
             next = next[0]
         else:
             path = next.split(os.sep)
-        if len(path) > 2:
-            # print "path > 3"
-            if len(path) > 0 and path[2] == "tulip":
-                # print path[4]
-                try:
-                    tulip = Tulip(url=path[4]).target
-                except:
+            if len(path) > 2:
+                # print "path > 3"
+                if len(path) > 0 and path[2] == "tulip":
+                    # print path[4]
+                    try:
+                        tulip = Tulip(url=path[4]).target
+                    except:
+                        tulip = "admin"
+                if not tulip:
                     tulip = "admin"
-            if not tulip:
-                tulip = "admin"
-            for c in form.elements('input'):
-                print c['_name']
-                if c['_name'] == "username":
-                    print c
-                    c['_value'] = tulip
-            return dict(form=form)
+                for c in form.elements('input'):
+                    print c['_name']
+                    if c['_name'] == "username":
+                        print c
+                        c['_value'] = tulip
+                return dict(form=form)
     try:
         for c in form.elements('input'):
-            # print c['_name']
             if c['_name'] == "username":
-                # print c
                 c['_value'] = "admin"
     except:
         pass
