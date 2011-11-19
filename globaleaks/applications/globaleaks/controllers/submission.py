@@ -346,7 +346,6 @@ def index():
         session.dirname = None
         session.wb_id = None
         session.files = None
-        print "Existing Files: %s" % existing_files
 
         return dict(leak_id=leak_id, leaker_tulip=pretty_number, error=None,
                     form=None, tulip_url=wb_number[1], jQuery_templates=None,

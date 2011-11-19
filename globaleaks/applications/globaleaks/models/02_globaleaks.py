@@ -152,12 +152,10 @@ class Globaleaks(object):
         self._db.commit()
 
         # extract the ID of the request group, if any, of found the default, if supported
-        requested_group = group_name if group_name else settings['globals'].default_group 
+        requested_group = group_name if group_name else settings['globals'].default_group
         if requested_group:
             group_id = self.get_group_id(requested_group)
             group_row = self._db(self._db.targetgroup.id==group_id).select().first()
-
-            print "IL PORCODIO ", group_row['targets']
 
             if group_row['targets']:
                 comrades = json.loads(group_row['targets'])
@@ -165,7 +163,6 @@ class Globaleaks(object):
                 self.update_targetgroup(group_id, targets=json.dumps(comrades))
             else:
                 starting_json = '["' + str(target_id) + '"]'
-                print "IL DIO BALORO", starting_json
                 self.update_targetgroup(group_id, targets=starting_json)
 
         return target_id
@@ -228,7 +225,7 @@ class Globaleaks(object):
         if hardcoded_url and target_id:
             logger.error("Invalid usage of create_tulip: url and target specifyed")
             return NoneType
-            
+
         tulip = self._db.tulip.insert(
             url= hardcoded_url if hardcoded_url else randomizer.generate_tulip_url(),
             leak_id=leak_id,
