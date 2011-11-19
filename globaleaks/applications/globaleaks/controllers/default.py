@@ -29,13 +29,11 @@ def user():
                     try:
                         tulip = Tulip(url=path[4]).target
                     except:
-                        tulip = "admin"
+                        pass
                 if not tulip:
                     tulip = "admin"
                 for c in form.elements('input'):
-                    print c['_name']
                     if c['_name'] == "username":
-                        print c
                         c['_value'] = tulip
                 return dict(form=form)
     try:
