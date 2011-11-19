@@ -18,7 +18,7 @@ def user():
     if '_next' in request.vars:
         next = request.vars['_next']
         # XXX: what the hell is this shit?
-        if not issubclass(next, str):
+        if not isinstance(next, str):
             next = next[0]
         else:
             path = next.split(os.sep)
