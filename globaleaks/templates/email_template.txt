@@ -6,9 +6,9 @@ This TULIP has been sent to you by an anonymous whistleblower. She/He would like
 
 You can download the material from the following URLs:
 
-https://%(site)s/tulip/%(tulip_url)s
+https://%(site)s/globaleaks/tulip/%(tulip_url)s
 via Tor:
-http://%(sitehs)s/tulip/%(tulip_url)s
+http://%(sitehs)s/globaleaks/tulip/%(tulip_url)s
 
 
 Please do not forward or share this e-mail: each TULIP has a limited number of downloads and access before being destroyed forever, nobody (even the node administrator) can recover and expired or dead TULIP.
@@ -32,14 +32,14 @@ You're receiving this communication because an anonymous whistleblower has chose
 4. How can I stop receiving future TULIPs?
 
 You can permanently unsibscrive from this GLobaLeaks Node by clicking on the following links:
-https://%(site)s/target/subscribe/%(tulip_url)s
+https://%(site)s/globaleaks/target/subscribe/%(tulip_url)s
 via Tor:
-http://%(site)s/target/subscribe/%(tulip_url)s
+http://%(site)s/globaleaks/target/subscribe/%(tulip_url)s
 
 If in any future you want to be re-enlisted you can add yourself again using this links:
-https://%(site)s/target/unsubscribe/%(tulip_url)s
+https://%(site)s/globaleaks/target/unsubscribe/%(tulip_url)s
 via Tor:
-http://%(sitehs)s/target/unsubscribe/%(tulip_url)s
+http://%(sitehs)s/globaleaks/target/unsubscribe/%(tulip_url)s
 
 
 For any other inquire please refer to %(sitename)s to the GlobaLeaks website at http://globaleaks.org
