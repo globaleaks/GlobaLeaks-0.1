@@ -219,7 +219,6 @@ If you are not interested in receive Tulips, or want change the segnalation prop
 
     <!-- h2>Feedbacks and Pertinence (overall vote: {{=pertinence}})</h2 -->
 
-
     <div id="comment-board">
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
@@ -235,7 +234,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
                 </div>
             {{else:}}
                 <div class="comment" id="other_comment">
-                    <h2 class="name">ID #{{=feedback.commenter_id}}</h2>
+                    <h2 class="name">Receiver #{{=feedback.commenter_id}}</h2>
                     <p class="comment">{{=feedback.comment}}</p>
                 </div>
             {{pass}}
@@ -333,7 +332,7 @@ If you are not interested in receive Tulips, or want change the segnalation prop
     {{if 0: #not whistleblower:}}
     <p class="intro">
       <b><a href="/globaleaks/tulip/forward/{{=tulip_url}}">
-        {{=T("Forward to another targetgroup")}}
+        {{=T("Forward to another receiver group")}}
       </a></b></p>
     {{pass}}
     </div>

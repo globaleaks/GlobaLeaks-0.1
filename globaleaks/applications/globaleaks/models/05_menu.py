@@ -23,7 +23,7 @@ response.menu_target = [
 ]
 
 response.menu_admin = [
-    (T('Targets'),'/globaleaks/admin/targets/display'==URL(), '/globaleaks/admin/targets/display'),
+    (T('Receivers'),'/globaleaks/admin/targets/display'==URL(), '/globaleaks/admin/targets/display'),
     (T('Groups'),'/globaleaks/admin/targetgroups'==URL(),'/globaleaks/admin/targetgroups'),
     (T('Globalview'),'/globaleaks/target/view'==URL(), '/globaleaks/target/view'),
     (T('Config'),'/config'==URL(), '/config'),
