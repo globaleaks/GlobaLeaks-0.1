@@ -37,10 +37,12 @@ class Zip:
                     files = os.listdir(mat_dir)
                 # XXX: issue #51
                 if passwd and os.path.exists(mat_dir):
-                    cmd = 'zip -e -P%(passwd) %(zipfile).zip %(files)' % dict(
-                           passwd=passwd, zipfile=filedir,
-                           files=" ".join(files))
-                    subprocess.check_call(cmd.split())
+                    logger.error('Encrypted ZIP function disabled, due to security redesign needs')
+                    return 0
+       #             cmd = 'zip -e -P%(passwd) %(zipfile).zip %(files)' % dict(
+       #                    passwd=passwd, zipfile=filedir,
+       #                    files=" ".join(files))
+       #             subprocess.check_call(cmd.split())
                 elif not passwd and os.path.exists(mat_dir):
                     zipf = zipfile.ZipFile(save_file+'.zip', 'w')
                     for f in files:
