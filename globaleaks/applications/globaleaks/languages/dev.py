@@ -94,4 +94,6 @@
 'selected': "DEVELOPMENT-MODE",
 'table': "DEVELOPMENT-MODE",
 'tulips': "DEVELOPMENT-MODE",
+'Error: only ten digits are accepted as receipt': 'DEVELOPMENT-MODE',
+'Error: you puts more than 10 digits': 'DEVELOPMENT-MODE',
 }

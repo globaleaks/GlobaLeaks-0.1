@@ -1,13 +1,27 @@
 {{extend 'layout.html'}}
-
+<style type="text/css">
+#littleinfo {
+    font-size: 0.6em;
+    color: white;
+    /* oh god, I hate so much that base.css with fixed pixel :( */
+}
+</style>
 <script type="text/javascript">
 function extractNumber(obj)
 {
     var temp = obj.value;
+    var remindlen = temp.length;
     
     var reg1Str = '[^0-9]';
     var reg1 = new RegExp(reg1Str, 'g');
     temp = temp.replace(reg1, '');
+
+    if(remindlen != temp.length) {
+        document.getElementById("littleinfo").innerHTML = '{{=T("Error: only ten digits are accepted as receipt")}}';
+    }
+    if(temp.length > 10) {
+        document.getElementById("littleinfo").innerHTML = '{{=T("Error: you puts more than 10 digits")}}';
+    }
 
     obj.value = temp;
 }
@@ -19,6 +33,7 @@ function extractNumber(obj)
     <input id="inputReceipt" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" name="Receipt" style="width: 150px" />
     <input type="submit" name="send" value="Submit receipt"/>
     </form>
+    <span id="littleinfo"></span>
 </div>
 <h1>{{=settings.globals.welcome}}</h1>
 <div class="presentation">{{=settings.globals.title}}</div>

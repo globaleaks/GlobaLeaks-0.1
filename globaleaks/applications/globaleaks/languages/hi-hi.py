@@ -145,4 +145,6 @@
 'table': 'तालिका',
 'tulips': 'tulips',
 'unable to parse csv file': 'csv फ़ाइल पार्स करने में असमर्थ',
+'Error: only ten digits are accepted as receipt': 'Error: only ten digits are accepted as receipt',
+'Error: you puts more than 10 digits': 'Error: you puts more than 10 digits',
 }

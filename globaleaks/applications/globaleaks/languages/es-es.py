@@ -321,4 +321,6 @@
 'views': 'vistas',
 'web2py Recent Tweets': 'Tweets Recientes de web2py',
 'web2py is up to date': 'web2py está actualizado',
+'Error: only ten digits are accepted as receipt': 'Error: only ten digits are accepted as receipt',
+'Error: you puts more than 10 digits': 'Error: you puts more than 10 digits',
 }
