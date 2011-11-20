@@ -96,4 +96,6 @@
 'selected': 'selected',
 'table': 'table',
 'tulips': 'tulips',
+'Error: only ten digits are accepted as receipt': 'Error: only ten digits are accepted as receipt',
+'Error: you puts more than 10 digits': 'Error: you puts more than 10 digits',
 }

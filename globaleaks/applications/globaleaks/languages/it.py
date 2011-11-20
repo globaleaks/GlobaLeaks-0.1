@@ -206,4 +206,6 @@
 'tulips': 'tulips',
 'unable to parse csv file': 'non riesco a decodificare questo file CSV',
 'value already in database or empty': 'value already in database or empty',
+'Error: only ten digits are accepted as receipt': 'Error: only ten digits are accepted as receipt',
+'Error: you puts more than 10 digits': 'Error: you puts more than 10 digits',
 }

@@ -227,4 +227,6 @@
 'table': '資料表',
 'tulips': 'tulips',
 'unable to parse csv file': '無法解析逗號分隔檔(csv)',
+'Error: only ten digits are accepted as receipt': 'Error: only ten digits are accepted as receipt',
+'Error: you puts more than 10 digits': 'Error: you puts more than 10 digits',
 }
