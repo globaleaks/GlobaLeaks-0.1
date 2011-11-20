@@ -77,10 +77,16 @@ settings.private.port     = '8000'
 settings.private.mail_use_tls = True
 
 
+# Mail setup
 settings.mail.server = 'box218.bluehost.com:25'
 settings.mail.sender = 'GlobaLeaks Demo <demonotification@globaleaks.org>'
 settings.mail.login = 'demonotification@globaleaks.org:antaniglobaleaks'
 settings.mail.ssl = False
+
+mail.settings.server = settings.mail.server
+mail.settings.sender = settings.mail.sender
+mail.settings.login = settings.mail.login
+
 
 # settings.auth
 settings.auth.hmac_key = 'sha512:7a716c8b015b5caca119e195533717fe9a3095d67b3f97114e30256b27392977'    # before define_tables()

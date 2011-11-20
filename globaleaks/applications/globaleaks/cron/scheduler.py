@@ -32,23 +32,24 @@ logger.info("New material: %s : ", unspooled)
 for leak_to_spool in unspooled:
     leak = Leak(leak_to_spool.id)
     submission = db(db.submission.leak_id==leak_to_spool.id).select().first()
-    if not randomizer.is_human_dirname(submission.dirname):
+    if submission.dirname and not randomizer.is_human_dirname(submission.dirname):
         human_dirname = randomizer.generate_human_dirname(request,
                                                           leak,
                                                           submission.dirname)
         os.rename(os.path.join(request.folder, "material", submission.dirname),
                   os.path.join(request.folder, "material", human_dirname))
         db(db.submission.id == submission.id).update(dirname=human_dirname)
-    human_path = os.path.join(request.folder, "material", submission.dirname)
-    compressor.create_zip(db, leak_to_spool, request, logger)
-    compressor.create_zip(db, leak_to_spool, request, logger, no_subdirs=True)
-    first = True
-    for directory in os.walk(human_path):
-        if not first:
-            mat_dir = directory[0]
-            compressor.create_zip(db, leak_to_spool, request, logger,
-                                  None, mat_dir)
-        first = False
+    if submission.dirname:
+        human_path = os.path.join(request.folder, "material", submission.dirname)
+        compressor.create_zip(db, leak_to_spool, request, logger)
+        compressor.create_zip(db, leak_to_spool, request, logger, no_subdirs=True)
+        first = True
+        for directory in os.walk(human_path):
+            if not first:
+                mat_dir = directory[0]
+                compressor.create_zip(db, leak_to_spool, request, logger,
+                                      None, mat_dir)
+            first = False
     db.leak[leak_to_spool.id].update_record(spooled=True)
     logger.info(leak_to_spool)
     db.commit()
@@ -65,7 +66,6 @@ for m in mails:
 
     message_txt = MimeMail.make_txt(context)
     message_html = MimeMail.make_html(context)
-    print message_html
 
     # XXX Use for AWS
     # conn.send_email(source='node@globaleaks.org', \
@@ -79,9 +79,11 @@ for m in mails:
               settings.globals.sitename, m.target, str(m.tulip[-8:]))
     logger.info("Sending to %s\n", m.target)
 
-    if MimeMail.send(to=m.address, subject=subject,
-                     message_text=message_txt,
-                     message_html=message_html):
+    #if MimeMail.send(to=m.address, subject=subject,
+    #                 message_text=message_txt,
+    #                 message_html=message_html):
+    if mail.send(to=m.address, subject=subject,
+                    message=(message_txt, message_html)):
 
         logger.info("email sent.")
         db(db.mail.id==m.id).delete()
