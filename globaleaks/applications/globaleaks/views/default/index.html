@@ -1,10 +1,23 @@
 {{extend 'layout.html'}}
 
+<script type="text/javascript">
+function extractNumber(obj)
+{
+    var temp = obj.value;
+    
+    var reg1Str = '[^0-9]';
+    var reg1 = new RegExp(reg1Str, 'g');
+    temp = temp.replace(reg1, '');
+
+    obj.value = temp;
+}
+</script>
+
 <div id="receiptbox">
 <h2>{{=T("Tulip Receipt")}}</h2>
     <form action="" method="POST">
-    <input type="text" name="Receipt" style="width: 150px"/>
-    <input type="submit" name="send"/>
+    <input id="inputReceipt" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" name="Receipt" style="width: 150px" />
+    <input type="submit" name="send" value="Submit receipt"/>
     </form>
 </div>
 <h1>{{=settings.globals.welcome}}</h1>
