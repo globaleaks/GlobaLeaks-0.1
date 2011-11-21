@@ -45,13 +45,14 @@ def plugin_translate(languages=[('en','English'),('es','Spanish'),('fr','French'
 # Template internationalization
 def localize_templates(name, lang='en'):
     fn = settings.globals.__getattr__(name).split(".")
-    template_file = ".".join(fn[:-1]) + "-" + lang + "." + fn[-1]
-    print "FILE: %s" % template_file
-    if os.path.exists(template_file):
-        settings.globals.__setattr__(name, template_file)
+    try:
+        template_file = ".".join(fn[:-1]) + "-" + lang + "." + fn[-1]
+        if os.path.exists(template_file):
+            settings.globals.__setattr__(name, template_file)
+    except:
+        pass
 
-for x in ["presentation_file", "disclaimer_file", "whistleblower_file",
-             "email_txt_template", "email_html_template"]:
+for x in ["presentation_file", "disclaimer_file", "whistleblower_file"]:
     localize_templates(x, lang=session._language)
 
 # mail and auth are filled after the first settings.tulip initialization,
