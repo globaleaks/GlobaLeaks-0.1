@@ -26,16 +26,14 @@ settings.private.hiddenservice = settings.globals.hiddenservice
 # Language settings
 T.set_current_languages('en', 'en-en')
 
-if T.accepted_language != session._language:
+# disable google translate "feature"
+if T.accepted_language != session._language and 0:
     import re
     lang = re.compile('\w{2}').findall(session._language)[0]
-    print "In here.. %s" % lang
     a = URL(r=request,c='static',f='plugin_translate/jquery.translate-1.4.3-debug-all.js')
     b = URL(r=request,c='plugin_translate',f='translate',args=lang+'.js')
-    print "a: %s b: %s" % (a,b)
     response.files.append(a)
     response.files.append(b)
-    print "RF: %s" % response.files
 
 def plugin_translate(languages=[('en','English'),('es','Spanish'),('fr','French'),('de','German')]):
     return FORM(SELECT(
@@ -44,6 +42,17 @@ def plugin_translate(languages=[('en','English'),('es','Spanish'),('fr','French'
             value=session._language,
             *[OPTION(k,_value=v) for v,k in languages]))
 
+# Template internationalization
+def localize_templates(name, lang='en'):
+    fn = settings.globals.__getattr__(name).split(".")
+    template_file = ".".join(fn[:-1]) + "-" + lang + "." + fn[-1]
+    print "FILE: %s" % template_file
+    if os.path.exists(template_file):
+        settings.globals.__setattr__(name, template_file)
+
+for x in ["presentation_file", "disclaimer_file", "whistleblower_file",
+             "email_txt_template", "email_html_template"]:
+    localize_templates(x, lang=session._language)
 
 # mail and auth are filled after the first settings.tulip initialization,
 # because used inside Globaleaks object
