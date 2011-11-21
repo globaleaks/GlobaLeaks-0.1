@@ -70,22 +70,23 @@ def targets():
     targets_list = gl.get_targets(None)
 
     if "display" in request.args and not request.vars:
-        return dict(form=None, list=True, targets=targets_list, default_group = settings['globals'].default_group)
+        return dict(form=None, list=True, targets=targets_list,
+                    default_group=settings['globals'].default_group, edit=None)
 
     if form.accepts(request.vars, session):
         req = request.vars
-
         passphrase = obtain_secret(req.passphrase)
 
         if not passphrase:
-            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.could_delete,
-                             None, "subscribed")
-            passphrase = randomizer.generate_target_passphrase()[0]
-
+            target_id = gl.create_target(req.Name, None, req.Description,
+                                         req.contact, req.could_delete,
+                                         None, "subscribed")
         else:
-            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                             hashlib.sha256(passphrase).hexdigest(), "subscribed")
-            
+            target_id = gl.create_target(req.Name, None, req.Description,
+                                         req.contact, req.coulddelete,
+                                         hashlib.sha256(passphrase).hexdigest(),
+                                         "subscribed")
+
         passphrase = randomizer.generate_target_passphrase()[0]
         target = db.auth_user.insert(first_name=req.Name,
                                      last_name="",
@@ -94,11 +95,10 @@ def targets():
                                      password=db.auth_user.password.validate(passphrase)[0]
                                      )
         auth.add_membership(auth.id_group("targets"), target)
-        
-        targets_list = gl.get_targets("ANY")
-        return dict(form=form, list=True, targets=targets_list, default_group = settings['globals'].default_group)
 
-    return dict(form=form, list=False, targets=targets_list, default_group = settings['globals'].default_group)
+        targets_list = gl.get_targets("ANY")
+        return dict(form=form, list=False, targets=targets_list,
+                    default_group=settings['globals'].default_group, edit=None)
 
 @auth.requires_login()
 def targetgroups():
@@ -133,7 +133,7 @@ def targetgroups():
     if form_target.accepts(request.vars, session):
         req = request.vars
         passphrase = obtain_secret(req.passphrase)
-        
+
         if not passphrase:
             target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
                              None, "subscribed")
@@ -142,7 +142,7 @@ def targetgroups():
         else:
             target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
                              hashlib.sha256(passphrase).hexdigest(), "subscribed")
-            
+
 
         target = db.auth_user.insert(first_name=req.Name,
                                      last_name="",
@@ -151,7 +151,7 @@ def targetgroups():
                                      password=db.auth_user.password.validate(passphrase)[0]
                                      )
         auth.add_membership(auth.id_group("targets"), target)
-        
+
     all_targets = gl.get_targets(None)
     targetgroups_list = gl.get_targetgroups()
 
@@ -263,7 +263,7 @@ def target_add():
         pass
 
     result = gl.add_to_targetgroup(target_id, group_id)
-    
+
     if result:
         return response.json({'success': 'true'})
 
