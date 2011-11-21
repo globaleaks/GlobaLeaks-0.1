@@ -76,17 +76,14 @@
 {{pass}}
 
 <script type="text/javascript">
-function checkDisclaimer() {
-        if ($('#disclaimer')[0].checked == true){
-        $('.buttonFinish').removeClass('buttonDisabled');
-        return true;
-    }
-        if ($('#disclaimer')[0].checked == false){
-        $('.buttonFinish').addClass('buttonDisabled');
-        return true;
-        }
-    }
 
+function checkDisclaimer() 
+{
+    if ($('#disclaimer')[0].checked == true)
+        $('.buttonFinish').removeClass('buttonDisabled');
+    else
+        $('.buttonFinish').addClass('buttonDisabled');
+}
 
 $(document).ready(function(){
     'use strict';
@@ -97,21 +94,7 @@ $(document).ready(function(){
     $('#fileupload').fileupload({
         url: "/globaleaks/submission/fileupload",
         autoUpload: true,
-        /*
-         * not working - would likely be fixed to support upload resume
-        maxChunkSize: 1000000,
-        multipart: false,
-        add: function (e, data) {
-               var that = this;
-               $.getJSON('/globaleaks/submission/fileupload', {file: data.files[0].name}, function (file) {
-                   data.uploadedBytes = file && file.size;
-                   $.blueimpUI.fileupload.prototype.options.add.call(that, e, data);
-                });
-              }
-          */
-
         // those spaces used to avoid TWO GRAPH IN SEQUENCE
-
     });
 
     $('#fileupload').bind('fileuploadprogressall', function (e, data) {
@@ -138,10 +121,14 @@ $(document).ready(function(){
             }
         }
 
+        /* escamotage: avoid that someone click on checked and press finish before 
+         * the upload had really finished. until an upload is running, the disclaimer
+         * could not be already be checked */
+        $('#disclaimer')[0].checked = false;
         $('.buttonFinish').addClass('buttonDisabled');
+
         var new_height = $('#fileupload').parents('.content').innerHeight();
         $('.stepContainer').css('height', new_height);
-
     });
 
     $('#fileupload').bind('fileuploadstop', function (e, data) {
