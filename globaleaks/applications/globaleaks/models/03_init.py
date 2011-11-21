@@ -26,9 +26,24 @@ settings.private.hiddenservice = settings.globals.hiddenservice
 # Language settings
 T.set_current_languages('en', 'en-en')
 
-# force the default language if the config file specifies it
-if settings.globals.language:
-    T.force(settings.globals.language)
+if T.accepted_language != session._language:
+    import re
+    lang = re.compile('\w{2}').findall(session._language)[0]
+    print "In here.. %s" % lang
+    a = URL(r=request,c='static',f='plugin_translate/jquery.translate-1.4.3-debug-all.js')
+    b = URL(r=request,c='plugin_translate',f='translate',args=lang+'.js')
+    print "a: %s b: %s" % (a,b)
+    response.files.append(a)
+    response.files.append(b)
+    print "RF: %s" % response.files
+
+def plugin_translate(languages=[('en','English'),('es','Spanish'),('fr','French'),('de','German')]):
+    return FORM(SELECT(
+            _onchange="document.location='%s?_language='+jQuery(this).val()" \
+                % URL(r=request,args=request.args),
+            value=session._language,
+            *[OPTION(k,_value=v) for v,k in languages]))
+
 
 # mail and auth are filled after the first settings.tulip initialization,
 # because used inside Globaleaks object

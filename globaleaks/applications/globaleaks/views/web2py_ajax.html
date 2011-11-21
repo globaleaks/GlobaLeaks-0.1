@@ -1,11 +1,12 @@
 {{
-response.files.insert(0,URL('static','js/jquery.js'))
-response.files.insert(1,URL('static','css/calendar.css'))
-response.files.insert(2,URL('static','js/calendar.js'))
+#response.files.insert(0,URL('static','js/jquery.js'))
+#response.files.insert(1,URL('static','css/calendar.css'))
+#response.files.insert(2,URL('static','js/calendar.js'))
 for _item in response.meta or []:}}
      <meta name="{{=_item}}" content="{{=response.meta[_item]}}" />{{
 pass
 for _k,_file in enumerate(response.files or []):
+  print "w2p: %s %s" % (_k, _file)
   if _file in response.files[:_k]:
      continue
   _file0=_file.lower().split('?')[0]
@@ -22,4 +23,4 @@ pass
     var w2p_ajax_date_format = "{{=T('%Y-%m-%d')}}";
     var w2p_ajax_datetime_format = "{{=T('%Y-%m-%d %H:%M:%S')}}";
     //--></script>
-    <script src="{{=URL('static','js/web2py_ajax.js')}}" type="text/javascript"></script>
+    <!-- script src="{{=URL('static','js/web2py_ajax.js')}}" type="text/javascript"></script-->

@@ -35,21 +35,31 @@
 
     <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
 	<!--     <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script> -->
+    {{#----- Hack to make the language be loaded properly ------}}
+    {{
+        T.set_current_languages('en', 'en-en')
+        plugin_translate_current_language = 'en'
+        session._language = request.vars._language or session._language or plugin_translate_current_language
+        T.force(str(session._language))
+    }}
+    {{#---- END hack                                      ------}}
 
     {{#------  require CSS and JS files for this page (read info in base.css) ------}}
     {{#response.files.append(URL('static','css/base.css'))}}
+    {{response.files.insert(0, URL('preload', 'js/all.js'))}}
+    {{response.files.append(URL('static', 'js/jquery.cookie.js'))}}
+
     {{#response.files.append(URL('static','css/superfish.css'))}}
     {{#response.files.append(URL('static', 'js/fancybox/jquery.fancybox-1.3.4.css'))}}
     {{#response.files.append(URL('static','js/superfish.js'))}}
     {{#response.files.append(URL('static', 'js/cufon.js'))}}
     {{#response.files.append(URL('static', 'js/AlteHaas_700.font.js'))}}
-    {{#response.files.append(URL('static', 'js/main.js'))}}
     {{#response.files.append(URL('static', 'js/fancybox/jquery.fancybox-1.3.4.pack.js'))}}
+    {{#response.files.append(URL('static', 'js/main.js'))}}
     {{#------ include web2py specific js code (jquery, calendar, form stuff) ------}}
-    {{#include 'web2py_ajax.html'}}
+    {{include 'web2py_ajax.html'}}
 
-	<script type="text/javascript" src="/globaleaks/preload/js/all.js"></script>
-    <script type="text/javascript" src="/globaleaks/static/js/jquery.cookie.js"></script>
+    <!-- script type="text/javascript" src="/globaleaks/static/plugin_translate/jquery.translate-1.4.3-debug-all.js"></script-->
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -156,7 +166,8 @@
     </div><!-- header  -->
 
     <div id="statusbar"><!-- statusbar is menu zone -->
-      {{if session.target and not session.admin:}}
+    {{=plugin_translate(languages=[('en','English'),('it','Italiano'),('sr','Serbian'),('dev','DEV MODE'), ('ar', 'Arabic')])}}
+    {{if session.target and not session.admin:}}
       	{{=MENU(response.menu_target,_class="sf-menu")}}
       {{pass}}
 

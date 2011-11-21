@@ -7,7 +7,6 @@
     padding-bottom: 5px;
 }
 </style>
-
 <script type="text/javascript">
 
   // custom css expression for a case-insensitive contains()
@@ -60,7 +59,7 @@
 {{pass}}
 
 {{if not error and not leak_id and form:}}
-    <h1><span>{{=T("Submission interface")}}</span></h1>
+    <h1><span>{{=T("Submission Interface")}}</span></h1>
     {{=form}}
 
 {{pass}}
@@ -77,7 +76,7 @@
 
 <script type="text/javascript">
 
-function checkDisclaimer() 
+function checkDisclaimer()
 {
     if ($('#disclaimer')[0].checked == true)
         $('.buttonFinish').removeClass('buttonDisabled');
@@ -121,7 +120,7 @@ $(document).ready(function(){
             }
         }
 
-        /* escamotage: avoid that someone click on checked and press finish before 
+        /* escamotage: avoid that someone click on checked and press finish before
          * the upload had really finished. until an upload is running, the disclaimer
          * could not be already be checked */
         $('#disclaimer')[0].checked = false;
