@@ -22,10 +22,10 @@ response.menu_target = [
 
 response.menu_admin = [
     (T('Receivers'),'/globaleaks/admin/targets/display'==URL(), '/globaleaks/admin/targets/display'),
-    (T('Groups'),'/globaleaks/admin/targetgroups'==URL(),'/globaleaks/admin/targetgroups'),
-    (T('Globalview'),'/globaleaks/target/view'==URL(), '/globaleaks/target/view'),
-    (T('Config'),'/config'==URL(), '/config'),
-    (T('Stats'),'/stats'==URL(), '/stats'),
+#    (T('Groups'),'/globaleaks/admin/targetgroups'==URL(),'/globaleaks/admin/targetgroups'),
+#    (T('Globalview'),'/globaleaks/target/view'==URL(), '/globaleaks/target/view'),
+#    (T('Config'),'/config'==URL(), '/config'),
+#    (T('Stats'),'/stats'==URL(), '/stats'),
     (T('Logout'),'/globaleaks/default/user/logout'==URL(), '/globaleaks/default/user/logout'),
     (T('Password'),'/globaleaks/default/user/change_password'==URL(), '/globaleaks/default/user/change_password'),
 ]

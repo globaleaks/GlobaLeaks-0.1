@@ -51,7 +51,8 @@ def targets():
     if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
 
-    if (request.vars.edit and request.vars.edit.startswith("edit")):
+    # it's possible delete via ajax and add via POST
+    if (request.vars.edit and request.vars.edit.startswith("edit") and not len(request.vars) > 1):
         pass
 
     # is hardcoded email, supposing that, at the moment, every subscription
@@ -69,25 +70,25 @@ def targets():
 
     targets_list = gl.get_targets(None)
 
+    # provide display only, whan controller is called as targets/display
     if "display" in request.args and not request.vars:
-        return dict(form=None, list=True, targets=targets_list,
+        return dict(form=None, list_only=True, targets=targets_list,
                     default_group=settings['globals'].default_group, edit=None)
 
     if form.accepts(request.vars, session):
         req = request.vars
         passphrase = obtain_secret(req.passphrase)
 
-        if not passphrase:
-            target_id = gl.create_target(req.Name, None, req.Description,
-                                         req.contact, req.could_delete,
-                                         None, "subscribed")
-        else:
-            target_id = gl.create_target(req.Name, None, req.Description,
-                                         req.contact, req.coulddelete,
-                                         hashlib.sha256(passphrase).hexdigest(),
-                                         "subscribed")
+        # here some mistake happen, I wish that now has been fixed and not augmented
 
-        passphrase = randomizer.generate_target_passphrase()[0]
+        if not passphrase:
+            passphrase = randomizer.generate_target_passphrase()[0]
+
+        target_id = gl.create_target(req.Name, None, req.Description,
+                                     req.contact, req.could_delete,
+                                     hashlib.sha256(passphrase).hexdigest(),
+                                    "subscribed")
+
         target = db.auth_user.insert(first_name=req.Name,
                                      last_name="",
                                      username=target_id,
@@ -98,7 +99,8 @@ def targets():
 
         targets_list = gl.get_targets("ANY")
 
-    return dict(form=form, list=False, targets=targets_list,
+    # switch list_only=None if, in the adding interface, the list has not to be showed
+    return dict(form=form, list_only=None, targets=targets_list,
                 default_group=settings['globals'].default_group, edit=True)
 
 @auth.requires_login()

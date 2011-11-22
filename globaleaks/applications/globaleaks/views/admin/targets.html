@@ -4,7 +4,7 @@ div.flash {
 background-color: green;
 }
 </style>
-{{if not list:}}
+{{if not list_only:}}
 <h1><span>Add a Receiver</span></h1>
 <p class="intro">
     The Node Administrator is the person who is actually running the GlobaLeaks node. He is aware of the context he wishes to impact and will therefore
@@ -20,10 +20,9 @@ background-color: green;
 
 {{=form}}
 
-
 {{pass}}
 
-{{if list:}}
+{{if len(targets):}}
 
 <h1><span>Receiver list</span></h1>
 <form><input type="hidden" id="edit" name="edit" /></form>
@@ -58,14 +57,18 @@ background-color: green;
 {{pass}}
 </table>
 
+<div class="clear"></div>
+
+{{else:}}
+    <h1><span>Receiver list is empty!</span></h1>
+{{pass}}
+
 {{if default_group:}}
     <p>In this node, every receiver is added at the default group, named "{{=default_group}}"</p>
 {{pass}}
 
-<a class="button addtarget" href="/globaleaks/admin/targets">Add a receiver</a>
-
-<div class="clear"></div>
-
+{{if list_only or not len(targets):}}
+    <a class="button addtarget" href="/globaleaks/admin/targets">Add a receiver</a>
 {{pass}}
 
 <script>
