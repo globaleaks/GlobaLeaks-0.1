@@ -97,8 +97,9 @@ def targets():
         auth.add_membership(auth.id_group("targets"), target)
 
         targets_list = gl.get_targets("ANY")
-        return dict(form=form, list=False, targets=targets_list,
-                    default_group=settings['globals'].default_group, edit=None)
+
+    return dict(form=form, list=False, targets=targets_list,
+                default_group=settings['globals'].default_group, edit=True)
 
 @auth.requires_login()
 def targetgroups():

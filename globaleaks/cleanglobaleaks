@@ -10,6 +10,7 @@ help() {
     echo "1]  you want delete all the data, and restore the node as freshly downloaded software (use option 'complete')."
     echo "2]  you want to commit the code without your local configuration (use option 'commit')."
     echo "3]  you want to clean your databases (use option 'database')."
+    echo "4]  remove all .pyc files."
     echo "${info}To start the cleaning: run $0 [complete|database|commit]"
     exit
 }
@@ -30,6 +31,14 @@ clean_database() {
     rm -f applications/globaleaks/databases/*
     echo "${success}done"
 }
+
+clean_pyc() {
+    echo "${info}removing .pyc files..."
+    find . -type f -name '*.pyc' -delete
+    echo "${success}done"
+}
+
+
 
 clean_commit() {
     echo "${info}restoring pre install files..."
@@ -68,5 +77,9 @@ fi
 if [ $1 = "commit" ]; then
     path_fix; clean_commit; exit
 fi
+if [ $1 = "pyc" ]; then
+    path_fix; clean_pyc; exit
+fi
+
 
 help

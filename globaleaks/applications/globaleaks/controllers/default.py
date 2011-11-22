@@ -69,10 +69,13 @@ def index():
     # inside a form_receipt = SQLFORM.factory(Field('Receipt', requires))
     if request.vars:
         req = request.vars
-        leak_number = req.Receipt.replace(' ', '')
-        tulip_url = hashlib.sha256(leak_number).hexdigest()
-        redirect("/globaleaks/tulip/status/" + tulip_url)
-
+        try:
+            leak_number = req.Receipt.replace(' ', '')
+            tulip_url = hashlib.sha256(leak_number).hexdigest()
+            redirect("/globaleaks/tulip/status/" + tulip_url)
+        except:
+            pass
+    
     with open(settings.globals.presentation_file) as filestream:
         presentation_text = filestream.read()
         # sadly, HTML must not be passed, to avoid XXSs
