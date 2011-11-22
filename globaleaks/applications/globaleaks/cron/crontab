@@ -1,4 +1,6 @@
 # crontab file format:
 #
-# remind - need to be checked - we are not really run as root ?
-*      *  *  *  *  root *applications/globaleaks/cron/scheduler.py
+# every minute is spooled the email
+*      *  *  *  *  root *applications/globaleaks/cron/mail_spool.py
+# two time in the day is clean the database for expired tulip, unfinished uploads, etc
+0      0,12  *  *  *  root *applications/globaleaks/cron/cleaner.py
