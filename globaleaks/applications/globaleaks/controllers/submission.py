@@ -49,7 +49,7 @@ def api():
         # change group names to group ids
         group_ids = [gl.get_group_id(g) for g in group_ids]
         data['spooled'] = False
-        data['submission_timestamp'] = str(time.time())
+        data['submission_timestamp'] = time.time()
 
         result = db.leak.validate_and_insert(**data)
 
