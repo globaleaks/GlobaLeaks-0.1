@@ -24,10 +24,10 @@ class FormShaman(SQLFORM):
                                         SPAN(T(group["tags"]),
                                              _class="group_tags")))
             grouplist = DIV(LABEL(T("Select Group:")),grouplist,_class="groups")
-            
+
         else:
             grouplist = ""
-        
+
         jQueryFileUpload = DIV(
                            DIV(LABEL("Material:"),
                                 _class="w2p_fl"),
@@ -89,6 +89,9 @@ class FormShaman(SQLFORM):
 
         # set up everything launching the parent class' init
         super(FormShaman, self).__init__(*args, fields=fields, labels=labels, **kwargs)
+        # This is a hack to make the form submission work on Chrome
+        if not self['_action']:
+            self['_action'] = "#"
 
     def createform(self, xfields):
 
@@ -125,5 +128,4 @@ class FormShaman(SQLFORM):
 
         #response.files.append(URL('static','FormShaman',args=['css','smart_wizard.css']))
         #response.files.append(URL('static','FormShaman',args=['js','jquery.smartWizard.js']))
-
         return table
