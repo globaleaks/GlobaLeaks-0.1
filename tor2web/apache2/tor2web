@@ -41,7 +41,7 @@
 	RewriteCond %{HTTP_HOST} ^servertest\.demo\.globaleaks\.org(:443)?$
 	RewriteRule ^/(.*)$  http://127.0.0.1:8118/$1 [L,P]
 	SetEnvIf Host "^servertest\.demo\.globaleaks\.org" servertest
-	RequestHeader set Host y5bf6uibtsy5qwnc.onion.onion env=servertest
+	RequestHeader set Host y5bf6uibtsy5qwnc.onion env=servertest
 
 	# Enable PHP scripts only for /torcheck.php blocking all other PHP requests
 	<Location /torcheck.php>
