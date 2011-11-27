@@ -1,1 +1,7 @@
-This is the content of the file 'personalization/presentation_default.txt', you're invited to change the content, including some descripting text of your GlobaLeaks whistleblowing service.
+With this submission system your identity will not be disclosed in any part of the process.
+
+If the box on top of this page indicates “Anonymous” you are good to go, if not you should download the Tor Browser Bundle from http://torproject.org/download/.
+
+For even more security you should use the live linux distribution Tails. It can be downloaded from here: http://tails.boum.org/.
+
+CUSTOMIZATION: Write here your introductury text by editing templates/presentation_default.txt
