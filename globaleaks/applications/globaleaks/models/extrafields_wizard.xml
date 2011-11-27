@@ -1,7 +1,9 @@
 <wizard>
     <step number="1">
         <p>
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        Enter the title you would like to give the submission. It should be something that gives us an idea of what the issue is about (e.x. A politician corruption).
+	The description should give us enough contextual information to investigate the issue and properly understand the material. 
+	Please take your time when filling in this form in.
         </p>
         <field>
             <name>title</name>
@@ -20,7 +22,8 @@
 
     <step number="2">
         <p>
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        Select one or more documents to be uploaded. If the content is not clear, be sure to reference what the file is exactly in step 1.
+	Your connection is being hopped through various random parts of the world therefore it may be slow and take a while to finish uploading.
         </p>
         <material></material>
         <!--field>
@@ -51,7 +54,7 @@
 
     <step number="3">
         <p>
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        Carefully read the disclaimer and click accept only once you have fully understood the consequences of what will happen when you click submit.
         </p>
 
         <!-- field>
