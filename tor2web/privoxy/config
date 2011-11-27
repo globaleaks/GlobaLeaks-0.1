@@ -1,0 +1,44 @@
+# Listen to Localhost
+listen-address  127.0.0.1:8118
+
+# Logging
+logdir /var/log/privoxy/
+logfile privoxy.log
+
+# Enable Actions Processing (for X-Forwarded-For header removal)
+toggle  1
+
+accept-intercepted-requests 1
+
+# Forward to TOR requests
+forward-socks4a / 127.0.0.1:9050 .
+
+# Privoxy Templates
+templdir /etc/privoxy/templates
+
+# Actions to cleanup X-Forwarded-For HTTP Header
+actionsfile /etc/privoxy/privacy.action
+# actionsfile /etc/privoxy/blocking.action
+
+# If you need to debug privoxy with /tmp/privoxy.log uncomment below
+# debug 64
+# logdir /tmp
+# logfile privoxy.log
+
+# EXPERIMENTAL PERFORMANCE IMPROVEMENTS
+# Speed up communication by looking for a Tor-Circuit (PATH) that connect before 3 seconds (low delay circuit)
+# If it's not able to open-up a socket within 3 seconds (HIGH SPEED!), retry 5 times improving the chance to get a FAST PATH.
+# socket-timeout 3
+forwarded-connect-retries 2
+
+# Use an existing established hidden-service connection for different inbound connections 
+# connection-sharing 1
+# Keep connections open for 120 seconds (whether other clients need to use it)
+#keep-alive-timeout 120
+
+connection-sharing 1
+keep-alive-timeout 300
+# Experimentally install Privoxy 3.017 (on ubuntu there is 3.0.15 that doesn't support default-server-timeout)
+# https://launchpad.net/ubuntu/+source/privoxy/3.0.17-1/+build/2303773
+# Not supported on privoxy =>3.0.16 (Not on ubuntu 10.04.3)
+# default-server-timeout 60
