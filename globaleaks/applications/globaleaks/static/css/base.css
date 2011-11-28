@@ -639,3 +639,8 @@ border-radius: 5px;
 #footer a {
     color: #0a70b4;
 }
+
+.w2p_fl label {
+    font-size: 20px;
+    font-weight: bold;
+}

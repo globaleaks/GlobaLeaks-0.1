@@ -23,13 +23,13 @@ class FormShaman(SQLFORM):
                                         SPAN(T(group["name"])),
                                         SPAN(T(group["tags"]),
                                              _class="group_tags")))
-            grouplist = DIV(LABEL(T("Select Group:")),grouplist,_class="groups")
+            grouplist = DIV(LABEL(T("Select Group:"),_class="submit_label"),grouplist,_class="groups")
 
         else:
             grouplist = ""
 
         jQueryFileUpload = DIV(
-                           DIV(LABEL("Material:"),
+                           DIV(LABEL("Material:", _class="submit_label"),
                                 _class="w2p_fl"),
                            DIV(DIV(LABEL(SPAN(T("Add Files")),
                                          INPUT(_type="file",
@@ -50,7 +50,7 @@ class FormShaman(SQLFORM):
                             DIV(_class="w2p_fc"),
                                 _id="material__row")
 
-        material_njs = DIV(DIV(LABEL("Material:"),
+        material_njs = DIV(DIV(LABEL("Material:", _class="submit_label"),
                                 _class="w2p_fl"),
                             DIV(INPUT(_name='material', _type='file',
                                       _id='file-uploader-nonjs'),
@@ -64,7 +64,8 @@ class FormShaman(SQLFORM):
             disclaimer_text = filestream.read()
             # sadly, HTML must not be passed to avoid XXSs
 
-        disclaimer_fb = DIV(LABEL(T('Accept Disclaimer') + ': '), disclaimer_text,
+        disclaimer_fb = DIV(DIV(LABEL(T('Accept Disclaimer') + ': ', _class="submit_label"),
+                            _class="w2p_fl"), disclaimer_text,
                          INPUT(_name='agree', value=False, _type='checkbox',_id="disclaimer", requires=IS_EQUAL_TO("on",
                                                                                                  error_message=T('must accept disclaimer'))))
 
