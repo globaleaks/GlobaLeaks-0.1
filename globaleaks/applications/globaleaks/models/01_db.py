@@ -102,6 +102,8 @@ class ExtraField:
                 steps.append("grouplist")
             elif node.nodeName == "disclaimer":
                 steps.append("disclaimer")
+            elif node.nodeName == "disclaimer_info":
+                steps.append("disclaimer_info")
             elif node.nodeName == "captcha":
                 steps.append("captcha")
             elif node.nodeName == "p":

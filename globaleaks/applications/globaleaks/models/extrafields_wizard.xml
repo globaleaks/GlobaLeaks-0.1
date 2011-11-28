@@ -53,9 +53,7 @@
     </step>
 
     <step number="3">
-        <p>
-        Carefully read the disclaimer and click accept only once you have fully understood the consequences of what will happen when you click submit.
-        </p>
+        <p>Carefully read the disclaimer and click accept only once you have fully understood the consequences of what will happen when you click submit.</p>
 
         <!-- field>
             <name>date</name>
@@ -63,6 +61,9 @@
             <description>Enter a date realted to your submission</description>
             <type>date</type>
         </field -->
+
+        <!-- disclaimer info and feedback are kept separeted to handle different CSS class/id -->
+        <disclaimer_info></disclaimer_info>
         <disclaimer></disclaimer>
         <captcha></captcha>
     </step>

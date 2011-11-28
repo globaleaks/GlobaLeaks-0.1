@@ -64,11 +64,13 @@ class FormShaman(SQLFORM):
             disclaimer_text = filestream.read()
             # sadly, HTML must not be passed to avoid XXSs
 
-        disclaimer_fb = DIV(LABEL(T('Accept Disclaimer') + ': '), disclaimer_text,
+        disclaimer_info = DIV(disclaimer_text, _class="disclaimer_text")
+        disclaimer_fb = DIV(LABEL(T('Accept Disclaimer'), _id="disclaimer_alert"),
                          INPUT(_name='agree', value=False, _type='checkbox',_id="disclaimer", requires=IS_EQUAL_TO("on",
                                                                                                  error_message=T('must accept disclaimer'))))
 
         self.special_fields = {
+                       'disclaimer_info' : disclaimer_info,
                        'disclaimer' : disclaimer_fb,
                        'captcha' : '' ,#auth.settings.captcha,
                        'material': DIV(jQueryFileUpload, material_njs),#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),

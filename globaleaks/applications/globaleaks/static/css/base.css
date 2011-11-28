@@ -639,3 +639,27 @@ border-radius: 5px;
 #footer a {
     color: #0a70b4;
 }
+
+/* temporary here - XML, template source, calling a CSS class/id */
+.disclaimer_text {
+    color:black;
+    font-size: 1.1em;
+    background-image:url('/globaleaks/static/images/disclaimer_pattern.jpg');
+    margin: 1em 2em 1em 2em;
+    padding: 0.5em;
+    line-height: 120%;
+    font-style: normal;
+}
+
+#step-3 label {
+    border-top: 3em;
+    font-size: 2em;
+    color: #8Cc63f;
+    /* this is the same stile of the button ahead */
+    font: Verdana, Arial, Helvetica;
+    font-style: bold;
+}
+
+#step-3 {
+    font-size: 1.1em;
+}
