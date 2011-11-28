@@ -11,7 +11,7 @@ routes_in = (
              ('^/subscribe(/)?', '/globaleaks/target/subscribe/'),
              ('^/unsubscribe(/)?', '/globaleaks/target/unsubscribe/'),
              ('^/groups(/)?', '/globaleaks/admin/targetgroups'),
-             ('^/globalview(/)?', '/globaleaks/target/view'),
+             ('^/debugview(/)?', '/globaleaks/target/debugview'),
              ('^/receiver(/)?', '/globaleaks/target/receiver'),
              ('^/bouquet/(?P<target_id>[\w]+)', '/globaleaks/target/bouquet/\g<target_id>'),
              ('^/bouquet', '/globaleaks/target/bouquet'),

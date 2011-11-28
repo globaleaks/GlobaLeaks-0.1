@@ -10,7 +10,7 @@ def index():
 
 @configuration_required
 @auth.requires_login()
-def view():
+def debugview():
     collected_user = []
     target_list = db(db.target.status=="subscribed").select()
     for active_user in target_list:

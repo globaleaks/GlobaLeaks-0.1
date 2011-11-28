@@ -1,9 +1,13 @@
 {{extend 'layout.html'}}
-<h2 class="entry">Globa<u>List</u>: Users, Tulips & Bouquet<br>This is intended to be used by developers only.</h2>
+<center>
+<h2 class="entry">Globa<u>List</u>: Node info, Receivers, Groups, Tulips & Bouquet<br><br>
+This interface is useful in developing and is <u>enable only in debug mode</u>...<br><br>
+change your loglevel inside globaleaks.conf before start a production GlobaLeaks node.</h2>
+</center>
 
 <div class="intro">
 {{if active:}}
-Those are the brave active users! added with <a href="targets/">insertion interface</a>.<br>
+Active Receivers, add them thru the <a href="targets/">insertion interface</a>.<br>
 <!-- this link is provided because this page could works as index for all node maintainer's features -->
 <table class="targetlist">
     <tr class="even">
@@ -32,13 +36,13 @@ Those are the brave active users! added with <a href="targets/">insertion interf
     {{pass}}
 </table>
 {{else:}}
-No target configured in this node, add them by <a href="targets/">insertion interface</a>.
+No target configured in this node, add them thru the <a href="targets/">insertion interface</a>.
 {{pass}}
 </div>
 
 <div class="intro">
 {{if inactive:}}
-    And whass follow are the loooooser user<br>
+    <b>inactive</b> user, feature not implemented yet<br>
 <table class="targetlist">
     {{i=0}}
     {{for target in inactive:}}
@@ -57,17 +61,17 @@ No target configured in this node, add them by <a href="targets/">insertion inte
 </table>
 
 {{else:}}
-No unsubscribed users are presents! <b>maybe you have not choose so randomly the lists of targetz!</b>
+<b>no inactive receiver are present in the node</b>
 {{pass}}
 </div>
 
 <div class="intro">
-The <b>Boquets</b> follows below: this is what happen in your node:<br>
+The <b>Boquets</b> follows below: how the submission are spreaded between the receiver:<br>
 {{if flowers:}}
 <table class="targetlist">
     <tr class="even">
         <td class="name">title</td>
-        <td class="name">leak_id</td>
+        <td class="name">subm #id</td>
         <!-- has no sense that is always 0, it's a field to delete -->
         <td class="description">Submission date</td>
         <td class="description">whistleblower accesses</td>
@@ -82,7 +86,7 @@ The <b>Boquets</b> follows below: this is what happen in your node:<br>
             <tr class="even">
         {{pass}}
         <td class="name">{{=leak.title}}</td>
-        <td class="name"><b>fixme</b> [{{=leak.leaker_id}}]</td>
+        <td class="name">#{{=leak.leaker_id}}</td>
         <td class="description">{{=leak.submission_timestamp}}</td>
         <td class="description">{{=leak.whistleblower_access}}</td>
         <td class="description">{{=leak.spooled}}</td>
@@ -91,14 +95,13 @@ The <b>Boquets</b> follows below: this is what happen in your node:<br>
 </table>
 
 {{else:}}
-No submission are present, you could feel yourself sorry because it is your fucking rensponsability in make your node advocacy! come on!!
+No submission are present
 <!-- yep, text need to be reviewed -->
 {{pass}}
 </div>
 
-
 <div class="intro">
-The <b>Groups</b>That are the context your node is capable to handle; added by <a href="/globaleaks/admin/targetgroups">Groups interface</a>.<br>
+The <b>Context</b> your node is capable to handle; added by <a href="/globaleaks/admin/targetgroups">Groups ajax interface</a>. or <a href="/globaleaks/admin/targets">Groups form interface</a>.<br>
 {{if groups:}}
 <table class="targetlist">
     <tr class="even">
@@ -122,11 +125,10 @@ The <b>Groups</b>That are the context your node is capable to handle; added by <
 </table>
 
 {{else:}}
-No <a href="/globaleaks/admin/targetgroups">groups are present</a>, otherwise you are running a test node: you are using this software in the WRONG WAY!
+No <a href="/globaleaks/admin/target">receiver group</a>, are present. neither a default group configured in <b>globaleaks.conf</b>.
 <!-- yep, text need to be reviewed -->
 {{pass}}
 </div>
-
 
 <div class="intro">
 The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
@@ -134,7 +136,7 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
 <table class="targetlist">
     <tr class="even">
         <td class="name">URL</td>
-        <td class="name">leak ID</td>
+        <td class="name">subm ID</td>
         <td class="description">target id</td>
         <td class="name">access done/allow</td>
         <td class="name">vote</td>

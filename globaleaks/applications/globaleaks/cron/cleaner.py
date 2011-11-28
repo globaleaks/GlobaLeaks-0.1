@@ -52,7 +52,7 @@ for subm_row in total_submissions:
         if os.access(absdir, os.X_OK ):
             file_counter = 0
             for submitted_file in os.listdir(absdir):
-                file_counter++
+                file_counter += 1
                 os.unlink(submitted_file)
             logger.debug("related to tulip %d, has been removed %d uploaded files", subm_row.id, file_counter)
             os.rmdir(absdir)
