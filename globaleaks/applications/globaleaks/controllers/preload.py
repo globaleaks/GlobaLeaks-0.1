@@ -17,7 +17,8 @@ def js():
              '/js/fileupload/jquery.iframe-transport.js',
              '/js/fileupload/jquery.fileupload.js',
              '/js/fileupload/jquery.fileupload-ui.js',
-             '/js/fileupload/jquery.tmpl.min.js'
+             '/js/fileupload/jquery.tmpl.min.js',
+             '/js/jquery.cookie.js'
 
              ]
 

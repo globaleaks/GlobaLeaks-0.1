@@ -83,4 +83,10 @@ if [ -d "applications/globaleaks/static" ]; then
     rm -f applications/globaleaks/static/main_*
 fi
 
+if ! [ -d "applications/globaleaks/errors" ]; then
+    echo "applications/globaleaks/errors directory doesn't exists, creating it..."
+    mkdir -p applications/globaleaks/errors
+fi
+
+
 python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION

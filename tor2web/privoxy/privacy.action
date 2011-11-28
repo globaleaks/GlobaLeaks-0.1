@@ -1,0 +1,9 @@
+# X-Forwarded-For removal have different syntax depending on Privoxy
+# Privoxy <3.0.11 configuration
+#{ +hide-forwarded-for-headers }
+#/
+
+# Privoxy >=3.0.12 configuration
+{ +change-x-forwarded-for{block} }
+/
+

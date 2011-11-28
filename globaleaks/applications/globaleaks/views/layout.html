@@ -47,7 +47,7 @@
     {{#------  require CSS and JS files for this page (read info in base.css) ------}}
     {{#response.files.append(URL('static','css/base.css'))}}
     {{response.files.insert(0, URL('preload', 'js/all.js'))}}
-    {{response.files.append(URL('static', 'js/jquery.cookie.js'))}}
+    {{#response.files.append(URL('static', 'js/jquery.cookie.js'))}}
 
     {{#response.files.append(URL('static','css/superfish.css'))}}
     {{#response.files.append(URL('static', 'js/fancybox/jquery.fancybox-1.3.4.css'))}}
