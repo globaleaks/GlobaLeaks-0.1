@@ -665,13 +665,13 @@ border-radius: 5px;
 }
 
 #PrivacyBox {
-    width: 500px;
+    width: 100px;
 
 }
 
 #PrivacyBox #status h2 {
     font-size: 20px;
-
+    color: red;
 }
 
 

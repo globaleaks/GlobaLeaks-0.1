@@ -94,12 +94,15 @@
                     } else {
                         //box.children("#image").addClass("notanonymous");
                         box.children("#image").replaceWith('<img src="/globaleaks/static/images/notanonymous.png"/>');
-                        box.children("#status").replaceWith('<div id="status">{{=TAG(settings.globals.not_anonymous_file_content.replace("\n", ""))}}</div>');
-                        $("#PrivacyBox").qtip({
-                           content: 'Stems are great for indicating the context of the tooltip.',
-                           style: {
-                              tip: 'bottomLeft' // Notice the corner value is identical to the previously mentioned positioning corners
-                           }
+                        box.children("#status").replaceWith('<div id="status"><h2>Warning!</h2></div>');
+                        box.qtip({
+                           content: '{{=TAG(settings.globals.not_anonymous_file_content.replace("\n", ""))}}',
+                           position: {
+                                corner: { target: 'rightBottom',
+                                          tooltip: 'bottomLeft'
+                                        }
+                           },
+                           hide : { fixed: true }
                         });
 
                     }

@@ -36,6 +36,5 @@ def localize_templates(name, lang='en'):
 
 for x in ["presentation_file", "disclaimer_file", "whistleblower_file", "not_anonymous_file"]:
     localize_templates(x, lang=session._language)
-    print settings.globals.__getattr__(x)
 
 
