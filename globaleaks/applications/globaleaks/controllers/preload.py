@@ -18,6 +18,7 @@ def js():
              '/js/fileupload/jquery.fileupload.js',
              '/js/fileupload/jquery.fileupload-ui.js',
              '/js/fileupload/jquery.tmpl.min.js',
+             '/js/jquery.qtip-1.0.0-rc3.min.js',
              '/js/jquery.cookie.js'
 
              ]

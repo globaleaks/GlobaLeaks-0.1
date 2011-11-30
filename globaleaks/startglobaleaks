@@ -78,7 +78,7 @@ fi
 
 tput sgr0
 
-if [ ! -r "globaleaks/globaleaks.conf" ]; then
+if [ ! -r "globaleaks.conf" ]; then
     echo "first start detected: copying globaleaks.conf..."
     cp defaults/original.globaleaks.conf globaleaks.conf
 fi
