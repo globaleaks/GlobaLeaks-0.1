@@ -11,7 +11,7 @@ function extractNumber(obj)
 {
     var temp = obj.value;
     var remindlen = temp.length;
-    
+
     var reg1Str = '[^0-9]';
     var reg1 = new RegExp(reg1Str, 'g');
     temp = temp.replace(reg1, '');

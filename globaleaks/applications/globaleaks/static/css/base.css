@@ -663,3 +663,16 @@ border-radius: 5px;
 #step-3 {
     font-size: 1.1em;
 }
+
+#PrivacyBox {
+    width: 500px;
+
+}
+
+#PrivacyBox #status h2 {
+    font-size: 20px;
+
+}
+
+
+

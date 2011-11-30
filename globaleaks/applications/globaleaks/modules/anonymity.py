@@ -57,7 +57,7 @@ class Tor:
                     name = f.readline().strip()
                     break
         return name
-            
+
 
     def start(self):
         if not self.check():
@@ -66,7 +66,7 @@ class Tor:
                 raise OSError("torrc doesn't exist (%s)" % torrc)
 
             tor_cmd = ["tor", "-f", torrc]
- 
+
             if self.settings.globals.hiddenservice:
                 tor_cmd.extend(["--HiddenServiceDir", hiddenservice, "--HiddenServicePort", "80 127.0.0.1:8000"])
 

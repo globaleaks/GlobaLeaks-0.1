@@ -82,21 +82,19 @@
                       }, 1000);
                     })();
                 }
-
                 function anonymous(value) {
                     var box = $('#PrivacyBox');
                     if (value) {
                         //box.children("#image").addClass("anonymous");
                         box.children("#image").replaceWith('<img src="/globaleaks/static/images/anonymous.png"/>');
-                        box.children("#status").replaceWith('<p id="status">Anonymous</p>');
+                        box.children("#status").replaceWith('<div id="status">Anonymous</div>');
                         if (window.location.hostname != "{{=settings.globals.hsurl}}") {
                             redirect_to("{{=settings.globals.hsurl}}");
                         }
                     } else {
                         //box.children("#image").addClass("notanonymous");
                         box.children("#image").replaceWith('<img src="/globaleaks/static/images/notanonymous.png"/>');
-
-                        box.children("#status").replaceWith('<p id="status">Not Anonymous</p>');
+                        box.children("#status").replaceWith('<div id="status">{{=TAG(settings.globals.not_anonymous_file_content.replace("\n", ""))}}</div>');
                     }
                 }
                 console.log($.cookie('privacystatus'));
