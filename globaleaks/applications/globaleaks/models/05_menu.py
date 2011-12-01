@@ -16,8 +16,8 @@ response.menu = [
 response.menu_target = [
     (T('Tulip'),'/globaleaks/tulip/status/'+str(session.target)==URL(), '/globaleaks/tulip/status/'+str(session.target)),
 #   (T('Preferences'),'/preferences'==URL(),'/preferences'),
-    (T('Bouquet'),'/globaleaks/target/bouquet/'==URL(), '/globaleaks/target/bouquet/'),
-    (T('Preferences'),'/globaleaks/target/preferences/'==URL(), '/globaleaks/target/preferences/'),
+    (T('Bouquet'),'/globaleaks/target/bouquet/'+str(session.target)==URL(), '/globaleaks/target/bouquet/'+str(session.target)),
+#    (T('Preferences'),'/globaleaks/target/preferences/'==URL(), '/globaleaks/target/preferences/'),
 ]
 
 response.menu_admin = [
