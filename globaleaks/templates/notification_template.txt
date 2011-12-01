@@ -1,0 +1,11 @@
+You have received a %(type)s from %(sitename)s - %(name)s<
+
+
+Esteemed %(name)s,
+
+You can view the %(type)s from the following URL:
+
+Internet: http://%(site)s/globaleaks/tulip/%(tulip_url)s
+Via Tor: http://%(sitehs)s/globaleaks/tulip/%(tulip_url)s
+
+

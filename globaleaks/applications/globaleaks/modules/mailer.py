@@ -187,14 +187,14 @@ class MultiPart_Mail(object):
             return False
         return True
 
-    def make_txt(self, context):
-        f = open(os.path.join(os.getcwd(), self.settings.globals.email_txt_template))
+    def make_txt(self, context, file):
+        f = open(os.path.join(os.getcwd(), file))
         return f.read().strip() % context
 
 
 
-    def make_html(self, context):
-        f = open(os.path.join(os.getcwd(), self.settings.globals.email_html_template))
+    def make_html(self, context, file):
+        f = open(os.path.join(os.getcwd(), file))
         return f.read().strip() % context
                                                         
                                                         

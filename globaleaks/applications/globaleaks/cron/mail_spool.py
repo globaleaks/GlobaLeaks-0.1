@@ -64,8 +64,8 @@ for m in mails:
                     site=settings.globals.baseurl,
                     sitehs=settings.globals.hsurl)
 
-    message_txt = MimeMail.make_txt(context)
-    message_html = MimeMail.make_html(context)
+    message_txt = MimeMail.make_txt(context, settings.globals.email_txt_template)
+    message_html = MimeMail.make_html(context, settings.globals.email_html_template)
 
     # XXX Use for AWS
     # conn.send_email(source='node@globaleaks.org', \
@@ -93,6 +93,45 @@ for m in mails:
     # XXX Uncomment in real world environment
     # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
     #    m.target,message=message_html)
+
+
+##########
+notifications = db(db.notification).select()
+for n in notifications:    
+    context = dict(name=n.target,
+                    sitename=settings.globals.sitename,
+                    tulip_url=n.tulip,
+                    site=settings.globals.baseurl,
+                    sitehs=settings.globals.hsurl,
+                    type=n.type)
+
+    to = n.target + " <" + n.address + ">"
+    if n.type == "comment":
+        subject = "[GlobaLeaks] New comment from node %s for %s - %s" % (
+              settings.globals.sitename, n.target, str(n.tulip[-8:]))
+        message_txt = MimeMail.make_txt(context, settings.globals.notification_txt_template)
+        message_html = MimeMail.make_html(context, settings.globals.notification_html_template)
+    elif n.type == "material":
+        subject = "[GlobaLeaks] New material from node %s for %s - %s" % (
+              settings.globals.sitename, n.target, str(n.tulip[-8:]))
+        message_txt = MimeMail.make_txt(context, settings.globals.notification_txt_template)
+        message_html = MimeMail.make_html(context, settings.globals.notification_html_template)
+    else:
+        break
+        
+    logger.info("Sending to %s\n", n.target)
+    if mail.send(to=n.address, subject=subject,
+                    message=(message_txt, message_html)):
+
+        logger.info("email sent.")
+        db(db.notification.id==n.id).delete()
+        db.commit()
+
+    else:
+        logger.info("error in sending mail.")
+    
+
+##########
 
 
 path = os.path.join(projroot, 'globaleaks',
