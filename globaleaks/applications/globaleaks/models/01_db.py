@@ -204,3 +204,16 @@ db.define_table('submission',
     Field('dirname'),
     format='%(name)s'
 )
+
+# XXX
+# This should be merged with the above
+# Notification table to keep track of notifications to be sent to targets.
+db.define_table('notification',
+                Field('target'),
+                Field('address'),
+                Field('tulip'),
+                Field('leak_id'),
+                Field('type'),
+                format='%(name)s'
+)
+

@@ -42,11 +42,20 @@ def access_increment(tulip):
 
 # http://games.adultswim.com/robot-unicorn-attack-twitchy-online-game.html
 def record_comment(comment_feedback, tulip):
-    db.comment.insert(leak_id=tulip.get_leak().get_id(),
+    leak_id = tulip.get_leak().get_id()
+    db.comment.insert(leak_id=leak_id,
                       commenter_id=tulip.get_target(),
                       comment=comment_feedback)
     db.commit()
-
+    for t_id in gl.get_targets(None):
+        target = gl.get_target(t_id)
+        db.notification.insert(target=target.name,
+                address=target.contact,
+                tulip=db.tulip[tulip.id].url,
+                leak_id=leak_id,
+                type="comment")
+    
+    db.commit()
     if tulip.feedbacks_provided:
         new_count = int(tulip.feedbacks_provided) + 1
         db.tulip[tulip.id].update_record(feedbacks_provided=new_count)
@@ -136,6 +145,17 @@ def fileupload():
             session.add_files = None
             # Leak needs to be spooled again
             db(db.leak.id == tulip.leak.id).update(spooled=False)
+            
+            for t_id in gl.get_targets(None):
+                target = gl.get_target(t_id)
+                db.notification.insert(target=target.name,
+                        address=target.contact,
+                        tulip=tulip_url,
+                        leak_id=tulip.leak.id,
+                        type="material")
+            
+            db.commit()
+
             return json.dumps({"success": "true", "data": add_files})
         elif uploads:
             return "not implemented"
