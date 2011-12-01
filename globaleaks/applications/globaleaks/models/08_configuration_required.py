@@ -7,6 +7,7 @@ def configuration_required(funct):
     """
 
     if not settings['globals'].node_admin_configured:
-        return lambda: redirect('/globaleaks/installation/configuration.html')
+        return lambda: redirect('/globaleaks/installation/mandatory_setup.html')
+#        return lambda: redirect('/globaleaks/admin/wizard')
     else:
         return funct

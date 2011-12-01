@@ -304,7 +304,7 @@ def target_delete():
 
 
 @auth.requires_login()
-def config():
+def configuration():
 
     mail_form = FORM(TABLE(
             TR("server", INPUT(_name="server", _type="text")),
@@ -360,38 +360,16 @@ def config():
                 auth_form=auth_form,
                 logging_form=logging_form)
 
+# this is the page available to the node maintainer and is redirected here after the
+# mandatory setup 
 @auth.requires_login()
-def wizard():
-    """
-    Wizard page should be avaible only on startup, and provide with a cool
-    graphical interface a configuration wizard.
-        {{{ import cfg file }}}
-      step #1:
-        Node description, i.e. title and subtitle
-      step #2:
-        Supported output: mail, aws?
-        (mail is the only options supported now.)
-      step #3 {>>>skip}
-        Tulip settings: expiration date, maximum access and so on.
-      step #4: {>>>skip}
-        Advanced configs: author email, layout theme, keywords
-      step #5: {{>>skip}}
-        Logging Options
-      step #6: {{>>skip}}
-        Create first grups
+def setup():
 
-    NOTE: {{>>skip}} should put some default values adequate for a normal
-    globaleaks node.
-    """
-
-    import_form = FORM(TR(INPUT(_name="imp_url", _type="url"),
-                          "\tor\t",
-                          INPUT(_name="imp_file", _type="file")),
-                       TR(INPUT(_type="submit"))
-                      )
+    # note: such configurability will be better if expored by formShaman
+    # but we know, -- never will happen
 
     step1_form = FORM(TABLE(
-        TR("Type of activity",
+        TR("Type of activit",
             SELECT(OPTION('Local Municipality Activism', _value='lma'),
                    OPTION('Public Agencies', _value='pa'),
                    OPTION('Public Safety', _value='ps'),
