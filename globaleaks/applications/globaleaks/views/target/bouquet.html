@@ -36,42 +36,6 @@
         {{pass}}
         </tr>
     </table>
-    <div class="description">{{=i}} Tulips ready in your basket</div>
+    <div class="description">{{=i}} Total tulips received</div>
 
-    <pre>
-    {{=answer}}
-    </pre>
-
-    <br>
-    <li>change your authentication passphrase and recovery setup</li>
-    <div class="description">
-        <form action="" name="pass_update" method="POST">
-        new passphrase: <input type="text" id="newPassId" name="new_passphrase" style="width: 350px" /><br><br>
-        stop mailing this access link in every email <input type="checkbox" name="recovery" value="on" /><br>
-        this cause that you need, absolutely, to <b>remember permamently your password</b>.
-        <br>
-        Copy your GPG public key:
-        <textarea type="text" id="newGPG" name="new_gpg" style="width: 100%"></textarea>
-        <br>
-        <input type="submit" value="change autentication preferences" />
-        </form>
-    </div>
-    <li>change your material receiving method</li>
-    <div class="description">
-        <form action="" name="receiving_update" method="POST">
-        enable SSH/SCP material submission method <input type="checkbox" name="scp_enable_copy" value="on" /><br><br>
-        username@server: <input type="text" id="newServer" name="new_server" value="not supported at the moment!" style="width: 350px" />
-        <textarea type="text" id="newSSHkey" name="new_key" style="width: 100%"></textarea><br>
-        <input type="submit" value="change material receiving method" />
-        </form>
-    </div>
-
-    <li>change your contact method</li>
-    <div class="description">
-        <form action="" name="contact_update" method="POST">
-        new email: <input type="text" id="newEmail" name="new_email" value="not supported at the moment!" style="width: 350px" /><br>
-        other contact: <input type="text" id="newContact" name="new_contact" value="not supported at the moment!" style="width: 350px" /><br>
-        <input type="submit" value="change contact" />
-        </form>
-    </div>
 {{pass}}

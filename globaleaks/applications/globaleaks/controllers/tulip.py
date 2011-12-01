@@ -186,11 +186,10 @@ def fileupload():
     return locals()
 
 @configuration_required
-@auth.requires( ((request and request.args and request.args[0]) and
-                (Tulip(url=request.args[0]).target == "0" or not
-                 (gl.get_target_hash(int(Tulip(url=request.args[0]).get_target())))
-                ))
-               or auth.has_membership('targets'))
+#@auth.requires(((request and request.args and request.args[0]) and
+#                (Tulip(url=request.args[0]).target == "0" or not
+#                 (gl.get_target_hash(int(Tulip(url=request.args[0]).get_target())))
+#                )) or auth.has_membership('targets'))
 def status():
     """
     The main TULIP status page

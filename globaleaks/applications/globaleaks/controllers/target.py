@@ -65,7 +65,6 @@ def receiver():
         return dict(err=True)
 
 @configuration_required
-@auth.requires(auth.has_membership('targets'))
 def bouquet():
     """
     This page is indexed by an uniq identifier by the receiver, and shows
@@ -81,46 +80,13 @@ def bouquet():
     # XXX here security issue to think about, create_target involved.
     # X&Y challenge response required
 
-    receiver_row = db(db.target.hashpass==target_url).select()
-    if len(receiver_row) == 0:
-        return dict(err="invald password supply")
-    if len(receiver_row) > 1:
-        return dict(err="temporary fault: collision detected, two target"
-                        "with the same password")
-
-    # fixme: this bug depends by the actual bad auth type
-
-    # addiction information could be present in the POST
-    # here are treated the configuration option, and returned in the variable
-    # "response"
-    response_t = ""
-
-    form_password = (Field('new_passphrase', requires=IS_NOT_EMPTY()),
-                     Field('recovery'),
-                     Field('new_gpg'),
-                    )
-    password_info = SQLFORM.factory(*form_password, table_name="pass_update")
-
-    if password_info.accepts(request.vars, session):
-        response_t += "password accepted "
-
-    form_receiving = (  Field('new_server', requires=IS_NOT_EMPTY()),
-                        Field('scp_enable_copy'),
-                        Field('new_key', requires=IS_NOT_EMPTY()),
-                    )
-    receiving_info = SQLFORM.factory(*form_receiving,
-                                     table_name="receiving_update")
-
-    if receiving_info.accepts(request.vars, session):
-        response_t += "receiving update accepted "
-
-    # the contact-type required to be updated
-    form_contact = (  Field('new_contact'), Field('new_email'), )
-    contact_info = SQLFORM.factory(*form_contact, table_name="contact_update")
-
-    if contact_info.accepts(request.vars, session):
-        response_t += "contact update accepted "
-
+    try:
+        tulip = Tulip(url=target_url)
+    except:
+        return dict(err="Invalid tulip")
+    #receiver_row = db(db.target.hashpass==target_url).select()
+    receiver_row = db(db.target.id==tulip.target).select()
+    
     # this require to be splitted because tulip are leak x target matrix
     bouquet_list = []
     tulip_list = db(db.tulip.target_id==receiver_row[0].id).select()
@@ -129,8 +95,7 @@ def bouquet():
 
     return dict(err=False,
                 bouquet=bouquet_list,
-                target=receiver_row[0],
-                answer=response_t)
+                target=receiver_row[0])
 
 @configuration_required
 @auth.requires(auth.has_membership('targets'))
