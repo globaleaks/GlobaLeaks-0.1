@@ -56,21 +56,12 @@ def record_comment(comment_feedback, tulip):
                 type="comment")
     
     db.commit()
+
     if tulip.feedbacks_provided:
         new_count = int(tulip.feedbacks_provided) + 1
         db.tulip[tulip.id].update_record(feedbacks_provided=new_count)
     else:
         db.tulip[tulip.id].update_record(feedbacks_provided=1)
-
-
-def record_vote(vote_feedback, tulip):
-    int_vote = int(vote_feedback)
-    if int_vote <= 1 and int_vote >= (-1) and tulip.target != "0":
-        tulip.set_vote(int_vote)
-    else:
-        response.flash = ("Invalid vote provided thru HTTP header "
-                          "manipulation: do you wanna work with us?")
-
 
 FileUpload = UploadHandler()
 
@@ -274,9 +265,6 @@ def status():
     if request.vars and request.vars.Comment:
         record_comment(request.vars.Comment, tulip)
 
-    if request.vars and request.vars.Vote:
-        record_vote(request.vars.Vote, tulip)
-
     # configuration issue
     # *) if we want permit, in Tulip, to see how many download/clicks has
     #    been doing from the receiver, we need to pass the entire tulip
@@ -325,7 +313,6 @@ def status():
             tulipUsage=tulip_usage,
             feedbacks=feedbacks,
             feedbacks_n=tulip.get_feedbacks_provided(),
-            pertinence=tulip.get_pertinence(),
             previous_vote=tulip.get_vote(),
             name=tulip.target,
             target_del_cap=delete_capability,

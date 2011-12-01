@@ -16,10 +16,19 @@ class Globaleaks(object):
         Creates a new targetgroup.
         Returns the id of the new record.
         """
-        group_id = self._db.targetgroup.insert(name=name, desc=desc,
+        # http://zimbabwenewsonline.com/top_news/2495.html 
+        prev_row = self._db(self._db.targetgroup.name==name).select().first()
+        if prev_row:
+            print "error: requested insert of already present 'name', not updated"
+            self._db.targetgroup.update(id=prev_row.id, name=name, desc=desc,
                                               tags=tags, targets=targets)
+            ret_id = prev_row.id
+        else:
+            ret_id = self._db.targetgroup.insert(name=name, desc=desc,
+                                              tags=tags, targets=targets)
+
         self._db.commit()
-        return group_id
+        return ret_id
 
     def delete_targetgroup(self, group_id):
         """

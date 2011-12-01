@@ -298,19 +298,6 @@ class Tulip(object):
 
     vote = property(get_vote, set_vote)
 
-    def get_pertinence(self):
-        pertinence = 0
-        brotherTulips = db(db.tulip.leak_id == db.tulip[self.id].leak_id).select()
-        for t in brotherTulips:
-            if t.express_vote and t.target_id:
-                pertinence += int(t.express_vote)
-        return pertinence
-
-    def set_pertinence(self, value):
-        print "Error: pertinence is a collaborative value"
-
-    pertinence = property(set_pertinence, get_pertinence)
-
     # delete_bros used to delete the tulip self and all the legit brothers
     def delete_bros(self):
         retval = db(db.tulip.leak_id == db.tulip[self.id].leak_id).count()
