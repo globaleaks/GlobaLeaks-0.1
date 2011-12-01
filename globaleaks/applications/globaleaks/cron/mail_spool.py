@@ -24,10 +24,10 @@ randomizer = local_import('randomizer')
 
 # conn = SESConnection(settings.aws_key, settings.aws_secret_key)
 
-logger.info('### Starting GlobaLeaks at: %s ###',  time.ctime())
+logger.debug('### Starting GlobaLeaks at: %s ###',  time.ctime())
 
 unspooled = db(db.leak.spooled!=True).select()
-logger.info("New material: %s : ", unspooled)
+logger.debug("New material: %s : ", unspooled)
 
 for leak_to_spool in unspooled:
     leak = Leak(leak_to_spool.id)
@@ -51,11 +51,11 @@ for leak_to_spool in unspooled:
                                       None, mat_dir)
             first = False
     db.leak[leak_to_spool.id].update_record(spooled=True)
-    logger.info(leak_to_spool)
+    logger.debug(leak_to_spool)
     db.commit()
 
 mails = db(db.mail).select()
-logger.info(str(mails)+"\n")
+logger.debug(str(mails))
 
 for m in mails:
     context = dict(name=m.target,
@@ -77,7 +77,7 @@ for m in mails:
     to = m.target + " <" + m.address + ">"
     subject = "[GlobaLeaks] A TULIP from node %s for %s - %s" % (
               settings.globals.sitename, m.target, str(m.tulip[-8:]))
-    logger.info("Sending to %s\n", m.target)
+    logger.debug("Sending to %s", m.target)
 
     #if MimeMail.send(to=m.address, subject=subject,
     #                 message_text=message_txt,
@@ -85,10 +85,10 @@ for m in mails:
     if mail.send(to=m.address, subject=subject,
                     message=(message_txt, message_html)):
 
-        logger.info("email sent.")
+        logger.debug("email sent.")
         db(db.mail.id==m.id).delete()
     else:
-        logger.info("error in sending mail.")
+        logger.warn("error in sending mail (%s)", m.address)
 
     # XXX Uncomment in real world environment
     # mail.send(to=m.address,subject="GlobaLeaks notification for: " + \
@@ -119,9 +119,9 @@ if settings.globals.debug_notification:
 
         error = RestrictedError()
         error.load(request, request.application, filename)
-        logger.info("REQUEST-APP: %s" % dir(request))
+        logger.debug("REQUEST-APP: %s" % dir(request))
 
-        logger.info("Sending email...")
+        logger.debug("Sending email...")
 
         message = '<b>There has been an error on a node.</b><br>'
         message += '<h1>This is the trackback:</h1><br><pre>%s</pre><br><br><br>' % error.traceback
@@ -137,7 +137,7 @@ if settings.globals.debug_notification:
         if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
                          message_text=message,
                          message_html=message):
-            logger.info("... email sent.")
+            logger.debug("... email sent.")
             if settings.globals.debug_deletetickets:
                 os.unlink(filename)
 
