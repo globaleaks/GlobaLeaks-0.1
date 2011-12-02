@@ -178,13 +178,16 @@ class Leak(object):
 
         notified_groups = self.get_notified_targetgroups()
         # questo è vuoto: verifica
+        print notified_groups
 
         notified_targets = [x.id for x in gl.get_targets(notified_groups)]
         # questo è vuoto: mah
+        print notified_targets
 
         to_notify = [x.id for x in gl.get_targets([group_id])]
         to_notify = set(to_notify).difference(notified_targets)
         # questo è popolato, ok
+        print to_notify
 
         for target_id in to_notify:
             target = gl.get_target(target_id)
@@ -194,16 +197,15 @@ class Leak(object):
                 tulip_id = gl.create_tulip(self._id, target.id)
             tulip_url = db.tulip[tulip_id].url
 
-            if target.status is not "subscribed":
-                # Add mail to db, sending managed by scheduler
-                db.mail.insert(target=target.name,
-                               address=target.contact,
-                               tulip=tulip_url)
+            # Add mail to db, sending managed by scheduler
+            db.mail.insert(target=target.name,
+                           address=target.contact,
+                           tulip=tulip_url)
+
         notified_groups += [group_id]
         notified_groups = list(set(notified_groups))  # deletes duplicates
 
-        db.leak[self._id].update_record(
-            notified_groups=json.dumps(notified_groups))
+        db.leak[self._id].update_record(notified_groups=json.dumps(notified_groups))
         db.commit()
 
 class Target(object):

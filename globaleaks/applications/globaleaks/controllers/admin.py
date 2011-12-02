@@ -65,31 +65,20 @@ def targets():
                           requires=IS_LENGTH(minsize=5, maxsize=50)),
                     Field('contact', requires=[IS_EMAIL(),
                           IS_NOT_IN_DB(db, db.target.contact)]),
-                    Field('passphrase'), Field('could_delete', 'boolean'), #extern the text in view
+                    Field('could_delete', 'boolean'), #extern the text in view
                    )
 
     form = SQLFORM.factory(*form_content)
 
     targets_list = gl.get_targets(None)
 
-    # provide display only, whan controller is called as targets/display
-    if "display" in request.args and not request.vars:
-        return dict(form=None, list_only=True, targets=targets_list,
-                    default_group=settings['globals'].default_group, edit=None)
-
     if form.accepts(request.vars, session):
         req = request.vars
-        passphrase = obtain_secret(req.passphrase)
 
         # here some mistake happen, I wish that now has been fixed and not augmented
 
-        if not passphrase:
-            passphrase = randomizer.generate_target_passphrase()[0]
-
         target_id = gl.create_target(req.Name, None, req.Description,
-                                     req.contact, req.could_delete,
-                                     hashlib.sha256(passphrase).hexdigest(),
-                                    "subscribed")
+                                     req.contact, req.could_delete)
 
         target = db.auth_user.insert(first_name=req.Name,
                                      last_name="",
@@ -129,31 +118,21 @@ def targetgroups():
                     Field('contact',
                           requires=[IS_EMAIL(),
                                     IS_NOT_IN_DB(db, db.target.contact)]),
-                    Field('passphrase'), Field('coulddelete', 'boolean'), # extern in view the text
+                    Field('coulddelete', 'boolean'), # extern in view the text
                    )
 
-    form_target = SQLFORM.factory(*form_content_target,
-                                  table_name="form_target")
+    form_target = SQLFORM.factory(*form_content_target, table_name="form_target")
 
     if form_target.accepts(request.vars, session):
         req = request.vars
-        passphrase = obtain_secret(req.passphrase)
 
-        if not passphrase:
-            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                             None, "subscribed")
-            passphrase = randomizer.generate_target_passphrase()[0]
-
-        else:
-            target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete,
-                             hashlib.sha256(passphrase).hexdigest(), "subscribed")
-
+        target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete)
 
         target = db.auth_user.insert(first_name=req.Name,
                                      last_name="",
                                      username=target_id,
                                      email=req.contact,
-                                     password=db.auth_user.password.validate(passphrase)[0]
+                                     password=randomizer.generate_target_passphrase()[0]
                                      )
         auth.add_membership(auth.id_group("targets"), target)
 

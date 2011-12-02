@@ -12,10 +12,8 @@ db.define_table('target',
                            # with external database loading (e.g.: gpg key, ssh key, notification and
                            # material delivery treat and configured separately, etc).
     Field('contact'),
-    Field('hashpass'),
     Field('type'),
     Field('info'),
-    Field('status'),
     Field('delete_cap'),    # delete capability: the capability of a receiver could be managed with a
                             # bitmask, like contact_type in the future need to be. during the development
                             # other capability might be request, could be useful provide here a flexible

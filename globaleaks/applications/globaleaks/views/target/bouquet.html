@@ -3,7 +3,6 @@
 {{if err:}}
     Error in calling Bouquet page: {{=err}}
     <br>
-    Please back to the <a href="/globaleaks/target/receiver/">receiver</a> page.
 {{else:}}
     <br>
     <h2>{{=target.name}}, this is your Bouquet:</h2>
@@ -14,7 +13,6 @@
             <td class="name">submission ID</td>
             <td class="description">target id</td>
             <td class="name">access done/allow</td>
-            <td class="name">vote</td>
             <td class="name">download D/A</td>
             <td class="name">feedbacks #</td>
         </tr>
@@ -30,7 +28,6 @@
             <td class="name">{{=tulip.leak_id}}</td>
             <td class="description">{{=tulip.target_id}}</td>
             <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>
-            <td class="description">{{=tulip.express_vote}}</td>
             <td class="description">{{=tulip.downloads_counter}}/{{=tulip.allowed_downloads}}</td>
             <td class="description">{{=tulip.feedbacks_provided}}</td>
         {{pass}}
