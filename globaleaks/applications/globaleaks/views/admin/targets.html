@@ -4,6 +4,10 @@ div.flash {
 background-color: green;
 }
 </style>
+
+{{if form:}}
+{{=form}}
+{{else:}}
 {{if not list_only:}}
 <h1><span>Add a Receiver</span></h1>
 <p class="intro">
@@ -45,6 +49,8 @@ background-color: green;
         <td class="description">{{=target.delete_cap}}</td>
         <td class="delete">
             <button name="delete" onclick="clicked({{=target.id}}, 'delete')">delete</button>
+            <a href="/globaleaks/admin/targets/?edit=edit.{{=target.id}}">edit</a>
+
         </td>
     </tr>
     {{i += 1}}
@@ -65,6 +71,8 @@ background-color: green;
     <a class="button addtarget" href="/globaleaks/admin/targets">Add a receiver</a>
 {{pass}}
 
+
+{{pass}}
 <script>
 function clicked(id, action) {
       jQuery('#edit').val(action + '.' + id);

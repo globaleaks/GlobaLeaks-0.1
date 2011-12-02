@@ -48,12 +48,14 @@ def targets():
     """
     Controller for page that lets the admin to create new targets
     """
+    crud.settings.detect_record_change = False
     if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
-
+    
     # it's possible delete via ajax and add via POST
-    if (request.vars.edit and request.vars.edit.startswith("edit") and not len(request.vars) > 1):
-        pass
+    if (request.vars.edit and request.vars.edit.startswith("edit")):
+        update_form = crud.update(db.target, request.vars.edit.split(".")[1])
+        return dict(form=update_form)
 
     # is hardcoded email, supposing that, at the moment, every subscription
     # happen with email only. in the future, other kind of contacts could be
