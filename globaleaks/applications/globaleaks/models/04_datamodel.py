@@ -341,12 +341,17 @@ class Tulip(object):
         if self.id == -1:
             print "requested target name in invalid Tulip"
             return -1
-        else:
-            target_id = db.tulip[self.id]
-            if not target_id:
-                return T(("Whistleblower"))
-            else:
-                return db.target[target_id].name
+
+        target_id = db.tulip[self.id].target_id
+        if not int(target_id):
+            return T("Whistleblower")
+
+        target_selection = db.target[target_id]
+        if target_selection:
+            return target_selection.name
+
+        print "requested a target id not available in target table"
+        return "Error code: MACH3T3"
 
     def set_target_name(self, target):
         print "Error: target name not writable in Tulip object"

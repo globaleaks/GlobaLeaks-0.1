@@ -38,12 +38,12 @@ Active Receivers, added by the <a href="targets/">insertion interface</a>.<br>
 </div>
 
 <div class="intro">
-The <b>Boquets</b>:<br>
+The <b>Bouquets</b>:<br>
+<! -- thiz iz teh spellin'!! https://en.wikipedia.org/wiki/Bouquet -->
 {{if flowers:}}
 <table class="targetlist">
     <tr class="even">
         <td class="name">title</td>
-        <td class="name">subm #id</td>
         <!-- has no sense that is always 0, it's a field to delete -->
         <td class="description">Submission date</td>
         <td class="description">whistleblower accesses</td>
@@ -58,7 +58,6 @@ The <b>Boquets</b>:<br>
             <tr class="even">
         {{pass}}
         <td class="name">{{=leak.title}}</td>
-        <td class="name">#{{=leak.leaker_id}}</td>
         <td class="description">{{=leak.submission_timestamp}}</td>
         <td class="description">{{=leak.whistleblower_access}}</td>
         <td class="description">{{=leak.spooled}}</td>
@@ -79,11 +78,9 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
 {{if tulips:}}
 <table class="targetlist">
     <tr class="even">
-        <td class="name">URL</td>
-        <td class="name">subm ID</td>
-        <td class="description">target id</td>
+        <td class="name">#id, URL</td>
+        <td class="description">receiver #</td>
         <td class="name">access done/allow</td>
-        <td class="name">vote</td>
         <td class="name">downld done/allow</td>
         <td class="name">feedbacks</td>
     </tr>
@@ -95,12 +92,9 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
         {{else:}}
             <tr class="even">
         {{pass}}
-        <!-- <td class="name"><a href="/globaleaks/tulip/status/{ [ vB ] { [vecBLAH ] =  tulip.url} [ vB ] }">{{=tulip.url[:10]}}</a></td> -->
-        <td class="name">{{=tulip.url[:10]}}</td>
-        <td class="name">{{=tulip.leak_id}}</td>
+        <td class="name">{{=tulip.leak_id}} <a href="/globaleaks/tulip/status/{{=tulip.url}}">{{=tulip.url[:10]}}</a></td>
         <td class="description">{{=tulip.target_id}}</td>
         <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>
-        <td class="description">{{=tulip.express_vote}}</td>
         <td class="description">{{=tulip.downloads_counter}}/{{=tulip.allowed_downloads}}</td>
         <td class="description">{{=tulip.feedbacks_provided}}</td>
     </tr>
@@ -108,6 +102,6 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
 </table>
 
 {{else:}}
-No <b>Tulip are present!</b>
+    No <b>Tulip are present!</b>
 {{pass}}
 </div>
