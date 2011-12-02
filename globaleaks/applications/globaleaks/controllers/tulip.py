@@ -277,10 +277,14 @@ def status():
     tulip_usage = []
     flowers = db(db.tulip.leak_id == leak.get_id()).select()
     for single_tulip in flowers:
+        targetname = db(db.target.id == single_tulip.target_id).select(db.target.name).first()
+        if targetname:
+            targetname = targetname.name
+        
         if single_tulip.leak_id == tulip.get_id():
-            tulip_usage.append(single_tulip)
+            tulip_usage.append((targetname,single_tulip))
         else:
-            tulip_usage.append(single_tulip)
+            tulip_usage.append((targetname, single_tulip))
     # this else is obviously an unsolved bug, but at the moment 0 lines seem
     # to match in leak_id
 
