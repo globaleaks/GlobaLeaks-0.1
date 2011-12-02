@@ -150,7 +150,7 @@ class Globaleaks(object):
         target_id = self._db.target.insert(name=name,
             desc=desc, contact_type="email",
             contact=contact_mail, type="plain", info="",
-            delete_cap=could_del, tulip_counter=0,
+            candelete=could_del, tulip_counter=0,
             download_counter=0)
         self._db.commit()
 

@@ -9,36 +9,6 @@ def index():
     return dict(message="hello from target.py")
 
 @configuration_required
-@auth.requires_login()
-def debugview():
-    collected_user = []
-    target_list = db().select(db.target.ALL)
-    for active_user in target_list:
-        collected_user.append(active_user)
-
-    leak_active = []
-    flowers = db().select(db.leak.ALL)
-    for leak in flowers:
-        leak_active.append(leak)
-
-    groups_usage = []
-    group_list = db().select(db.targetgroup.ALL)
-    for group in group_list:
-        groups_usage.append(group)
-
-    # this require to be splitted because tulip are leak x target matrix
-    tulip_avail = []
-    tulip_list = db().select(db.tulip.ALL)
-    for single_t in tulip_list:
-        tulip_avail.append(single_t)
-
-    return dict(active=collected_user,
-                flowers=leak_active,
-                groups=groups_usage,
-                tulips=tulip_avail)
-    # nevah forget http://uiu.me/Nr9G.png
-
-@configuration_required
 def bouquet():
     """
     This page is indexed by an uniq identifier by the receiver, and shows
