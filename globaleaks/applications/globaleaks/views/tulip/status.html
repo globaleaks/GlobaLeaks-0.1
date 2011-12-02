@@ -112,10 +112,14 @@
 {{session.wb_number = None}}
 {{pass}}
 {{else:}}
-<div class="pagetitle">{{=T("You've received a Tulip...")}}</div>
-<p class="intro">
-This Tulip has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this Tulip should be considered of high importance.<br>
-</p>
+
+	{{if tulip_accesses == 0:}}
+		<div class="pagetitle">{{=T("You've received a Tulip...")}}</div>
+		<p class="intro">
+		This Tulip has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this Tulip should be considered of high importance.<br>
+		</p>
+	
+	{{pass}}
 
 {{pass}}
 <div class="entry">

@@ -27,9 +27,9 @@ def index():
 def access_increment(tulip):
     if tulip.accesses_counter:
         new_count = int(tulip.accesses_counter) + 1
-        db.tulip[tulip.target].update_record(accesses_counter=new_count)
+        db.tulip[tulip.id].update_record(accesses_counter=str(new_count))
     else:
-        db.tulip[tulip.target].update_record(accesses_counter=1)
+        db.tulip[tulip.id].update_record(accesses_counter="1")
 
     db.commit()
 
