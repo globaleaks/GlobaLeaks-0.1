@@ -14,7 +14,6 @@ settings.logging = ConfigFile(cfgfile, 'logging')
 # GLOBAL setting
 settings.private.author_email = settings.globals.author_email
 settings.private.database_uri = settings.database.uri
-settings.private.security_key = settings.globals.security_key
 settings.private.email_server = settings.globals.email_server
 settings.private.email_sender = settings.globals.email_sender
 settings.private.email_login = settings.globals.email_login
