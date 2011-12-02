@@ -92,6 +92,45 @@ def fileupload():
 
     return locals()
 
+def default_material(submission):
+    
+    file_array = [{"size": "20.0 KB", 
+                    "ext": "txt", 
+                    "fileid": "",
+                    "bytes": 0,
+                    "filename": "Submission.txt"},
+                  {"size": "20.0 KB", 
+                    "ext": "txt", 
+                    "fileid": "", 
+                    "bytes": 0, 
+                    "filename": "DISCLAIMER.txt"}]
+    
+    filedir = FileUpload.get_file_dir()
+    dst_folder = os.path.join(request.folder, 'material', filedir)
+
+    if not os.path.isdir(dst_folder):
+        os.makedirs(dst_folder)
+
+    src_file = os.path.join(request.folder, "../../", "templates", "disclaimer_receiver.txt")
+    dst_file = os.path.join(request.folder, 'material', filedir, file_array[1]['filename'])
+    shutil.copyfile(src_file, dst_file)
+
+    dst_file = os.path.join(request.folder, 'material', filedir, file_array[0]['filename'])
+    fp = open(dst_file, "w+")
+    
+    fp.write("# GlobaLeaks submission\n\n")
+    #fp.write("To view this submission visit: %s\n\n" % tulip_url)
+    fp.write("## Details:\n")
+    for key, value in submission.items():
+        if key not in ("spooled", "id", "submission_timestamp"):
+            fp.write("%s: %s\n" % (key, value))
+    
+    session.files.append(file_array[0])
+    session.files.append(file_array[1])
+
+    return True
+
+
 @configuration_required
 def index():
     """
@@ -148,10 +187,10 @@ def index():
 
     # Add to the fields to be displayed the ones inside of
     # the extrafields setting
-#    for i in settings.extrafields.fields:
-#        form_extras.append(str(i['name']))
-#        form_fields.append(str(i['name']))
-#        form_labels[str(i['name'])] = i['desc']
+    #    for i in settings.extrafields.fields:
+    #        form_extras.append(str(i['name']))
+    #        form_fields.append(str(i['name']))
+    #        form_labels[str(i['name'])] = i['desc']
 
     if settings.extrafields.wizard:
         the_steps = settings.extrafields.gen_wizard()
@@ -222,6 +261,7 @@ def index():
                 except:
                     logger.error("There was an error in processing the "
                                  "submission files.")
+                
 
             if var.startswith("target_") and var.split("_")[-1].isdigit():
                 group_ids.append(var.split("_")[-1])
@@ -230,12 +270,17 @@ def index():
         # the session variable this should be safe to use this way.
         if not session.files:
             session.files = []
+
+        # Add the default files
+        default_material(form.vars)
+
         # XXX verify that this is safe
         pfile = json.dumps(session.files)
 
         # leak_id has been used in the previous code as this value,
         # I'm keeping to don't change the following lines
         leak_id = form.vars.id
+        
 
         # XXX probably a better way to do this
         # Create a record in submission db associated with leak_id
@@ -247,6 +292,7 @@ def index():
 
         # Instantiate the Leak object
         leak = Leak(leak_id)
+
         # Create the material entry for the submitted data
         leak.add_material(leak_id, None, "localfs", file=pfile)
 

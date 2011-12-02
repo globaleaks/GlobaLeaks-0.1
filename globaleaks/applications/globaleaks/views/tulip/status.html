@@ -116,7 +116,12 @@
 	{{if tulip_accesses == 0:}}
 		<div class="pagetitle">{{=T("You've received a Tulip...")}}</div>
 		<p class="intro">
-		This Tulip has been sent to you by an anonymous whistleblower. She/He would like it for you to pay special attention to the information and material contained therein. Please consider that whistleblowers often expose themselves to high personal risks in order to protect the public good. Therefore the material that they provide with this Tulip should be considered of high importance.<br>
+		This Tulip has been sent to you by an anonymous whistleblower. 
+		She/He would like it for you to pay special attention to the 
+		information and material contained therein. Please consider 
+		that whistleblowers often expose themselves to high personal 
+		risks in order to protect the public good. Therefore the material 
+		that they provide with this Tulip should be considered of high importance.
 		</p>
 	
 	{{pass}}
@@ -288,7 +293,9 @@
     </div>
 
     {{if target_del_cap:}}
-    <div class="description">{{=T("You have the right to delete this submitted material. This effect delete also all the related Tulips for the other receiver.")}}</div>
+    <div class="description">
+    	{{=T("You have the right to delete this submitted material. This effect delete also all the related Tulips for the other receiver.")}}
+    </div>
     <form name="delete_tulips" method="POST" action="">
         {{=T("I want delete this tulip and all the tulips derived from the same material")}}: <input type="checkbox" name="delete" />
         <br>
