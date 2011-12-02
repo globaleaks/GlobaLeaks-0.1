@@ -6,8 +6,8 @@ def configuration_required(funct):
     when the mandatory configuartion is provieded
     """
 
-    if not settings['globals'].node_admin_configured:
+    admin_row = db(db.auth_user.username == 'admin').select().first()
+    if not admin_row:
         return lambda: redirect('/globaleaks/installation/mandatory_setup.html')
-#        return lambda: redirect('/globaleaks/admin/wizard')
     else:
         return funct

@@ -36,32 +36,7 @@ Active Receivers, add them thru the <a href="targets/">insertion interface</a>.<
     {{pass}}
 </table>
 {{else:}}
-No target configured in this node, add them thru the <a href="targets/">insertion interface</a>.
-{{pass}}
-</div>
-
-<div class="intro">
-{{if inactive:}}
-    <b>inactive</b> user, feature not implemented yet<br>
-<table class="targetlist">
-    {{i=0}}
-    {{for target in inactive:}}
-        {{i+=1}}
-        {{if i % 2 == 1: }}
-        <tr class="odd">
-        {{else:}}
-        <tr class="even">
-        {{pass}}
-    <td class="name">{{=target.id}}</td>
-    <td class="name">{{=target.name}}</td>
-    <td class="description">{{=target.desc}}</td>
-    <td class="description">{{=target.url}}</td>
-    </tr>
-    {{pass}}
-</table>
-
-{{else:}}
-<b>no inactive receiver are present in the node</b>
+    No target configured in this node, add them thru the <a href="targets/">insertion interface</a>.
 {{pass}}
 </div>
 

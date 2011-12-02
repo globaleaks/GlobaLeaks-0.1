@@ -19,7 +19,6 @@ class Globaleaks(object):
         # http://zimbabwenewsonline.com/top_news/2495.html 
         prev_row = self._db(self._db.targetgroup.name==name).select().first()
         if prev_row:
-            print "error: requested insert of already present 'name', not updated"
             self._db.targetgroup.update(id=prev_row.id, name=name, desc=desc,
                                               tags=tags, targets=targets)
             ret_id = prev_row.id
@@ -135,29 +134,24 @@ class Globaleaks(object):
     # by default, a target is inserted with an email type only as contact_type,
     # in the personal page, the receiver should change that or the contact type
     # (eg: facebook, irc ?, encrypted mail setting up a gpg pubkey)
-    def create_target(self, name, group_name, desc, contact_mail, could_del, initial_hashpass, req_status):
+    def create_target(self, name, group_name, desc, contact_mail, could_del):
         """
         Creates a new target with the specified parameters.
         Returns the id of the new record.
 
         |contact_type| supported values: [email]
         |type| supported values: [plain*|pgp]
-        |status|: [subscribed*|unsubscribed|selfproposed]
         |could_del|: true or false*, mean: could delete material
         |group_name|: could be specified a single group name only
 
         * = default
         """
 
-        if req_status is not "subscribed" and req_status is not "selfproposed":
-            print "bad usage of create_target: req_status is different from expected (%s)", req_status
-            return 0
-
         target_id = self._db.target.insert(name=name,
             desc=desc, contact_type="email",
             contact=contact_mail, type="plain", info="",
-            status=req_status, delete_cap=could_del, tulip_counter=0,
-            download_counter=0, hashpass=initial_hashpass)
+            delete_cap=could_del, tulip_counter=0,
+            download_counter=0)
         self._db.commit()
 
         # extract the ID of the request group, if any, of found the default, if supported
