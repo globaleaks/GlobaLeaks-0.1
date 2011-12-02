@@ -279,7 +279,10 @@ def status():
     for single_tulip in flowers:
         targetname = db(db.target.id == single_tulip.target_id).select(db.target.name).first()
         if targetname:
-            targetname = targetname.name
+            if tulip.target == single_tulip.target_id:
+                targetname = "You"
+            else:
+                targetname = targetname.name
         
         if single_tulip.leak_id == tulip.get_id():
             tulip_usage.append((targetname,single_tulip))

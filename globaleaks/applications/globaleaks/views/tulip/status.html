@@ -267,7 +267,11 @@
                     <tr class="even">
                 {{pass}}
              {{if peer.target_id != "0":}}
+             	{{if targetname == "You":}}
+                 <td class="name" id="you"><em>{{=targetname}}</em></td>
+             	{{else:}}
                  <td class="name">{{=targetname}}</td>
+                {{pass}}
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
                  <td class="downloads">{{=peer.downloads_counter}}/{{=tulip_allowed_download}}</td>
