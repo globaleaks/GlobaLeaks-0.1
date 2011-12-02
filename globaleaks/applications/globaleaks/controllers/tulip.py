@@ -213,7 +213,7 @@ def status():
     whistleblower_text = ''
     if tulip.target == "0":
         whistleblower = True
-
+        session.target = None
         with open(settings.globals.whistleblower_file) as filestream:
             whistleblower_text = filestream.read()
 

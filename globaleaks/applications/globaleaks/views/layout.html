@@ -174,7 +174,7 @@
 
     <div id="statusbar"><!-- statusbar is menu zone -->
     {{=plugin_translate(languages=[('en','English'),('it','Italiano'),('sr','Serbian'),('dev','DEV MODE'), ('ar', 'Arabic')])}}
-    {{if session.target and not session.admin:}}
+      {{if session.target and not session.admin:}}
       	{{=MENU(response.menu_target,_class="sf-menu")}}
       {{pass}}
 
