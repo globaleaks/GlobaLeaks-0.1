@@ -337,6 +337,23 @@ class Tulip(object):
 
     target = property(get_target, set_target)
 
+    def get_target_name(self):
+        if self.id == -1:
+            print "requested target name in invalid Tulip"
+            return -1
+        else:
+            target_id = db.tulip[self.id]
+            if not target_id:
+                return T(("Whistleblower"))
+            else:
+                return db.target[target_id].name
+
+    def set_target_name(self, target):
+        print "Error: target name not writable in Tulip object"
+        return -1
+
+    target_name = property(get_target_name, set_target_name)
+
     def is_wb(self):
         return int(self.target) == 0
 

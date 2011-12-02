@@ -177,6 +177,17 @@ class Globaleaks(object):
         self._db(self._db.target.id==target_id).delete()
         return True
 
+    def delete_tulips_by_target(target_id):
+        """
+        Delete the tulips associated to a single target
+        """
+        associated_tulips = self._db().select(self._db.tulip.target_id==target_id)
+        tulips_removed = 0
+        for single_tulip in associated_tulips:
+            tulips_removed += 1
+            self._db(self._db.tulip.id==single_tulip.it).delete()
+        return tulips_removed 
+
     def get_targets(self, group_set, target_set=[]):
         """
         If target_set is not a list it returns a rowset with all

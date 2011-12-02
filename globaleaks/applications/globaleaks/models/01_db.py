@@ -155,7 +155,8 @@ db.define_table('leak',
 
 db.define_table('comment',
     Field('leak_id', db.leak),
-    Field('commenter_id', db.target),
+    Field('commenter_name'),
+    Field('commenter_id'),
     Field('comment'),
     format='%(name)s'
 )

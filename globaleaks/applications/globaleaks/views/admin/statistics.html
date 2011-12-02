@@ -1,13 +1,10 @@
 {{extend 'layout.html'}}
-<center>
-<h2 class="entry">Globa<u>List</u>: Node info, Receivers, Groups, Tulips & Bouquet<br><br>
-This interface is useful in developing and is <u>enable only in debug mode</u>...<br><br>
-change your loglevel inside globaleaks.conf before start a production GlobaLeaks node.</h2>
-</center>
+
+<h1>Node statistics</h1>
 
 <div class="intro">
 {{if active:}}
-Active Receivers, add them thru the <a href="targets/">insertion interface</a>.<br>
+Active Receivers, added by the <a href="targets/">insertion interface</a>.<br>
 <!-- this link is provided because this page could works as index for all node maintainer's features -->
 <table class="targetlist">
     <tr class="even">
@@ -15,7 +12,7 @@ Active Receivers, add them thru the <a href="targets/">insertion interface</a>.<
         <td class="name">name</td>
         <td class="description">description</td>
         <td class="description">contact type</td>
-        <td class="description">delete cap</td>
+        <td class="description">can delete</td>
         <td class="description">contact</td>
     </tr>
     {{i=0}}
@@ -36,12 +33,12 @@ Active Receivers, add them thru the <a href="targets/">insertion interface</a>.<
     {{pass}}
 </table>
 {{else:}}
-    No target configured in this node, add them thru the <a href="targets/">insertion interface</a>.
+    No target configured in this node, add, remove and edit with the <a href="targets/">receiver management page</a>.
 {{pass}}
 </div>
 
 <div class="intro">
-The <b>Boquets</b> follows below: how the submission are spreaded between the receiver:<br>
+The <b>Boquets</b>:<br>
 {{if flowers:}}
 <table class="targetlist">
     <tr class="even">
@@ -75,35 +72,7 @@ No submission are present
 {{pass}}
 </div>
 
-<div class="intro">
-The <b>Context</b> your node is capable to handle; added by <a href="/globaleaks/admin/targetgroups">Groups ajax interface</a>. or <a href="/globaleaks/admin/targets">Groups form interface</a>.<br>
-{{if groups:}}
-<table class="targetlist">
-    <tr class="even">
-        <td class="name">Group Name</td>
-        <td class="name">id</td>
-        <td class="description">tags</td>
-    </tr>
-    {{i=0}}
-    {{for single in groups:}}
-        {{i+=1}}
-        {{if i % 2 == 1: }}
-            <tr class="odd">
-        {{else:}}
-            <tr class="even">
-        {{pass}}
-        <td class="name">{{=single.name}}</td>
-        <td class="name">{{=single.id}}</td>
-        <td class="description"><a href="/globaleaks/admin/targetgroups" title="targets ID:{{=single.targets}}">{{=single.tags}}</a></td>
-    </tr>
-    {{pass}}
-</table>
-
-{{else:}}
-No <a href="/globaleaks/admin/target">receiver group</a>, are present. neither a default group configured in <b>globaleaks.conf</b>.
-<!-- yep, text need to be reviewed -->
-{{pass}}
-</div>
+<!-- the group is a deleted capability, also if a default one exists -->
 
 <div class="intro">
 The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
@@ -126,7 +95,8 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
         {{else:}}
             <tr class="even">
         {{pass}}
-        <td class="name"><a href="/globaleaks/tulip/status/{{=tulip.url}}">{{=tulip.url[:10]}}</a></td>
+        <!-- <td class="name"><a href="/globaleaks/tulip/status/{ [ vB ] { [vecBLAH ] =  tulip.url} [ vB ] }">{{=tulip.url[:10]}}</a></td> -->
+        <td class="name">{{=tulip.url[:10]}}</td>
         <td class="name">{{=tulip.leak_id}}</td>
         <td class="description">{{=tulip.target_id}}</td>
         <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>

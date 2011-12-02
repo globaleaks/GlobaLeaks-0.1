@@ -261,6 +261,8 @@ def target_delete():
     except KeyError:
         pass
     else:
+        gl.delete_tulips_by_target(target_id)
+        # delete_target remove simply the target
         result = gl.delete_target(target_id)
         if result:
             return response.json({'success': 'true'})
