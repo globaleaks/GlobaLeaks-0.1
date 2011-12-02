@@ -12,7 +12,7 @@ def index():
 @auth.requires_login()
 def debugview():
     collected_user = []
-    target_list = db(db.target.ALL).select()
+    target_list = db().select(db.target.ALL)
     for active_user in target_list:
         collected_user.append(active_user)
 

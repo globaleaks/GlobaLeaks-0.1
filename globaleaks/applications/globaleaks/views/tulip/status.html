@@ -284,7 +284,9 @@ This Tulip has been sent to you by an anonymous whistleblower. She/He would like
         <br>
         <input type="submit" name="send" value="Yes I'm sure, I want delete all the tulips related" />
     </form>
+    <br>
     {{pass}}
+   <div class="description">procedee to your <a href="/globaleaks/target/bouquet/{{=tulip_url}}">Bouquet</a>, the list of all Tulips usable by you.</div>
 
 </div>
 
@@ -347,18 +349,6 @@ This Tulip has been sent to you by an anonymous whistleblower. She/He would like
         $('#fileupload').fileupload({
             url: "/globaleaks/tulip/fileupload/"+tulip[tulip.length-1],
             autoUpload: true,
-            /*
-             * not working - would likely be fixed to support upload resume
-            maxChunkSize: 1000000,
-            multipart: false,
-            add: function (e, data) {
-                   var that = this;
-                   $.getJSON('/globaleaks/submission/fileupload', {file: data.files[0].name}, function (file) {
-                       data.uploadedBytes = file && file.size;
-                       $.blueimpUI.fileupload.prototype.options.add.call(that, e, data);
-                    });
-                  }
-              */
 
             // those spaces used to avoid TWO GRAPH IN SEQUENCE
         });
@@ -426,27 +416,6 @@ This Tulip has been sent to you by an anonymous whistleblower. She/He would like
                   comment.focus();
                 }
             }
-
-//
-                // new function($) {
-  // $.fn.setCursorPosition = function(pos) {
-    // if ($(this).get(0).setSelectionRange) {
-      // $(this).get(0).setSelectionRange(pos, pos);
-    // } else if ($(this).get(0).createTextRange) {
-      // var range = $(this).get(0).createTextRange();
-      // range.collapse(true);
-      // range.moveEnd('character', pos);
-      // range.moveStart('character', pos);
-      // range.select();
-    // }
-  // }
-// }(jQuery);
-//
-//
-//
-// FieldRange.select();
-//
-                // $('#comment').setCursorPosition($("#comment").val().length);
         });
     });
     </script>

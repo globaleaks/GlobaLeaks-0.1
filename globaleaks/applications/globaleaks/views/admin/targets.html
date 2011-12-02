@@ -6,56 +6,50 @@ background-color: green;
 </style>
 
 {{if form:}}
-{{=form}}
-{{else:}}
-{{if not list_only:}}
 <h1><span>Add a Receiver</span></h1>
 <p class="intro">
     From here you can add new receivers that will get sent notification to access submitted material via Tulip.
     The Receiver can optionally have the privileges to delete a Submission (and all the Tulip associated with it). This is particularly useful for single receiver setup.
 </p>
-{{=form}}
-
+    {{=form}}
 {{pass}}
 
-{{if len(targets):}}
+{{if targets and len(targets):}}
 
-<h1><span>Receiver list</span></h1>
-<form><input type="hidden" id="edit" name="edit" /></form>
-<table class="targetlist">
-<thead>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Contact</th>
-    <th>Description</th>
-    <th>Delete Permission</th>
-    <th>Delete</th>
-</thead>
-<tbody>
-{{i=0}}
-{{for target in targets:}}
-    {{if (i % 2 == 0):}}
-    <tr class="even" id="target-{{=target.id}}">
-    {{pass}}
-    {{if (i % 2 == 1):}}
-    <tr class="odd" id="target-{{=target.id}}">
-    {{pass}}
+    <h1><span>Receiver list</span></h1>
+    <form><input type="hidden" id="edit" name="edit" /></form>
+    <table class="targetlist">
+    <thead>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Contact</th>
+        <th>Description</th>
+        <th>Delete Permission</th>
+        <th>Delete</th>
+    </thead>
+    <tbody>
+    {{i=0}}
+    {{for target in targets:}}
+        {{if (i % 2 == 0):}}
+            <tr class="even" id="target-{{=target.id}}">
+        {{pass}}
+        {{if (i % 2 == 1):}}
+            <tr class="odd" id="target-{{=target.id}}">
+        {{pass}}
         <td class="name">{{=target.name}}</td>
         <td class="email">{{=target.contact_type}}</td>
         <td class="email">{{=target.contact}}</td>
         <td class="description">{{=target.desc}}</td>
         <td class="description">{{=target.delete_cap}}</td>
         <td class="delete">
-            <button name="delete" onclick="clicked({{=target.id}}, 'delete')">delete</button>
-            <a href="/globaleaks/admin/targets/?edit=edit.{{=target.id}}">edit</a>
-
+        <button name="delete" onclick="clicked({{=target.id}}, 'delete')">delete</button>
+        <a href="/globaleaks/admin/targets/?edit=edit.{{=target.id}}">edit</a>
         </td>
-    </tr>
-    {{i += 1}}
-{{pass}}
-</table>
-
-<div class="clear"></div>
+        </tr>
+        {{i += 1}}
+    {{pass}}
+    </table>
+    <div class="clear"></div>
 
 {{else:}}
     <h1><span>Receiver list is empty!</span></h1>
@@ -65,12 +59,6 @@ background-color: green;
     <p>In this node, every receiver is added at the default group, named "{{=default_group}}"</p>
 {{pass}}
 
-{{if list_only or not len(targets):}}
-    <a class="button addtarget" href="/globaleaks/admin/targets">Add a receiver</a>
-{{pass}}
-
-
-{{pass}}
 <script>
 function clicked(id, action) {
       jQuery('#edit').val(action + '.' + id);

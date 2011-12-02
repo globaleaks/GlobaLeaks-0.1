@@ -19,13 +19,6 @@ def index():
     session.admin = True
     return dict(message="hello from admin.py")
 
-def obtain_secret(input_secret):
-    if not input_secret:
-        ret = randomizer.generate_target_passphrase()[0]
-        return None
-    else:
-        return input_secret
-
 @auth.requires_login()
 def nodeprivacy():
     """
@@ -48,29 +41,40 @@ def targets():
     """
     Controller for page that lets the admin to create new targets
     """
+    # first operation is get the target list, because every dict() returned 
+    # will need it
+    targets_list = gl.get_targets(None)
+
     crud.settings.detect_record_change = False
     if (request.vars.edit and request.vars.edit.startswith("delete")):
         gl.delete_target(request.vars.edit.split(".")[1])
+        # update the list
+        targets_list = gl.get_targets(None)
     
     # it's possible delete via ajax and add via POST
     if (request.vars.edit and request.vars.edit.startswith("edit")):
         update_form = crud.update(db.target, request.vars.edit.split(".")[1])
-        return dict(form=update_form)
+        return dict(targets=targets_list, default_group=settings['globals'].default_group, 
+                    form=update_form)
 
     # is hardcoded email, supposing that, at the moment, every subscription
-    # happen with email only. in the future, other kind of contacts could be
+    # happen with email only. in the future, other kind of contacts can be
     # setup from the start.
     form_content = (Field('Name', requires=IS_NOT_EMPTY()),
                     Field('Description',
                           requires=IS_LENGTH(minsize=5, maxsize=50)),
                     Field('contact', requires=[IS_EMAIL(),
                           IS_NOT_IN_DB(db, db.target.contact)]),
-                    Field('could_delete', 'boolean'), #extern the text in view
+                    Field('can_delete', 'boolean'), #extern the text in view
                    )
 
     form = SQLFORM.factory(*form_content)
 
-    targets_list = gl.get_targets(None)
+    # provide display only, when controller is called as targets/display
+    if "display" in request.args and not request.vars:
+        return dict(form=None, list_only=True, targets=targets_list,
+                    default_group=settings['globals'].default_group, edit=None)
+    # default: you don't call display, and the list is show anyway.
 
     if form.accepts(request.vars, session):
         req = request.vars
@@ -78,70 +82,19 @@ def targets():
         # here some mistake happen, I wish that now has been fixed and not augmented
 
         target_id = gl.create_target(req.Name, None, req.Description,
-                                     req.contact, req.could_delete)
+                                     req.contact, req.can_delete)
 
         target = db.auth_user.insert(first_name=req.Name,
                                      last_name="",
                                      username=target_id,
-                                     email=req.contact,
-                                     password=db.auth_user.password.validate(passphrase)[0]
-                                     )
+                                     email=req.contact)
         auth.add_membership(auth.id_group("targets"), target)
 
         targets_list = gl.get_targets("ANY")
 
     # switch list_only=None if, in the adding interface, the list has not to be showed
     return dict(form=form, list_only=None, targets=targets_list,
-                default_group=settings['globals'].default_group, edit=True)
-
-@auth.requires_login()
-def targetgroups():
-    """
-    Controller for the targets management page.
-    It creates two forms, one for creating a new target and one for
-    creating a new group.
-    """
-    form_content_group = (Field('Name', requires=[IS_NOT_EMPTY(),
-                                IS_NOT_IN_DB(db, db.targetgroup.name)]),
-                          Field('Description'),
-                          Field('Tags'),
-                         )
-    form_group = SQLFORM.factory(*form_content_group, table_name="form_group")
-
-    if form_group.accepts(request.vars, session):
-        # Build group target list with posted data
-        TargetList(request.vars)
-
-    form_content_target = (Field('Name', requires=IS_NOT_EMPTY()),
-                    Field('Description', requires=IS_LENGTH(minsize=5,
-                                                            maxsize=50)),
-                    Field('contact',
-                          requires=[IS_EMAIL(),
-                                    IS_NOT_IN_DB(db, db.target.contact)]),
-                    Field('coulddelete', 'boolean'), # extern in view the text
-                   )
-
-    form_target = SQLFORM.factory(*form_content_target, table_name="form_target")
-
-    if form_target.accepts(request.vars, session):
-        req = request.vars
-
-        target_id = gl.create_target(req.Name, None, req.Description, req.contact, req.coulddelete)
-
-        target = db.auth_user.insert(first_name=req.Name,
-                                     last_name="",
-                                     username=target_id,
-                                     email=req.contact,
-                                     password=randomizer.generate_target_passphrase()[0]
-                                     )
-        auth.add_membership(auth.id_group("targets"), target)
-
-    all_targets = gl.get_targets(None)
-    targetgroups_list = gl.get_targetgroups()
-
-    return dict(form_target=form_target, form_group=form_group,
-                list=False, targets=None, all_targets=all_targets,
-                targetgroups=targetgroups_list)
+                default_group=settings['globals'].default_group, edit=None)
 
 @auth.requires_login()
 def group_create():
@@ -196,7 +149,7 @@ def group_rename():
     return response.json({'success': 'false'})
 
 
-#@auth.requires_login()
+@auth.requires_login()
 def group_desc():
     """
     Receives the parameter "group" with the group id and "desc"

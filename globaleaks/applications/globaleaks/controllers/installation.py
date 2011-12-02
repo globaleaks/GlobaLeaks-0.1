@@ -4,6 +4,7 @@ This controller module contains every controller that the target can use
 to edits its settings. (E.g.: Unsubscribe from a GL node)
 """
 
+@auth.requires(auth.requires_login() or not configuration_required)
 def mandatory_setup():
     import os
     """
