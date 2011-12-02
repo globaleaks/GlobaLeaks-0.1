@@ -44,6 +44,7 @@ def access_increment(tulip):
 def record_comment(comment_feedback, tulip):
     leak_id = tulip.get_leak().get_id()
     db.comment.insert(leak_id=leak_id,
+                      commenter_name=tulip.get_target_name(),
                       commenter_id=tulip.get_target(),
                       comment=comment_feedback)
     db.commit()
@@ -320,7 +321,7 @@ def status():
             tulipUsage=tulip_usage,
             feedbacks=feedbacks,
             feedbacks_n=tulip.get_feedbacks_provided(),
-            name=tulip.target,
+            receiver_id=tulip.target,
             target_del_cap=delete_capability,
             target_url=target_url,
             targets=gl.get_targets("ANY"),

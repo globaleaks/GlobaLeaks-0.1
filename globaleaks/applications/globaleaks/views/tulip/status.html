@@ -229,14 +229,14 @@
             <p class="comment">{{=feedback.comment}}</p>
             </div>
         {{else:}}
-            {{if feedback.commenter_id == int(name):}}
+            {{if feedback.commenter_id == int(receiver_id):}}
                 <div class="comment" id="your_comment">
                 <h2 class="name">You</h2>
                 <p class="comment">{{=feedback.comment}}</p>
                 </div>
             {{else:}}
                 <div class="comment" id="other_comment">
-                    <h2 class="name">Receiver #{{=feedback.commenter_id}}</h2>
+                    <h2 class="name">{{=feedback.commenter_name}}</h2>
                     <p class="comment">{{=feedback.comment}}</p>
                 </div>
             {{pass}}
