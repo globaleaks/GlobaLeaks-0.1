@@ -83,9 +83,7 @@ def targets():
         target = db.auth_user.insert(first_name=req.Name,
                                      last_name="",
                                      username=target_id,
-                                     email=req.contact,
-                                     password=db.auth_user.password.validate(passphrase)[0]
-                                     )
+                                     email=req.contact)
         auth.add_membership(auth.id_group("targets"), target)
 
         targets_list = gl.get_targets("ANY")

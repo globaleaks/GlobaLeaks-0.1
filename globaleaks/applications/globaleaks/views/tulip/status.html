@@ -255,7 +255,7 @@ This Tulip has been sent to you by an anonymous whistleblower. She/He would like
         </thead>
         <tbody>
             {{i=0}}
-            {{for peer in tulipUsage: }}
+            {{for targetname, peer in tulipUsage: }}
                 {{i += 1}}
                 {{if i % 2 == 1: }}
                     <tr class="odd">
@@ -263,7 +263,7 @@ This Tulip has been sent to you by an anonymous whistleblower. She/He would like
                     <tr class="even">
                 {{pass}}
              {{if peer.target_id != "0":}}
-                 <td class="name">{{=i}}</td>
+                 <td class="name">{{=targetname}}</td>
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
                  <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
                  <td class="downloads">{{=peer.downloads_counter}}/{{=tulip_allowed_download}}</td>
