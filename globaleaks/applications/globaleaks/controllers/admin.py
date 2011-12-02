@@ -55,7 +55,7 @@ def targets():
     if (request.vars.edit and request.vars.edit.startswith("edit")):
         update_form = crud.update(db.target, request.vars.edit.split(".")[1])
         return dict(targets=targets_list, default_group=settings['globals'].default_group, 
-                    form=update_form)
+                    form=update_form, edit=True)
 
     # is hardcoded email, supposing that, at the moment, every subscription
     # happen with email only. in the future, other kind of contacts can be
@@ -68,7 +68,7 @@ def targets():
                     Field('can_delete', 'boolean'), #extern the text in view
                    )
 
-    form = SQLFORM.factory(*form_content)
+    add_form = SQLFORM.factory(*form_content)
 
     # provide display only, when controller is called as targets/display
     if "display" in request.args and not request.vars:
@@ -76,7 +76,7 @@ def targets():
                     default_group=settings['globals'].default_group, edit=None)
     # default: you don't call display, and the list is show anyway.
 
-    if form.accepts(request.vars, session):
+    if add_form.accepts(request.vars, session):
         req = request.vars
 
         # here some mistake happen, I wish that now has been fixed and not augmented
@@ -93,8 +93,38 @@ def targets():
         targets_list = gl.get_targets("ANY")
 
     # switch list_only=None if, in the adding interface, the list has not to be showed
-    return dict(form=form, list_only=None, targets=targets_list,
+    return dict(form=add_form, list_only=None, targets=targets_list,
                 default_group=settings['globals'].default_group, edit=None)
+
+@configuration_required
+@auth.requires_login()
+def statistics():
+    collected_user = []
+    target_list = db().select(db.target.ALL)
+    for active_user in target_list:
+        collected_user.append(active_user)
+
+    leak_active = []
+    flowers = db().select(db.leak.ALL)
+    for leak in flowers:
+        leak_active.append(leak)
+
+    groups_usage = []
+    group_list = db().select(db.targetgroup.ALL)
+    for group in group_list:
+        groups_usage.append(group)
+
+    # this require to be splitted because tulip are leak x target matrix
+    tulip_avail = []
+    tulip_list = db().select(db.tulip.ALL)
+    for single_t in tulip_list:
+        tulip_avail.append(single_t)
+
+    return dict(active=collected_user,
+                flowers=leak_active,
+                groups=groups_usage,
+                tulips=tulip_avail)
+    # nevah forget http://uiu.me/Nr9G.png
 
 @auth.requires_login()
 def group_create():

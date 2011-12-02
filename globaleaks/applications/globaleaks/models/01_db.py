@@ -14,7 +14,7 @@ db.define_table('target',
     Field('contact'),
     Field('type'),
     Field('info'),
-    Field('delete_cap'),    # delete capability: the capability of a receiver could be managed with a
+    Field('candelete'),     # remove capability: the capability of a receiver could be managed with a
                             # bitmask, like contact_type in the future need to be. during the development
                             # other capability might be request, could be useful provide here a flexible
                             # interface
