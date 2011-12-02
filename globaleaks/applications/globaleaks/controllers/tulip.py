@@ -313,7 +313,6 @@ def status():
             tulipUsage=tulip_usage,
             feedbacks=feedbacks,
             feedbacks_n=tulip.get_feedbacks_provided(),
-            previous_vote=tulip.get_vote(),
             name=tulip.target,
             target_del_cap=delete_capability,
             target_url=target_url,
