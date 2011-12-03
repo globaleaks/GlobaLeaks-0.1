@@ -20,23 +20,6 @@ def index():
     return dict(message="hello from admin.py")
 
 @auth.requires_login()
-def nodeprivacy():
-    """
-    Controller for page that let the admin to configure privacy settings
-    """
-    if request.vars.edit:
-        if request.vars.edit == "start" :
-            settings.globals.hiddenservice = "true"
-            settings.globals.commit()
-            tor_hs.start()
-        elif request.vars.edit == "stop":
-            settings.globals.hiddenservice = "false"
-            settings.globals.commit()
-            tor_hs.stop()
-
-    return dict()
-
-@auth.requires_login()
 def targets():
     """
     Controller for page that lets the admin to create new targets

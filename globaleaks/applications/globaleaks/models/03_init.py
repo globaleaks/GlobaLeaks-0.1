@@ -76,7 +76,6 @@ settings.mail.login = settings.globals.email_login
 settings.mail.ssl = settings.globals.email_ssl
 
 
-
 mail.settings.server = settings.mail.server
 mail.settings.sender = settings.mail.sender
 mail.settings.login = settings.mail.login
