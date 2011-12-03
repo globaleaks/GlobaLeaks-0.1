@@ -29,7 +29,7 @@ PIDDIR=/var/run/$NAME
 PIDFILE=$PIDDIR/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 DAEMON=/usr/bin/python
-DAEMON_DIR=/data/$NAME
+DAEMON_DIR=/data/globaleaks/GlobaLeaks/$NAME
 DAEMON_ARGS="web2py.py -i $ADDRESS -p $PORT --password=$PASSWORD --pid_filename=$PIDFILE"
 DAEMON_USER=globaleaks
 
