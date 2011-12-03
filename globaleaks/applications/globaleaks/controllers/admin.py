@@ -53,7 +53,9 @@ def targets():
     
     # it's possible delete via ajax and add via POST
     if (request.vars.edit and request.vars.edit.startswith("edit")):
+
         update_form = crud.update(db.target, request.vars.edit.split(".")[1])
+
         return dict(targets=targets_list, default_group=settings['globals'].default_group, 
                     form=update_form, edit=True)
 

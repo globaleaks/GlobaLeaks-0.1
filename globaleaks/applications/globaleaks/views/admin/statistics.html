@@ -78,11 +78,11 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
 {{if tulips:}}
 <table class="targetlist">
     <tr class="even">
-        <td class="name">#id, URL</td>
+        <td class="name">#id</td>
         <td class="description">receiver #</td>
         <td class="name">access done/allow</td>
         <td class="name">downld done/allow</td>
-        <td class="name">feedbacks</td>
+        <td class="name">comments</td>
     </tr>
     {{i=0}}
     {{for tulip in tulips:}}
@@ -92,7 +92,8 @@ The <b>Tulips</b>, list of the entire list of <i>active</i> tulip in your node.
         {{else:}}
             <tr class="even">
         {{pass}}
-        <td class="name">{{=tulip.leak_id}} <a href="/globaleaks/tulip/status/{{=tulip.url}}">{{=tulip.url[:10]}}</a></td>
+        <!-- tulip.leak_id -->  
+        <td class="name">{{=tulip.url[:8]}}</td> 
         <td class="description">{{=tulip.target_id}}</td>
         <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>
         <td class="description">{{=tulip.downloads_counter}}/{{=tulip.allowed_downloads}}</td>

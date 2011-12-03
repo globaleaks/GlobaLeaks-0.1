@@ -4,25 +4,28 @@ Define the main globaleaks database structure.
 
 db = DAL(settings.database.uri)
 
+
 db.define_table('target',
     Field('name'),
-    Field('hidden'),
+    Field('hidden', writable=False, readable=False),
     Field('desc'),
-    Field('contact_type'), # this in the future need to be the trigger of external module loading
-                           # with external database loading (e.g.: gpg key, ssh key, notification and
-                           # material delivery treat and configured separately, etc).
+    Field('contact_type', writable=False, readable=False), 
+                            # this in the future need to be the trigger of external module loading
+                            # with external database loading (e.g.: gpg key, ssh key, notification and
+                            # material delivery treat and configured separately, etc).
     Field('contact'),
-    Field('type'),
+    Field('type', writable=False, readable=False),
     Field('info'),
-    Field('candelete'),     # remove capability: the capability of a receiver could be managed with a
+    Field('candelete', writable=False),     
+                            # remove capability: the capability of a receiver could be managed with a
                             # bitmask, like contact_type in the future need to be. during the development
                             # other capability might be request, could be useful provide here a flexible
                             # interface
-    Field('last_sent_tulip'),
-    Field('last_access'),
-    Field('last_download'),
-    Field('tulip_counter'),
-    Field('download_counter'),
+    Field('last_sent_tulip', writable=False),
+    Field('last_access', writable=False),
+    Field('last_download', writable=False),
+    Field('tulip_counter', writable=False),
+    Field('download_counter', writable=False),
     format='%(name)s'
     )
 
