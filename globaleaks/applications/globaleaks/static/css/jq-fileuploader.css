@@ -2,7 +2,7 @@
     display: none;
 }
 
-div.flash {background-color: #888;}
+div.flash {display: none}
 
 #group_list {
   padding-top: 15px;
