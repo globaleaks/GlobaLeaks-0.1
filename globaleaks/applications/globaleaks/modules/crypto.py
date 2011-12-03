@@ -1,3 +1,6 @@
+#
+# EXPERIMENTAL CODE - TO BE COMPLETED
+#
 # Notes for supporting PGP encryption
 # Requires: python-gnupg
 #           pip install python-gnupg

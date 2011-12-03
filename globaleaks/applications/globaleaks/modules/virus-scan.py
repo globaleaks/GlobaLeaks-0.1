@@ -1,3 +1,7 @@
+#
+# EXPERIMENTAL CODE - TO BE COMPLETED
+#
+
 ###
 ### Submit a sample to VirusTotal and check the result.
 ### Based on example code by Bryce Boe, downloaded from:
