@@ -1,3 +1,7 @@
+#
+# EXPERIMENTAL CODE - TO BE COMPLETED
+#
+
 from __future__ import with_statement
 
 import re
