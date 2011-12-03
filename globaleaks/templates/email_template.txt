@@ -29,19 +29,6 @@ No, this mail has been sent to you by the Node called %(sitename)s. They are run
 
 You're receiving this communication because an anonymous whistleblower has chosen you as a trustworthy contact for releasing confidential and/or important information that could be of utmost importance.
 
-4. How can I stop receiving future TULIPs?
-
-You can permanently unsibscrive from this GLobaLeaks Node by clicking on the following links:
-https://%(site)s/globaleaks/target/subscribe/%(tulip_url)s
-via Tor:
-http://%(site)s/globaleaks/target/subscribe/%(tulip_url)s
-
-If in any future you want to be re-enlisted you can add yourself again using this links:
-https://%(site)s/globaleaks/target/unsubscribe/%(tulip_url)s
-via Tor:
-http://%(sitehs)s/globaleaks/target/unsubscribe/%(tulip_url)s
-
-
 For any other inquire please refer to %(sitename)s to the GlobaLeaks website at http://globaleaks.org
 
 Take Care,
