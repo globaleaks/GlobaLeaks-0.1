@@ -3,6 +3,7 @@
 .*.swp
 *.DS_Store
 
+tests/
 build/
 dist/
 *.egg-info

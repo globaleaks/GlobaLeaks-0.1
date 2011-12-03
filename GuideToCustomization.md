@@ -13,7 +13,6 @@ From here you are able to set the following parameters:
     author_email = <email address of site maintainer>
 
     # must be changed to random string
-    security_key = CHANGEMEPLEASETOARANDOMSTRINGOFCHARSNUMBERS
     email_server =
     email_sender = node@globaleaks.org
     email_login =
