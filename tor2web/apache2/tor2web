@@ -33,6 +33,9 @@
 	# Tor2web signaling as per https://github.com/globaleaks/GlobaLeaks/issues/99
 	RequestHeader set X-tor2web "encrypted"
 
+	# Use HTTP Strict Transport Security to force client to use secure connections only
+	Header always set Strict-Transport-Security "max-age=500; includeSubDomains"
+
 	# Proxying directive
 	RewriteEngine On
 
