@@ -70,10 +70,12 @@ settings.private.mail_use_tls = True
 
 
 # Mail setup
-settings.mail.server = 'box218.bluehost.com:25'
-settings.mail.sender = 'GlobaLeaks Demo <demonotification@globaleaks.org>'
-settings.mail.login = 'demonotification@globaleaks.org:antaniglobaleaks'
-settings.mail.ssl = False
+settings.mail.server = settings.globals.emails_server
+settings.mail.sender = settings.globals.email_sender
+settings.mail.login = settings.globals.email_login
+settings.mail.ssl = settings.globals.email_ssl
+
+
 
 mail.settings.server = settings.mail.server
 mail.settings.sender = settings.mail.sender
