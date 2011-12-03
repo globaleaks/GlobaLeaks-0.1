@@ -6,14 +6,6 @@ PASSWORD="globaleaks"
 red="\033[1;31m"
 ARGD=0
 
-#echo "   _____ _       _           _                 _        ";
-#echo "  / ____| |     | |         | |               | |       "
-#echo " | |  __| | ___ | |__   __ _| |      ___  __ _| | _____ ";
-#echo " | | |_ | |/ _ \| '_ \ / _\` | |     / _ \/ _\` | |/ / __| "
-#echo " | |__| | | (_) | |_) | (_| | |____|  __/ (_| |   <\__ \ ";
-#echo "  \_____|_|\___/|_.__/ \__,_|______|\___|\__,_|_|\_\___/"
-#echo -e "\n\n"
-
 c1="\033[47m\033[34m"
 
 c2="\033[0m"
@@ -93,5 +85,12 @@ if ! [ -d "applications/globaleaks/errors" ]; then
     mkdir -p applications/globaleaks/errors
 fi
 
+if [ $# -ne  "0" ]; then
+    if [ $1 == "-u" ]; then
+        sudo -u $2 python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION
+    fi
 
+else
 python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION
+fi
+
