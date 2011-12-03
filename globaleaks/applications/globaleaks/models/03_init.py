@@ -20,7 +20,6 @@ settings.private.email_login = settings.globals.email_login
 settings.private.login_method = settings.globals.login_method
 settings.private.login_config = ''
 settings.private.plugins = []
-settings.private.hiddenservice = settings.globals.hiddenservice
 
 # mail and auth are filled after the first settings.tulip initialization,
 # because used inside Globaleaks object
