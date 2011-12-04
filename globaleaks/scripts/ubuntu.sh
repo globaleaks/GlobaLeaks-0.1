@@ -3,7 +3,7 @@ BD=`pwd`"/"
 groupadd globaleaks
 useradd -g globaleaks -s /bin/false -d $BD globaleaks
 # Change the group of certain folders and files
-chgrp globaleak ${BD}
+chgrp globaleaks ${BD}
 chgrp globaleaks ${BD}applications/globaleaks/uploads/
 mkdir ${BD}applications/globaleaks/material/
 chgrp globaleaks ${BD}applications/globaleaks/material/
