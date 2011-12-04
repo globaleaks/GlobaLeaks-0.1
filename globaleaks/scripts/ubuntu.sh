@@ -1,4 +1,4 @@
-BD=`pwd`
+BD=`pwd`"/"
 # Add GlobaLeaks user and groups
 groupadd globaleaks
 useradd -g globaleaks -s /bin/false -d $BD globaleaks
@@ -13,8 +13,13 @@ touch ${BD}httpserver.pid
 chgrp globaleaks ${BD}httpserver.pid
 touch ${BD}info.globaleaks.log
 chgrp globaleaks ${BD}info.globaleaks.log
+touch ${BD}applications/globaleaks/all.css
+touch ${BD}applications/globaleaks/all.js
+chgrp globaleaks ${BD}applications/globaleaks/static
+
 
 # Change the permissions
+chmod 770 ${BD}applications/globaleaks/static
 chmod 770 ${BD}globaleaks.conf
 chmod 770 ${BD}cron.master
 chmod 770 ${BD}parameters_8000.py
