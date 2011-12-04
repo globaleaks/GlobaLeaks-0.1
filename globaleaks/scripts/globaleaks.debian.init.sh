@@ -23,8 +23,7 @@ PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DESC="GlobaLeaks Node"
 ADDRESS="127.0.0.1"
 PORT="8000"
-# Setting no password disables admin interface
-PASSWORD=""
+PASSWORD="change"
 NAME=globaleaks
 PIDDIR=/var/run/$NAME
 PIDFILE=$PIDDIR/$NAME.pid
@@ -66,7 +65,7 @@ do_start()
 
     # Check to see if the daemon is already running.
     start-stop-daemon --stop --test --quiet --pidfile $PIDFILE \
-        && return 1
+        && echo "GlobaLeak already running" && return 1
 
     echo "Starting GlobaLeaks..."
     start-stop-daemon --start --quiet --pidfile $PIDFILE \
@@ -157,8 +156,9 @@ do_status()
 
     # Check to see if the daemon is already running.
     start-stop-daemon --stop --test --quiet --pidfile $PIDFILE \
-        && return 0
-    [ -f $PIDFILE ] && return 1
+        && echo "GlobaLeaks running OK." && return 0
+    [ -f $PIDFILE ] && echo "GlobaLeaks not responding, but PIDFILE exists." && return 1
+    echo "GlobaLeaks is not running"
     return 3
 }
 
