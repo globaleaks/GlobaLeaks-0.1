@@ -67,6 +67,8 @@ do_start()
     start-stop-daemon --stop --test --quiet --pidfile $PIDFILE \
         && echo "GlobaLeak already running" && return 1
 
+    echo "Starting Tor..."
+    /etc/init.d/tor start
     echo "Starting GlobaLeaks..."
     start-stop-daemon --start --quiet --pidfile $PIDFILE \
         ${DAEMON_USER:+--chuid $DAEMON_USER} --chdir $DAEMON_DIR \
@@ -92,6 +94,8 @@ do_stop()
     #   2 if daemon could not be stopped
     #   other if a failure occurred
 
+    echo "Stopping Tor..."
+    /etc/init.d/tor stop
     echo "Stopping GlobaLeaks..."
     start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE
     RETVAL=$?
