@@ -95,10 +95,10 @@ fi
 
 if [ $# -ne  "0" ]; then
     if [ $1 == "-u" ]; then
-        sudo -u $2 python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION
+        sudo -u $2 python web2py.py -i $ADDRESS -p $PORT -a "$PASSWORD" $LOG_OPTION
     fi
 
 else
-python web2py.py -i $ADDRESS -p $PORT -a $PASSWORD $LOG_OPTION
+python web2py.py -i $ADDRESS -p $PORT -a "$PASSWORD" $LOG_OPTION
 fi
 
