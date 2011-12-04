@@ -61,7 +61,7 @@ class FormShaman(SQLFORM):
                                          DIV(grouplist)))
 
         with open(settings.globals.disclaimer_file) as filestream:
-            disclaimer_text = filestream.read()
+            disclaimer_text = TAG(filestream.read())
             # sadly, HTML must not be passed to avoid XXSs
 
         disclaimer_info = DIV(disclaimer_text, _class="disclaimer_text")
