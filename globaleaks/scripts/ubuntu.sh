@@ -8,6 +8,7 @@ chgrp globaleaks ${BD}applications/globaleaks/uploads/
 mkdir ${BD}applications/globaleaks/material/
 chgrp globaleaks ${BD}applications/globaleaks/material/
 chgrp globaleaks ${BD}applications/globaleaks/databases/
+chgrp globaleaks ${BD}applications/globaleaks/errors/
 chgrp globaleaks ${BD}applications/globaleaks/cache/
 chgrp globaleaks ${BD}applications/globaleaks/sessions/
 chgrp globaleaks ${BD}cron.master
@@ -31,6 +32,7 @@ chmod 770 ${BD}httpserver.pid
 chmod 770 ${BD}info.globaleaks.log
 chmod 770 ${BD}applications/globaleaks/uploads/
 chmod 770 ${BD}applications/globaleaks/material/
+chmod 770 ${BD}applications/globaleaks/errors/
 chmod 770 ${BD}applications/globaleaks/databases/
 chmod 770 ${BD}applications/globaleaks/cache/
 chmod 770 ${BD}applications/globaleaks/sessions/
