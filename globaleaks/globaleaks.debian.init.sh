@@ -23,7 +23,8 @@ PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DESC="GlobaLeaks Node"
 ADDRESS="127.0.0.1"
 PORT="8000"
-PASSWORD="change"
+# Setting no password disables admin interface
+PASSWORD=""
 NAME=globaleaks
 PIDDIR=/var/run/$NAME
 PIDFILE=$PIDDIR/$NAME.pid

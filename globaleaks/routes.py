@@ -3,7 +3,6 @@ default_controller  = 'default'
 default_function    = 'index'
 
 routes_in = (
-             ('^/nodeprivacy(/)?', '/globaleaks/admin/nodeprivacy'),
              ('^/tulip(/)?', '/globaleaks/tulip/index'),
              ('^/targets(/)?', '/globaleaks/admin/targets'),
              ('^/tulip/(?P<tulip_id>[\w]+)', '/globaleaks/tulip/status/\g<tulip_id>'),
