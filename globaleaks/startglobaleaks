@@ -2,7 +2,7 @@
 
 ADDRESS="127.0.0.1"
 PORT="8000"
-PASSWORD="globaleaks"
+PASSWORD=`cat defaults/original.globaleaks.conf | grep "admin_password" | cut -d ' ' -f3 | sed "s/\'\'//"`
 red="\033[1;31m"
 ARGD=0
 
