@@ -211,12 +211,12 @@ def status():
     if tulip.id == -1:
         return dict(err=True, delete=None)
 
-    whistleblower_text = ''
+    whistleblower_msg_html = ''
     if tulip.target == "0":
         whistleblower = True
         session.target = None
         with open(settings.globals.whistleblower_file) as filestream:
-            whistleblower_text = filestream.read()
+            whistleblower_msg_html = filestream.read()
 
         target_url = ''
         delete_capability = False
@@ -233,8 +233,6 @@ def status():
     # check if the tulip has been requested to be deleted
     if request.vars and request.vars.delete and delete_capability:
         deleted_tulips = tulip.delete_bros()
-        # TODO delete_bros clean tulip table only. masterial & leak need to be
-        # cleaned too
         return dict(err=False, delete=deleted_tulips)
 
     if whistleblower == False:
@@ -306,7 +304,7 @@ def status():
             access_available=access_available,
             download_available=download_available,
             whistleblower=whistleblower,
-            whistleblower_text=whistleblower_text,
+            whistleblower_msg_html=whistleblower_msg_html,
             tulip_url=tulip_url,
             leak_id=leak.id,
             leak_title=leak.title,
