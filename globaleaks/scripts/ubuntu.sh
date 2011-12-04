@@ -9,9 +9,13 @@ mkdir ${BD}applications/globaleaks/material/
 chgrp globaleaks ${BD}applications/globaleaks/material/
 chgrp globaleaks ${BD}applications/globaleaks/databases/
 chgrp globaleaks ${BD}applications/globaleaks/errors/
+mkdir ${BD}applications/globaleaks/cache/
 chgrp globaleaks ${BD}applications/globaleaks/cache/
+mkdir ${BD}applications/globaleaks/sessions/
 chgrp globaleaks ${BD}applications/globaleaks/sessions/
+touch ${BD}cron.master
 chgrp globaleaks ${BD}cron.master
+touch ${BD}parameters_8000.py
 chgrp globaleaks ${BD}parameters_8000.py
 touch ${BD}httpserver.pid
 chgrp globaleaks ${BD}httpserver.pid
