@@ -4,6 +4,8 @@ groupadd globaleaks
 useradd -g globaleaks -s /bin/false -d $BD globaleaks
 # Change the group of certain folders and files
 chgrp globaleaks ${BD}
+chgrp globaleaks ${BD}applications/
+chgrp globaleaks ${BD}applications/globaleaks/
 chgrp globaleaks ${BD}applications/globaleaks/uploads/
 mkdir ${BD}applications/globaleaks/material/
 chgrp globaleaks ${BD}applications/globaleaks/material/
@@ -28,6 +30,8 @@ chgrp globaleaks ${BD}applications/globaleaks/static
 
 # Change the permissions
 chmod 771 ${BD}
+chmod 771 ${BD}applications/
+chmod 771 ${BD}applications/globaleaks/
 chmod 771 ${BD}applications/globaleaks/static
 chmod 770 ${BD}globaleaks.conf
 chmod 770 ${BD}cron.master
