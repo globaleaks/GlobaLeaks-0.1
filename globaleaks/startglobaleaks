@@ -1,8 +1,5 @@
 #!/bin/bash
 
-ADDRESS="127.0.0.1"
-PORT="8000"
-PASSWORD=`cat defaults/original.globaleaks.conf | grep "admin_password" | cut -d ' ' -f3 | sed "s/\'\'//"`
 red="\033[1;31m"
 ARGD=0
 
@@ -75,6 +72,17 @@ if [ ! -r "globaleaks.conf" ]; then
     cp defaults/original.globaleaks.conf globaleaks.conf
 fi
 
+# Get globaleaks.conf parameters
+getpar () {
+    cat globaleaks.conf | grep $1 | cut -d ' ' -f3 | sed "s/\'//g"
+}
+
+ADDRESS=$(getpar "server_ip")
+PORT=$(getpar "server_port")
+PASSWORD=$(getpar "admin_password")
+echo "PORT" $PORT
+echo "ADDR" $ADDRESS
+echo "PASSWORD" $PASSWORD
 if [ -d "applications/globaleaks/static" ]; then
     echo "cleaning of previously preloaded javascript and css..."
     rm -f applications/globaleaks/static/main_*
