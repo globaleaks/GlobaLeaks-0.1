@@ -3,7 +3,10 @@ BD=`pwd`"/"
 groupadd globaleaks
 useradd -g globaleaks -s /bin/false -d $BD globaleaks
 # Change the group of certain folders and files
+chgrp globaleak ${BD}
 chgrp globaleaks ${BD}applications/globaleaks/uploads/
+mkdir ${BD}applications/globaleaks/material/
+chgrp globaleaks ${BD}applications/globaleaks/material/
 chgrp globaleaks ${BD}applications/globaleaks/databases/
 chgrp globaleaks ${BD}applications/globaleaks/cache/
 chgrp globaleaks ${BD}applications/globaleaks/sessions/
@@ -19,13 +22,15 @@ chgrp globaleaks ${BD}applications/globaleaks/static
 
 
 # Change the permissions
-chmod 770 ${BD}applications/globaleaks/static
+chmod 771 ${BD}
+chmod 771 ${BD}applications/globaleaks/static
 chmod 770 ${BD}globaleaks.conf
 chmod 770 ${BD}cron.master
 chmod 770 ${BD}parameters_8000.py
 chmod 770 ${BD}httpserver.pid
 chmod 770 ${BD}info.globaleaks.log
 chmod 770 ${BD}applications/globaleaks/uploads/
+chmod 770 ${BD}applications/globaleaks/material/
 chmod 770 ${BD}applications/globaleaks/databases/
 chmod 770 ${BD}applications/globaleaks/cache/
 chmod 770 ${BD}applications/globaleaks/sessions/
