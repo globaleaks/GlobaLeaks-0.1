@@ -26,7 +26,7 @@ chgrp globaleaks ${BD}info.globaleaks.log
 touch ${BD}applications/globaleaks/all.css
 touch ${BD}applications/globaleaks/all.js
 chgrp globaleaks ${BD}applications/globaleaks/static
-
+chgrp globaleaks ${BD}globaleaks.conf
 
 # Change the permissions
 chmod 771 ${BD}
