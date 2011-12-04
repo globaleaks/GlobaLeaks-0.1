@@ -1,4 +1,4 @@
-BD=`pwd`
+BD=`pwd`"/"
 # Add GlobaLeaks user and groups
 groupadd globaleaks
 useradd -g globaleaks -s /bin/false -d $BD globaleaks
