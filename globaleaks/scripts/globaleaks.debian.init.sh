@@ -37,6 +37,8 @@ DAEMON_USER=globaleaks
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
 
+. $DAEMON_DIR/scripts/linux-firewall.sh
+
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
@@ -66,10 +68,16 @@ do_start()
     start-stop-daemon --stop --test --quiet --pidfile $PIDFILE \
         && return 1
 
+    echo "Starting GlobaLeaks..."
     start-stop-daemon --start --quiet --pidfile $PIDFILE \
         ${DAEMON_USER:+--chuid $DAEMON_USER} --chdir $DAEMON_DIR \
         --background --exec $DAEMON -- $DAEMON_ARGS \
         || return 2
+
+# Start GlobaLeaks firewall
+    firewall_start
+# Start GlobaLeaks Torrification
+    torrify_start
 
     return 0;
 }
@@ -85,10 +93,15 @@ do_stop()
     #   2 if daemon could not be stopped
     #   other if a failure occurred
 
+    echo "Stopping GlobaLeaks..."
     start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE
     RETVAL=$?
     # Many daemons don't delete their pidfiles when they exit.
     rm -f $PIDFILE
+# Stop GlobaLeaks firewall
+    firewall_stop
+# Stop GlobaLeaks Torrification
+    torrify_stop
     return "$RETVAL"
 }
 
