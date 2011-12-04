@@ -13,8 +13,15 @@ touch ${BD}httpserver.pid
 chgrp globaleaks ${BD}httpserver.pid
 touch ${BD}info.globaleaks.log
 chgrp globaleaks ${BD}info.globaleaks.log
+touch ${BD}applications/globaleaks/all.css
+touch ${BD}applications/globaleaks/all.js
+chgrp globaleaks ${BD}applications/globaleaks/all.css
+chgrp globaleaks ${BD}applications/globaleaks/all.js
+
 
 # Change the permissions
+chmod 770 ${BD}applications/globaleaks/all.css
+chmod 770 ${BD}applications/globaleaks/all.js
 chmod 770 ${BD}globaleaks.conf
 chmod 770 ${BD}cron.master
 chmod 770 ${BD}parameters_8000.py
