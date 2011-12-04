@@ -63,10 +63,6 @@ def index():
 
     tulip_url = None
 
-    # XXX
-    # not so easy switch in use
-    # requires=[IS_NOT_EMPTY(), IS_IN_SET([0, 1, 2, 3, 4, 5, 6, 7, 8, 9 , 0, ' '])
-    # inside a form_receipt = SQLFORM.factory(Field('Receipt', requires))
     if request.vars:
         req = request.vars
         try:
@@ -77,10 +73,9 @@ def index():
             pass
 
     with open(settings.globals.presentation_file) as filestream:
-        presentation_text = filestream.read()
-        # sadly, HTML must not be passed, to avoid XXSs
+        presentation_html = filestream.read()
 
-    return dict(tulip_url=None, presentation_text=presentation_text)
+    return dict(tulip_url=None, presentation_html=presentation_html)
 
 def notfound():
     logging.debug('404 Error detected')

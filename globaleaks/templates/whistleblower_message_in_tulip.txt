@@ -1,1 +1,0 @@
-[[This is the text present in template/whistleblower_message_in_tulip.txt, during your configuration, you're invited in change this text or point a new file, in your globaleaks.conf]]
