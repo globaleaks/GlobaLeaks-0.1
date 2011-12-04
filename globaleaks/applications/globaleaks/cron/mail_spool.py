@@ -84,7 +84,6 @@ for m in mails:
     #                 message_html=message_html):
     if mail.send(to=m.address, subject=subject,
                     message=(message_txt, message_html)):
-
         logger.debug("email sent.")
         db(db.mail.id==m.id).delete()
     else:
@@ -97,7 +96,7 @@ for m in mails:
 
 ##########
 notifications = db(db.notification).select()
-for n in notifications:    
+for n in notifications:
     context = dict(name=n.target,
                     sitename=settings.globals.sitename,
                     tulip_url=n.tulip,
@@ -118,7 +117,7 @@ for n in notifications:
         message_html = MimeMail.make_html(context, settings.globals.notification_html_template)
     else:
         break
-        
+
     logger.info("Sending to %s\n", n.target)
     if mail.send(to=n.address, subject=subject,
                     message=(message_txt, message_html)):
@@ -129,7 +128,7 @@ for n in notifications:
 
     else:
         logger.info("error in sending mail.")
-    
+
 
 ##########
 

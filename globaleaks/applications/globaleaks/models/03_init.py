@@ -69,11 +69,10 @@ settings.private.mail_use_tls = True
 
 
 # Mail setup
-settings.mail.server = settings.globals.emails_server
+settings.mail.server = settings.globals.email_server
 settings.mail.sender = settings.globals.email_sender
 settings.mail.login = settings.globals.email_login
 settings.mail.ssl = settings.globals.email_ssl
-
 
 mail.settings.server = settings.mail.server
 mail.settings.sender = settings.mail.sender
