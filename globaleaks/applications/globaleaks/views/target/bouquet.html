@@ -1,11 +1,11 @@
 {{extend 'layout.html'}}
 
 {{if err:}}
-    Error in calling Bouquet page: {{=err}}
+    Error in calling Tip-off page: {{=err}}
     <br>
 {{else:}}
     <br>
-    <h2>{{=target.name}}, this is your Bouquet:</h2>
+    <h2>{{=target.name}}, this is your Tip-off list:</h2>
 
     <table class="targetlist">
         <tr class="even">
@@ -33,6 +33,6 @@
         {{pass}}
         </tr>
     </table>
-    <div class="description">{{=i}} Total tulips received</div>
+    <div class="description">{{=i}} Total Tip-off received</div>
 
 {{pass}}

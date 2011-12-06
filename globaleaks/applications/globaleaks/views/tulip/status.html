@@ -77,17 +77,17 @@
 
 {{if err or delete:}}
     {{if err:}}
-        <h2>{{=T("invalid receipt: Tulip not found")}}!</h2>
+        <h2>{{=T("invalid receipt: Tip-off not found")}}!</h2>
     {{else:}}
-        <h2>{{=T("Tulip removed and all relatives")}} (#{{=delete}} {{=T("tulips")}})</h2>
+        <h2>{{=T("Tip-off removed and all relatives")}} (#{{=delete}} {{=T("Tip-off")}})</h2>
     {{pass}}
 
 {{else:}}
 
 {{if whistleblower: }}
-<div class="pagetitle">{{=T("Your submission")}}...</div>
+<div class="pagetitle">{{=T("Your tip-off")}}...</div>
 <p class="intro">
-    {{=T("Welcome back Whistleblower: this TULIP interface is unique for you.")}}
+    {{=T("Welcome back Whistleblower: this interface is unique for you.")}}
 </p>
 
 <script id="template-upload" type="text/x-jquery-tmpl">
@@ -100,7 +100,7 @@
 
 {{if session.wb_number:}}
 <div id="wb_receipt">
-    {{=T("Save the following number or the Tulip link: otherwise you could not have other ways to come back here, and comment your submitted information.")}}
+    {{=T("Save the following number or the Tip-off link: otherwise you could not have other ways to come back here, and comment your submitted information.")}}
     <p class="tulip">
         {{=session.wb_number}}
     </p>
@@ -114,14 +114,9 @@
 {{else:}}
 
 	{{if tulip_accesses == 0:}}
-		<div class="pagetitle">{{=T("You've received a Tulip...")}}</div>
+		<div class="pagetitle">{{=T("You've received a"))}} {{=T("Tip-off")}}</div>
 		<p class="intro">
-		This Tulip has been sent to you by an anonymous whistleblower. 
-		She/He would like it for you to pay special attention to the 
-		information and material contained therein. Please consider 
-		that whistleblowers often expose themselves to high personal 
-		risks in order to protect the public good. Therefore the material 
-		that they provide with this Tulip should be considered of high importance.
+            {{=TAG(settings.globals.tip_off_description_for_receiver.replace("\n", ""))}}
 		</p>
 	
 	{{pass}}
@@ -254,7 +249,7 @@
 
 
     <div id="tulip-access">
-    <h2>{{=T("Tulip access statistics")}}</h2>
+    <h2>{{=T("Tip-off access statistics")}}</h2>
     <table class="targetlist">
         <thead>
             <th class="downloads">{{=T("ID")}}</th>
@@ -294,12 +289,12 @@
 
     {{if target_del_cap:}}
     <div class="description">
-    	{{=T("You have the right to delete this submitted material. This effect delete also all the related Tulips for the other receiver.")}}
+    	{{=T("You have the right to delete this submitted material. This effect delete also all the related Tip-off for the other receivers.")}}
     </div>
     <form name="delete_tulips" method="POST" action="">
-        {{=T("I want delete this tulip and all the tulips derived from the same material")}}: <input type="checkbox" name="delete" />
+        {{=T("I want delete this tip-off and all the others derived from the same material")}}: <input type="checkbox" name="delete" />
         <br>
-        <input type="submit" name="send" value="Yes I'm sure, I want delete all the tulips related" />
+        <input type="submit" name="send" value="Yes I'm sure, I want delete all the tip-off related" />
     </form>
     <br>
     {{pass}}
