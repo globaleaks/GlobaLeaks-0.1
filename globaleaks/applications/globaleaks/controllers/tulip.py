@@ -101,7 +101,7 @@ def fileupload():
 
             return json.dumps(upload)
         elif commit:
-            print "Session value: %s" % session.add_files
+            # print "Session value: %s" % session.add_files
             if not session.add_files:
                 return json.dumps({"success": "false"})
             filedir = FileUpload.get_file_dir(leak_id=tulip.leak.id)

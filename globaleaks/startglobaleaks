@@ -57,10 +57,11 @@ else
     echo "to enable log, use [$0 -l]"
     LOG_OPTION="-l /dev/null"
 fi
-    tput sgr0
+tput sgr0
 
 FOLDER=$(python -c "import globaleaks, os; print os.path.dirname(globaleaks.__file__)" 2> /dev/null)
-if [ ! -z $FOLDER ]; then
+if [ ! -z $FOLDER ]; 
+then
     echo "switching running directory to $FOLDER"
     cd $FOLDER
 fi
@@ -93,12 +94,13 @@ if ! [ -d "applications/globaleaks/errors" ]; then
     mkdir -p applications/globaleaks/errors
 fi
 
-if [ $# -ne  "0" ]; then
-    if [ $1 == "-u" ]; then
+if [ $# -ne  "0" ]; 
+then
+    if [ $1 == "-u" ]; 
+    then
         sudo -u $2 python web2py.py -i $ADDRESS -p $PORT -a "$PASSWORD" $LOG_OPTION
     fi
-
 else
-python web2py.py -i $ADDRESS -p $PORT -a "$PASSWORD" $LOG_OPTION
+    python web2py.py -i $ADDRESS -p $PORT -a "$PASSWORD" $LOG_OPTION
 fi
 

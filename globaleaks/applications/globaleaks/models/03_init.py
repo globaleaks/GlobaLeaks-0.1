@@ -59,7 +59,6 @@ auth.settings.create_user_groups = False
 # Set up the logger to be shared with all
 logger = local_import('logger').start_logger(settings.logging)
 
-
 # AWS configuration
 settings.private.aws_key = '<AWS-KEY>'
 settings.private.aws_secret_key = '<AWS-SECRET-KEY>'
