@@ -50,12 +50,13 @@ def record_comment(comment_feedback, tulip):
     db.commit()
     for t_id in gl.get_targets(None):
         target = gl.get_target(t_id)
+        tulip_url = db((db.tulip.leak_id==leak_id) & (db.tulip.target_id==t_id.id)).select().first().url
         db.notification.insert(target=target.name,
                 address=target.contact,
-                tulip=db.tulip[tulip.id].url,
+                tulip=tulip_url,
                 leak_id=leak_id,
                 type="comment")
-    
+
     db.commit()
 
     if tulip.feedbacks_provided:
@@ -137,7 +138,7 @@ def fileupload():
             session.add_files = None
             # Leak needs to be spooled again
             db(db.leak.id == tulip.leak.id).update(spooled=False)
-            
+
             for t_id in gl.get_targets(None):
                 target = gl.get_target(t_id)
                 db.notification.insert(target=target.name,
@@ -145,7 +146,7 @@ def fileupload():
                         tulip=tulip_url,
                         leak_id=tulip.leak.id,
                         type="material")
-            
+
             db.commit()
 
             return json.dumps({"success": "true", "data": add_files})
@@ -282,7 +283,7 @@ def status():
                 targetname = "You"
             else:
                 targetname = targetname.name
-        
+
         if single_tulip.leak_id == tulip.get_id():
             tulip_usage.append((targetname,single_tulip))
         else:
