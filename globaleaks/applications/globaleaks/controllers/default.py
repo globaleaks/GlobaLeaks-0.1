@@ -71,7 +71,7 @@ def index():
             redirect("/globaleaks/tulip/status/" + tulip_url)
         except:
             pass
-
+    print settings.globals.presentation_file
     with open(settings.globals.presentation_file) as filestream:
         presentation_html = filestream.read()
 
