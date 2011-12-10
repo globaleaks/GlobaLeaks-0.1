@@ -72,6 +72,7 @@
     .complete-box h3 {
         font-size: 20px;
     }
+    .ui-progressbar-value { background-image: url(/globaleaks/static/css/images/pbar-ani.gif); }
 
 </style>
 
@@ -105,7 +106,7 @@
         {{=session.wb_number}}
     </p>
     <p>
-        {{=TAG(whistleblower_msg_html)}}
+        {{=XML(whistleblower_msg_html)}}
     </p>
 </div>
 
@@ -116,9 +117,9 @@
 	{{if tulip_accesses == 0:}}
 		<div class="pagetitle">{{=T("You've received a")}} {{=T("Tip-off")}}</div>
 		<p class="intro">
-            {{=TAG(settings.globals.tip_off_description_for_receiver.replace("\n", ""))}}
+            {{=XML(settings.globals.tip_off_description_for_receiver.replace("\n", ""))}}
 		</p>
-	
+
 	{{pass}}
 
 {{pass}}
@@ -215,7 +216,7 @@
     </div>
 
     <div id="comment-board">
-    	
+
     	<div id="comments">
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
@@ -428,11 +429,16 @@
                 }
             }
         });
-    
-           
-        $("#commentinput").children("#send").click(function(e){        	
+
+
+        $("#commentinput").children("#send").click(function(e){
         	var comment_box = $("#commentinput").children("#comment");
         	var comment_text = comment_box.val();
+            $("#commentinput").append('<div class="comment-loading"></div>');
+            $( ".comment-loading" ).progressbar({
+                value: 100
+            });
+            $("#commentinput").children("#send").hide();
         	$.ajax({
         		type: 'POST',
         		url: '/globaleaks/tulip/status/{{=tulip_url}}',
@@ -440,13 +446,15 @@
         		success: function(){
         			$("#comments").append('<div class="comment" id="your_comment"><h2 class="name">You</h2><p class="comment">' + comment_text + '</p></div>');
 					comment_box.replaceWith('<input type="text" id="comment" name="Comment">');
+                    $("#commentinput").children(".comment-loading").replaceWith('');
+                    $("#commentinput").children("#send").show();
         		}
         	})
 			return false;
-        	
+
         });
 
-        
-        
+
+
     });
     </script>
