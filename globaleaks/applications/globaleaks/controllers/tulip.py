@@ -50,12 +50,15 @@ def record_comment(comment_feedback, tulip):
     db.commit()
     for t_id in gl.get_targets(None):
         target = gl.get_target(t_id)
-        tulip_url = db((db.tulip.leak_id==leak_id) & (db.tulip.target_id==t_id.id)).select().first().url
-        db.notification.insert(target=target.name,
-                address=target.contact,
-                tulip=tulip_url,
-                leak_id=leak_id,
-                type="comment")
+        try:
+            tulip_url = db((db.tulip.leak_id==leak_id) & (db.tulip.target_id==t_id.id)).select().first().url
+            db.notification.insert(target=target.name,
+                    address=target.contact,
+                    tulip=tulip_url,
+                    leak_id=leak_id,
+                    type="comment")
+        except:
+            pass
 
     db.commit()
 
@@ -141,12 +144,15 @@ def fileupload():
 
             for t_id in gl.get_targets(None):
                 target = gl.get_target(t_id)
-                t_url = db((db.tulip.leak_id==leak_id) & (db.tulip.target_id==t_id.id)).select().first().url
-                db.notification.insert(target=target.name,
-                        address=target.contact,
-                        tulip=t_url,
-                        leak_id=tulip.leak.id,
-                        type="material")
+                try:
+                    t_url = db((db.tulip.leak_id==leak_id) & (db.tulip.target_id==t_id.id)).select().first().url
+                    db.notification.insert(target=target.name,
+                            address=target.contact,
+                            tulip=t_url,
+                            leak_id=tulip.leak.id,
+                            type="material")
+                except:
+                    pass
 
             db.commit()
 
