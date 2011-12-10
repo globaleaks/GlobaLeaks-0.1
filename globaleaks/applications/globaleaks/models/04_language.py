@@ -10,7 +10,7 @@ if T.accepted_language != session._language and 0:
     response.files.append(a)
     response.files.append(b)
 
-def plugin_translate(languages=[('en','English'),('rs','Serbian')]):
+def plugin_translate(languages=supported_languages):
     return FORM(SELECT(
             _onchange="document.location='%s?_language='+jQuery(this).val()" \
                 % URL(r=request,args=request.args),

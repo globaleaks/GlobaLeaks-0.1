@@ -173,7 +173,7 @@
     </div><!-- header  -->
 
     <div id="statusbar"><!-- statusbar is menu zone -->
-    {{=plugin_translate(languages=[('en','English'),('sr','Serbian')])}}
+    {{=plugin_translate(languages=supported_languages)}}
       {{if session.target and not session.admin:}}
       	{{=MENU(response.menu_target,_class="sf-menu")}}
       {{pass}}
