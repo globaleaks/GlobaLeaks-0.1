@@ -32,3 +32,8 @@ settings.database = ConfigFile(cfgfile, 'database')
 response.headers.pop('X-Powered-By')
 response.headers['Server'] = settings.globals.servername
 
+T.set_current_languages('en', 'en-en')
+plugin_translate_current_language = 'en'
+session._language = request.vars._language or session._language or plugin_translate_current_language
+T.force(str(session._language))
+

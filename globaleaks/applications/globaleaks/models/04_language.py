@@ -1,5 +1,4 @@
 # Language settings
-T.set_current_languages('en', 'en-en')
 
 # disable google translate "feature"
 if T.accepted_language != session._language and 0:
@@ -27,7 +26,7 @@ def localize_templates(name, lang='en'):
             pass
         else:
             template_file =  ".".join(fn[:-1]) + "." + fn[-1]
-
+        print template_file
         settings.globals.__setattr__(name, template_file)
         fp = open(template_file, "r")
         content = fp.read()
@@ -37,5 +36,3 @@ def localize_templates(name, lang='en'):
 
 for x in ["presentation_file", "disclaimer_file", "whistleblower_file", "not_anonymous_file"]:
     localize_templates(x, lang=session._language)
-
-
