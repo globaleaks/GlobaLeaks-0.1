@@ -142,6 +142,12 @@ extrafile = os.path.join(os.path.dirname(__file__), 'extrafields_wizard.xml')
 extrafields = ExtraField(extrafile)
 settings.extrafields = extrafields
 
+languages = settings.globals.supported_languages.split("|")
+supported_languages = []
+for l in languages:
+    x = l.split(",")
+    supported_languages.append((x[0].strip(),x[1].strip()))
+
 db_extrafields = extrafields.gen_db()
 
 db.define_table('leak',

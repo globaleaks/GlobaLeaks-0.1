@@ -1,5 +1,4 @@
 # Language settings
-T.set_current_languages('en', 'en-en')
 
 # disable google translate "feature"
 if T.accepted_language != session._language and 0:
@@ -10,7 +9,7 @@ if T.accepted_language != session._language and 0:
     response.files.append(a)
     response.files.append(b)
 
-def plugin_translate(languages=[('en','English'),('es','Spanish'),('fr','French'),('de','German')]):
+def plugin_translate(languages=supported_languages):
     return FORM(SELECT(
             _onchange="document.location='%s?_language='+jQuery(this).val()" \
                 % URL(r=request,args=request.args),
@@ -22,11 +21,12 @@ def localize_templates(name, lang='en'):
     fn = settings.globals.__getattr__(name).split(".")
     try:
         template_file = ".".join(fn[:-1]) + "-" + lang + "." + fn[-1]
-        if os.path.exists(template_file):
+        full_path = os.path.join(request.folder, "../../", template_file)
+        if os.path.exists(full_path):
             pass
         else:
             template_file =  ".".join(fn[:-1]) + "." + fn[-1]
-        template_file = ".".join(fn[:-1]) + "." + fn[-1]
+        print template_file
         settings.globals.__setattr__(name, template_file)
         fp = open(template_file, "r")
         content = fp.read()
@@ -36,5 +36,3 @@ def localize_templates(name, lang='en'):
 
 for x in ["presentation_file", "disclaimer_file", "whistleblower_file", "not_anonymous_file"]:
     localize_templates(x, lang=session._language)
-
-
