@@ -42,10 +42,15 @@ def start_logger(logsettings):
     """
     logger = logging.getLogger('')
     if logger.handlers:
-        if not logsettings.logfile or logsettings.logfile == "disabled":
-            logdest = os.devnull
+
+        if logsettings.enabled:
+            if logsettings.logfile:
+                logdest = logsettings.logfile
+            else:
+                logdest = os.devnull
+                print "logfile is not configured: log will be suppressed"
         else:
-            logdest = logsettings.logfile
+            logdest = os.devnull
 
         hdlr = GLogger(logdest)
 

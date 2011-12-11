@@ -172,11 +172,12 @@ if settings.globals.debug_notification:
         except KeyError:
             pass
 
+        # http://blog.transparency.org/2011/11/22/in-russia-the-fight-against-corruption-goes-online
         if MimeMail.send(to=settings.globals.debug_email, subject='new web2py ticket',
                          message_text=message,
                          message_html=message):
             logger.debug("... email sent.")
-            if settings.globals.debug_deletetickets:
+            if settings.globals.debug_deletetickets and os.access(filename, os.W_OK):
                 os.unlink(filename)
 
     # xxx: should be removed, and used as soon as it becomes necessary
