@@ -10,7 +10,7 @@
      Remove this if you use the .htaccess -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>{{=response.title or request.application}}</title>
+    <title>{{=settings.globals.title}} - {{=response.title or request.application}}</title>
 
     <!-- http://dev.w3.org/html5/markup/meta.name.html -->
     <meta name="application-name" content="{{=request.application}}" />
@@ -22,6 +22,11 @@
       maximum-scale = 1.0 retains dimensions instead of zooming in if page width < device width
       -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="{{=settings.globals.description}}">
+    <meta name="keywords" content="{{=settings.globals.html_keyword}}">
+    <meta name="author" content="{{=settings.globals.author}}">
+    <meta name="subtitle" content="{{=settings.globals.subtitle}}">
+
 
     <!-- Place favicon.ico and apple-touch-icon.png in the root of your domain and delete these references -->
     <link rel="shortcut icon" href="{{=URL('static','favicon.ico')}}" type="image/x-icon">
