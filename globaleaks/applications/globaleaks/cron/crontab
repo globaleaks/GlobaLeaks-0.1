@@ -2,6 +2,6 @@
 #
 # two time in the day is clean the database for expired tulip, unfinished uploads, etc
 #0      0,12  *  *  *  root *applications/globaleaks/cron/cleaner.py
-*      *  *  *  *  root *applications/globaleaks/cron/cleaner.py
+# *      *  *  *  *  root *applications/globaleaks/cron/cleaner.py
 # every minute is spooled the email
 *      *  *  *  *  root *applications/globaleaks/cron/mail_spool.py
