@@ -6,7 +6,7 @@ This tip-off has been sent to you by an anonymous whistleblower. She/He would li
 
 You can download the material from the following URLs:
 
-https://%(site)s/globaleaks/tulip/%(tulip_url)s
+%(site)s/globaleaks/tulip/%(tulip_url)s
 via Tor:
 http://%(sitehs)s/globaleaks/tulip/%(tulip_url)s
 
