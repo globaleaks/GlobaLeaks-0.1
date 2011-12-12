@@ -145,14 +145,14 @@ def fileupload():
             for t_id in gl.get_targets(None):
                 target = gl.get_target(t_id)
                 try:
-                    t_url = db((db.tulip.leak_id==leak_id) & (db.tulip.target_id==t_id.id)).select().first().url
+                    t_url = db((db.tulip.leak_id==tulip.leak.id) & (db.tulip.target_id==t_id.id)).select().first().url
                     db.notification.insert(target=target.name,
                             address=target.contact,
                             tulip=t_url,
                             leak_id=tulip.leak.id,
                             type="material")
                 except:
-                    pass
+                    print "problem in adding to notification DB"
 
             db.commit()
 
