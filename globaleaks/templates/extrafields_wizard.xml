@@ -1,0 +1,71 @@
+<wizard>
+    <step number="1">
+        <p>
+        Enter the title you would like to give the submission. It should be something that gives us an idea of what the issue is about (e.x. A politician corruption).
+    The description should give us enough contextual information to investigate the issue and properly understand the material.
+    Please take your time when filling in this form in.
+        </p>
+        <field>
+            <name>title</name>
+            <label>title</label>
+            <description>this is the main title of the submission</description>
+            <type>string</type>
+        </field>
+        <field>
+            <name>desc</name>
+            <label>Description</label>
+            <description>Describe your submission in this box</description>
+            <type>text</type>
+        </field>
+        <grouplist></grouplist>
+    </step>
+
+    <step number="2">
+        <p>
+        Select one or more documents to be uploaded. If the content is not clear, be sure to reference what the file is exactly in step 1.
+    Your connection is being hopped through various random parts of the world therefore it may be slow and take a while to finish uploading.
+        </p>
+        <material></material>
+        <!--field>
+            <name>extratext</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field>
+           <field>
+            <name>extratext2</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field>
+        <field>
+            <name>extratext3</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field>
+        <field>
+            <name>extratext4</name>
+            <label>Text</label>
+            <description>This is a text field</description>
+            <type>string</type>
+        </field-->
+    </step>
+
+    <step number="3">
+        <p>Carefully read the disclaimer and click accept only once you have fully understood the consequences of what will happen when you click submit.</p>
+
+        <!-- field>
+            <name>date</name>
+            <label>Date</label>
+            <description>Enter a date realted to your submission</description>
+            <type>date</type>
+        </field -->
+
+        <!-- disclaimer info and feedback are kept separeted to handle different CSS class/id -->
+        <disclaimer_info></disclaimer_info>
+        <disclaimer></disclaimer>
+        <captcha></captcha>
+    </step>
+</wizard>
+
