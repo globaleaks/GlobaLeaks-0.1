@@ -48,7 +48,7 @@ function extractNumber(obj)
 <h2>{{=T("Submission Receipt")}}</h2>
     <form action="" method="POST">
     <input id="inputReceipt" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" name="Receipt" style="width: 150px" />
-    <input type="submit" name="send" value="Submit receipt"/>
+    <input type="submit" name="send" value="{{=T("Submit receipt")}}"/>
     </form>
     <span id="littleinfo"></span>
 </div>
