@@ -66,9 +66,9 @@
             $("#PrivacyBox").ready(function() {
                 function redirect_to(value) {
                     $("#PrivacyBox").append(
-                        '<div id="redirect">Redirecting to Hidden Serivice in ' +
+                        '<div id="redirect">{{=T("Redirecting to Hidden Serivice in")}} ' +
                             '<span id="timeout">5' +
-                            '</span> seconds</div>'
+                            '</span> {{=T("seconds")}}</div>'
                         );
                     var Counter = 0;
                     (function timerfunction() {
@@ -94,7 +94,7 @@
                     } else {
                         //box.children("#image").addClass("notanonymous");
                         box.children("#image").replaceWith('<img src="/globaleaks/static/images/notanonymous.png"/>');
-                        box.children("#status").replaceWith('<div id="status"><h2>Warning!</h2></div>');
+                        box.children("#status").replaceWith('<div id="status"><h2>{{=T("Warning")}}!</h2></div>');
                         box.qtip({
                            content: '{{=TAG(settings.globals.not_anonymous_file_content.replace("\n", ""))}}',
                            position: {
