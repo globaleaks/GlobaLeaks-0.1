@@ -26,7 +26,6 @@ def localize_templates(name, lang='en'):
             pass
         else:
             template_file =  ".".join(fn[:-1]) + "." + fn[-1]
-        print template_file
         settings.globals.__setattr__(name, template_file)
         fp = open(template_file, "r")
         content = fp.read()

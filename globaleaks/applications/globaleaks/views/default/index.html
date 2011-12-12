@@ -5,7 +5,24 @@
     color: white;
     /* oh god, I hate so much that base.css with fixed pixel :( */
 }
+#homepage p {
+	margin-bottom: 20px;
+}
+
+#homepage h2 {
+	font-size: 30px;
+	margin-bottom: 20px;
+
+}
+
 </style>
+<!-- 
+THIS SHOULD ALL GO INTO A META TAG
+{{=settings.globals.welcome}}
+{{=settings.globals.title}}
+{{=settings.globals.subtitle}}
+{{=settings.globals.description}} -->
+
 <script type="text/javascript">
 function extractNumber(obj)
 {
@@ -35,13 +52,8 @@ function extractNumber(obj)
     </form>
     <span id="littleinfo"></span>
 </div>
-<h1>{{=settings.globals.welcome}}</h1>
-<div class="presentation">{{=settings.globals.title}}</div>
-<div class="description">{{=settings.globals.subtitle}}</div>
-<div class="presentation">{{=settings.globals.description}}</div>
-
-<div class="intro">
- <p> {{=XML(presentation_html)}} </p>
+<div id="homepage">
+ {{=XML(presentation_html)}}
 </div>
 
 <div class="submitbox box">
