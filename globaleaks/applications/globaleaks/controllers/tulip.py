@@ -344,9 +344,9 @@ def download_increment(tulip):
 
     if tulip.downloads_counter:
         new_count = int(tulip.downloads_counter) + 1
-        db.tulip[tulip.target].update_record(downloads_counter=new_count)
+        db.tulip[tulip.id].update_record(downloads_counter=new_count)
     else:
-        db.tulip[tulip.target].update_record(downloads_counter=1)
+        db.tulip[tulip.id].update_record(downloads_counter=1)
 
     return True
 
