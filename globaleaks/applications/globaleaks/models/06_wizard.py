@@ -81,13 +81,12 @@ class FormShaman(SQLFORM):
         if not self.steps:
             raise ValueError('FormShaman needs a steps argument')
         fields = []
-        labels = []
+        labels = {}
         for step in self.steps:
             for norm_field in filter(lambda x: x not in self.special_fields.keys(),
                                      step):
                 fields.append(norm_field['name'])
-                labels.append({ norm_field['name'] :
-                                norm_field['label'] })
+                labels[norm_field['name']] = norm_field['label']
 
         # set up everything launching the parent class' init
         super(FormShaman, self).__init__(*args, fields=fields, labels=labels, **kwargs)
