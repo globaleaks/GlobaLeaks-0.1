@@ -45,8 +45,7 @@ logger = local_import('logger').start_logger(settings.logging)
 
 # tulip removal deadline, converted in seconds
 if settings.tulip.expire_days:
-    # tulipsexpire = int(settings.tulip.expire_days) * (60 * 60 * 24)
-    tulipsexpire = int(settings.tulip.expire_days) * 3 # TEMP TEST TEMP fixme
+    tulipsexpire = int(settings.tulip.expire_days) * (60 * 60 * 24)
 else:
     logger.info("Unable to maintain clean GlobaLeaks database! required configuration in globaleaks.conf expire_days field")
 
