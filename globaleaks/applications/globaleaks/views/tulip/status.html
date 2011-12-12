@@ -332,7 +332,8 @@
         var tulip = window.location.href.split("/");
 
         $('#fileupload').hide();
-        $("#add_material").click(function() { $('#fileupload').show(); });
+        $("#add_material").click(function() { $('#fileupload').show(); $("#add_material_done").hide();
+});
         $("#add_material_done").click(function() {
             $.getJSON('/globaleaks/tulip/fileupload/'+tulip[tulip.length-1]+"/?commit=1",
                       function(data) {
@@ -365,6 +366,7 @@
         });
 
         $('#fileupload').bind('fileuploadprogressall', function (e, data) {
+        	$("#add_material_done").hide();
             if (window.speedarray) {
 
                 var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
@@ -394,12 +396,14 @@
 
         $('#fileupload').bind('fileuploadstop', function (e, data) {
             $("#speedbox").children("span").replaceWith("<span></span>");
+            $("#add_material_done").show();
         });
 
         $('#fileupload').bind('fileuploaddone', function (e, data) {
             var new_height = $('#fileupload').parents('.content').innerHeight();
             $('.stepContainer').css('height', new_height);
             $("#speedbox").children("span").replaceWith("<span></span>");
+        	$("#add_material_done").show();
         });
 
 		// Make the comment box expand when more than 10 chars are inserted.
