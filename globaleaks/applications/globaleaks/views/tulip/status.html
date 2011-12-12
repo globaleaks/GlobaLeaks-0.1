@@ -43,6 +43,12 @@
         background-color: green;
     }
 
+	#content a#add_material.disabled {
+	
+		background: #CCC;
+		cursor: text;
+	}
+
     #content .material-entry {
         background-color: #5A5655;
         padding: 30px 20px 5px 40px;
@@ -279,7 +285,7 @@
              {{else:}}
                  <td class="name">{{=T("Whistleblower")}}</td>
                  <td class="downloads">{{=peer.feedbacks_provided}}</td>
-                 <td class="downloads">{{=peer.accesses_counter}}/{{=tulip_allowed_accesses}}</td>
+                 <td class="downloads">-</td>
                  <td class="downloads">-</td>
              {{pass}}
             </tr>
@@ -332,8 +338,13 @@
         var tulip = window.location.href.split("/");
 
         $('#fileupload').hide();
-        $("#add_material").click(function() { $('#fileupload').show(); $("#add_material_done").hide();
-});
+        $("#add_material").click(function() { 
+            $("#add_material").addClass('disabled');
+
+        	$('#fileupload').show(); 
+        	$("#add_material_done").hide();
+		});
+		
         $("#add_material_done").click(function() {
             $.getJSON('/globaleaks/tulip/fileupload/'+tulip[tulip.length-1]+"/?commit=1",
                       function(data) {
