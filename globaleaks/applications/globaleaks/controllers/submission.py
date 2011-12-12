@@ -194,6 +194,7 @@ def index():
 
     if settings.extrafields.wizard:
         the_steps = settings.extrafields.gen_wizard()
+        print the_steps
 
         form = FormShaman(db.leak, steps=the_steps)
         # this is the only error handled at the moment, the fact that __init__

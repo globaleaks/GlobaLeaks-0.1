@@ -29,7 +29,7 @@ class FormShaman(SQLFORM):
             grouplist = ""
 
         jQueryFileUpload = DIV(
-                           DIV(LABEL("Material:", _class="submit_label"),
+                           DIV(LABEL(T("Material") + ":", _class="submit_label"),
                                 _class="w2p_fl"),
                            DIV(DIV(LABEL(SPAN(T("Add Files")),
                                          INPUT(_type="file",
@@ -50,14 +50,14 @@ class FormShaman(SQLFORM):
                             DIV(_class="w2p_fc"),
                                 _id="material__row")
 
-        material_njs = DIV(DIV(LABEL("Material:", _class="submit_label"),
+        material_njs = DIV(DIV(LABEL(T("Material") + ":", _class="submit_label"),
                                 _class="w2p_fl"),
                             DIV(INPUT(_name='material', _type='file',
                                       _id='file-uploader-nonjs'),
                                 _class="w2p_fc"),
                                 _id="file-uploader-nonjs")
 
-        targetgroups = DIV('Targets', DIV(DIV(_id="group_filter"),
+        targetgroups = DIV(T('Targets'), DIV(DIV(_id="group_filter"),
                                          DIV(grouplist)))
 
         with open(settings.globals.disclaimer_file) as filestream:
