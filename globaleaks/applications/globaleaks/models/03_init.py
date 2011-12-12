@@ -17,8 +17,6 @@ settings.private.database_uri = settings.database.uri
 settings.private.email_server = settings.globals.email_server
 settings.private.email_sender = settings.globals.email_sender
 settings.private.email_login = settings.globals.email_login
-settings.private.login_method = settings.globals.login_method
-settings.private.login_config = ''
 settings.private.plugins = []
 
 # mail and auth are filled after the first settings.tulip initialization,

@@ -217,7 +217,7 @@ def status():
 
     # those are the error not handled by the try/except before
     if tulip.id == -1:
-        return dict(err=True, delete=None)
+        return dict(err=True, delete=None, tulip_url=tulip_url)
 
     whistleblower_msg_html = ''
     if tulip.target == "0":
@@ -241,7 +241,7 @@ def status():
     # check if the tulip has been requested to be deleted
     if request.vars and request.vars.delete and delete_capability:
         deleted_tulips = tulip.delete_bros()
-        return dict(err=False, delete=deleted_tulips)
+        return dict(err=False, delete=deleted_tulips, tulip_url=tulip_url)
 
     if whistleblower == False:
         # the stats of the whistleblower don't stay in him own tulip
