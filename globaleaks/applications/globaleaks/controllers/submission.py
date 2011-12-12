@@ -93,18 +93,18 @@ def fileupload():
     return locals()
 
 def default_material(submission):
-    
-    file_array = [{"size": "20.0 KB", 
-                    "ext": "txt", 
+
+    file_array = [{"size": "20.0 KB",
+                    "ext": "txt",
                     "fileid": "",
                     "bytes": 0,
                     "filename": "Submission.txt"},
-                  {"size": "20.0 KB", 
-                    "ext": "txt", 
-                    "fileid": "", 
-                    "bytes": 0, 
+                  {"size": "20.0 KB",
+                    "ext": "txt",
+                    "fileid": "",
+                    "bytes": 0,
                     "filename": "DISCLAIMER.txt"}]
-    
+
     filedir = FileUpload.get_file_dir()
     dst_folder = os.path.join(request.folder, 'material', filedir)
 
@@ -117,14 +117,14 @@ def default_material(submission):
 
     dst_file = os.path.join(request.folder, 'material', filedir, file_array[0]['filename'])
     fp = open(dst_file, "w+")
-    
+
     fp.write("# GlobaLeaks submission\n\n")
     #fp.write("To view this submission visit: %s\n\n" % tulip_url)
     fp.write("## Details:\n")
     for key, value in submission.items():
         if key not in ("spooled", "id", "submission_timestamp"):
             fp.write("%s: %s\n" % (key, value))
-    
+
     session.files.append(file_array[0])
     session.files.append(file_array[1])
 
@@ -194,7 +194,6 @@ def index():
 
     if settings.extrafields.wizard:
         the_steps = settings.extrafields.gen_wizard()
-        print the_steps
 
         form = FormShaman(db.leak, steps=the_steps)
         # this is the only error handled at the moment, the fact that __init__
@@ -262,7 +261,7 @@ def index():
                 except:
                     logger.error("There was an error in processing the "
                                  "submission files.")
-                
+
 
             if var.startswith("target_") and var.split("_")[-1].isdigit():
                 group_ids.append(var.split("_")[-1])
@@ -281,7 +280,7 @@ def index():
         # leak_id has been used in the previous code as this value,
         # I'm keeping to don't change the following lines
         leak_id = form.vars.id
-        
+
 
         # XXX probably a better way to do this
         # Create a record in submission db associated with leak_id
