@@ -1,4 +1,9 @@
 # Language settings
+languages = settings.globals.supported_languages.split("|")
+supported_languages = []
+for l in languages:
+    x = l.split(",")
+    supported_languages.append((x[0].strip(),x[1].strip()))
 
 # disable google translate "feature"
 if T.accepted_language != session._language and 0:
@@ -33,5 +38,5 @@ def localize_templates(name, lang='en'):
     except:
         pass
 
-for x in ["presentation_file", "disclaimer_file", "whistleblower_file", "not_anonymous_file"]:
+for x in ["presentation_file", "disclaimer_file", "whistleblower_file", "not_anonymous_file", "extrafields_wizard"]:
     localize_templates(x, lang=session._language)

@@ -1,19 +1,19 @@
 <wizard>
     <step number="1">
         <p>
-        Enter the title you would like to give the submission. It should be something that gives us an idea of what the issue is about (e.x. A politician corruption).
-	The description should give us enough contextual information to investigate the issue and properly understand the material. 
-	Please take your time when filling in this form in.
+Унесите назив који бих желео да дам подношења. Требало би да буде нешто што нам даје идеју о томе шта ради о (бивши политичар корупције).
+Опис треба да нам дају довољно контекстуалне информације да истражи проблем и правилно разуме материјал.
+Молимо вас да одвојите своје време при попуњавању овог формулара ин
         </p>
         <field>
             <name>title</name>
-            <label>title</label>
+            <label>наслов</label>
             <description>this is the main title of the submission</description>
             <type>string</type>
         </field>
         <field>
             <name>desc</name>
-            <label>Description</label>
+            <label>опис</label>
             <description>Describe your submission in this box</description>
             <type>text</type>
         </field>
@@ -22,8 +22,8 @@
 
     <step number="2">
         <p>
-        Select one or more documents to be uploaded. If the content is not clear, be sure to reference what the file is exactly in step 1.
-	Your connection is being hopped through various random parts of the world therefore it may be slow and take a while to finish uploading.
+Изаберите један или више докумената бити учитани. Ако садржај није јасно, будите сигурни да референтну оно фајл је управо у 1. кораку.
+Ваша веза се скочила кроз разне случајне деловима света тако да може бити споро и да потраје неко време да се заврши уплоад.
         </p>
         <material></material>
         <!--field>
@@ -53,7 +53,7 @@
     </step>
 
     <step number="3">
-        <p>Carefully read the disclaimer and click accept only once you have fully understood the consequences of what will happen when you click submit.</p>
+        <p>Пажљиво прочитајте Напомену о одговорности и кликните на дугме прихватити само када у потпуности разумели последице онога што ће се десити када кликнете на дугме Пошаљи.</p>
 
         <!-- field>
             <name>date</name>
