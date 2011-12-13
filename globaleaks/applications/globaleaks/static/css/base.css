@@ -63,7 +63,7 @@ table {
 /* Template */
 body {
     background: #f3f3f3;
-/*    url('/globaleaks/static/images/background.png');*/
+/*    url('/globaleaks/preload/img/images/background.png');*/
     font-family: Arial, sans-serif;
     color: #444;
 }
@@ -534,15 +534,15 @@ border-radius:5px;
 }
 
 .material li.zip {
-    background: url('/globaleaks/static/images/box_16x16.png') no-repeat left center;
+    background: url('/globaleaks/preload/img/images/box_16x16.png') no-repeat left center;
 }
 
 .material li.img {
-    background: url('/globaleaks/static/images/image_16x16.png') no-repeat left center;
+    background: url('/globaleaks/preload/img/images/image_16x16.png') no-repeat left center;
 }
 
 .material li.pdf {
-    background: url('/globaleaks/static/images/document_fill_16x16.png') no-repeat left center;
+    background: url('/globaleaks/preload/img/images/document_fill_16x16.png') no-repeat left center;
 }
 
 .material a {
@@ -562,13 +562,13 @@ border-radius:5px;
 
 .material a.zip {
     font-size: 10px;
-    background: #0a70b4 url('/globaleaks/static/images/icon-download-zip.png') no-repeat 5px center;
+    background: #0a70b4 url('/globaleaks/preload/img/images/icon-download-zip.png') no-repeat 5px center;
 }
 
 .material a.crypt {
     font-size: 10px;
-    //background: #0a70b4 url('/globaleaks/static/images/icon-download-crypt.png') no-repeat 5px center;
-    background: #CCCCCC url('/globaleaks/static/images/icon-download-crypt.png') no-repeat 5px center;
+    //background: #0a70b4 url('/globaleaks/preload/img/images/icon-download-crypt.png') no-repeat 5px center;
+    background: #CCCCCC url('/globaleaks/preload/img/images/icon-download-crypt.png') no-repeat 5px center;
     cursor: text;
 
 }
@@ -645,7 +645,7 @@ border-radius: 5px;
 .disclaimer_text {
     color:black;
     font-size: 1.1em;
-    background-image:url('/globaleaks/static/images/disclaimer_pattern.jpg');
+    background-image:url('/globaleaks/preload/img/images/disclaimer_pattern.jpg');
     margin: 1em 2em 1em 2em;
     padding: 0.5em;
     line-height: 120%;

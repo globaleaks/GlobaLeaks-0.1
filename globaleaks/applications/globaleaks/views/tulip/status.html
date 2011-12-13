@@ -43,10 +43,9 @@
         background-color: green;
     }
 
-	#content a#add_material.disabled {
+	#content a#add_material_refresh {
 	
 		background: #CCC;
-		cursor: text;
 	}
 
     #content .material-entry {
@@ -339,8 +338,8 @@
 
         $('#fileupload').hide();
         $("#add_material").click(function() { 
-            $("#add_material").addClass('disabled');
-
+        	// XXX Replace the Add Button with a refresh (this is a workaround to avoid breaking UI)
+            $("#add_material").replaceWith('<a href="javascript:document.location.reload();" class="button" id="add_material_refresh">{{=T("Add")}}</a>');
         	$('#fileupload').show(); 
         	$("#add_material_done").hide();
 		});

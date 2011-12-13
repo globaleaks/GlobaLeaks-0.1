@@ -91,3 +91,19 @@ def css():
     fh.close()
 
     return response.stream(open(output_file, 'rb'))
+
+def img():
+    file_path = request.args
+
+    if ".." not in file_path:
+        image_file = os.path.join(request.folder, 'static', '/'.join(file_path))
+    else:
+        image_file = os.path.join(request.folder, 'static', '/images/error.png')
+
+    ftype = image_file.split(".")[-1:][0]
+    #response.headers['Content-Encoding'] = 'gzip'
+    response.headers['Content-Type'] = gluon.contenttype.contenttype(ftype)
+    response.headers['Cache-Control'] =  "max-age=86400, private"
+    response.headers['Pragma'] = "cache"
+
+    return response.stream(open(image_file, 'rb'))
