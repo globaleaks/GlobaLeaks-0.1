@@ -18,7 +18,7 @@ Mention groups
 The Node Administrator
 ----------------------
 The person running GlobaLeaks software, aware of the goals and motivations of
-their activities. He should choose the target list depending on the context and
-activities.
+their activities. They should choose the target list depending on the context
+and activities.
 
 

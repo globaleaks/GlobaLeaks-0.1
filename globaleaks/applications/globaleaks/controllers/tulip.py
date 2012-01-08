@@ -244,8 +244,7 @@ def status():
         return dict(err=False, delete=deleted_tulips, tulip_url=tulip_url)
 
     if whistleblower == False:
-        # the stats of the whistleblower don't stay in him own tulip
-        # (also ifi its unique!)
+        # the stats of the whistleblower are not in their own tulip
         if leak.spooled:
             download_available = int(tulip.downloads_counter) < \
                                  int(tulip.allowed_downloads)

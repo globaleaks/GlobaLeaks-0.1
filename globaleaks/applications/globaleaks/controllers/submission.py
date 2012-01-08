@@ -137,7 +137,7 @@ def index():
     This is the main submission page.
     """
     # Generate the number the WB will use to come back to
-    # his submission
+    # their submission
     wb_number = randomizer.generate_tulip_receipt()
 
     # Perform a check to see if the client is using Tor

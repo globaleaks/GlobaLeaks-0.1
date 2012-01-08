@@ -12,7 +12,7 @@ def index():
 def bouquet():
     """
     This page is indexed by an uniq identifier by the receiver, and shows
-    all him accessible Tulips, its the page where she/he could change their
+    all accessible Tulips, its the page where she/he could change their
     preferences
     """
     if request and request.args:
@@ -30,7 +30,7 @@ def bouquet():
         return dict(err="Invalid Tulip")
 
     receiver_row = db(db.target.id==tulip.target).select()
-    
+
     # this require to be splitted because tulip are leak x target matrix
     bouquet_list = []
     tulip_list = db(db.tulip.target_id==receiver_row[0].id).select()
