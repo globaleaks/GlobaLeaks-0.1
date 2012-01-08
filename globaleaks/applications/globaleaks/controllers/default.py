@@ -65,12 +65,11 @@ def index():
 
     if request.vars:
         req = request.vars
-        try:
-            leak_number = req.Receipt.replace(' ', '')
-            tulip_url = hashlib.sha256(leak_number).hexdigest()
-            redirect("/globaleaks/tulip/status/" + tulip_url)
-        except:
-            pass
+        leak_number = req.Receipt.replace(' ', '')
+        tulip_url = hashlib.sha256(leak_number).hexdigest()
+        redurl = "/globaleaks/tulip/status/" + tulip_url
+        redirect(redurl)
+
     with open(settings.globals.presentation_file) as filestream:
         presentation_html = filestream.read()
 
