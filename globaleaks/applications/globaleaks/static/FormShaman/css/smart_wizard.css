@@ -261,7 +261,7 @@
   border: 1px solid #FFD700;
   font: bold 13px Verdana, Arial, Helvetica, sans-serif;
   color:#5A5655;
-  background: #FFF url(../images/loader.gif) no-repeat 5px;
+  background: #FFF;
   -moz-border-radius  : 5px;
   -webkit-border-radius: 5px;
   z-index:998;
