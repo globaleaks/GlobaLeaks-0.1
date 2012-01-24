@@ -1,4 +1,4 @@
-﻿# coding: utf8
+# coding: utf8
 {
 '"update" is an optional expression like "field1=\'newvalue\'". You cannot update or delete the results of a JOIN': '"update" is an optional expression like "field1=\'newvalue\'". You cannot update or delete the results of a JOIN',
 '%Y-%m-%d': '%Y-%m-%d',
