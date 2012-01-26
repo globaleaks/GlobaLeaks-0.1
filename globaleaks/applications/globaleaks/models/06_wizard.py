@@ -31,7 +31,7 @@ class FormShaman(SQLFORM):
         jQueryFileUpload = DIV(
                            DIV(LABEL(T("Material") + ":", _class="submit_label"),
                                 _class="w2p_fl"),
-                           DIV(DIV(LABEL(SPAN(T("Add Files")),
+                           DIV(DIV(LABEL(DIV(T("Add Files")),
                                          INPUT(_type="file",
                                                _name="files[]"),
                                                _class="fileinput-button"),
