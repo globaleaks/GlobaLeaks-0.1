@@ -15,11 +15,16 @@ if T.accepted_language != session._language and 0:
     response.files.append(b)
 
 def plugin_translate(languages=supported_languages):
-    return FORM(SELECT(
-            _onchange="document.location='%s?_language='+jQuery(this).val()" \
-                % URL(r=request,args=request.args),
-            value=session._language,
-            *[OPTION(k,_value=v) for v,k in languages]))
+    return [LI(A(v,
+        _href="/%s?_language=%s" \
+            % (URL(r=request, args=request.args), k), value=session._language))
+                  for v,k in languages]
+
+    #return FORM(LI(
+    #        _href="document.location='%s?_language='+jQuery(this).val()" \
+    #            % URL(r=request,args=request.args),
+    #        value=session._language,
+    #        *[OPTION(k,_value=v) for v,k in languages]))
 
 # Template internationalization
 def localize_templates(name, lang='en'):

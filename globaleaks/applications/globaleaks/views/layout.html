@@ -132,7 +132,7 @@
             });
         });
     </script>
-    
+
     {{
     #using sidebars need to know what sidebar you want to use
     #prior of using it, because of static width size of content, you can use
@@ -155,85 +155,90 @@
   <!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
   <!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
   <!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
-  <!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--> 
+  	
+  	<body> <!--<![endif]-->
 
     <div class="flash">{{=response.flash or ''}}</div> <!-- notification div -->
 
-    <div id="container">
+	<div class="container">
+		
+		<div class="header">
+			<div class="logo">
+				<a href="/" title="Južne vesti / Perun">
+				<img src="/globaleaks/static/images/globaleaks.png" alt="Južne vesti / Perun"/>
+				</a>
+			</div>
+			<!-- logo -->
+			<div class="clearfix">
+				<div class="clearfix header_left fleft">
+					<div class="header_message fleft">
+						<h1>{{=T("Welcome to")}} {{=settings.globals.title}}</h1>
+					</div>
+					<!-- header_message -->
+					
+					<ul class="lang_menu fright clearfix">
+					    {{for language in plugin_translate(languages=supported_languages):}}
+					    {{=language}}
+					    {{pass}}
+					</ul>
+			      	{{if session.target and not session.admin:}}
+				      	{{=MENU(response.menu_target,_class="sf-menu")}}
+				      {{pass}}
+				
+				      {{if session.admin:}}
+				      	{{=MENU(response.menu_admin,_class="sf-menu")}}
+				      {{pass}}
 
-    <!-- div id="wrapper">        -->
+					<!-- lang_menu -->
+				</div>
+				<!-- header_left -->
+				<form class="submitted_status fleft" id="submitted_status" method="post" action="">
+					<label class="block mb5" for="check_status">{{=T("Already Submitted?")}} <br />
+						{{=T("Check your status here")}}</label>
 
-    <!-- img class="ribbon" alt="beta" src={{=URL('static', 'images/prototype.png')}} /-->
+					<!-- input id="inputReceipt" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" name="Receipt" style="width: 150px" /-->
 
-    <div id="header"> <!-- header and login nav -->
-      {{block header}} <!-- this is default header -->
-      <a href="/"><img src="{{=URL('static','images/globaleaks.png')}}" /></a>
-      <div id="PrivacyBox">
-        <div id="image"></div>
-        <p id="status"></p>
-      </div>
+					<input id="check_status" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" name="Receipt" style="width: 150px" />
 
-      <div style="clear: both;"></div><!-- Clear the divs -->
+					<input type="text" id="check_status" name="check_status" value="receipt number" />
+					<input type="submit" value="{{=T("submit")}} &gt;&gt;" />
+				</form>
+				<!-- submitted_status -->
+			</div>
+		</div>
+		<!-- header -->
+		
+		<div class="content">
+			{{include}}
 
-      {{end}}
-    </div><!-- header  -->
-
-    <div id="statusbar"><!-- statusbar is menu zone -->
-    	<label>{{=T("Language")}}</label>
-    {{=plugin_translate(languages=supported_languages)}}
-      {{if session.target and not session.admin:}}
-      	{{=MENU(response.menu_target,_class="sf-menu")}}
-      {{pass}}
-
-      {{if session.admin:}}
-      	{{=MENU(response.menu_admin,_class="sf-menu")}}
-      {{pass}}
-      <script type="text/javascript">
-        jQuery(document).ready(function(){
-        //jQuery('ul.sf-menu').superfish();
-        });
-      </script>
-      <div style="clear: both;"></div><!-- Clear the divs -->
-    </div><!-- statusbar -->
-
-    <div id="page"> <!-- Here my central body -->
-
-      {{if left_sidebar_enabled:}}
-          <div id="left_sidebar" {{=XML(left_sidebar_style)}} >
-            <div style="padding: 4px;">
-          {{block left_sidebar}}Content Left Sidebar{{end}}
-            </div>
-          </div><!-- left_sidebar -->
-      {{pass}}
-
-      <!-- content -->
-      <div id="content" {{=XML(style_content)}} >
-        {{include}}
-      </div>
-      <!-- content -->
-
-      {{if right_sidebar_enabled:}}
-          <div id="right_sidebar" {{=XML(right_sidebar_style)}} >
-            <div style="padding: 4px;">
-              {{block right_sidebar}}Content Right Sidebar{{end}}
-            </div>
-      </div><!-- right_sidebar -->
-          {{pass}}
-
-      <div style="clear: both;"></div><!-- Clear the divs -->
-
-    </div><!-- page -->
-
-     <!-- /div> wrapper -->
-    </div><!-- container -->
-
-    <div id="footer">
+		</div>
+		<!-- content -->
+		
+	</div>
+	<!-- container -->
+	
+	<div class="footer clearfix">
       {{block footer}} <!-- this is default footer -->
 
-      {{=T("powered by")}} <a href="http://www.globaleaks.org/">GlobaLeaks</a>
-      <div style="clear: both;"></div><!-- Clear the divs -->
-      {{end}}
+		<ul class="info_links clearfix fleft">
+			<li><a href="#" title="Disclaimer">{{=T("Disclaimer")}}</a></li>
+			<li><a href="#" title="How we protect your privacy">{{=T("Why use Tor?")}}</a></li>
+			<li class="last"><a href="#" title="About {{=settings.globals.title}}">{{=T("About")}} {{=settings.globals.title}}</a></li>
+		</ul>
+		<!-- info_links -->
+		
 
-    </div>
-  </body>
+		<div class="footer_info fright tright">{{=T("powered by")}} <a href="http://www.globaleaks.org/" title="GlobaLeaks">GlobaLeaks</a></div>
+		<!-- footer_info -->
+        {{end}}
+
+	</div>
+	<!-- footer -->
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script>!window.jQuery && document.write(unescape('%3Cscript src="js/jquery-1.7.1.min.js"%3E%3C/script%3E'))</script>
+	<script src="js/custom.js"></script>
+
+     </body>
 </html>
