@@ -90,14 +90,19 @@
                 function anonymous(value) {
                     var box = $('#PrivacyBox');
                     if (value) {
-                        //box.children("#image").addClass("anonymous");
+                        $(".tor_status.not_connected").hide();
+                        /*
+                        box.children("#image").addClass("anonymous");
                         box.children("#image").replaceWith('<img src="/globaleaks/static/images/anonymous.png"/>');
                         box.children("#status").replaceWith('<div id="status">Anonymous</div>');
+                        */
                         if (window.location.hostname != "{{=settings.globals.hsurl}}") {
                             redirect_to("{{=settings.globals.hsurl}}");
                         }
                     } else {
-                        //box.children("#image").addClass("notanonymous");
+                        $(".tor_status.tor_connected").hide();
+                        /* box.children("#image").addClass("notanonymous");
+
                         box.children("#image").replaceWith('<img src="/globaleaks/static/images/notanonymous.png"/>');
                         box.children("#status").replaceWith('<div id="status"><h2>{{=T("Warning")}}!</h2></div>');
                         box.qtip({
@@ -109,6 +114,7 @@
                            },
                            hide : { fixed: true }
                         });
+                        */
 
                     }
                 }
@@ -155,14 +161,14 @@
   <!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
   <!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
   <!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
-  <!--[if (gt IE 9)|!(IE)]><!--> 
-  	
+  <!--[if (gt IE 9)|!(IE)]><!-->
+
   	<body> <!--<![endif]-->
 
     <div class="flash">{{=response.flash or ''}}</div> <!-- notification div -->
 
 	<div class="container">
-		
+
 		<div class="header">
 			<div class="logo">
 				<a href="/" title="Južne vesti / Perun">
@@ -176,7 +182,7 @@
 						<h1>{{=T("Welcome to")}} {{=settings.globals.title}}</h1>
 					</div>
 					<!-- header_message -->
-					
+
 					<ul class="lang_menu fright clearfix">
 					    {{for language in plugin_translate(languages=supported_languages):}}
 					    {{=language}}
@@ -185,7 +191,7 @@
 			      	{{if session.target and not session.admin:}}
 				      	{{=MENU(response.menu_target,_class="sf-menu")}}
 				      {{pass}}
-				
+
 				      {{if session.admin:}}
 				      	{{=MENU(response.menu_admin,_class="sf-menu")}}
 				      {{pass}}
@@ -199,25 +205,24 @@
 
 					<!-- input id="inputReceipt" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" name="Receipt" style="width: 150px" /-->
 
-					<input id="check_status" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" name="Receipt" style="width: 150px" />
+					<input id="check_status" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" value="Receipt Number" name="Receipt" style="width: 150px" />
 
-					<input type="text" id="check_status" name="check_status" value="receipt number" />
 					<input type="submit" value="{{=T("submit")}} &gt;&gt;" />
 				</form>
 				<!-- submitted_status -->
 			</div>
 		</div>
 		<!-- header -->
-		
+
 		<div class="content">
 			{{include}}
 
 		</div>
 		<!-- content -->
-		
+
 	</div>
 	<!-- container -->
-	
+
 	<div class="footer clearfix">
       {{block footer}} <!-- this is default footer -->
 
@@ -227,7 +232,7 @@
 			<li class="last"><a href="#" title="About {{=settings.globals.title}}">{{=T("About")}} {{=settings.globals.title}}</a></li>
 		</ul>
 		<!-- info_links -->
-		
+
 
 		<div class="footer_info fright tright">{{=T("powered by")}} <a href="http://www.globaleaks.org/" title="GlobaLeaks">GlobaLeaks</a></div>
 		<!-- footer_info -->
@@ -235,7 +240,7 @@
 
 	</div>
 	<!-- footer -->
-	
+
 	<!-- script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<script>!window.jQuery && document.write(unescape('%3Cscript src="js/jquery-1.7.1.min.js"%3E%3C/script%3E'))</script>
 	<script src="js/custom.js"></script-->

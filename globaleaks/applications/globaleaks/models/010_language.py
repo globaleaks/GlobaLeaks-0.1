@@ -16,8 +16,8 @@ if T.accepted_language != session._language and 0:
 
 def plugin_translate(languages=supported_languages):
     return [LI(A(v,
-        _href="/%s?_language=%s" \
-            % (URL(r=request, args=request.args), k), value=session._language))
+        _href="%s?_language=%s" \
+            % (URL(r=request, args=request.args), v), value=session._language))
                   for v,k in languages]
 
     #return FORM(LI(
