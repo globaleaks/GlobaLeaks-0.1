@@ -44,7 +44,7 @@
     }
 
 	#content a#add_material_refresh {
-	
+
 		background: #CCC;
 	}
 
@@ -337,13 +337,13 @@
         var tulip = window.location.href.split("/");
 
         $('#fileupload').hide();
-        $("#add_material").click(function() { 
+        $("#add_material").click(function() {
         	// XXX Replace the Add Button with a refresh (this is a workaround to avoid breaking UI)
             $("#add_material").replaceWith('<a href="javascript:document.location.reload();" class="button" id="add_material_refresh">{{=T("Add")}}</a>');
-        	$('#fileupload').show(); 
+        	$('#fileupload').show();
         	$("#add_material_done").hide();
 		});
-		
+
         $("#add_material_done").click(function() {
             $.getJSON('/globaleaks/tulip/fileupload/'+tulip[tulip.length-1]+"/?commit=1",
                       function(data) {
@@ -441,7 +441,7 @@
                   range.select();
                   comment.focus();
                 }
-                
+
                 /*** SPACING ***/
             }
             /*** SPACING ***/

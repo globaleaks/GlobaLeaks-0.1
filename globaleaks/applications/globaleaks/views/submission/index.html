@@ -53,8 +53,11 @@
 
 {{if error:}}
     <div class="pagetitle">{{=T("Incomplete configuration")}}!</div>
-    <div class="description">{{=T("It's required that almost one receiver group has been configured from the administrative panel, in order to accept whistleblowing submission.")}}<br><br>
-    If your are the <b>Node maintainer</b>, you need to create one or more <b>receivers</b>: go to <a href="/globaleaks/admin/targets">the appropiate page</a>.
+    <div class="description">
+{{=T("It's required that almost one receiver group has been configured from the administrative panel, in order to accept whistleblowing submission.")}}
+<br><br>
+    If your are the <b>Node maintainer</b>, you need to create one or more <b>receivers</b>: go to 
+    <a href="/globaleaks/admin/targets">the appropiate page</a>.
     </div>
 {{pass}}
 
@@ -170,7 +173,7 @@ $(document).ready(function(){
     });
 
     // Smart Wizard
-    $('#wizard').smartWizard({
+    $('#submit_form').smartWizard({
         transitionEffect: 'slide',
         enableAllSteps: true,
         enableFinishButton: false,
@@ -188,7 +191,7 @@ $(document).ready(function(){
 
     function onFinishCallback(){
         // $('#wizard').smartWizard('showMessage','Finish Clicked');
-        $('form').submit();
+        $('form')[1].submit();
     }
 
   // Load existing files:

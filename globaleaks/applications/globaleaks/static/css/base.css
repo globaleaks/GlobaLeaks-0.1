@@ -1,7 +1,6 @@
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
-*/
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -23,7 +22,6 @@ time, mark, audio, video {
     font: inherit;
     vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
@@ -60,10 +58,8 @@ table {
 
 
 
-/* Template */
 body {
     background: #f3f3f3;
-/*    url('/globaleaks/preload/img/images/background.png');*/
     font-family: Arial, sans-serif;
     color: #444;
 }
@@ -75,6 +71,7 @@ body {
 strong {
     font-weight: bold;
 }
+*/
 
 a.button {
     color: #fff;
@@ -150,7 +147,7 @@ p.tulip{
     width: 300px;
 }
 
-
+/*
 #container {
     background: #fff;
     width: 880px;
@@ -254,6 +251,7 @@ border-radius:5px;
     background: #ededed;
     padding: 20px;
 }
+*/
 
 /* right_intro, common_intro and left_intro are used in feedbacks visualization */
 
@@ -641,7 +639,7 @@ border-radius: 5px;
     color: #0a70b4;
 }
 
-/* temporary here - XML, template source, calling a CSS class/id */
+/* temporary here - XML, template source, calling a CSS class/id
 .disclaimer_text {
     color:black;
     font-size: 1.1em;
@@ -651,12 +649,10 @@ border-radius: 5px;
     line-height: 120%;
     font-style: normal;
 }
-
 #step-3 label {
     border-top: 3em;
     font-size: 2em;
     color: #8Cc63f;
-    /* this is the same stile of the button ahead */
     font: Verdana, Arial, Helvetica;
     font-style: bold;
 }
@@ -664,7 +660,7 @@ border-radius: 5px;
 #step-3 {
     font-size: 1.1em;
 }
-
+*/
 #PrivacyBox {
     width: 100px;
 

@@ -16,7 +16,7 @@
 }
 
 </style>
-<!-- 
+<!--
 THIS SHOULD ALL GO INTO A META TAG
 {{=settings.globals.welcome}}
 {{=settings.globals.title}}
@@ -44,7 +44,10 @@ function extractNumber(obj)
 }
 </script>
 
-<div id="receiptbox">
+ {{=XML(presentation_html)}}
+
+
+<!-- div id="receiptbox">
 <h2>{{=T("Submission Receipt")}}</h2>
     <form action="" method="POST">
     <input id="inputReceipt" onblur="extractNumber(this);" onkeyup="extractNumber(this);" type="text" name="Receipt" style="width: 150px" />
@@ -53,10 +56,9 @@ function extractNumber(obj)
     <span id="littleinfo"></span>
 </div>
 <div id="homepage">
- {{=XML(presentation_html)}}
 </div>
 
 <div class="submitbox box">
     <a href="/globaleaks/submission/" onclick="location.href='{{=URL('submission', 'index')}}'">{{=T("Submit material")}} &raquo;</a>
 </div>
-<div class="clear"></div>
+<div class="clear"></div-->
