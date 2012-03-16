@@ -56,7 +56,7 @@ def js():
 
 def css():
     files = ['/css/style.css',
-             #'/css/base.css',
+             '/css/base.css',
              '/css/superfish.css',
              '/js/fancybox/jquery.fancybox-1.3.4.css',
              '/css/calendar.css',

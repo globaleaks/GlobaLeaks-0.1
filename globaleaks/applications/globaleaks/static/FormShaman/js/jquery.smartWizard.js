@@ -30,7 +30,7 @@ function SmartWizard(target, options) {
      */
 
     var _init = function($this) {
-        var elmActionBar = $('<div></div>').addClass("actionBar");
+        var elmActionBar = $('<div></div>').addClass("actionBar form_buttons clearfix");
         elmActionBar.append($this.msgBox);
         $('.close',this.msgBox).click(function() {
             $this.msgBox.fadeOut("normal");
@@ -171,7 +171,7 @@ function SmartWizard(target, options) {
                 }
             }
         }
-        $this.elmStepContainer.height($($(selStep, $this.target).attr("href"), $this.target).outerHeight());
+        $this.elmStepContainer.height($($(selStep, $this.target).attr("href"), $this.target).outerHeight()+90);
         var prevCurStepIdx = $this.curStepIdx;
         $this.curStepIdx =  stepIdx;
         if ($this.options.transitionEffect == 'slide'){

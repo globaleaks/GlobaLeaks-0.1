@@ -32,7 +32,7 @@ function extractNumber(obj)
     var reg1Str = '[^0-9]';
     var reg1 = new RegExp(reg1Str, 'g');
     temp = temp.replace(reg1, '');
-
+ 
     if(remindlen != temp.length) {
         document.getElementById("littleinfo").innerHTML = '{{=T("Error: only ten digits are accepted as receipt")}}';
     }

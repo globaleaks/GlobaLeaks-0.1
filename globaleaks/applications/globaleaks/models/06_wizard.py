@@ -75,7 +75,8 @@ class FormShaman(SQLFORM):
                        'disclaimer_info' : disclaimer_info,
                        'disclaimer' : disclaimer_fb,
                        'captcha' : '' ,#auth.settings.captcha,
-                       'material': DIV(jQueryFileUpload, material_njs),#DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
+                       'material': DIV(jQueryFileUpload, material_njs),
+                       #DIV(settings.globals.material_njs, settings.globals.jQueryFileUpload),
                        'grouplist': grouplist
                        }
 
