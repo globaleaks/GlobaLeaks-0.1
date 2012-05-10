@@ -1,5 +1,5 @@
 {{extend 'layout.html'}}
-<style type="text/css">
+<!-- style type="text/css">
     .entry {
         background-color: white;
         width: 800px;
@@ -67,7 +67,7 @@
     }
     .ui-progressbar-value { background-image: url(/globaleaks/static/css/images/pbar-ani.gif); }
 
-</style>
+</style -->
 <div class="row">
     <div class="span4">
 {{if err or delete:}}
@@ -159,7 +159,7 @@
             <a href="javascript:void(0);" class="btn" id="add_material">{{=T("Add")}}</a>
         {{pass}}
         {{for number, files in submission_materials:}}
-        <div class="material-entry">
+        <div class="material-entry well">
             <ul class="unstyled">
                 {{for file in files:}}
                 <li class="{{=file['ext']}}"><i class="icon-file"></i>{{=file['filename']}} ({{=file['size']}})</li>
@@ -169,9 +169,12 @@
                 {{url = tulip_url+"/"+number if number else tulip_url+"/0"}}
                 <div class="download-box">
                     <h3>{{=T("Download")}}</h3>
-                    <a href="/globaleaks/tulip/download/{{=url}}" class="zip">{{=T("ZIP")}}</a>
-                    <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">{{=T("Encrypted ZIP")}}</a>
-                    <a href="/globaleaks/tulip/download/{{=url}}" class="crypt notimplemented">{{=T("PGP Encrypted ZIP")}}</a>
+                    <a href="/globaleaks/tulip/download/{{=url}}"
+                        class="btn"><i class="icon-download"></i>{{=T("ZIP")}}</a>
+                    <a href="#" class="btn
+                        disabled"><i class="icon-lock"></i>{{=T("Encrypted ZIP")}}</a>
+                    <a href="#" class="btn
+                        disabled"><i class="icon-lock"></i>{{=T("PGP Encrypt")}}</a>
                 </div>
             {{pass}}
 
@@ -184,9 +187,11 @@
             {{if not download_available == -1:}}
                 <div class="complete-box">
                     <h3>{{=T("Complete Download")}}</h3>
-                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="zip">{{=T("ZIP")}}</a>
-                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">{{=T("Encrypted ZIP")}}</a>
-                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="crypt notimplemented">{{=T("PGP Encrypted ZIP")}}</a>
+                    <a href="/globaleaks/tulip/download/{{=tulip_url}}" class="btn"><i class="icon-download"></i>{{=T("ZIP")}}</a>
+                    <a href="#"
+                        class="btn disabled"><i class="icon-lock"></i>{{=T("Encrypted ZIP")}}</a>
+                    <a href="#"
+                        class="btn disabled"><i class="icon-lock"></i>{{=T("PGP Encrypt")}}</a>
                 </div>
             {{pass}}
         {{else:}}
@@ -203,7 +208,7 @@
                 <table class="files"></table>
                 <div class="fileupload-progressbar"></div>
             </div>
-            <a href="javascript:void(0)" class="button" id="add_material_done">{{=T("Done")}}</a>
+            <a href="javascript:void(0)" class="btn" id="add_material_done">{{=T("Done")}}</a>
         </div>
         {{pass}}
         <div class="clear"></div>
@@ -326,7 +331,7 @@
         $('#fileupload').hide();
         $("#add_material").click(function() {
         	// XXX Replace the Add Button with a refresh (this is a workaround to avoid breaking UI)
-            $("#add_material").replaceWith('<a href="javascript:document.location.reload();" class="button" id="add_material_refresh">{{=T("Add")}}</a>');
+            $("#add_material").replaceWith('<a href="javascript:document.location.reload();" class="btn" id="add_material_refresh">{{=T("Add")}}</a>');
         	$('#fileupload').show();
         	$("#add_material_done").hide();
 		});
