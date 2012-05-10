@@ -13,6 +13,7 @@
 'Are you sure you want to delete this object?': 'Da li ste sigurni da želite da obrišete ovaj dokument?',
 'Ask useful details to the whistleblower thru the comment box': 'Pitajte Uzbunjivača kroz comment box',
 'Available databases and tables': 'Raspoložive baze podataka i tabele',
+'Back to top': 'Back to top',
 'Bouquet': 'Bouquet',
 'Cancel upload': 'Otkaži slanje',
 'Cannot be empty': 'Ovo polje mora biti popunjeno',

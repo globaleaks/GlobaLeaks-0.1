@@ -15,10 +15,15 @@ if T.accepted_language != session._language and 0:
     response.files.append(b)
 
 def plugin_translate(languages=supported_languages):
-    return [LI(A(v,
-        _href="%s?_language=%s" \
-            % (URL(r=request, args=request.args), v), value=session._language))
-                  for v,k in languages]
+    ret = []
+    for v,k in languages:
+        current = False
+        if v == session._language:
+            current = True
+        ret.append({'url':
+                    "%s?_language=%s" % (URL(r=request, args=request.args), v),
+                    'name': v, 'current': current})
+    return ret
 
     #return FORM(LI(
     #        _href="document.location='%s?_language='+jQuery(this).val()" \

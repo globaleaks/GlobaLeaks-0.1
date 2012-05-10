@@ -65,11 +65,11 @@ class FormShaman(SQLFORM):
             # sadly, HTML must not be passed to avoid XXSs
 
         disclaimer_info = DIV(disclaimer_text, _class="disclaimer_text")
-        disclaimer_fb = DIV(LABEL(T('Accept Disclaimer'), _id="disclaimer_alert"),
-                         INPUT(_name='agree', value=False, _type='checkbox',_id="disclaimer", 
-                               requires=IS_EQUAL_TO("on", error_message=T('must accept disclaimer'))
-                               )
-                            )
+        disclaimer_fb = DIV(LABEL(INPUT(_name='agree', value=False, _type='checkbox',
+                                        _id="disclaimer",
+                                        requires=IS_EQUAL_TO("on",
+                                            error_message=T('must accept disclaimer'))),T('Accept Disclaimer')),
+                            INPUT(_type="submit", _class="btn"))
 
         self.special_fields = {
                        'disclaimer_info' : disclaimer_info,
@@ -98,31 +98,33 @@ class FormShaman(SQLFORM):
             self['_action'] = "#"
 
     def createform(self, xfields):
-        table = DIV(_id="submit_form", _class="swMain submit_form")
-        step_head = UL(_class="step_indicator clearfix")
+        table = DIV(_id="submission", _class="")
+        step_head = UL(_class="nav nav-tabs", _id="submission-steps")
         for i in range(1,len(self.steps)+1):
+            classval = "step active" if i == 1 else "step"
             # XXX Make this part much more customizable, such as the stepDesc
             step_head.append(LI(
                                 A(
-                                  SPAN(str(i),_class="stepNumber"),
+                                  #SPAN(str(i),_class="stepNumber"),
                                   SPAN(T("Step") + " " +str(i),_class="stepDesc"),
-                                  _href="#step-"+str(i), _class="step"),
+                                  _href="#step-"+str(i)), _class=classval
                                 )
                              )
-        table.append(DIV(step_head, _class="form_top mb10 clearfix"))
+        table.append(step_head)
 
         try:
             i = 1
             j = 0
             steps = []
             for step in self.steps:
-                step_html = FIELDSET(
-                                     P(settings.extrafields.step_desc[i-1]), 
+                classval = "tab-pane active" if i == 1 else "tab-pane"
+                step_html = DIV(FIELDSET(
+                                     P(settings.extrafields.step_desc[i-1]),
                                      _id="step-"+str(i), _class="step_holder"
-                                     )
+                                     ), _class=classval, _id="step-"+str(i))
                 for field in step:
                     if field in self.special_fields.keys():
-                        step_html.append(DIV(self.special_fields[field], 
+                        step_html.append(DIV(self.special_fields[field],
                                              _class="field_holder"))
                     else:
                         step_html.append(DIV(
@@ -133,7 +135,7 @@ class FormShaman(SQLFORM):
                 i += 1
                 steps.append(step_html)
 
-            table.append(DIV(steps, _class="steps"))
+            table.append(DIV(steps, _class="tab-content"))
 
         except:
             raise RuntimeError, 'formstyle not supported'
