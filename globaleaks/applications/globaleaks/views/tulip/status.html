@@ -1,75 +1,6 @@
 {{extend 'layout.html'}}
-<!-- style type="text/css">
-    .entry {
-        background-color: white;
-        width: 800px;
-    }
-
-    .material {
-
-        position: relative;
-
-    }
-    #content table.targetlist {
-
-        width: 200px;
-    }
-
-    #content a#add_material {
-        top: 0px;
-        right: 0px;
-        width: 100px;
-        position: absolute;
-        padding: 5px 10px;
-        background-color: green;
-    }
-
-    #content a#add_material_done {
-        width: 100px;
-        position: absolute;
-        padding: 5px 10px;
-        background-color: green;
-    }
-
-	#content a#add_material_refresh {
-
-		background: #CCC;
-	}
-
-    #content .material-entry {
-        background-color: #5A5655;
-        padding: 30px 20px 5px 40px;
-        width: 600px;
-        margin-bottom: 20px;
-        position: relative;
-    }
-
-    .download-box {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-
-    }
-
-    .download-box {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-
-    }
-
-    .download-box h3 {
-        font-size: 15px;
-    }
-
-    .complete-box h3 {
-        font-size: 20px;
-    }
-    .ui-progressbar-value { background-image: url(/globaleaks/static/css/images/pbar-ani.gif); }
-
-</style -->
 <div class="row">
-    <div class="span4">
+    <div class="span5">
 {{if err or delete:}}
     {{if err:}}
         <div class="alert alert-error">{{=T("invalid receipt: Tip-off not found")}}!</div>
@@ -119,8 +50,8 @@
     {{pass}}
 </div>
 </div>
-<div class="row">
-    <div class="span4">
+<div class="row submission-content">
+    <div class="span5">
     <p class="info">
         {{if whistleblower:}}
 
@@ -153,7 +84,7 @@
     {{pass}}
 </div>
 
-    <div class="material span4">
+    <div class="material span7">
         <h3>{{=T("Material")}}</h3>
         {{if whistleblower:}}
             <a href="javascript:void(0);" class="btn" id="add_material">{{=T("Add")}}</a>
@@ -217,38 +148,45 @@
 </div>
 
     <div class="row">
-    <div class="span4" id="comment-board">
+        <div class="span5">
 
-    	<dl id="comments">
+    <div id="comment-board">
+        <h2>{{=T("Comments")}}</h2>
     {{for feedback in feedbacks:}}
-        {{if not feedback.commenter_id:}}
-            <dt><span class="label label-important">{{=T("Whistleblower")}}</span></dt>
-            <dd class="comment">{{=feedback.comment}}</dd>
+    {{if not feedback.commenter_id:}}
+    <div class="comment">
+        <div class="comment-head">
+            <h4>{{=T("Whistleblower")}}</h4>
+        </div>
+        <div class="comment-body">{{=feedback.comment}}</div>
+    </div>
+
+        {{else:}}
+        {{if feedback.commenter_id == int(receiver_id):}}
+
+            <div class="comment">
+                <div class="comment-head"><h4>You</h4></div>
+                <div class="comment-body">{{=feedback.comment}}</div>
             </div>
         {{else:}}
-            {{if feedback.commenter_id == int(receiver_id):}}
-                <dt class="name">You</dt>
-                <dd class="comment">{{=feedback.comment}}</dd>
-                </div>
-            {{else:}}
-                <dt class="name">{{=feedback.commenter_name}}</dt>
-                <dd class="comment">{{=feedback.comment}}</dd>
+
+            <div class="comment">
+                <div class="comment-head"><h4>{{=feedback.commenter_name}}</h4></div>
+                <div class="comment-body">{{=feedback.comment}}</div>
+            </div>
             {{pass}}
         {{pass}}
-    {{pass}}
-    {{if not feedbacks:}}
-        <p>{{=T("No comments")}}</p>
-    {{pass}}
-    </dl>
-
-    <form name="receiver_input" method="POST" id="commentinput" action="">
+        {{pass}}
+    </div>
+    <form name="receiver_input" method="POST" id="commentinput"
+        class="form-inline" action="">
         <input type="text" id="comment" name="Comment">
         <input type="submit" class="btn" name="send" id="send" value="Send your feedback">
     </form>
     </div>
 
 
-    <div class="span4" id="tulip-access">
+    <div class="span7" id="tulip-access">
     <h2>{{=T("Access statistics")}}</h2>
     <table class="table">
         <thead>
@@ -452,8 +390,15 @@
         		type: 'POST',
         		url: '/globaleaks/tulip/status/{{=tulip_url}}',
         		data: 'Comment=' + comment_text + '&send=feedback',
-        		success: function(){
-        			$("#comments").append('<div class="comment" id="your_comment"><h2 class="name">You</h2><p class="comment">' + comment_text + '</p></div>');
+                success: function(){
+
+                var comment_markup = '<div class="comment">';
+                comment_markup += '<div class="comment-head"><h4>You</h4></div>';
+                comment_markup += '<div class="comment-body">';
+                comment_markup += comment_text;
+                comment_markup += '</div></div>';
+
+                    $("#comment-board").append(comment_markup);
 					comment_box.replaceWith('<input type="text" id="comment" name="Comment">');
                     $("#commentinput").children(".comment-loading").replaceWith('');
                     $("#commentinput").children("#send").show();

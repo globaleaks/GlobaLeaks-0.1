@@ -13,3 +13,34 @@
     font-size: 26px;
     line-height: 30px;
 }
+
+.comment-body {
+    padding: 15px;
+}
+
+.comment-head {
+    padding: 9px 15px;
+    border-bottom: 1px solid #EEE;
+}
+.submission-content {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #E5E5E5;
+    margin-bottom: 30px;
+
+}
+.comment {
+    width: 400px;
+    background-color: white;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+    margin-bottom: 20px;
+}
