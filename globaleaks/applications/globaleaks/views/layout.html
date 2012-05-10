@@ -139,6 +139,9 @@
                     });
                 }
             });
+            $("#receipt-load").click(function(){
+                $("#receipt-form").submit();
+            });
         });
     </script>
 
@@ -198,7 +201,8 @@
               {{pass}}
 
 				<!-- header_left -->
-                <form class="form-horizontal" method="post" action="">
+                <form class="form-horizontal" id="receipt-form" method="post"
+                    action="/">
                     <fieldset>
                     <div class="control-group">
                     <label for="check_status" class="control-label">
@@ -208,7 +212,7 @@
                     <div class="input-append">
                         <input class="span2" id="check_status" size="16"
                         type="text" placeholder="Receipt Number" name="Receipt">
-                        <button type="button"
+                        <button id="receipt-load" type="button"
                                 class="btn"
                                 value="{{=T("submit")}}">{{=T("submit")}}</button>
                     </div>
