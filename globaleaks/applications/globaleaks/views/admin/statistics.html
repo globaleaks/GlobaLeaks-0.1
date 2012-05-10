@@ -6,7 +6,7 @@
 {{if active:}}
 Active Receivers<br>
 <!-- this link is provided because this page could works as index for all node maintainer's features -->
-<table class="targetlist">
+<table class="targetlist table">
     <tr class="even">
         <td class="name">id</td>
         <td class="name">name</td>
@@ -40,7 +40,7 @@ Active Receivers<br>
 <div class="intro">
 The <b>{{=T("Tip-off")}} list</b>:<br>
 {{if flowers:}}
-<table class="targetlist">
+<table class="targetlist table">
     <tr class="even">
         <td class="name">title</td>
         <!-- has no sense that is always 0, it's a field to delete -->
@@ -75,7 +75,7 @@ The <b>{{=T("Tip-off")}} list</b>:<br>
 <div class="intro">
 The <b>{{=T("Tip-off")}} list</b>, of the entire set of <i>live unique links</i> in your GlobaLeaks installation.
 {{if tulips:}}
-<table class="targetlist">
+<table class="targetlist table">
     <tr class="even">
         <td class="name">#id</td>
         <td class="description">receiver #</td>
@@ -91,8 +91,8 @@ The <b>{{=T("Tip-off")}} list</b>, of the entire set of <i>live unique links</i>
         {{else:}}
             <tr class="even">
         {{pass}}
-        <!-- tulip.leak_id -->  
-        <td class="name">{{=tulip.url[:8]}}</td> 
+        <!-- tulip.leak_id -->
+        <td class="name">{{=tulip.url[:8]}}</td>
         <td class="description">{{=tulip.target_id}}</td>
         <td class="description">{{=tulip.accesses_counter}}/{{=tulip.allowed_accesses}}</td>
         <td class="description">{{=tulip.downloads_counter}}/{{=tulip.allowed_downloads}}</td>
