@@ -69,7 +69,7 @@ class FormShaman(SQLFORM):
                                         _id="disclaimer",
                                         requires=IS_EQUAL_TO("on",
                                             error_message=T('must accept disclaimer'))),T('Accept Disclaimer')),
-                            INPUT(_type="submit", _class="btn"))
+                            INPUT(_type="submit",_id="submission-button", _class="btn"))
 
         self.special_fields = {
                        'disclaimer_info' : disclaimer_info,

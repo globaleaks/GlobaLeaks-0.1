@@ -83,23 +83,43 @@
 
 <script type="text/javascript">
 
-function checkDisclaimer()
-{
-    if ($('#disclaimer')[0].checked == true)
-        $('.buttonFinish').removeClass('buttonDisabled');
-    else
-        $('.buttonFinish').addClass('buttonDisabled');
-}
-
 $(document).ready(function(){
     'use strict';
+    window.upload_in_progress = false;
+
+    var disclaimerCheck = function() { return $('#disclaimer')[0].checked; };
+    var setSubmit = function(condition) {
+        if (typeof(condition) == "undefined") {
+            condition = disclaimerCheck() && !(window.upload_in_progress);
+        }
+        if (condition) {
+            $('#submission-button').removeClass('disabled');
+        } else {
+            $('#submission-button').addClass('disabled');
+        }
+    };
+    $('#submission-button').addClass('disabled');
+
     $('#fileupload').show();
     $('#file-uploader-nonjs').hide();
 
+    $('#submission-button').click(function(e) {
+        if (disclaimerCheck() && !(window.upload_in_progress)) {
+            e.target.form.submit();
+            } else {
+                setSubmit();
+                return false;
+            }
+    });
+
+    $('#disclaimer').change(function(e) {
+        setSubmit(disclaimerCheck() && !(window.upload_in_progress));
+    });
+
     $('#submission-steps a').click(function (e) {
-          e.preventDefault();
-            $(this).tab('show');
-            })
+        e.preventDefault();
+        $(this).tab('show');
+    })
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
@@ -109,6 +129,8 @@ $(document).ready(function(){
     });
 
     $('#fileupload').bind('fileuploadprogressall', function (e, data) {
+        window.upload_in_progress = true;
+
         if ((Date.now() - window.last_update) > 1000) {
             if(window.speedarray) {
                 var speed = (data.loaded - speedarray[1])/(Date.now() - speedarray[0]);
@@ -132,12 +154,6 @@ $(document).ready(function(){
             }
         }
 
-        /* escamotage: avoid that someone click on checked and press finish before
-         * the upload had really finished. until an upload is running, the disclaimer
-         * could not be already be checked */
-        $('#disclaimer')[0].checked = false;
-        $('.buttonFinish').addClass('buttonDisabled');
-
         var new_height = $('#fileupload').parents('.content').innerHeight();
         $('.stepContainer').css('height', new_height);
     });
@@ -146,11 +162,12 @@ $(document).ready(function(){
         $("#speedbox").children("span").replaceWith("<span></span>");
         window.speedarray = null;
         window.average = null;
+        window.upload_in_progress = false;
     });
 
     $('#fileupload').bind('fileuploaddone', function (e, data) {
-        $('.buttonFinish').removeClass('buttonDisabled');
-        checkDisclaimer();
+        window.upload_in_progress = false;
+        setSubmit();
 
         var new_height = $('#fileupload').parents('.content').innerHeight();
         $('.stepContainer').css('height', new_height);
@@ -180,12 +197,6 @@ $(document).ready(function(){
             .prop('src', this.href)
             .appendTo('body');
     });
-
-    checkDisclaimer();
-    $('#disclaimer').change(function (){
-        checkDisclaimer();
-    });
-
 
   // Load existing files:
   var files = [];
