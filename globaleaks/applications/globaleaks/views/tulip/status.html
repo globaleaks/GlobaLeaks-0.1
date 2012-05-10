@@ -1,17 +1,5 @@
 {{extend 'layout.html'}}
 <style type="text/css">
-    #comment-board {
-        float: right;
-        width: 300px;
-
-    }
-
-    #tulip-access {
-
-        float: left;
-        width: 300px;
-    }
-
     .entry {
         background-color: white;
         width: 800px;
@@ -80,21 +68,22 @@
     .ui-progressbar-value { background-image: url(/globaleaks/static/css/images/pbar-ani.gif); }
 
 </style>
-
+<div class="row">
+    <div class="span4">
 {{if err or delete:}}
     {{if err:}}
-        <h2>{{=T("invalid receipt: Tip-off not found")}}!</h2>
+        <div class="alert alert-error">{{=T("invalid receipt: Tip-off not found")}}!</div>
     {{else:}}
-        <h2>{{=T("Tip-off removed and all relatives")}} (#{{=delete}} {{=T("Tip-off")}})</h2>
+        <div class="alert alert-error">{{=T("Tip-off removed and all relatives")}} (#{{=delete}} {{=T("Tip-off")}})</div>
     {{pass}}
 
 {{else:}}
 
 {{if whistleblower: }}
-<div class="pagetitle">{{=T("Your tip-off")}}...</div>
-<p class="intro">
-    {{=T("Welcome back Whistleblower: this interface is unique for you.")}}
-</p>
+<div class="alert alert-info">
+    <h4 class="alert-heading">{{=T("Welcome back Whistleblower")}}</h4>
+    {{=T("this interface is unique for you.")}}
+</div>
 
 <script id="template-upload" type="text/x-jquery-tmpl">
     {{=jQuery_templates[0]}}
@@ -105,14 +94,14 @@
 </script>
 
 {{if session.wb_number:}}
-<div id="wb_receipt">
+<div class="alert alert-info">
     {{=T("Save the following number or the Tip-off link: otherwise you could not have other ways to come back here, and comment your submitted information.")}}
-    <p class="tulip">
-        {{=session.wb_number}}
-    </p>
-    <p>
-        {{=XML(whistleblower_msg_html)}}
-    </p>
+</div>
+<div class="alert receipt">
+    {{=session.wb_number}}
+</div>
+<div class="alert alert-info">
+    {{=XML(whistleblower_msg_html)}}
 </div>
 
 {{session.wb_number = None}}
@@ -127,11 +116,11 @@
 
 	{{pass}}
 
-{{pass}}
-<div class="entry">
-
-    <h2 class="title">Tip-off</h2>
-
+    {{pass}}
+</div>
+</div>
+<div class="row">
+    <div class="span4">
     <p class="info">
         {{if whistleblower:}}
 
@@ -150,29 +139,30 @@
         <h2>{{=T("Material description")}}</h2>
         <p class="description">{{=leak_desc}}</p>
     {{pass}}
-
+    <h3>Submission details</h3>
+    <div class="dl-horizontal">
     {{for field_name, content, type in leak_extra: }}
-            <div class="material_submission material_{{=type}}">
-                <h2>{{=field_name}}</h2>
-                <p>{{=content}}</p>
-            </div>
+        <dt>{{=field_name}}</dt>
+        <dd>{{=content}}</dd>
     {{pass}}
+    </div>
 
     {{if leak_tags:}}
         <p class="left_title">{{=T("Tags")}}:</p>
         <p class="description">{{=leak_tags}}</p>
     {{pass}}
+</div>
 
-    <div class="material">
+    <div class="material span4">
         <h3>{{=T("Material")}}</h3>
         {{if whistleblower:}}
-            <a href="javascript:void(0);" class="button" id="add_material">{{=T("Add")}}</a>
+            <a href="javascript:void(0);" class="btn" id="add_material">{{=T("Add")}}</a>
         {{pass}}
         {{for number, files in submission_materials:}}
         <div class="material-entry">
-            <ul>
+            <ul class="unstyled">
                 {{for file in files:}}
-                    <li class="{{=file['ext']}}">{{=file['filename']}} ({{=file['size']}})</li>
+                <li class="{{=file['ext']}}"><i class="icon-file"></i>{{=file['filename']}} ({{=file['size']}})</li>
                 {{pass}}
             </ul>
             {{if download_available and not whistleblower and download_available != -1: }}
@@ -219,44 +209,43 @@
         <div class="clear"></div>
 
     </div>
+</div>
 
-    <div id="comment-board">
+    <div class="row">
+    <div class="span4" id="comment-board">
 
-    	<div id="comments">
+    	<dl id="comments">
     {{for feedback in feedbacks:}}
         {{if not feedback.commenter_id:}}
-            <div class="comment" id="wb_comment">
-            <h2 class="name">{{=T("Whistleblower")}}</h2>
-            <p class="comment">{{=feedback.comment}}</p>
+            <dt><span class="label label-important">{{=T("Whistleblower")}}</span></dt>
+            <dd class="comment">{{=feedback.comment}}</dd>
             </div>
         {{else:}}
             {{if feedback.commenter_id == int(receiver_id):}}
-                <div class="comment" id="your_comment">
-                <h2 class="name">You</h2>
-                <p class="comment">{{=feedback.comment}}</p>
+                <dt class="name">You</dt>
+                <dd class="comment">{{=feedback.comment}}</dd>
                 </div>
             {{else:}}
-                <div class="comment" id="other_comment">
-                    <h2 class="name">{{=feedback.commenter_name}}</h2>
-                    <p class="comment">{{=feedback.comment}}</p>
-                </div>
+                <dt class="name">{{=feedback.commenter_name}}</dt>
+                <dd class="comment">{{=feedback.comment}}</dd>
             {{pass}}
         {{pass}}
     {{pass}}
     {{if not feedbacks:}}
         <p>{{=T("No comments")}}</p>
     {{pass}}
-		</div>
+    </dl>
+
     <form name="receiver_input" method="POST" id="commentinput" action="">
         <input type="text" id="comment" name="Comment">
-        <input type="submit" name="send" id="send" value="Send your feedback">
+        <input type="submit" class="btn" name="send" id="send" value="Send your feedback">
     </form>
     </div>
 
 
-    <div id="tulip-access">
-    <h2>{{=T("Tip-off access statistics")}}</h2>
-    <table class="targetlist">
+    <div class="span4" id="tulip-access">
+    <h2>{{=T("Access statistics")}}</h2>
+    <table class="table">
         <thead>
             <th class="downloads">{{=T("ID")}}</th>
             <th class="downloads">{{=T("Comments")}}</th>
@@ -291,7 +280,7 @@
             {{pass}}
         </tbody>
     </table>
-    </div>
+</div>
 
     {{if target_del_cap:}}
     <div class="description">
@@ -307,8 +296,6 @@
 </div>
 
 {{pass}}
-    <div id="messages">
-    </div>
 
     <script type="text/javascript">
     $(document).ready(function() {

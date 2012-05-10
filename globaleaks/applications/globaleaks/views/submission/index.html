@@ -56,15 +56,19 @@
     <div class="description">
 {{=T("It's required that almost one receiver group has been configured from the administrative panel, in order to accept whistleblowing submission.")}}
 <br><br>
-    If your are the <b>Node maintainer</b>, you need to create one or more <b>receivers</b>: go to 
+    If your are the <b>Node maintainer</b>, you need to create one or more <b>receivers</b>: go to
     <a href="/globaleaks/admin/targets">the appropiate page</a>.
     </div>
 {{pass}}
 
 {{if not error and not leak_id and form:}}
-    <h1><span>{{=T("Submission Interface")}}</span></h1>
+<div class="row">
+    <div class="span6">
+    <h1><span>{{=T("Submission")}}</span></h1>
     {{=form}}
+    </div>
 
+</div>
 {{pass}}
 
 {{if not error and form:}}
@@ -79,7 +83,7 @@
 
 <script type="text/javascript">
 
-function checkDisclaimer() 
+function checkDisclaimer()
 {
     if ($('#disclaimer')[0].checked == true)
         $('.buttonFinish').removeClass('buttonDisabled');
@@ -91,6 +95,11 @@ $(document).ready(function(){
     'use strict';
     $('#fileupload').show();
     $('#file-uploader-nonjs').hide();
+
+    $('#submission-steps a').click(function (e) {
+          e.preventDefault();
+            $(this).tab('show');
+            })
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
@@ -123,7 +132,7 @@ $(document).ready(function(){
             }
         }
 
-        /* escamotage: avoid that someone click on checked and press finish before 
+        /* escamotage: avoid that someone click on checked and press finish before
          * the upload had really finished. until an upload is running, the disclaimer
          * could not be already be checked */
         $('#disclaimer')[0].checked = false;
@@ -172,27 +181,11 @@ $(document).ready(function(){
             .appendTo('body');
     });
 
-    // Smart Wizard
-    $('#submit_form').smartWizard({
-        transitionEffect: 'slide',
-        enableAllSteps: true,
-        enableFinishButton: false,
-        labelNext: '{{=T("Next")}}', 
-    	labelPrevious:'{{=T("Previous")}}', // label for Previous button
-    	labelFinish:'{{=T("Finish")}}',  // label for Finish button        
-        onShowStep: checkDisclaimer,
-        onFinish: onFinishCallback
-    });
-
     checkDisclaimer();
     $('#disclaimer').change(function (){
         checkDisclaimer();
     });
 
-    function onFinishCallback(){
-        // $('#wizard').smartWizard('showMessage','Finish Clicked');
-        $('form')[1].submit();
-    }
 
   // Load existing files:
   var files = [];
@@ -223,21 +216,26 @@ $(document).ready(function(){
 
 
 {{if not error and leak_id:}}
+<div class="row">
+    <div class="span6">
     <h1><span>{{=T("Submission Receipt")}}</span></h1>
-    <p class="intro">{{=T("This is a number you should write down to keep track of your submission")}}</p>
+    <div class="alert alert-success">
+        <h4 class="alert-heading">Congratulations!</h4> You have successfully submitted to this GlobaLeaks
+        nodes.
+        {{=T("This is a number you should write down to keep track of your submission")}}
+    </div>
 
-    <p class="tulip">
-        {{=leaker_tulip}}
-    </p>
+    <div class="alert receipt">
+    <span>{{=leaker_tulip}}</span>
+    </div>
 
-    <p class="intro">
+    <div class="alert alert-info">
         {{=T("Please save it in a safe place (e.x. mobile phone, piece of paper, etc.)")}}
-    </p>
+    </div>
 
-    <a class="button whistleblower" href="/globaleaks/tulip/status/{{=tulip_url}}">{{=T("Submission status")}}</a>
+    <a class="btn btn-primary" href="/globaleaks/tulip/status/{{=tulip_url}}">{{=T("Submission status")}}</a>
 
-    <p>
-        {{=T("You are also able to use your Whistleblower receipt from the first page.")}}
-    </p>
+    </div>
+</div>
 {{pass}}
 </body>

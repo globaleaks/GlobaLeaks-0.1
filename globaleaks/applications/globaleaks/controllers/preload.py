@@ -2,24 +2,25 @@ import os, gzip
 import gluon.contenttype
 
 def js():
-    files = ['/js/jquery-1.6.4.min.js',
+    files = ['/js/jquery-1.7.2.min.js',
              '/js/modernizr-1.7.min.js',
-             '/js/superfish.js',
-             '/js/cufon.js',
-             '/js/AlteHaas_700.font.js',
-             '/js/web2py_ajax.js',
-             '/js/calendar.js',
+             #'/js/superfish.js',
+             #'/js/cufon.js',
+             #'/js/AlteHaas_700.font.js',
+             #'/js/web2py_ajax.js',
+             #'/js/calendar.js',
              #'/js/main.js',
              '/js/fancybox/jquery.fancybox-1.3.4.pack.js',
              '/js/fileupload/jquery-ui.min.js',
-             '/js/jquery.inlineedit.js',
-             '/FormShaman/js/jquery.smartWizard.js',
+             #'/js/jquery.inlineedit.js',
+             #'/FormShaman/js/jquery.smartWizard.js',
              '/js/fileupload/jquery.iframe-transport.js',
              '/js/fileupload/jquery.fileupload.js',
              '/js/fileupload/jquery.fileupload-ui.js',
              '/js/fileupload/jquery.tmpl.min.js',
              '/js/jquery.cookie.js',
-             '/js/jquery.qtip-1.0.0-rc3.min.js'
+             '/js/jquery.qtip-1.0.0-rc3.min.js',
+             '/js/bootstrap/bootstrap-tab.js'
              ]
 
     output_file = os.path.join(request.folder, 'static') + "/main_js_file.js"
@@ -55,13 +56,16 @@ def js():
     #response.stream(output)
 
 def css():
-    files = ['/css/style.css',
-             '/css/base.css',
-             '/css/superfish.css',
-             '/js/fancybox/jquery.fancybox-1.3.4.css',
-             '/css/calendar.css',
+    files = ['/css/bootstrap.min.css',
+             '/css/globaleaks.css',
+             #'/css/style.css',
+             '/css/bootstrap-responsive.min.css',
+             #'/css/base.css',
+             #'/css/superfish.css',
+             #'/js/fancybox/jquery.fancybox-1.3.4.css',
+             #'/css/calendar.css',
              #'/css/jq-fileupload.css',
-             '/FormShaman/css/smart_wizard.css',
+             #'/FormShaman/css/smart_wizard.css',
              '/css/jquery.fileupload-ui.css',
              '/css/jquery-ui.css'
              ]

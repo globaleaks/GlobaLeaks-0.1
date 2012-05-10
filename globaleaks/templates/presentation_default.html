@@ -1,13 +1,13 @@
-<div class="main clearfix">
-    <div id="PrivacyBox" class="home_tor_status_block fleft">
+<div class="row">
+    <div id="PrivacyBox" class="span4 home_tor_status_block">
 
-        <div class="tor_status not_connected mb10">
-            <span class="status_ico"></span> <span>You are not connecting to this node through Tor. This Means that your indentity maybe compromised.
-            You are advised to <a href="#" title="TOR">download a copy of Tor</a></span>.
+        <div class="tor_status not_connected alert alert-error">
+            You are not connecting to this node through Tor. This Means that your indentity maybe compromised.
+            You are advised to <a href="#" title="Tor">download a copy of Tor</a></span>.
         </div>
         <!-- tor_status / not connected -->
 
-        <div class="tor_status tor_connected mb10">
+        <div class="tor_status tor_connected mb10 alert alert-success">
             <span class="status_ico"></span> <span>Congratulations!! You are now being connected anonymously via <a href="#" title="Tor">Tor</a></span>.
         </div>
         <!-- tor_status / connected -->
@@ -15,7 +15,7 @@
     </div>
     <!-- home_tor_status_block -->
 
-    <div class="home_info_block fright">
+    <div class="home_info_block span8">
         <p>Through Perun, a secure and anonymous submission
         site, you are able to submit documents and tips about
         corruption and malpractice.</p>
@@ -28,7 +28,7 @@
         allows you to browse anonymously on the web.</p>
         <!-- hint -->
 
-        <a class="go_submit_btn" href="/globaleaks/submission/" title="submit tips &amp; materials">submit tips &amp; materials</a>
+        <a class="btn" id="submit-tips" href="/globaleaks/submission/" title="submit tips &amp; materials">submit tips &amp; materials</a>
 
     </div>
     <!-- home_info_block -->
