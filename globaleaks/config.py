@@ -5,7 +5,11 @@ from gluon.storage import Storage
 import ConfigParser
 import os.path
 
-projroot = os.path.abspath(__file__).rsplit('GlobaLeaks', 1)[0] + 'GlobaLeaks'
+GLpathsegment = (os.path.abspath(__file__).rsplit('config.py')[0]).split('/')
+# the previous code has been changed, because there was a bug. 
+# homedirectory, or project dir 'globaleaks' 'GlobaLeaks'
+# would broke this generation
+projroot = '/'.join([str(x) for x in GLpathsegment[:-2]])
 cfgfile = os.path.join(projroot, 'globaleaks', 'globaleaks.conf')
 
 def copyform(form, settings):
