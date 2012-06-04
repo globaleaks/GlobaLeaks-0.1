@@ -1,0 +1,41 @@
+{{extend 'layout.html'}}
+
+{{if configured:}}
+
+<b>Now you need to reboot your box, the data previously inserted, shall be modified in the next access.<br>
+	This reboot is required to semplify the Tor hidden service startup.
+	</b><br><br>
+
+	<i>Technical details</i><br>
+	<p>
+	Settings can be changed editing the file:
+	<pre>
+/home/globaleaks/GL-01/globaleaks/globaleaks.conf
+	</pre>
+	and the original copy reside in defaults/original.globaleaks.conf</p><br><br>
+
+	<h1>Reboot now!</h1>
+	<p>When the Virtual GL installation is up, click on <a href="http://172.16.254.2:8000">http://172.16.254.2:8000</a>.
+{{else:}}
+
+<h1>configuration settings</h1>
+	<p>This page contains the required setting for every GlobaLeaks node.<br>
+	<p>Complete those stuff and your setup can be completed. Please read the explanation of the various fields below.</p><br>
+
+    <p>These informations shall be recorded in the globaleaks.conf file.</p>
+	<br>
+	{{=configuration_data}}
+
+	<p>
+	<li>service name: the short name of your initiative, this value shall be present in the email notification sent by your GL node.
+	<li>title: your GlobaLeaks name, headline.
+	<li>subtitle: appears in every page, below the title.
+	<li>description: goes in HTML meta description.
+	<li>page author: goes in HTML meta tag.
+	<li><b>email sender appearance</b>: (name and address) make the notification email appears from: "Sender Name <sender@address.tld>".
+	<li><b>mail Login credentials</b>: with the format "username_or_email_auth:password", the ':' character inside the password is not usable.
+	<li><b>mail Server</b>: host:port of an SMTP service, if the port is 25 SSL is disabled, otherwise is enabled.
+	<li>baseurl: http://yourweb.net/yoursubdir used for compose the URL in the mail notification
+	</p>
+
+{{pass}}

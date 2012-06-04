@@ -1,0 +1,32 @@
+{{extend 'layout.html'}}
+
+{{if configured:}}
+
+    <b>Now you need to add the receivers, in order to make works the submission logic: proceed to the <a href="/globaleaks/admin/targets">receiver page</a>.
+    </b><br><br>
+    Settings can be changed editing <i>globaleks.conf</i>, you may find a lot of comments inside, and the original copy reside in defaults/original.globaleaks.conf<br>
+
+{{else:}}
+    <h1>The hidden service is ready!</h1>
+	<p>Thru the Tor network your node can be reached at the addess {{=hidden_service}}.onion, or via <a href="https://{{=hidden_service}}.tor2web.org">{{=hidden_service}} (Tor2Web)</a> or <a href="https://{{=hidden_service}}.onion.to">{{=hidden_service}} (Onion.TO)</a>.</p> <br><br>
+
+    <h1>GlobaLeaks administrative password</h1>
+	<p>You need to setup the administrative password, you shall modify the configuration data editing globaleaks.conf</p> <br>
+	<b>Some text printed in the GlobaLeaks template contains a demo text, you need to edit the by hand</b>
+	<p>Those files are:</p>
+	<pre>
+templates/disclaimer_default.html     templates/notification_template.html
+templates/disclaimer_receiver.txt     templates/notification_template.txt
+templates/email_template.html         templates/presentation_default.html
+templates/email_template.txt          templates/tip_off_description_for_receiver.html
+templates/extrafields_wizard.xml      templates/whistleblower_message_in_tipoff.html
+templates/not_anonymous.html
+	</pre>
+	<h2>All those eleven files need to be customized with your coherent text!</h2>
+
+	<p>Record your administrative password:</p>
+    <div class="intro">
+    {{=mandatory}}
+    </div>
+
+{{pass}}
