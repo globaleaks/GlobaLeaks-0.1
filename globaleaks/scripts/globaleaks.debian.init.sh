@@ -94,7 +94,6 @@ do_start()
 			/etc/init.d/tor start
 			;; # GLobaLeaks setupped, Tor not touched
 	esac
-	;;
 
     # The PIDDIR should normally be created during installation. This
     # fixes things just in case.
