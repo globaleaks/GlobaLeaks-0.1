@@ -13,7 +13,7 @@ def start_setup():
                     Field('title', requires=IS_NOT_EMPTY()),
                     Field('subtitle', requires=IS_NOT_EMPTY()),
                     Field('description', requires=IS_NOT_EMPTY()),
-                    Field('page_author_name', requires=IS_NOT_EMPTY()),
+                    Field('page_author_name', requires=IS_NOT_EMPTY(), default='name in the meta keyword'),
                     Field('email_sender_appearance', requires=IS_NOT_EMPTY(), default='GlobaLeaks initiative <your@email.addr>'),
 					Field('email_auth', requires=IS_NOT_EMPTY(), default='username_or_email:password'),
                     Field('email_server', requires=IS_NOT_EMPTY(), default='server_host:server_port'),
