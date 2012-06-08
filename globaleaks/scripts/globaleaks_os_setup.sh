@@ -24,11 +24,8 @@ fi
 hiddenservice=`cat $HSfile` 
 echo "[+] started hidden service with name $hiddenservice pointing to 172.16.254.2:8000"
 echo "[+] changing configuration file with hidden service $hiddenservice"
-cat $GL01/globaleaks/globaleaks.conf | sed -es/hsurl=.*/hsurl=$hiddenservice/ > /tmp/globaleaks.conf-hs
+cat $GL01/globaleaks/globaleaks.conf | sed -es/hsurl\ =.*/hsurl\ =\ $hiddenservice/ > /tmp/globaleaks.conf-hs
 cp /tmp/globaleaks.conf-hs $GL01/globaleaks/globaleaks.conf
-
-echo "stopping Tor (it start with GlobaLeaks script)"
-/etc/init.d/tor stop
 
 sleep 1
 return 0

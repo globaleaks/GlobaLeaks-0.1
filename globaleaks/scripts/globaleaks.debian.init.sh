@@ -30,6 +30,7 @@ DAEMON_DIR=/home/globaleaks/GL-01/$NAME
 HS=/home/globaleaks/HS
 DAEMON_ARGS="web2py.py -i $ADDRESS -p $PORT --password=$PASSWORD --pid_filename=$PIDFILE"
 DAEMON_USER=globaleaks
+WGL="http://172.16.254.2:8000"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
@@ -51,22 +52,56 @@ trap_under_installation()
 		return 0
 	fi
 
-	x=`grep "under_installation = True" "$DAEMON_DIR/globaleaks.conf"`
-	if [ ! "$x" ]; then
-		echo "Setup hidden service: it would be repeated until you validate the node at http://172.16.254.2:8000"
+	under_install=`grep "under_installation = True" "$DAEMON_DIR/globaleaks.conf"`
+	hs_virginity=`grep "_BCDEF" "$DAEMON_DIR/globaleaks.conf"`
+
+    # debug
+    if [ "$under_install" ]; then
+        echo "under install True"
+    else
+        echo "not yet under installation!"
+    fi
+
+    if [ "$hs_virginity" ]; then
+        echo "the hidden service is not yet initialized"
+    else
+        echo "the hidden service has been yet initialized"
+    fi
+
+	if [ "$under_install" ] && [ "$hs_virginity" ]; then
+        echo "(U!I) the start_setup.html has been used, creating HS..."
+		echo "Setup hidden service: it would be repeated until you configure the node at $WGL"
 		do_stop
 
 		# This command starts Tor
 		$DAEMON_DIR/scripts/globaleaks_os_setup.sh
 
 		if [ ! -f "$HS/hostname" ]; then
+            echo "try to start HS, failing"
 			return 1
 	    else
 			return 0
 		fi
-	else
-		return 2
 	fi
+
+    if [ "$under_install" ] && [ ! "$hs_virginity" ]; then
+        echo "(UI) HS available, starting Tor and finalize virtual_setup.html in $WGL"
+        # return code 2 start Tor
+        return 2
+	fi
+
+	if [ ! "$under_install" ] && [ ! "$hs_virginity" ]; then
+        echo "(!UI) the virtual_setup.html has not yet filled, connect to $WGL"
+		return 2
+    fi
+
+    if [ ! "$under_install" ] && [ "$hs_virginity" ]; then
+        echo "(!U!I) the start_setup.html need to be filled, connect to $WGL"
+        return 3
+    fi
+
+    echo "not handled condition!"
+    return 4
 }
 
 #
@@ -90,9 +125,17 @@ do_start()
 			echo "Unable to setup hidden service!"
 			;; # Old process is still running
 		2) 
-			echo "GlobaLeaks has been already setupped, starting Tor..."
+			echo "GlobaLeaks setup is going well, starting Tor..."
 			/etc/init.d/tor start
 			;; # GLobaLeaks setupped, Tor not touched
+        3)
+            echo "this shall be the first boot of the Virtual Machine of GL!"
+            sleep 1
+            ;;
+        4)
+            echo "urgh !? this bug need to be handled"
+            echo "mail to info@globaleaks.org!"
+            ;;
 	esac
 
     # The PIDDIR should normally be created during installation. This
