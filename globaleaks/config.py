@@ -25,6 +25,11 @@ class ConfigFile(Storage):
     """
 
     def __init__(self, cfgfile, section):
+
+        if not os.access(cfgfile, os.R_OK|os.W_OK):
+            print "Unable to open configuration file " + cfgfile
+            quit()
+
         super(ConfigFile, self).__init__()
 
         self._cfgfile = cfgfile
