@@ -61,7 +61,7 @@ def start_logger(logsettings):
         level = levels.get(logsettings.level, None)
         if not level:
             level = levels['fatal']
-            logger.waring('Invalid level in config file: set [fatal] as default')
+            logger.warning('Invalid level in config file: set [fatal] as default')
 
         logger.setLevel(level)
 

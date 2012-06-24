@@ -86,6 +86,7 @@ for m in mails:
                     message=(message_txt, message_html)):
         logger.debug("email sent.")
         db(db.mail.id==m.id).delete()
+        db.commit()
     else:
         logger.warn("error in sending mail (%s)", m.address)
 
