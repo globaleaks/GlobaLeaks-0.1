@@ -32,7 +32,7 @@ def plugin_translate(languages=supported_languages):
     #        *[OPTION(k,_value=v) for v,k in languages]))
 
 # Template internationalization
-def localize_templates(name, lang='en'):
+def localize_templates(name, lang='it'):
     fn = settings.globals.__getattr__(name).split(".")
     try:
         template_file = ".".join(fn[:-1]) + "-" + lang + "." + fn[-1]
