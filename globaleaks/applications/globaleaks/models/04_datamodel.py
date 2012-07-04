@@ -280,6 +280,7 @@ class Tulip(object):
             tulip_row = db(db.tulip.url==url).select().first()
             if tulip_row:
                 self._id = tulip_row.id
+                self.target_id = tulip_row.target_id
             else:
                 # The object does not handle the error code inside the obj
                 print "Invalid url requested: ", url

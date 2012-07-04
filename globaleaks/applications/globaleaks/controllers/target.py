@@ -24,12 +24,11 @@ def bouquet():
     # XXX here security issue to think about, create_target involved.
     # X&Y challenge response required
 
-    try:
-        tulip = Tulip(url=target_url)
-    except:
+    tulip = Tulip(url=target_url)
+    if tulip.id == -1:
         return dict(err="Invalid Tulip")
 
-    receiver_row = db(db.target.id==tulip.target).select()
+    receiver_row = db(db.target.id==tulip.target_id).select()
 
     # this require to be splitted because tulip are leak x target matrix
     bouquet_list = []
