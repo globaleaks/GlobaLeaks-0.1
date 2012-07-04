@@ -27,6 +27,9 @@ echo "[+] changing configuration file with hidden service $hiddenservice"
 cat $GL01/globaleaks/globaleaks.conf | sed -es/hsurl\ =.*/hsurl\ =\ $hiddenservice/ > /tmp/globaleaks.conf-hs
 cp /tmp/globaleaks.conf-hs $GL01/globaleaks/globaleaks.conf
 
+echo "\n# added by globaleaks setup\n" >> /etc/hosts
+echo "$hiddenservice 127.0.0.2" >> /etc/hosts
+
 sleep 1
 return 0
 
