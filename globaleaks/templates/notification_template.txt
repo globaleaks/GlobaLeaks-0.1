@@ -5,7 +5,7 @@ Esteemed %(name)s,
 
 You can view the %(type)s from the following URL:
 
-Internet: %(site)s/globaleaks/tulip/%(tulip_url)s
-Via Tor: http://%(sitehs)s/globaleaks/tulip/%(tulip_url)s
+Internet: %(site)s/globaleaks/tulip/status/%(tulip_url)s
+Via Tor: http://%(sitehs)s/globaleaks/tulip/status/%(tulip_url)s
 
 
