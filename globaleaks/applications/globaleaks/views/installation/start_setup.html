@@ -19,10 +19,10 @@
 {{else:}}
 
 <h1>configuration settings</h1>
-	<p>This page contains the required setting for every GlobaLeaks node.<br>
-	<p>Complete those stuff and your setup can be completed. Please read the explanation of the various fields below.</p><br>
+<p><b>This page awaits mandatory settings for your GlobaLeaks node</b>.<br>
+<p>Read the explanation of the various fields below. You can provide addictional details following the HOW-TOs in <a href="https://github.com/globaleaks/GlobaLeaks/wiki">GlobaLeaks wiki</a> (section: Configuration).</p><br>
 
-    <p>These informations shall be recorded in the globaleaks.conf file.</p>
+    <p>These informations will be recorded in the globaleaks.conf file.</p>
 	<br>
 	{{=configuration_data}}
 
@@ -35,7 +35,7 @@
 	<li><b>email sender appearance</b>: (name and address) make the notification email appears from: "Sender Name <sender@address.tld>".
 	<li><b>mail Login credentials</b>: with the format "username_or_email_auth:password", the ':' character inside the password is not usable.
 	<li><b>mail Server</b>: host:port of an SMTP service, if the port is 25 SSL is disabled, otherwise is enabled.
-	<li>baseurl: http://yourweb.net/yoursubdir used for compose the URL in the mail notification
+	<li>baseurl: http://yourweb.net/yoursubdir used for compose the URL in the mail notification, if you're going to use tor2web, would be https://blahblahblah.tor2web.xxx; You can set 'baseurl' in globaleaks.conf when installation is complete too.
 	</p>
 
 {{pass}}

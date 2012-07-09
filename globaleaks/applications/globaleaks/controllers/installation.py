@@ -33,8 +33,10 @@ def start_setup():
 
     # check the PORT, if 25 is enable_ssl = False, else is True
     settings.globals.email_server = request.vars.email_server
-    valuecheck = request.vars.email_server.split(':')[1]
-    if valuecheck == '25':
+
+    valuecheck = request.vars.email_server.split(':')
+    # if not ":port" is provided, a default 25 is assumed
+    if len(valuecheck) != 2 or int(valuecheck[1]) == 25:
         settings.globals.email_ssl = False
     else:
         settings.globals.email_ssl = True
@@ -73,7 +75,7 @@ def virtual_setup():
     db.auth_user.insert(
         first_name="GlobaLeaks",
         last_name="node administrator",
-        username=settings.globals.node_admin_username, # default: 'admin'
+        username=settings.globals.node_admin_username,
         password=db.auth_user.password.validate(request.vars.administrative_password)[0]
     )
 
