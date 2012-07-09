@@ -211,13 +211,13 @@ def status():
     try:
         tulip = Tulip(url=tulip_url)
     except:
-        return dict(err=True, delete=None)
+        return dict(err=True, password_req=None, delete=None)
 
     leak = tulip.get_leak()
 
     # those are the error not handled by the try/except before
     if tulip.id == -1:
-        return dict(err=True, delete=None, tulip_url=tulip_url)
+        return dict(err=True, password_req=None, delete=None, tulip_url=tulip_url)
 
     whistleblower_msg_html = ''
     if tulip.target == "0":
@@ -238,10 +238,31 @@ def status():
         except:
             delete_capability = None
 
+        """
+        HERE the receiver password authentication check
+        """
+        if gl.get_target(int(tulip.get_target())).password_enabled == True:
+
+            password_form = SQLFORM.factory(Field('access_password', 'password', requires=IS_NOT_EMPTY()))
+
+            if password_form.accepts(request.vars, session):
+                if request.vars.access_password != gl.get_target(int(tulip.get_target())).password:
+                    return dict(err=True, delete=None, 
+                            password_req=True, password_form=password_form, tulip_url=tulip_url)
+                else:
+                    print "password match correctly!"
+            else:
+                print "invalid form received"
+                return dict(err=True, delete=None, 
+                        password_req=True, password_form=password_form, tulip_url=tulip_url)
+        else:
+            print "this receiver has not password set"
+
+
     # check if the tulip has been requested to be deleted
     if request.vars and request.vars.delete and delete_capability:
         deleted_tulips = tulip.delete_bros()
-        return dict(err=False, delete=deleted_tulips, tulip_url=tulip_url)
+        return dict(err=False, password_req=False, delete=deleted_tulips, tulip_url=tulip_url)
 
     if whistleblower == False:
         # the stats of the whistleblower are not in their own tulip
@@ -307,7 +328,7 @@ def status():
     upload_template = jQueryHelper.upload_tmpl()
     download_template = jQueryHelper.download_tmpl()
     submission_mats = [(m.url, json.loads(m.file)) for m in leak.material]
-    return dict(err=None,delete=None,
+    return dict(err=None,delete=None,password_req=False,
             access_available=access_available,
             download_available=download_available,
             whistleblower=whistleblower,

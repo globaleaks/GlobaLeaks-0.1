@@ -1,8 +1,12 @@
 {{extend 'layout.html'}}
 <div class="row">
     <div class="span5">
-{{if err or delete:}}
-    {{if err:}}
+{{if err or delete or password_req:}}
+
+    {{if password_req:}}
+        <p>I've protected your access with a password, insert them before proceede</p>.
+        {{=password_form}}
+    {{elif err:}}
         <div class="alert alert-error">{{=T("invalid receipt: Tip-off not found")}}!</div>
     {{else:}}
         <div class="alert alert-error">{{=T("Tip-off removed and all relatives")}} (#{{=delete}} {{=T("Tip-off")}})</div>

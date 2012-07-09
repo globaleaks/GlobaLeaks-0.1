@@ -15,6 +15,12 @@ db.define_table('target',
                             # material delivery treat and configured separately, etc).
     Field('contact'),
     Field('type', writable=False, readable=False),
+    # security supports - configurable by Bouquet page
+    Field('password'),
+    Field('password_enabled', 'boolean'),
+    Field('pgpkey'),
+    Field('pgpkey_enabled', 'boolean'),
+    # end of security supports
     Field('info'),
     Field('candelete', writable=False),     
                             # remove capability: the capability of a receiver could be managed with a
@@ -25,6 +31,7 @@ db.define_table('target',
     Field('last_access', writable=False),
     Field('last_download', writable=False),
     Field('tulip_counter', writable=False),
+    Field('download_counter', writable=False),
     Field('download_counter', writable=False),
     format='%(name)s'
     )
