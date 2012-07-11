@@ -41,7 +41,8 @@ def clean_directory(subm_id, absolute_dir):
     return removed_file_count
 
 # useful init
-logger = local_import('logger').start_logger(settings.logging)
+# logger = local_import('logger').start_logger(settings.logging)
+# logger = local_import('logger').logger
 
 # tulip removal deadline, converted in seconds
 if settings.tulip.expire_days:

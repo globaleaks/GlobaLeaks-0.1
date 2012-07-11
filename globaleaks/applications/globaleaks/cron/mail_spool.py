@@ -18,7 +18,10 @@ from gluon.tools import Mail
 from config import projroot
 
 MimeMail = local_import('mailer').MultiPart_Mail(settings)
-logger = local_import('logger').start_logger(settings.logging)
+
+
+# logger = local_import('logger').logger
+# .start_logger(settings.logging)
 compressor = local_import('compress_material').Zip()
 randomizer = local_import('randomizer')
 
