@@ -1,5 +1,8 @@
 {{extend 'layout.html'}}
 
+{{if password_req:}}
+    {{=password_form}}
+{{pass}}
 {{if err:}}
     Error in calling Tip-off page: {{=err}}
     <br>
