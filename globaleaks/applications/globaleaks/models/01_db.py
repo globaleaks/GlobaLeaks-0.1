@@ -32,7 +32,6 @@ db.define_table('target',
     Field('last_download', writable=False),
     Field('tulip_counter', writable=False),
     Field('download_counter', writable=False),
-    Field('download_counter', writable=False),
     format='%(name)s'
     )
 

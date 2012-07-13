@@ -23,29 +23,45 @@ def bouquet():
     if request and request.args:
         target_url = request.args[0]
     else:
-        return dict(err="Tulip index not supplied")
+        return dict(err="Tulip index not supplied", password_req=None)
 
     tulip = Tulip(url=target_url)
     if tulip.id == -1:
-        return dict(err="Invalid Tulip")
+        return dict(err="Invalid Tulip", password_req=None)
 
     receiver_row = db(db.target.id==tulip.target_id).select()
 
-    print receiver_row[0]
+    # PASSWORD CHECKS IN BOUQUET
+    if receiver_row[0]['password_enabled'] == True:
+        password_form = SQLFORM.factory(Field('access_password', 'password', requires=IS_NOT_EMPTY()))
+
+        if password_form.accepts(request.vars, session):
+            if request.vars.access_password != receiver_row[0]['password']:
+                print "Bouquet: password does not match"
+                return dict(err="Invalid password", password_req=True, password_form=password_form)
+            else:
+                print "Bouquet: password match correctly!"
+        else:
+            print "Bouquet: invalid form received"
+            return dict(err="Missing password", password_req=True, password_form=password_form)
+
+    else:
+        print "Bouquet: this receiver has not password set"
+
 
     # pretty string for password default
     if receiver_row[0]['password'] != None:
         passlen = str(len(receiver_row[0]['password']))
         password_default = "Password set and enabled (" + passlen + " char)"
+        # MOVI QUI
     else:
         password_default= "password not configured"
 
+    # SET NEW PASSWORD
     security_input = (
         Field('password', requires=IS_LENGTH(minsize=8), default=password_default),
         Field('confirm_password', 
             requires=IS_EQUAL_TO(request.vars.password, error_message="passwords do not match")),
-        Field('pgpkey', 'text', default=receiver_row[0]['pgpkey'] ),
-        Field('pgpkey_enabled', 'boolean', default=False),
     )
 
     security_form = SQLFORM.factory(*security_input, table_name="security")
@@ -63,20 +79,6 @@ def bouquet():
             db.commit()
             print "saved password " + pref.password
 
-        if len(pref.pgpkey) > 20:
-
-            if not valid_pgp_key(pref.pgpkey):
-                return dict(err="Invalid PGP key submitted")
-
-            db.target[receiver_row[0].id].update_record(pgpkey=pref.pgpkey)
-            db.commit()
-            print "Key saved for target " + str(receiver_row[0].id)
-
-        if pref.pgpkey_enabled == True:
-            db.target[receiver_row[0].id].update_record(pgpkey_enabled=True)
-            db.commit()
-            print "Key set as enable, for target " + str(receiver_row[0].id)
-
     # this require to be splitted because tulip are leak x target matrix
     bouquet_list = []
     tulip_list = db(db.tulip.target_id==receiver_row[0].id).select()
@@ -86,5 +88,5 @@ def bouquet():
     return dict(err=False,
                 bouquet=bouquet_list,
                 target=receiver_row[0],
-                security=security_form)
+                security=security_form, password_req=None)
 
