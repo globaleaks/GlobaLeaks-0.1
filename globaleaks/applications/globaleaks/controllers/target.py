@@ -8,11 +8,6 @@ to edits its settings. (E.g.: Unsubscribe from a GL node)
 def index():
     return dict(message="hello from target.py")
 
-def valid_pgp_key(pgpkeystring):
-    # implementation TODO: 
-    # verify that is a valid PGP string, almost checking the header 
-    return True
-
 @configuration_required
 def bouquet():
     """

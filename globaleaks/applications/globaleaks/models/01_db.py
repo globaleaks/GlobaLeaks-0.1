@@ -18,8 +18,6 @@ db.define_table('target',
     # security supports - configurable by Bouquet page
     Field('password'),
     Field('password_enabled', 'boolean'),
-    Field('pgpkey'),
-    Field('pgpkey_enabled', 'boolean'),
     # end of security supports
     Field('info'),
     Field('candelete', writable=False),     
