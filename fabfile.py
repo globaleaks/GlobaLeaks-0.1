@@ -7,6 +7,13 @@ try:
 except:
     print "Pystache not installed. I will not create apache configs!"
 
+
+
+env.use_ssh_config = True
+
+instance_dir = "/data/globaleaks-instances"
+instances_config = "/etc/glinstances.conf"
+
 class FakeSecHead(object):
     def __init__(self, fp):
         self.fp = fp
@@ -16,9 +23,6 @@ class FakeSecHead(object):
             try: return self.sechead
             finally: self.sechead = None
         else: return self.fp.readline()
-
-env.use_ssh_config = True
-instance_dir = "/data/globaleaks-instances"
 
 def _make_tor2web_template():
     tor2web_template = 'tor2web/apache2/tor2web'
@@ -32,6 +36,8 @@ def list_instances():
     output = run('ls '+instance_dir)
     files = output.split()
     instances = []
+    print "Currently installed instances"
+    print "-----------------------------"
     for f in files:
         if f.startswith('demo'):
             instances.append(f)
@@ -40,6 +46,7 @@ def list_instances():
             print "    * %s" % f
 
     instances.sort()
+    print "-----------------------------"
     return instances
 
 def new_instance():
@@ -92,7 +99,7 @@ def new_instance():
         '/etc/apache2/sites-enabled/'+new_instance+'-globaleaks')
 
     print "[+] Getting remote config file..."
-    get('/etc/glinstances.conf', random_filename+'.cfg')
+    get(instances_config, random_filename+'.cfg')
     with open(random_filename+'.cfg', 'r') as f:
         import ConfigParser
         config = ConfigParser.SafeConfigParser()
@@ -102,6 +109,7 @@ def new_instance():
             if item == 'instances':
                 r_instances = value
 
+    print "[+] Pushing new config file..."
     with open(random_filename+'.cfg', 'w+') as f:
         f.write('# THIS WAS SELF GENERATED\n')
         f.write('instance_dir='+instance_dir+'\n')
@@ -110,7 +118,19 @@ def new_instance():
         else:
             f.write('instances='+r_instances+','+new_instance+':'+port_number+'\n')
 
-    put(random_filename+'.cfg', '/etc/glinstances.conf')
+    put(random_filename+'.cfg', instances_config)
+
+    # XXX Update torrc and restart the globaleaks init script. Get hidden
+    # service of latest instance.
+    dot_onion = "foobar.onion"
+
+    print "[+] Created new globaleaks instance!"
+    print ""
+    print "Details"
+    print "-------"
+    print "Hostname: "+server_name
+    print "Local Port: "+port_number
+    print "Hidden Service: "+dot_onion
 
     # XXX
     # Create the config file that looks something like this:
