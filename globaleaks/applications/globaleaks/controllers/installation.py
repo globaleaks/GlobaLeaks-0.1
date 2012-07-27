@@ -36,7 +36,7 @@ def start_setup():
 
     valuecheck = request.vars.email_server.split(':')
     # if not ":port" is provided, a default 25 is assumed
-    if len(valuecheck) != 2 or int(valuecheck[1]) == 25:
+    if len(valuecheck) != 2 or valuecheck[1] == '25':
         settings.globals.email_ssl = False
     else:
         settings.globals.email_ssl = True
