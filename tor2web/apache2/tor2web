@@ -1,20 +1,20 @@
 # GlobaLeask Tor2web configuration file
 # Port 443 SSL
 
-<VirtualHost *:443>
+<VirtualHost *:{{port_number}}>
 	# Place checktor.php here
 	DocumentRoot /var/www/tor2web
 
 	# SSL
-	SSLEngine On
-	SSLCertificateFile /etc/apache2/ssl/apache.pem
-	SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+	SSLEngine {{ssl_engine}} # Can be On of Off
+	SSLCertificateFile {{path_to_sslcertificate}}
+	SSLCertificateKeyFile {{path_to_certificate_key}}
 	SSLProtocol all -SSLv2
 	SSLCipherSuite DHE-RSA-AES256-SHA:DHE-DSS-AES256-SHA:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA
 
 	# Misc
 	ServerAdmin info@globaleaks.org
-	ServerName servertest.demo.globaleaks.org
+	ServerName {{server_name}}
 
 
 	# Proxy Settings
@@ -41,10 +41,15 @@
 
 	# Remote GlobaLeaks proxying trough Tor HS
 	# https://servertest.demo.globaleaks.org -> y5bf6uibtsy5qwnc.onion:80
-	RewriteCond %{HTTP_HOST} ^servertest\.demo\.globaleaks\.org(:443)?$
-	RewriteRule ^/(.*)$  http://127.0.0.1:8118/$1 [L,P]
-	SetEnvIf Host "^servertest\.demo\.globaleaks\.org" servertest
-	RequestHeader set Host y5bf6uibtsy5qwnc.onion env=servertest
+	# RewriteCond %{HTTP_HOST} ^servertest\.demo\.globaleaks\.org(:443)?$
+	RewriteCond %{HTTP_HOST} ^{{rewrite_condition}}(:443)?$
+
+	# RewriteRule ^/(.*)$  http://127.0.0.1:8118/$1 [L,P]
+	RewriteRule ^/(.*)$  http://{{rewrite_host}}/$1 [L,P]
+	# SetEnvIf Host "^servertest\.demo\.globaleaks\.org" servertest
+	SetEnvIf Host "^{{rewrite_condition}}" servertest
+	# RequestHeader set Host y5bf6uibtsy5qwnc.onion env=servertest
+	RequestHeader set Host {{dot_onion}} env=servertest
 
 	# Enable PHP scripts only for /torcheck.php blocking all other PHP requests
 	<Location /torcheck.php>
@@ -62,12 +67,12 @@
 	# RequestHeader set X-Forwarded-Server "sux"
 
 	# Privacy enhanced logging
-	# 
+	#
 	# When you need to enable debugging, switch that lines on. Apache logs with IP sanitized.
 	# From http://www.autistici.org/orangebook/html-en/c1043.html
 	LogFormat "127.0.0.1 %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" anonymous
-	CustomLog /var/log/apache2/tor2web_ssl_access.log anonymous
-	ErrorLog /var/log/apache2/tor2web_ssl_error.log
+	CustomLog /var/log/apache2/{{server_name}}_access.log anonymous
+	ErrorLog /var/log/apache2/{{server_name}}_error.log
 
 	# Rewrite Rules debugging
 	RewriteLog "/tmp/rewrite.log"
