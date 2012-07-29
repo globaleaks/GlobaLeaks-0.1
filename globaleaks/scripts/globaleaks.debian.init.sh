@@ -1,24 +1,27 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:			globaleaks
-# Required-Start: 	$local_fs $remote_fs $syslog
-# Required-Stop:	$local_fs $remote_fs $syslog
-# Default-Start: 
-# Default-Stop: 
+# startup script for Ubuntu and Debian Linux servers
+#
+# To use this file
+# cp globaleaks.debian.init.sh /etc/init.d/globaleaks
+#
+# To automatitcally start at reboot
+# sudo update-rc.d globaleaks defaults
+#
+# Provides:          globaleaks
+# Required-Start:    $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      S 0 1 6
 # Short-Description: globaleaks initscript
-# Description: This file starts up the globaleaks server.
+# Description:       This file starts up the globaleaks server.
 ### END INIT INFO
 
-# startup script for VirtualBox ubuntu 11.10 - 
-# strictly modified for run in a fixed environment
-#
-# THIS SCRIPT IS INTENDED TO WORKS ONLY WIH
-# https://globaleaks.org/vecna/GL-virtual 
-# and never shall be installed by hand
+# Author: Arturo Filasto' <art@globaleaks.org>
 
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DESC="GlobaLeaks Node"
-ADDRESS="172.16.254.2"
+ADDRESS="127.0.0.1"
 PORT="8000"
 PASSWORD=""
 NAME=globaleaks
@@ -26,14 +29,14 @@ PIDDIR=/var/run/$NAME
 PIDFILE=$PIDDIR/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 DAEMON=/usr/bin/python
-DAEMON_DIR=/home/globaleaks/GL-01/$NAME
-HS=/home/globaleaks/HS
+DAEMON_DIR=/data/globaleaks/GlobaLeaks/$NAME
 DAEMON_ARGS="web2py.py -i $ADDRESS -p $PORT --password=$PASSWORD --pid_filename=$PIDFILE"
 DAEMON_USER=globaleaks
-WGL="http://172.16.254.2:8000"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
+
+. $DAEMON_DIR/scripts/linux-firewall.sh
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -45,65 +48,6 @@ WGL="http://172.16.254.2:8000"
 # Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
 . /lib/lsb/init-functions
 
-trap_under_installation()
-{
-	if [ ! -e "$DAEMON_DIR/globaleaks.conf" ]; then
-		echo "not found $DAEMON_DIR/globaleaks.conf -- GlobaLeaks not yet setup"
-		return 0
-	fi
-
-	under_install=`grep "under_installation = True" "$DAEMON_DIR/globaleaks.conf"`
-	hs_virginity=`grep "_BCDEF" "$DAEMON_DIR/globaleaks.conf"`
-
-    # debug
-    if [ "$under_install" ]; then
-        echo "under install True"
-    else
-        echo "not yet under installation!"
-    fi
-
-    if [ "$hs_virginity" ]; then
-        echo "the hidden service is not yet initialized"
-    else
-        echo "the hidden service has been yet initialized"
-    fi
-
-	if [ "$under_install" ] && [ "$hs_virginity" ]; then
-        echo "(U!I) the start_setup.html has been used, creating HS..."
-		echo "Setup hidden service: it would be repeated until you configure the node at $WGL"
-		do_stop
-
-		# This command starts Tor
-		$DAEMON_DIR/scripts/globaleaks_os_setup.sh
-
-		if [ ! -f "$HS/hostname" ]; then
-            echo "try to start HS, failing"
-			return 1
-	    else
-			return 0
-		fi
-	fi
-
-    if [ "$under_install" ] && [ ! "$hs_virginity" ]; then
-        echo "(UI) HS available, starting Tor and finalize virtual_setup.html in $WGL"
-        # return code 2 start Tor
-        return 2
-	fi
-
-	if [ ! "$under_install" ] && [ ! "$hs_virginity" ]; then
-        echo "(!UI) the virtual_setup.html has not yet filled, connect to $WGL"
-		return 2
-    fi
-
-    if [ ! "$under_install" ] && [ "$hs_virginity" ]; then
-        echo "(!U!I) the start_setup.html need to be filled, connect to $WGL"
-        return 3
-    fi
-
-    echo "not handled condition!"
-    return 4
-}
-
 #
 # Function that starts the daemon/service
 #
@@ -114,30 +58,6 @@ do_start()
     #   1 if daemon was already running
     #   2 if daemon could not be started
 
-	# Extra condition: if the globaleaks.conf contains under_installation = True
-	# we need to invoke the globaleaks_os_setup.sh before the start
-	trap_under_installation
-	case "$?" in
-		0)
-			echo "Hidden service setup correctly"
-			;; # Hidden service setup correctly, Tor already running
-		1) 
-			echo "Unable to setup hidden service!"
-			;; # Old process is still running
-		2) 
-			echo "GlobaLeaks setup is going well, starting Tor..."
-			/etc/init.d/tor start
-			;; # GLobaLeaks setupped, Tor not touched
-        3)
-            echo "this shall be the first boot of the Virtual Machine of GL!"
-            sleep 1
-            ;;
-        4)
-            echo "urgh !? this bug need to be handled"
-            echo "mail to info@globaleaks.org!"
-            ;;
-	esac
-
     # The PIDDIR should normally be created during installation. This
     # fixes things just in case.
     [ -d $PIDDIR ] || mkdir -p $PIDDIR
@@ -147,11 +67,18 @@ do_start()
     start-stop-daemon --stop --test --quiet --pidfile $PIDFILE \
         && echo "GlobaLeak already running" && return 1
 
+    echo "Starting Tor..."
+    /etc/init.d/tor start
     echo "Starting GlobaLeaks..."
     start-stop-daemon --start --quiet --pidfile $PIDFILE \
         ${DAEMON_USER:+--chuid $DAEMON_USER} --chdir $DAEMON_DIR \
         --background --exec $DAEMON -- $DAEMON_ARGS \
         || return 2
+
+# Start GlobaLeaks firewall
+    firewall_start
+# Start GlobaLeaks Torrification
+    torrify_start
 
     return 0;
 }
@@ -167,14 +94,17 @@ do_stop()
     #   2 if daemon could not be stopped
     #   other if a failure occurred
 
-    # Stopping Tor is one of this script jobs
-	/etc/init.d/tor stop
-
+    echo "Stopping Tor..."
+    /etc/init.d/tor stop
     echo "Stopping GlobaLeaks..."
     start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE
     RETVAL=$?
     # Many daemons don't delete their pidfiles when they exit.
     rm -f $PIDFILE
+# Stop GlobaLeaks firewall
+    firewall_stop
+# Stop GlobaLeaks Torrification
+    torrify_stop
     return "$RETVAL"
 }
 
@@ -239,16 +169,7 @@ do_status()
 case "$1" in
   start)
     [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
-	do_status
-    RETVAL=$?
-    case "$RETVAL" in
-      0) log_success_msg "$NAME is running" 
-		 do_restart
-		 ;;
-      *) log_failure_msg "$NAME is not running" 
-		 do_start
-		 ;;
-	esac
+    do_start
     RETVAL=$?
     [ "$VERBOSE" != no ] &&
     case "$RETVAL" in
@@ -305,3 +226,19 @@ case "$1" in
     exit 3
     ;;
 esac
+
+:
+
+# This was based off /etc/init.d/skeleton from the Ubuntu 8.04 Hardy release.
+# (md5sum: da0162012b6a916bdbd4e2580282af78).  If we notice that changes, we
+# should re-examine things.
+
+# The configuration at the very top seems to be documented as part of the
+# Linux Standard Base (LSB) Specification.  See section 20.6 Facility Names
+# in particular.  This is also where I got the spec for the status parm.
+
+# References:
+# http://refspecs.linux-foundation.org/LSB_3.2.0/LSB-Core-generic/LSB-Core-generic.pdf
+# Debian Policy SysV init: http://www.debian.org/doc/debian-policy/ch-opersys.html#s-sysvinit
+# Examine files in /usr/share/doc/sysv-rc/
+
