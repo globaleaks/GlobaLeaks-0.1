@@ -12,7 +12,7 @@ It empowers anyone to easily setup and maintain their own Whistleblowing platfor
 Installation
 ------------
 
-Follow the howto on the wiki https://github.com/globaleaks/GlobaLeaks/wiki
+Follow the howto on the wiki for a setup https://github.com/globaleaks/GlobaLeaks/wiki and get on irc #globaleaks to let us know about your deployment! :-)
 
 Then you will find running as a web service the following:
 
@@ -21,19 +21,8 @@ Then you will find running as a web service the following:
 *  debug only global view interface: http://127.0.0.1:8000/globalview
 *  web2py developer access: http://127.0.0.1:8000/admin password "globaleaks"
 
-Base configuration
-------------------
 
-inside
 
-    defaults/origin.globaleaks.conf
-
-there are the configuration file with all the required, optional and mandatory fields that an admin could change.
-When globaleaks is started, the request of a controller that require a proper configuration will redirect to the configuration page. The admin provide with the few mandatory information, and the file globaleaks.conf is saved.
-
-When the login is requested to access as node maintainer, the default login is in: node_admin_username = admin@globaleaks.local
-
-The file globaleaks/globaleaks.conf contain your personal configuration: mail server, installation name, and usually don't be shared
 
 How to hack on it (We moved to GlobaLeaks 0.2 development on http://wiki.globaleaks.org)
 -----------------
