@@ -12,22 +12,9 @@ It empowers anyone to easily setup and maintain their own Whistleblowing platfor
 Installation
 ------------
 
-First you need to install pip
+Follow the howto on the wiki https://github.com/globaleaks/GlobaLeaks/wiki
 
-    easy_install pip
-
-You need to get a copy of web2py, you can install it by doing
-
-    pip install web2py
-
-then install Globaleaks
-
-    pip install git+git://github.com/globaleaks/GlobaLeaks.git#egg=globaleaks
-
-Under Windows|MacOSX|whatever, start the service with:
-    globaleaks/startglobaleaks
-
-then you will find running as a web service the following:
+Then you will find running as a web service the following:
 
 *  whistleblowing interface binds to http://127.0.0.1:8000
 *  node administrator targets configuratation http://127.0.0.1:8000/globaleaks/admin/
@@ -48,7 +35,7 @@ When the login is requested to access as node maintainer, the default login is i
 
 The file globaleaks/globaleaks.conf contain your personal configuration: mail server, installation name, and usually don't be shared
 
-How to hack on it
+How to hack on it (We moved to GlobaLeaks 0.2 development on http://wiki.globaleaks.org)
 -----------------
 
 * You need to get a copy of [web2py](http://www.web2py.com/) and install it (that means get the necessary gluons into $PYTHON_PATH)
