@@ -48,5 +48,6 @@ def localize_templates(name, lang='it'):
     except:
         pass
 
-for x in ["presentation_file", "disclaimer_file", "whistleblower_file", "not_anonymous_file", "extrafields_wizard"]:
+for x in ["presentation_file", "disclaimer_file", "whistleblower_file",
+"not_anonymous_file", "extrafields_wizard", "disclaimer_long_file"]:
     localize_templates(x, lang=session._language)

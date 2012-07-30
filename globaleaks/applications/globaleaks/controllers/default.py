@@ -89,3 +89,10 @@ def error():
 
 def email_template():
     return {}
+
+def disclaimer():
+    with open(settings.globals.disclaimer_long_file) as filestream:
+        content = filestream.read()
+
+    return dict(content=content)
+
