@@ -231,6 +231,7 @@ def new_instance():
 
     print "[+] Restarting Globaleaks-service"
     run('/etc/init.d/globaleaks-service restart')
+    run('/etc/init.d/apache2 reload')
 
     print "[+] Created new globaleaks instance!"
     print ""

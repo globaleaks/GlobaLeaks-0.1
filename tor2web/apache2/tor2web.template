@@ -1,0 +1,72 @@
+# GlobaLeask Tor2web configuration file
+# Port 443 SSL
+
+<VirtualHost *:{{port_number}}>
+	# Place checktor.php here
+	DocumentRoot /var/www/tor2web
+
+    # Misc
+	ServerAdmin info@globaleaks.org
+	ServerName {{server_name}}
+
+	# Proxy Settings
+	<Proxy *>
+                AddDefaultCharset off
+                Order deny,allow
+                Allow from all
+        </Proxy>
+	ProxyRequests Off
+	# We need this settings for the tor2web proxying hack
+	# So we need to remove from privoxy the added headers
+	# X-Forwarded-For X-Forwarded-Host X-Forwarded-Server
+	ProxyPreserveHost On
+	ProxyVia Off
+
+	# Tor2web signaling as per https://github.com/globaleaks/GlobaLeaks/issues/99
+	RequestHeader set X-tor2web "encrypted"
+
+	# Use HTTP Strict Transport Security to force client to use secure connections only
+	Header always set Strict-Transport-Security "max-age=500; includeSubDomains"
+
+	# Proxying directive
+	RewriteEngine On
+
+	# Remote GlobaLeaks proxying trough Tor HS
+	# https://servertest.demo.globaleaks.org -> y5bf6uibtsy5qwnc.onion:80
+	# RewriteCond %{HTTP_HOST} ^servertest\.demo\.globaleaks\.org(:443)?$
+	RewriteCond %{HTTP_HOST} ^{{rewrite_condition}}(:443)?$
+
+	# RewriteRule ^/(.*)$  http://127.0.0.1:8118/$1 [L,P]
+	RewriteRule ^/(.*)$  http://{{rewrite_host}}/$1 [L,P]
+	# SetEnvIf Host "^servertest\.demo\.globaleaks\.org" servertest
+	SetEnvIf Host "^{{rewrite_condition}}" servertest
+
+	# Enable PHP scripts only for /torcheck.php blocking all other PHP requests
+	<Location /torcheck.php>
+	Allow from all
+	</Location>
+	<FilesMatch "\.ph(p3?|tml)$">
+	Deny from all
+	</FilesMatch>
+
+
+	# How to remoive that strings From Apache Itself? This way it doesn't work.
+	# It must be done from privoxy.
+	# RequestHeader set X-Forwarded-For "sux"
+	# RequestHeader set X-Forwarded-Host "sux"
+	# RequestHeader set X-Forwarded-Server "sux"
+
+	# Privacy enhanced logging
+	#
+	# When you need to enable debugging, switch that lines on. Apache logs with IP sanitized.
+	# From http://www.autistici.org/orangebook/html-en/c1043.html
+	LogFormat "127.0.0.1 %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" anonymous
+	CustomLog /var/log/apache2/{{server_name}}_access.log anonymous
+	ErrorLog /var/log/apache2/{{server_name}}_error.log
+
+	# Rewrite Rules debugging
+	RewriteLog "/tmp/rewrite.log"
+	RewriteLogLevel 0
+
+
+</VirtualHost>
