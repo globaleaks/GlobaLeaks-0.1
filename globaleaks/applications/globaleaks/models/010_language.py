@@ -44,7 +44,6 @@ def localize_templates(name, lang='it'):
         settings.globals.__setattr__(name, template_file)
         fp = open(template_file, "r")
         content = fp.read()
-        settings.globals.__setattr__(name + "_content", content)
     except:
         pass
 
