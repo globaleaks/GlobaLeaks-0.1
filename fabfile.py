@@ -9,8 +9,6 @@ try:
 except:
     print "Pystache not installed. I will not create apache configs!"
 
-
-
 env.use_ssh_config = True
 
 instance_dir = "/data/globaleaks-instances"
@@ -208,13 +206,17 @@ def new_instance():
         with open('globaleaks/defaults/original.globaleaks.conf') as f:
             for line in f:
                 if line.strip().startswith('hsurl'):
+                    print l
                     l = line.replace('oooooooooooooooo.onion', dot_onion)
                 elif line.strip().startswith('baseurl'):
+                    print l
                     l = line.replace('https://example.com', 'http://'+server_name)
                 elif line.strip().startswith('server_port'):
+                    print l
                     l = line.replace('8000', port_number)
                 elif line.strip().startswith('server_ip'):
                     l = line.replace('127.0.0.1', env.host)
+                    print l
                 else:
                     l = line
                 gf.write(l)
