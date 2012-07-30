@@ -37,7 +37,8 @@ PATH=$PATH:$DAEMON_DIR
 [ -r $CONFIG ] && . $CONFIG;
 
 # split the config line into an array
-IFS=',' read -ra INSTANCE <<< $instances
+INSTANCE=(`echo $instances | tr "," "\n"`)
+#IFS=',' read -ra INSTANCE <<< $instances
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -57,51 +58,51 @@ do_start()
     #   1 if daemon was already running
     #   2 if daemon could not be started
 
-    # Starting Tor is one of this scripts jobs 
+    # Starting Tor is one of this scripts jobs
     /etc/init.d/tor start
 
     for instance in ${INSTANCE[@]}; do
         instance_name=`expr match $instance "\(.*\):.*"`
         instance_port=`expr match $instance ".*:\(.*\)"`
-    
+
         # check that the directory exists
         if [ ! -d $instance_dir"/"$instance_name ]; then
             echo "Path "$instance_dir"/"$instance_name" not found!"
             # skip missing instances
             continue
         else
-        
+
             # look for the pid directory
             if [ ! -d $PIDDIR ]; then
                 mkdir -m 0700 $PIDDIR
                 chown $USERNAME $PIDDIR
             fi
-        
+
                 instance_pid_dir=$PIDDIR"/"$instance_name
             if [ ! -d $instance_pid_dir ]; then
                 mkdir -m 0700 $instance_pid_dir
                 chown $USERNAME $instance_pid_dir
             fi
-        
+
             pidfile=$instance_pid_dir"/pid"
-    
-    
+
+
             # Skip launching if the daemon is already running.
             start-stop-daemon --stop --test --quiet --pidfile \
                 $pidfile && continue
-    
+
             echo Starting GlobaLeaks instance $instance_name
             DAEMON_ARGS= $DAEMON_DIR/web2py.py -i $ADDRESS -p $instance_port \
                 --pid_filename=$pidfile
-    
+
             # launch the daemon
             start-stop-daemon --start --quiet --pidfile $pidfile \
                 ${DAEMON_USER:+--chuid $DAEMON_USER} --chdir \
                 $instance_dir/$instance_name --background --exec \
                 $DAEMON -- $DAEMON_ARGS || return 2
-        
+
         fi
-        
+
     done
     # figure out what proper return value should go here
     return 0
