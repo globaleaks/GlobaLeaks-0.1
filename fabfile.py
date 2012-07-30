@@ -223,8 +223,14 @@ def new_instance():
     put(random_filename+'.gl',
             instance_dir+'/'+new_instance+'/globaleaks/globaleaks.conf')
 
+    print "[+] Setting proper permissions..."
+    run('chown -R globaleaks:globaleaks '+instance_dir+'/'+new_instance)
+
     print "[+] Cleaning up tmp files"
     local('rm -rf %s*' % random_filename)
+
+    print "[+] Restarting Globaleaks-service"
+    run('/etc/init.d/globaleaks-service restart')
 
     print "[+] Created new globaleaks instance!"
     print ""
