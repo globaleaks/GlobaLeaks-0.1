@@ -24,8 +24,14 @@ Then you will find running as a web service the following:
 
 
 
-How to hack on it (We moved to GlobaLeaks 0.2 development on http://wiki.globaleaks.org)
+How to hack on it
 -----------------
+
+We moved to GlobaLeaks 0.2 development, for which you can find all the pointers and new git repo on http://wiki.globaleaks.org .
+
+GlobaLeaks 0.1 is feature-freeze, support only bugfixing.
+
+To hack on it
 
 * You need to get a copy of [web2py](http://www.web2py.com/) and install it (that means get the necessary gluons into $PYTHON_PATH)
 * You need to know the MVC programming model, and the [web2py framework documentation](http://web2py.com/book).
