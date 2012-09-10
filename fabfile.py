@@ -4,10 +4,7 @@ import string
 import itertools
 import collections
 from fabric.api import run, env, put, get, local
-try:
-    import pystache
-except:
-    print "Pystache not installed. I will not create apache configs!"
+import pystache
 
 env.use_ssh_config = True
 
@@ -120,6 +117,7 @@ def new_instance():
     else:
         new_instance_idx = str(int(idx) + 1)
     new_instance = 'demo'+'0'*(3 - len(new_instance_idx))+new_instance_idx
+    new_instance = 'pentest1'
     template = _make_tor2web_template()
 
     # Check if template exists
