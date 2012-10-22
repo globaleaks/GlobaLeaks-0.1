@@ -51,6 +51,7 @@ class Material(object):
 class Leak(object):
     def __init__(self, id):
         self._id = id
+        self.title = "default title"
 
     def get_id(self):
         return self._id
@@ -62,10 +63,15 @@ class Leak(object):
     id = property(get_id, set_id)
 
     def get_title(self):
+        """
+        issue 122
+        """
+        if not db.leak[self.id]:
+            return self.title
         return db.leak[self.id].title
 
     def set_title(self, title):
-        db.leak[self.id] = dict(title = title)
+        db.leak[self.id].title = title
         db.commit()
 
     title = property(get_title, set_title)
@@ -107,7 +113,10 @@ class Leak(object):
     material = property(get_material, set_material)
 
     def get_spooled(self):
-        return db.leak[self.id].spooled
+        """
+        little fix of an adopters bug (issue #122)
+        """
+        return True
 
     def set_spooled(self, material):
         pass
