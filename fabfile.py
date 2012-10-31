@@ -117,7 +117,7 @@ def new_instance():
     else:
         new_instance_idx = str(int(idx) + 1)
     new_instance = 'demo'+'0'*(3 - len(new_instance_idx))+new_instance_idx
-    new_instance = 'pentest1'
+    new_instance = 'pentest2'
     template = _make_tor2web_template()
 
     # Check if template exists

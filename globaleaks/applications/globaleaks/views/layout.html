@@ -72,9 +72,9 @@
                 function redirect_to(value) {
                     $("#PrivacyBox").append(
                         '<div id="redirect">{{=T("Redirecting to Hidden Serivice in")}} ' +
-                            '<span id="timeout">5' +
-                            '</span> {{=T("seconds")}}</div>'
-                        );
+                        '<span id="timeout">5' +
+                        '</span> {{=T("seconds")}}</div>'
+                    );
                     var Counter = 0;
                     (function timerfunction() {
                       setTimeout(function() {
@@ -88,55 +88,35 @@
                     })();
                 }
                 function anonymous(value) {
-                    var box = $('#PrivacyBox');
-                    if (value) {
-                        $(".tor_status.not_connected").hide();
-                        $("#submit-tips").addClass("btn-success");
-                        /*
-                        box.children("#image").addClass("anonymous");
-                        box.children("#image").replaceWith('<img src="/globaleaks/static/images/anonymous.png"/>');
-                        box.children("#status").replaceWith('<div id="status">Anonymous</div>');
-                        */
-                        if (window.location.hostname != "{{=settings.globals.hsurl}}") {
-                            redirect_to("{{=settings.globals.hsurl}}");
-                        }
-                    } else {
-                        $(".tor_status.tor_connected").hide();
-                        $("#submit-tips").addClass("btn-danger");
-
-                        /* box.children("#image").addClass("notanonymous");
-
-                        box.children("#image").replaceWith('<img src="/globaleaks/static/images/notanonymous.png"/>');
-                        box.children("#status").replaceWith('<div id="status"><h2>{{=T("Warning")}}!</h2></div>');
-                        box.qtip({
-                           content: '{{=XML(settings.globals.not_anonymous_file_content.replace("\n", ""))}}',
-                           position: {
-                                corner: { target: 'rightBottom',
-                                          tooltip: 'bottomLeft'
-                                        }
-                           },
-                           hide : { fixed: true }
-                        });
-                        */
-
+                  var box = $('#PrivacyBox');
+                  $('.tor_status.unknown').hide();
+                  if (value) {
+                    $(".tor_status.tor_connected").show();
+                    $("#submit-tips").addClass("btn-success");
+                    if (window.location.hostname != "{{=settings.globals.hsurl}}") {
+                      redirect_to("{{=settings.globals.hsurl}}");
                     }
+                  } else {
+                    $(".tor_status.not_connected").show();
+                    $("#submit-tips").addClass("btn-danger");
+                  }
                 }
                 if ( $.cookie('privacystatus') ){
-                    if ($.cookie('privacystatus') == "True") {
-                        anonymous(true);
-                    } else {
-                        anonymous(false);
-                    }
+                  if ($.cookie('privacystatus') == "True") {
+                    anonymous(true);
+                  } else {
+                    anonymous(false);
+                  }
                 } else {
-                    $.getJSON('{{=settings.globals.privacycheckurl}}', function(data) {
-                        if (data.Tor) {
-                            anonymous(data.Tor);
-                            $.cookie('privacystatus', 'True', { expires: 1, path: '/' });
-                        } else {
-                            anonymous(data.Tor);
-                            $.cookie('privacystatus', 'False', { expires: 1, path: '/' });
-                        }
-                    });
+                  $.getJSON('{{=settings.globals.privacycheckurl}}', function(data) {
+                    if (data.Tor) {
+                        anonymous(data.Tor);
+                        $.cookie('privacystatus', 'True', { expires: 1, path: '/' });
+                    } else {
+                        anonymous(data.Tor);
+                        $.cookie('privacystatus', 'False', { expires: 1, path: '/' });
+                    }
+                  });
                 }
             });
             $("#receipt-load").click(function(){

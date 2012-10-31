@@ -127,7 +127,7 @@ def default_material(submission):
 
     session.files.append(file_array[0])
     session.files.append(file_array[1])
-
+    fp.close()
     return True
 
 

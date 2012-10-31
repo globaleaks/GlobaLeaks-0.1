@@ -1,13 +1,17 @@
 <div class="row">
     <div id="PrivacyBox" class="span4 home_tor_status_block">
+        <div class="tor_status unknown alert">
+          We are determining the security of this connection. If this message
+          does not disappear, try reloading the page.
+        </div>
 
-        <div class="tor_status not_connected alert alert-error">
+        <div class="tor_status not_connected alert alert-error hide">
             You are not connecting to this node through Tor. This Means that your indentity maybe compromised.
             You are advised to <a href="https://www.torproject.org/download/download" title="Tor">download a copy of Tor</a></span>.
         </div>
         <!-- tor_status / not connected -->
 
-        <div class="tor_status tor_connected mb10 alert alert-success">
+        <div class="tor_status tor_connected mb10 alert alert-success hide">
             <span class="status_ico"></span> <span>Congratulations!! You are now being connected anonymously via <a href="#" title="Tor">Tor</a></span>.
         </div>
         <!-- tor_status / connected -->
