@@ -12,7 +12,7 @@ It empowers anyone to easily setup and maintain their own Whistleblowing platfor
 Installation
 ------------
 
-Follow the howto on the wiki for a setup https://github.com/globaleaks/GlobaLeaks/wiki and get on irc #globaleaks to let us know about your deployment! :-)
+Follow the howto on the wiki for a setup https://github.com/globaleaks-0.1/GlobaLeaks/wiki and get on irc #globaleaks to let us know about your deployment! :-)
 
 Then you will find running as a web service the following:
 
